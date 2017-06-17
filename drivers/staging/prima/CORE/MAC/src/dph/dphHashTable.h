@@ -46,23 +46,23 @@ static inline tANI_U8
 dphCompareMacAddr(tANI_U8 addr1[], tANI_U8 addr2[])
 {
     return((addr1[0] == addr2[0]) &&
-       (addr1[1] == addr2[1]) &&
-       (addr1[2] == addr2[2]) &&
-       (addr1[3] == addr2[3]) &&
-       (addr1[4] == addr2[4]) &&
-       (addr1[5] == addr2[5]));
+           (addr1[1] == addr2[1]) &&
+           (addr1[2] == addr2[2]) &&
+           (addr1[3] == addr2[3]) &&
+           (addr1[4] == addr2[4]) &&
+           (addr1[5] == addr2[5]));
 }
 
 /// Hash table class
 typedef struct
 {
 
-  /// The hash table itself
-  tpDphHashNode *pHashTable;
+    /// The hash table itself
+    tpDphHashNode *pHashTable;
 
-  /// The state array
-  tDphHashNode  *pDphNodeArray;
-  tANI_U16 size;
+    /// The state array
+    tDphHashNode  *pDphNodeArray;
+    tANI_U16 size;
 } dphHashTableClass;
 
 /// The hash table object
@@ -87,7 +87,7 @@ extern tSirRetStatus dphDeleteHashEntry(tpAniSirGlobal pMac, tSirMacAddr staAddr
 void dphHashTableClassInit(tpAniSirGlobal pMac, dphHashTableClass* pDphHashTable);
 /// Initialize STA state
 extern tpDphHashNode dphInitStaState(tpAniSirGlobal pMac, tSirMacAddr staAddr,
-        tANI_U16 staId, tANI_U8 validStaIdx, dphHashTableClass* pDphHashTable);
+                                     tANI_U16 staId, tANI_U8 validStaIdx, dphHashTableClass* pDphHashTable);
 
 
 #endif

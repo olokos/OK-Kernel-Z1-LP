@@ -51,16 +51,17 @@
 #include "palTypes.h"
 #include "wlan_qct_wda_debug.h"
 
-void wdaLog(tpAniSirGlobal pMac, tANI_U32 loglevel, const char *pString,...) {
+void wdaLog(tpAniSirGlobal pMac, tANI_U32 loglevel, const char *pString,...)
+{
     va_list marker;
-    
+
     if(loglevel > pMac->utils.gLogDbgLevel[WDA_DEBUG_LOGIDX])
         return;
-   
+
     va_start( marker, pString );     /* Initialize variable arguments. */
-    
+
     logDebug(pMac, SIR_WDA_MODULE_ID, loglevel, pString, marker);
-    
+
     va_end( marker );              /* Reset variable arguments.      */
 }
 

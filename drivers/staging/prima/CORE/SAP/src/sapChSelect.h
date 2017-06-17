@@ -32,18 +32,18 @@
 /*===========================================================================
 
                       s a p C h S e l e c t . h
-                                               
+
   OVERVIEW:
-  
+
   This software unit holds the implementation of the WLAN SAP modules
   functions for channel selection.
 
-  DEPENDENCIES:   
-  
+  DEPENDENCIES:
 
-  Are listed for each API below. 
-  
-  
+
+  Are listed for each API below.
+
+
   Copyright (c) 2010 QUALCOMM Incorporated.
   All Rights Reserved.
   Qualcomm Confidential and Proprietary
@@ -117,16 +117,18 @@ typedef enum
 } tSapChannel;
 
 /**
-* Structure holding information of each channel in the spectrum, 
+* Structure holding information of each channel in the spectrum,
 * it contains the channel number, the computed weight
 */
 
-typedef struct sSapChannelListInfo{
+typedef struct sSapChannelListInfo
+{
     v_U8_t numChannel;
     v_U8_t *channelList;
 } tSapChannelListInfo;
 
-typedef struct {
+typedef struct
+{
     v_U16_t chNum;      // Channel Number
     v_U16_t channelWidth;      // Channel Width
     v_U16_t bssCount;   // bss found in scanresult for this channel
@@ -136,11 +138,12 @@ typedef struct {
 } tSapSpectChInfo;//tDfsSpectChInfo;
 
 /**
-* Structure holding all the information required to make a 
+* Structure holding all the information required to make a
 * decision for the best operating channel based on dfs formula
 */
 
-typedef struct {
+typedef struct
+{
     tSapSpectChInfo *pSpectCh;//tDfsSpectChInfo *pSpectCh;  // Ptr to the channels in the entire spectrum band
     v_U8_t numSpectChans;      // Total num of channels in the spectrum
 } tSapChSelSpectInfo;//tDfsChSelParams;
@@ -148,7 +151,8 @@ typedef struct {
 /**
  * Structure for channel weight calculation parameters
  */
-typedef struct sSapChSelParams {
+typedef struct sSapChSelParams
+{
     void *pSpectInfoParams;//*pDfsParams;   // Filled with tSapChSelSpectInfo
     v_U16_t numChannels;
 } tSapChSelParams;

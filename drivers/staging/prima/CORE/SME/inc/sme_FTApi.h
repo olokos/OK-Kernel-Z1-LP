@@ -32,9 +32,9 @@
 #include <palTimer.h>
 
 /**=========================================================================
-  
+
   \brief macros and prototype for SME APIs
-  
+
   ========================================================================*/
 typedef enum eFTIEState
 {
@@ -43,9 +43,9 @@ typedef enum eFTIEState
     eFT_WAIT_AUTH2,                 // Sent auth1 and waiting auth2
     eFT_AUTH_COMPLETE,              // We are now ready for FT phase, send auth1, recd auth2
     eFT_REASSOC_REQ_WAIT,           // Now we have sent Auth Rsp to the supplicant and waiting
-                                    // Reassoc Req from the supplicant.
-    eFT_SET_KEY_WAIT,               // We have received the Reassoc request from 
-                                    // supplicant. Waiting for the keys.
+    // Reassoc Req from the supplicant.
+    eFT_SET_KEY_WAIT,               // We have received the Reassoc request from
+    // supplicant. Waiting for the keys.
 } tFTIEStates;
 
 

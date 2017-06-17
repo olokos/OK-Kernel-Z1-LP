@@ -90,7 +90,7 @@ limProcessDisassocFrame(tpAniSirGlobal pMac, tANI_U8 *pRxPacketInfo, tpPESession
         // Received Disassoc frame from a BC/MC address
         // Log error and ignore it
         PELOGE(limLog(pMac, LOG1,
-               FL("received Disassoc frame from a BC/MC address"));)
+                      FL("received Disassoc frame from a BC/MC address"));)
 
         return;
     }
@@ -100,7 +100,7 @@ limProcessDisassocFrame(tpAniSirGlobal pMac, tANI_U8 *pRxPacketInfo, tpPESession
         // Received Disassoc frame for a MC address
         // Log error and ignore it
         PELOGE(limLog(pMac, LOG1,
-               FL("received Disassoc frame for a MC address"));)
+                      FL("received Disassoc frame for a MC address"));)
 
         return;
     }
@@ -125,7 +125,7 @@ limProcessDisassocFrame(tpAniSirGlobal pMac, tANI_U8 *pRxPacketInfo, tpPESession
     reasonCode = sirReadU16(pBody);
 
     PELOG2(limLog(pMac, LOGE,
-        FL("Received Disassoc frame for Addr: "MAC_ADDRESS_STR"(mlm state=%s, sme state=%d),"
+                  FL("Received Disassoc frame for Addr: "MAC_ADDRESS_STR"(mlm state=%s, sme state=%d),"
         "with reason code %d from "MAC_ADDRESS_STR), MAC_ADDR_ARRAY(pHdr->da),
         limMlmStateStr(psessionEntry->limMlmState), psessionEntry->limSmeState, reasonCode,
         MAC_ADDR_ARRAY(pHdr->sa));)

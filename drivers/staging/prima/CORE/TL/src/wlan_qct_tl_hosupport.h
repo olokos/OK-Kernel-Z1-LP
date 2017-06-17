@@ -30,12 +30,12 @@
 
 /*===========================================================================
 
-               W L A N   T R A N S P O R T   L A Y E R 
+               W L A N   T R A N S P O R T   L A Y E R
                HO SUPPORT    I N T E R N A L  A P I
-                
-                   
+
+
 DESCRIPTION
-        
+
   Copyright (c) 2008 QUALCOMM Incorporated. All Rights Reserved.
   Qualcomm Confidential and Proprietary
 ===========================================================================*/
@@ -66,7 +66,7 @@ when        who    what, where, why
                           INCLUDE FILES FOR MODULE
 
 ===========================================================================*/
-#include "wlan_qct_tl.h" 
+#include "wlan_qct_tl.h"
 
 #ifdef WLAN_FEATURE_LINK_LAYER_STATS
 /*==========================================================================
@@ -82,10 +82,10 @@ when        who    what, where, why
 ============================================================================*/
 VOS_STATUS WLANTL_HSGetDataRSSI
 (
-   v_PVOID_t        pAdapter,
-   v_PVOID_t        pBDHeader,
-   v_U8_t           STAid,
-   v_S7_t          *currentAvgRSSI
+    v_PVOID_t        pAdapter,
+    v_PVOID_t        pBDHeader,
+    v_U8_t           STAid,
+    v_S7_t          *currentAvgRSSI
 );
 #endif
 
@@ -97,152 +97,152 @@ VOS_STATUS WLANTL_HSGetDataRSSI
 
    FUNCTION
 
-   DESCRIPTION 
-    
-   PARAMETERS 
+   DESCRIPTION
+
+   PARAMETERS
 
    RETURN VALUE
 
 ============================================================================*/
 VOS_STATUS WLANTL_HSHandleRXFrame
 (
-   v_PVOID_t        pAdapter,
-   v_U8_t           frameType,
-   v_PVOID_t        pBDHeader,
-   v_U8_t           STAid,
-   v_BOOL_t         isBroadcast,
-   vos_pkt_t       *dataBuffer
+    v_PVOID_t        pAdapter,
+    v_U8_t           frameType,
+    v_PVOID_t        pBDHeader,
+    v_U8_t           STAid,
+    v_BOOL_t         isBroadcast,
+    vos_pkt_t       *dataBuffer
 );
 
 /*==========================================================================
 
    FUNCTION
 
-   DESCRIPTION 
-    
-   PARAMETERS 
+   DESCRIPTION
+
+   PARAMETERS
 
    RETURN VALUE
 
 ============================================================================*/
 VOS_STATUS WLANTL_HSHandleTXFrame
 (
-   v_PVOID_t        pAdapter,
-   v_U8_t           ac,
-   v_U8_t           STAid,
-   vos_pkt_t       *dataBuffer,
-   v_PVOID_t        bdHeader
+    v_PVOID_t        pAdapter,
+    v_U8_t           ac,
+    v_U8_t           STAid,
+    vos_pkt_t       *dataBuffer,
+    v_PVOID_t        bdHeader
 );
 
 /*==========================================================================
 
    FUNCTION
 
-   DESCRIPTION 
-    
-   PARAMETERS 
+   DESCRIPTION
+
+   PARAMETERS
 
    RETURN VALUE
 
 ============================================================================*/
 VOS_STATUS WLANTL_HSRegRSSIIndicationCB
 (
-   v_PVOID_t                       pAdapter,
-   v_S7_t                          rssiValue,
-   v_U8_t                          triggerEvent,
-   WLANTL_RSSICrossThresholdCBType crossCBFunction,
-   VOS_MODULE_ID                   moduleID,
-   v_PVOID_t                       usrCtxt
+    v_PVOID_t                       pAdapter,
+    v_S7_t                          rssiValue,
+    v_U8_t                          triggerEvent,
+    WLANTL_RSSICrossThresholdCBType crossCBFunction,
+    VOS_MODULE_ID                   moduleID,
+    v_PVOID_t                       usrCtxt
 );
 
 /*==========================================================================
 
    FUNCTION
 
-   DESCRIPTION 
-    
-   PARAMETERS 
+   DESCRIPTION
+
+   PARAMETERS
 
    RETURN VALUE
 
 ============================================================================*/
 VOS_STATUS WLANTL_HSDeregRSSIIndicationCB
 (
-   v_PVOID_t                       pAdapter,
-   v_S7_t                          rssiValue,
-   v_U8_t                          triggerEvent,
-   WLANTL_RSSICrossThresholdCBType crossCBFunction,
-   VOS_MODULE_ID                   moduleID
+    v_PVOID_t                       pAdapter,
+    v_S7_t                          rssiValue,
+    v_U8_t                          triggerEvent,
+    WLANTL_RSSICrossThresholdCBType crossCBFunction,
+    VOS_MODULE_ID                   moduleID
 );
 
 /*==========================================================================
 
    FUNCTION
 
-   DESCRIPTION 
-    
-   PARAMETERS 
+   DESCRIPTION
+
+   PARAMETERS
 
    RETURN VALUE
 
 ============================================================================*/
 VOS_STATUS WLANTL_HSBMPSRSSIRegionChangedNotification
 (
-   v_PVOID_t             pAdapter,
-   tpSirRSSINotification pRSSINotification
+    v_PVOID_t             pAdapter,
+    tpSirRSSINotification pRSSINotification
 );
 
 /*==========================================================================
 
    FUNCTION
 
-   DESCRIPTION 
-    
-   PARAMETERS 
+   DESCRIPTION
+
+   PARAMETERS
 
    RETURN VALUE
 
 ============================================================================*/
 VOS_STATUS WLANTL_HSSetAlpha
 (
-   v_PVOID_t pAdapter,
-   int       valueAlpha
+    v_PVOID_t pAdapter,
+    int       valueAlpha
 );
 
 /*==========================================================================
 
    FUNCTION
 
-   DESCRIPTION 
-    
-   PARAMETERS 
+   DESCRIPTION
+
+   PARAMETERS
 
    RETURN VALUE
 
 ============================================================================*/
 VOS_STATUS WLANTL_HSRegGetTrafficStatus
 (
-   v_PVOID_t                          pAdapter,
-   v_U32_t                            idleThreshold,
-   v_U32_t                            period,
-   WLANTL_TrafficStatusChangedCBType  trfficStatusCB,
-   v_PVOID_t                          usrCtxt
+    v_PVOID_t                          pAdapter,
+    v_U32_t                            idleThreshold,
+    v_U32_t                            period,
+    WLANTL_TrafficStatusChangedCBType  trfficStatusCB,
+    v_PVOID_t                          usrCtxt
 );
 
 /*==========================================================================
 
    FUNCTION
 
-   DESCRIPTION 
-    
-   PARAMETERS 
+   DESCRIPTION
+
+   PARAMETERS
 
    RETURN VALUE
 
 ============================================================================*/
 VOS_STATUS WLANTL_HSInit
 (
-   v_PVOID_t   pAdapter
+    v_PVOID_t   pAdapter
 );
 
 
@@ -250,9 +250,9 @@ VOS_STATUS WLANTL_HSInit
 
    FUNCTION    WLANTL_HSDeInit
 
-   DESCRIPTION 
-    
-   PARAMETERS 
+   DESCRIPTION
+
+   PARAMETERS
 
    RETURN VALUE
 
@@ -260,7 +260,7 @@ VOS_STATUS WLANTL_HSInit
 
 VOS_STATUS WLANTL_HSDeInit
 (
-   v_PVOID_t   pAdapter
+    v_PVOID_t   pAdapter
 );
 
 
@@ -268,61 +268,61 @@ VOS_STATUS WLANTL_HSDeInit
 
    FUNCTION
 
-   DESCRIPTION 
-    
-   PARAMETERS 
+   DESCRIPTION
+
+   PARAMETERS
 
    RETURN VALUE
 
 ============================================================================*/
 VOS_STATUS WLANTL_HSStop
 (
-   v_PVOID_t   pAdapter
+    v_PVOID_t   pAdapter
 );
 
 VOS_STATUS WLANTL_SetFWRSSIThresholds
 (
-   v_PVOID_t                       pAdapter
+    v_PVOID_t                       pAdapter
 );
 
 /*==========================================================================
 
    FUNCTION
 
-   DESCRIPTION 
-    
-   PARAMETERS 
+   DESCRIPTION
+
+   PARAMETERS
 
    RETURN VALUE
 
 ============================================================================*/
 VOS_STATUS WLANTL_HSSerializeTlIndication
 (
-   v_PVOID_t   pAdapter,
-   v_U8_t      rssiNotification,
-   v_PVOID_t   pUserCtxt,
-   WLANTL_RSSICrossThresholdCBType cbFunction,
-   v_U8_t      avgRssi
+    v_PVOID_t   pAdapter,
+    v_U8_t      rssiNotification,
+    v_PVOID_t   pUserCtxt,
+    WLANTL_RSSICrossThresholdCBType cbFunction,
+    v_U8_t      avgRssi
 );
 
 /*==========================================================================
 
    FUNCTION
 
-   DESCRIPTION 
-    
-   PARAMETERS 
+   DESCRIPTION
+
+   PARAMETERS
 
    RETURN VALUE
 
 ============================================================================*/
 VOS_STATUS WLANTL_StatHandleTXFrame
 (
-   v_PVOID_t        pAdapter,
-   v_U8_t           STAid,
-   vos_pkt_t       *dataBuffer,
-   v_PVOID_t        pBDHeader,
-   WLANTL_MetaInfoType *txMetaInfo
+    v_PVOID_t        pAdapter,
+    v_U8_t           STAid,
+    vos_pkt_t       *dataBuffer,
+    v_PVOID_t        pBDHeader,
+    WLANTL_MetaInfoType *txMetaInfo
 );
 
 #endif

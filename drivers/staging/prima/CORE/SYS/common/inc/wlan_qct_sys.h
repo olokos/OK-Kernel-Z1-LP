@@ -54,38 +54,38 @@
   Type declarations
   -------------------------------------------------------------------------*/
 
-  /*----------------------------------------------------------------------------
+/*----------------------------------------------------------------------------
 
-  \brief sysResponseCback() - SYS async resonse callback
+\brief sysResponseCback() - SYS async resonse callback
 
-  This is a protype for the callback function that SYS makes to various
-  modules in the system.
+This is a protype for the callback function that SYS makes to various
+modules in the system.
 
-  \param  pUserData - user data that is passed to the Callback function
-                      when it is invoked.
+\param  pUserData - user data that is passed to the Callback function
+                    when it is invoked.
 
-  \return Nothing
+\return Nothing
 
-  \sa sysMcStart(), sysMcThreadProbe(), sysTxThreadProbe()
+\sa sysMcStart(), sysMcThreadProbe(), sysTxThreadProbe()
 
-  --------------------------------------------------------------------------*/
+--------------------------------------------------------------------------*/
 typedef v_VOID_t ( * sysResponseCback ) ( v_VOID_t *pUserData );
 
 
 
 typedef enum
 {
-   SYS_MSG_ID_MC_START,
-   SYS_MSG_ID_MC_THR_PROBE,
-   SYS_MSG_ID_MC_TIMER,
+    SYS_MSG_ID_MC_START,
+    SYS_MSG_ID_MC_THR_PROBE,
+    SYS_MSG_ID_MC_TIMER,
 
-   SYS_MSG_ID_TX_THR_PROBE,
-   SYS_MSG_ID_TX_TIMER,
+    SYS_MSG_ID_TX_THR_PROBE,
+    SYS_MSG_ID_TX_TIMER,
 
-   SYS_MSG_ID_RX_TIMER,
+    SYS_MSG_ID_RX_TIMER,
 
-   SYS_MSG_ID_MC_STOP,
-   SYS_MSG_ID_FTM_RSP,
+    SYS_MSG_ID_MC_STOP,
+    SYS_MSG_ID_FTM_RSP,
 
 } SYS_MSG_ID;
 

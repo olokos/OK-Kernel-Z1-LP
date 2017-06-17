@@ -325,11 +325,11 @@ enum eWniMsgTypes
     eWNI_SME_EXCLUDE_UNENCRYPTED,
     eWNI_SME_RSSI_IND, //RSSI indication from TL to be serialized on MC thread
 #ifdef FEATURE_WLAN_TDLS
-    eWNI_SME_TDLS_SEND_MGMT_REQ,    
-    eWNI_SME_TDLS_SEND_MGMT_RSP,    
-    eWNI_SME_TDLS_ADD_STA_REQ,    
-    eWNI_SME_TDLS_ADD_STA_RSP,    
-    eWNI_SME_TDLS_DEL_STA_REQ,    
+    eWNI_SME_TDLS_SEND_MGMT_REQ,
+    eWNI_SME_TDLS_SEND_MGMT_RSP,
+    eWNI_SME_TDLS_ADD_STA_REQ,
+    eWNI_SME_TDLS_ADD_STA_RSP,
+    eWNI_SME_TDLS_DEL_STA_REQ,
     eWNI_SME_TDLS_DEL_STA_RSP,
     eWNI_SME_TDLS_DEL_STA_IND,
     eWNI_SME_TDLS_DEL_ALL_PEER_IND,
@@ -340,24 +340,24 @@ enum eWniMsgTypes
     eWNI_SME_TDLS_CHANNEL_SWITCH_REQ,
     eWNI_SME_TDLS_CHANNEL_SWITCH_RSP,
 #endif
-    //NOTE: If you are planning to add more mesages, please make sure that 
+    //NOTE: If you are planning to add more mesages, please make sure that
     //SIR_LIM_ITC_MSG_TYPES_BEGIN is moved appropriately. It is set as
     //SIR_LIM_MSG_TYPES_BEGIN+0xB0 = 12B0 (which means max of 176 messages and
     //eWNI_SME_TDLS_DEL_STA_RSP = 175.
     //Should fix above issue to enable TDLS_INTERNAL
 #ifdef FEATURE_WLAN_TDLS_INTERNAL
 #error ERROR_TDLS_INTERNAL
-    eWNI_SME_TDLS_DISCOVERY_START_REQ,    
-    eWNI_SME_TDLS_DISCOVERY_START_RSP,    
-    eWNI_SME_TDLS_DISCOVERY_START_IND,    
-    eWNI_SME_TDLS_LINK_START_REQ,    
-    eWNI_SME_TDLS_LINK_START_RSP,    
-    eWNI_SME_TDLS_LINK_START_IND,    
-    eWNI_SME_TDLS_TEARDOWN_REQ,    
-    eWNI_SME_TDLS_TEARDOWN_RSP,    
-    eWNI_SME_TDLS_TEARDOWN_IND,    
-    eWNI_SME_ADD_TDLS_PEER_IND,    
-    eWNI_SME_DELETE_TDLS_PEER_IND,    
+    eWNI_SME_TDLS_DISCOVERY_START_REQ,
+    eWNI_SME_TDLS_DISCOVERY_START_RSP,
+    eWNI_SME_TDLS_DISCOVERY_START_IND,
+    eWNI_SME_TDLS_LINK_START_REQ,
+    eWNI_SME_TDLS_LINK_START_RSP,
+    eWNI_SME_TDLS_LINK_START_IND,
+    eWNI_SME_TDLS_TEARDOWN_REQ,
+    eWNI_SME_TDLS_TEARDOWN_RSP,
+    eWNI_SME_TDLS_TEARDOWN_IND,
+    eWNI_SME_ADD_TDLS_PEER_IND,
+    eWNI_SME_DELETE_TDLS_PEER_IND,
 #endif
     eWNI_SME_SET_BCN_FILTER_REQ,
     eWNI_SME_RESET_AP_CAPS_CHANGED,
@@ -379,7 +379,7 @@ enum eWniMsgTypes
     eWNI_SME_TSM_IE_IND,
 
 #ifdef FEATURE_WLAN_CH_AVOID
-   eWNI_SME_CH_AVOID_IND,
+    eWNI_SME_CH_AVOID_IND,
 #endif /* FEATURE_WLAN_CH_AVOID */
     eWNI_SME_HT40_OBSS_SCAN_IND, /* START and UPDATE OBSS SCAN Indication*/
     eWNI_SME_HT40_STOP_OBSS_SCAN_IND, /* STOP OBSS SCAN indication */
@@ -609,34 +609,34 @@ enum eWniMsgTypes
 // Per STA statistic structure
 typedef struct sAniCfgPerStaStatStruct
 {
-       unsigned long     sentAesBlksUcastHi;
-       unsigned long     sentAesBlksUcastLo;
+    unsigned long     sentAesBlksUcastHi;
+    unsigned long     sentAesBlksUcastLo;
 
-       unsigned long     recvAesBlksUcastHi;
-       unsigned long     recvAesBlksUcastLo;
+    unsigned long     recvAesBlksUcastHi;
+    unsigned long     recvAesBlksUcastLo;
 
-       unsigned long     aesFormatErrorUcastCnts;
+    unsigned long     aesFormatErrorUcastCnts;
 
-       unsigned long     aesReplaysUcast;
+    unsigned long     aesReplaysUcast;
 
-       unsigned long     aesDecryptErrUcast;
+    unsigned long     aesDecryptErrUcast;
 
-       unsigned long     singleRetryPkts;
+    unsigned long     singleRetryPkts;
 
-       unsigned long     failedTxPkts;
+    unsigned long     failedTxPkts;
 
-       unsigned long     ackTimeouts;
+    unsigned long     ackTimeouts;
 
-       unsigned long     multiRetryPkts;
+    unsigned long     multiRetryPkts;
 
-       unsigned long     fragTxCntsHi;
-       unsigned long     fragTxCntsLo;
+    unsigned long     fragTxCntsHi;
+    unsigned long     fragTxCntsLo;
 
-       unsigned long     transmittedPktsHi;
-       unsigned long     transmittedPktsLo;
+    unsigned long     transmittedPktsHi;
+    unsigned long     transmittedPktsLo;
 
-       unsigned long     phyStatHi;
-       unsigned long     phyStatLo;
+    unsigned long     phyStatHi;
+    unsigned long     phyStatLo;
 } tCfgPerStaStatStruct, *tpAniCfgPerStaStatStruct;
 
 #define WNI_CFG_GET_PER_STA_STAT_RSP_NUM                       23
@@ -655,7 +655,7 @@ typedef struct sAniCfgPerStaStatStruct
                                    (WNI_CFG_GET_AGG_STA_STAT_RSP_NUM << 2))
 #define WNI_CFG_GET_AGG_STA_STAT_RSP_RES 0
 
-  // Get TX rate based stats
+// Get TX rate based stats
 #define WNI_CFG_GET_TX_RATE_CTR_RSP_RES                        0
 
 typedef struct sAniCfgTxRateCtrs
@@ -692,7 +692,7 @@ typedef struct sAniCfgTxRateCtrs
 #define WNI_CFG_GET_STAT_REQ_LEN       (WNI_CFG_MB_HDR_LEN + \
                                        (WNI_CFG_GET_STAT_REQ_NUM << 2))
 
-  // Get per station statistic request
+// Get per station statistic request
 #define WNI_CFG_GET_PER_STA_STAT_REQ_STAID 0
 
 #define WNI_CFG_GET_PER_STA_STAT_REQ_NUM   1

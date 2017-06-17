@@ -61,7 +61,7 @@ typedef struct sAniSirCfgStaticString
     tANI_U8  maxLen;
     tANI_U8  length;
     tANI_U8  data[255];
-}tAniSirCfgStaticString;
+} tAniSirCfgStaticString;
 
 typedef struct sAniSirCfgStatic
 {
@@ -71,7 +71,7 @@ typedef struct sAniSirCfgStatic
     tANI_U32 cfgIMax;
     tANI_U32 cfgIVal;
     void     *pStrData;
-}tAniSirCgStatic;
+} tAniSirCgStatic;
 
 typedef struct sAniSirCfg
 {

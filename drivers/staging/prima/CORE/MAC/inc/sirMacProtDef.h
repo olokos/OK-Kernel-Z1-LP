@@ -231,7 +231,7 @@
 
 #endif
 
-//VHT Action Field 
+//VHT Action Field
 #ifdef WLAN_FEATURE_11AC
 #define SIR_MAC_VHT_OPMODE_NOTIFICATION        2
 #endif
@@ -443,7 +443,7 @@
 // When station sends Radio Management Cap.
 // State should be normal=1
 // Mbssid Mask should be 0
-#define RM_STATE_NORMAL             1 
+#define RM_STATE_NORMAL             1
 #endif
 
 #define SIR_MAC_OUI_VERSION_1         1
@@ -631,7 +631,7 @@
 #define SIR_MAC_SET_SHORT_SLOT_TIME(x)   (((tANI_U16) x) | 0x0400)
 #define SIR_MAC_SET_APSD(x)              (((tANI_U16) x) | 0x0800)
 #if defined WLAN_FEATURE_VOWIFI
-#define SIR_MAC_SET_RRM(x)               (((tANI_U16) x) | 0x1000) 
+#define SIR_MAC_SET_RRM(x)               (((tANI_U16) x) | 0x1000)
 #endif
 #define SIR_MAC_SET_GROUP_ACK(x)         (((tANI_U16) x) | 0x4000)
 
@@ -670,44 +670,44 @@ typedef enum eSirMacStatusCodes
     eSIR_MAC_OUTSIDE_SCOPE_OF_SPEC_STATUS         = 12, //Association denied due to reason outside the scope of this standard
     eSIR_MAC_AUTH_ALGO_NOT_SUPPORTED_STATUS       = 13, //Responding station does not support the specified authentication algorithm
     eSIR_MAC_AUTH_FRAME_OUT_OF_SEQ_STATUS         = 14, //Received an Authentication frame with authentication transaction sequence number
-                                                        //out of expected sequence
+    //out of expected sequence
     eSIR_MAC_CHALLENGE_FAILURE_STATUS             = 15, //Authentication rejected because of challenge failure
-    eSIR_MAC_AUTH_RSP_TIMEOUT_STATUS              = 16, //Authentication rejected due to timeout waiting for next frame in sequence 
+    eSIR_MAC_AUTH_RSP_TIMEOUT_STATUS              = 16, //Authentication rejected due to timeout waiting for next frame in sequence
     eSIR_MAC_MAX_ASSOC_STA_REACHED_STATUS         = 17, //Association denied because AP is unable to handle additional associated stations
     eSIR_MAC_BASIC_RATES_NOT_SUPPORTED_STATUS     = 18, //Association denied due to requesting station not supporting all of the data rates in the
-                                                        //BSSBasicRateSet parameter
+    //BSSBasicRateSet parameter
     eSIR_MAC_SHORT_PREAMBLE_NOT_SUPPORTED_STATUS  = 19, //Association denied due to requesting station not supporting the short preamble
-                                                        //option
+    //option
     eSIR_MAC_PBCC_NOT_SUPPORTED_STATUS            = 20, //Association denied due to requesting station not supporting the PBCC modulation
-                                                        //option
+    //option
     eSIR_MAC_CHANNEL_AGILITY_NOT_SUPPORTED_STATUS = 21, //Association denied due to requesting station not supporting the Channel Agility
-                                                        //option
+    //option
     eSIR_MAC_SPECTRUM_MGMT_REQD_STATUS            = 22, //Association request rejected because Spectrum Management capability is required
     eSIR_MAC_PWR_CAPABILITY_BAD_STATUS            = 23, //Association request rejected because the information in the Power Capability
-                                                        //element is unacceptable
+    //element is unacceptable
     eSIR_MAC_SPRTD_CHANNELS_BAD_STATUS            = 24, //Association request rejected because the information in the Supported Channels
-                                                        //element is unacceptable
+    //element is unacceptable
     eSIR_MAC_SHORT_SLOT_NOT_SUPORTED_STATUS       = 25, //Association denied due to requesting station not supporting the Short Slot Time
-                                                        //option
+    //option
     eSIR_MAC_DSSS_OFDM_NOT_SUPPORTED_STATUS       = 26, //Association denied due to requesting station not supporting the DSSS-OFDM option
     // reserved                                     27-29
     eSIR_MAC_TRY_AGAIN_LATER                      = 30, //Association request rejected temporarily, try again later
     // reserved                                     31
     eSIR_MAC_QOS_UNSPECIFIED_FAILURE_STATUS       = 32, //Unspecified, QoS-related failure
     eSIR_MAC_QAP_NO_BANDWIDTH_STATUS              = 33, //Association denied because QoS AP has insufficient bandwidth to handle another
-                                                        //QoS STA
+    //QoS STA
     eSIR_MAC_XS_FRAME_LOSS_STATUS                 = 34, //Association denied due to excessive frame loss rates and/or poor conditions on cur-
-                                                        //rent operating channel
+    //rent operating channel
     eSIR_MAC_STA_QOS_NOT_SUPPORTED_STATUS         = 35, //Association (with QoS BSS) denied because the requesting STA does not support the
-                                                        //QoS facility
+    //QoS facility
     eSIR_MAC_STA_BLK_ACK_NOT_SUPPORTED_STATUS     = 36, //Reserved
     eSIR_MAC_REQ_DECLINED_STATUS                  = 37, //The request has been declined
     eSIR_MAC_INVALID_PARAM_STATUS                 = 38, //The request has not been successful as one or more parameters have invalid values
     eSIR_MAC_TS_NOT_HONOURED_STATUS               = 39, //The TS has not been created because the request cannot be honored; however, a suggested
-                                                        //TSPEC is provided so that the initiating STA may attempt to set another TS
-                                                        //with the suggested changes to the TSPEC
+    //TSPEC is provided so that the initiating STA may attempt to set another TS
+    //with the suggested changes to the TSPEC
     eSIR_MAC_INVALID_INFORMATION_ELEMENT_STATUS   = 40, //Invalid information element, i.e., an information element defined in this standard for
-                                                        //which the content does not meet the specifications in Clause 7
+    //which the content does not meet the specifications in Clause 7
     eSIR_MAC_INVALID_GROUP_CIPHER_STATUS          = 41, //Invalid group cipher
     eSIR_MAC_INVALID_PAIRWISE_CIPHER_STATUS       = 42, //Invalid pairwise cipher
     eSIR_MAC_INVALID_AKMP_STATUS                  = 43, //Invalid AKMP
@@ -715,13 +715,13 @@ typedef enum eSirMacStatusCodes
     eSIR_MAC_INVALID_RSN_IE_CAPABILITIES_STATUS   = 45, //Invalid RSN information element capabilities
     eSIR_MAC_CIPHER_SUITE_REJECTED_STATUS         = 46, //Cipher suite rejected because of security policy
     eSIR_MAC_TS_NOT_CREATED_STATUS                = 47, //The TS has not been created; however, the HC may be capable of creating a TS, in
-                                                        //response to a request, after the time indicated in the TS Delay element
+    //response to a request, after the time indicated in the TS Delay element
     eSIR_MAC_DL_NOT_ALLOWED_STATUS                = 48, //Direct link is not allowed in the BSS by policy
     eSIR_MAC_DEST_STA_NOT_KNOWN_STATUS            = 49, //The Destination STA is not present within this BSS
     eSIR_MAC_DEST_STA_NOT_QSTA_STATUS             = 50, //The Destination STA is not a QoS STA
     eSIR_MAC_INVALID_LISTEN_INTERVAL_STATUS       = 51, //Association denied because the ListenInterval is too large
 
-    eSIR_MAC_DSSS_CCK_RATE_MUST_SUPPORT_STATUS    = 52, //FIXME: 
+    eSIR_MAC_DSSS_CCK_RATE_MUST_SUPPORT_STATUS    = 52, //FIXME:
     eSIR_MAC_DSSS_CCK_RATE_NOT_SUPPORT_STATUS     = 53,
     eSIR_MAC_PSMP_CONTROLLED_ACCESS_ONLY_STATUS   = 54,
 #ifdef FEATURE_WLAN_ESE
@@ -729,7 +729,7 @@ typedef enum eSirMacStatusCodes
     eSIR_MAC_ESE_TSPEC_REQ_REFUSED_STATUS         = 201, //ESE-TSPEC request refused due to AP's policy configuration in AddTs Rsp, (Re)Assoc Rsp.
     eSIR_MAC_ESE_ASSOC_DENIED_INSUFF_BW_STATUS    = 202, //ESE-Assoc denied due to insufficient bandwidth to handle new TS in (Re)Assoc Rsp.
     eSIR_MAC_ESE_INVALID_PARAMETERS_STATUS        = 203, //ESE-Invalid parameters. (Re)Assoc request had one or more TSPEC parameters with
-                                                         //invalid values.
+    //invalid values.
 #endif
 
 } tSirMacStatusCodes;
@@ -753,12 +753,12 @@ typedef enum eSirMacReasonCodes
     eSIR_MAC_SPRTD_CHANNELS_BAD_REASON               = 11, //Disassociated because the information in the Supported Channels element is unacceptable
     // reserved                                        12
     eSIR_MAC_INVALID_IE_REASON                       = 13, //Invalid information element, i.e., an information element defined in this standard for
-                                                           //which the content does not meet the specifications in Clause 7
+    //which the content does not meet the specifications in Clause 7
     eSIR_MAC_MIC_FAILURE_REASON                      = 14, //Message integrity code (MIC) failure
     eSIR_MAC_4WAY_HANDSHAKE_TIMEOUT_REASON           = 15, //4-Way Handshake timeout
     eSIR_MAC_GR_KEY_UPDATE_TIMEOUT_REASON            = 16, //Group Key Handshake timeout
     eSIR_MAC_RSN_IE_MISMATCH_REASON                  = 17, //Information element in 4-Way Handshake different from (Re)Association Request/Probe
-                                                           //Response/Beacon frame
+    //Response/Beacon frame
     eSIR_MAC_INVALID_MC_CIPHER_REASON                = 18, //Invalid group cipher
     eSIR_MAC_INVALID_UC_CIPHER_REASON                = 19, //Invalid pairwise cipher
     eSIR_MAC_INVALID_AKMP_REASON                     = 20, //Invalid AKMP
@@ -777,12 +777,12 @@ typedef enum eSirMacReasonCodes
     eSIR_MAC_QOS_UNSPECIFIED_REASON                  = 32, //Disassociated for unspecified, QoS-related reason
     eSIR_MAC_QAP_NO_BANDWIDTH_REASON                 = 33, //Disassociated because QoS AP lacks sufficient bandwidth for this QoS STA
     eSIR_MAC_XS_UNACKED_FRAMES_REASON                = 34, //Disassociated because excessive number of frames need to be acknowledged, but are not
-                                                           //acknowledged due to AP transmissions and/or poor channel conditions
+    //acknowledged due to AP transmissions and/or poor channel conditions
     eSIR_MAC_BAD_TXOP_USE_REASON                     = 35, //Disassociated because STA is transmitting outside the limits of its TXOPs
     eSIR_MAC_PEER_STA_REQ_LEAVING_BSS_REASON         = 36, //Requested from peer STA as the STA is leaving the BSS (or resetting)
     eSIR_MAC_PEER_REJECT_MECHANISIM_REASON           = 37, //Requested from peer STA as it does not want to use the mechanism
     eSIR_MAC_MECHANISM_NOT_SETUP_REASON              = 38, //Requested from peer STA as the STA received frames using the mechanism for which a
-                                                           //setup is required
+    //setup is required
     eSIR_MAC_PEER_TIMEDOUT_REASON                    = 39, //Requested from peer STA due to timeout
     eSIR_MAC_CIPHER_NOT_SUPPORTED_REASON             = 45,  //Peer STA does not support the requested cipher suite
     eSIR_MAC_DISASSOC_DUE_TO_FTHANDOFF_REASON        = 46, //FT reason
@@ -801,29 +801,29 @@ typedef enum eSirMacChannelType
 // BA Initiator v/s Recipient
 typedef enum eBADirection
 {
-  eBA_RECIPIENT,
-  eBA_INITIATOR
+    eBA_RECIPIENT,
+    eBA_INITIATOR
 } tBADirection;
 
 // A-MPDU/BA Enable/Disable in Tx/Rx direction
 typedef enum eBAEnable
 {
-  eBA_DISABLE,
-  eBA_ENABLE
+    eBA_DISABLE,
+    eBA_ENABLE
 } tBAEnable;
 
 // A-MPDU/BA Policy
 typedef enum eBAPolicy
 {
-  eBA_UNCOMPRESSED,
-  eBA_COMPRESSED
+    eBA_UNCOMPRESSED,
+    eBA_COMPRESSED
 } tBAPolicy;
 
 // A-MPDU/BA Policy
 typedef enum eBAPolicyType
 {
-  eBA_POLICY_DELAYED,
-  eBA_POLICY_IMMEDIATE
+    eBA_POLICY_DELAYED,
+    eBA_POLICY_IMMEDIATE
 } tBAPolicyType;
 
 #ifdef WLAN_FEATURE_VOWIFI
@@ -1413,7 +1413,7 @@ typedef __ani_attr_pre_packed struct sSirMacTclasParamEthernet
     tANI_U8             srcAddr[6];
     tANI_U8             dstAddr[6];
     tANI_U16            type;
-}__ani_attr_packed tSirMacTclasParamEthernet;
+} __ani_attr_packed tSirMacTclasParamEthernet;
 
 #define SIR_MAC_TCLAS_PARAM_IPV4_MIN  16
 typedef __ani_attr_pre_packed struct sSirMacTclasParamIPv4
@@ -1753,7 +1753,7 @@ typedef __ani_attr_pre_packed struct sSirMacVHTTxSupDataRateInfo
     tANI_U16 txSupDataRate: 13;
     tANI_U16 reserved: 3;
 #endif
-}__ani_attr_packed tSirMacVHTTxSupDataRateInfo;
+} __ani_attr_packed tSirMacVHTTxSupDataRateInfo;
 
 typedef __ani_attr_pre_packed struct sSirMacVHTRxSupDataRateInfo
 {
@@ -1764,7 +1764,7 @@ typedef __ani_attr_pre_packed struct sSirMacVHTRxSupDataRateInfo
     tANI_U16 rxSupDataRate: 13;
     tANI_U16 reserved: 3;
 #endif
-}__ani_attr_packed tSirMacVHTRxSupDataRateInfo;
+} __ani_attr_packed tSirMacVHTRxSupDataRateInfo;
 
 /**
  * struct sSirVhtMcsInfo - VHT MCS information
@@ -1779,12 +1779,13 @@ typedef __ani_attr_pre_packed struct sSirMacVHTRxSupDataRateInfo
  *      If this field is 0 this value should not be used to
  *      consider the highest TX data rate supported.
  */
-typedef struct sSirVhtMcsInfo {
+typedef struct sSirVhtMcsInfo
+{
     tANI_U16 rxMcsMap;
     tANI_U16 rxHighest;
     tANI_U16 txMcsMap;
     tANI_U16 txHighest;
-}tSirVhtMcsInfo;
+} tSirVhtMcsInfo;
 
 /**
  * struct sSirVHtCap - VHT capabilities
@@ -1794,10 +1795,11 @@ typedef struct sSirVhtMcsInfo {
  * @vht_cap_info: VHT capability info
  * @supp_mcs: VHT MCS supported rates
  */
-typedef struct sSirVHtCap {
+typedef struct sSirVHtCap
+{
     tANI_U32       vhtCapInfo;
     tSirVhtMcsInfo suppMcs;
-}tSirVHTCap;
+} tSirVHTCap;
 
 /**
  * struct sSirHtCap - HT capabilities
@@ -1807,14 +1809,15 @@ typedef struct sSirVHtCap {
  */
 
 
-typedef struct sSirHtCap {
+typedef struct sSirHtCap
+{
     tANI_U16 capInfo;
     tANI_U8  ampduParamsInfo;
     tANI_U8  suppMcsSet[16];
     tANI_U16 extendedHtCapInfo;
     tANI_U32 txBFCapInfo;
     tANI_U8  antennaSelectionInfo;
-}tSirHTCap;
+} tSirHTCap;
 
 // HT Cap and HT IE Size defines
 #define HT_CAPABILITY_IE_SIZE                       28
@@ -1825,20 +1828,20 @@ typedef struct sSirHtCap {
 //
 typedef enum eSirMacHTOperatingMode
 {
-  eSIR_HT_OP_MODE_PURE, // No Protection
-  eSIR_HT_OP_MODE_OVERLAP_LEGACY, // Overlap Legacy device present, protection is optional
-  eSIR_HT_OP_MODE_NO_LEGACY_20MHZ_HT, // No legacy device, but 20 MHz HT present
-  eSIR_HT_OP_MODE_MIXED // Protetion is required
+    eSIR_HT_OP_MODE_PURE, // No Protection
+    eSIR_HT_OP_MODE_OVERLAP_LEGACY, // Overlap Legacy device present, protection is optional
+    eSIR_HT_OP_MODE_NO_LEGACY_20MHZ_HT, // No legacy device, but 20 MHz HT present
+    eSIR_HT_OP_MODE_MIXED // Protetion is required
 } tSirMacHTOperatingMode;
 
 
 // Spatial Multiplexing(SM) Power Save mode
 typedef enum eSirMacHTMIMOPowerSaveState
 {
-  eSIR_HT_MIMO_PS_STATIC = 0, // Static SM Power Save mode
-  eSIR_HT_MIMO_PS_DYNAMIC = 1, // Dynamic SM Power Save mode
-  eSIR_HT_MIMO_PS_NA = 2, // reserved
-  eSIR_HT_MIMO_PS_NO_LIMIT = 3 // SM Power Save disabled
+    eSIR_HT_MIMO_PS_STATIC = 0, // Static SM Power Save mode
+    eSIR_HT_MIMO_PS_DYNAMIC = 1, // Dynamic SM Power Save mode
+    eSIR_HT_MIMO_PS_NA = 2, // reserved
+    eSIR_HT_MIMO_PS_NO_LIMIT = 3 // SM Power Save disabled
 } tSirMacHTMIMOPowerSaveState;
 
 
@@ -1853,7 +1856,8 @@ typedef enum eSirMacHTChannelWidth
 } tSirMacHTChannelWidth;
 
 //Packet struct for HT capability
-typedef __ani_attr_pre_packed struct sHtCaps {
+typedef __ani_attr_pre_packed struct sHtCaps
+{
     tANI_U16     advCodingCap: 1;
     tANI_U16 supportedChannelWidthSet: 1;
     tANI_U16    mimoPowerSave: 2;
@@ -1905,19 +1909,20 @@ typedef __ani_attr_pre_packed struct sHtCaps {
 } __ani_attr_packed tHtCaps;
 
 /* During 11h channel switch, the AP can indicate if the
- * STA needs to stop the transmission or continue until the 
+ * STA needs to stop the transmission or continue until the
  * channel-switch.
  * eSIR_CHANSW_MODE_NORMAL - STA can continue transmission
  * eSIR_CHANSW_MODE_SILENT - STA should stop transmission
  */
-typedef enum eSirMacChanSwMode 
+typedef enum eSirMacChanSwMode
 {
     eSIR_CHANSW_MODE_NORMAL = 0,
     eSIR_CHANSW_MODE_SILENT = 1
 } tSirMacChanSwitchMode;
 
 
-typedef __ani_attr_pre_packed struct _BarControl {
+typedef __ani_attr_pre_packed struct _BarControl
+{
 
 #ifndef ANI_BIG_BYTE_ENDIAN
 
@@ -1936,16 +1941,17 @@ typedef __ani_attr_pre_packed struct _BarControl {
 
 #endif
 
-}__ani_attr_packed barCtrlType;
+} __ani_attr_packed barCtrlType;
 
-typedef __ani_attr_pre_packed struct _BARFrmStruct {
+typedef __ani_attr_pre_packed struct _BARFrmStruct
+{
     tSirMacFrameCtl   fc;
     tANI_U16          duration;
     tSirMacAddr       rxAddr;
     tSirMacAddr       txAddr;
     barCtrlType       barControl;
     tSirMacSeqCtl     ssnCtrl;
-}__ani_attr_packed BARFrmType;
+} __ani_attr_packed BARFrmType;
 
 
 #if 0
@@ -2004,7 +2010,7 @@ typedef __ani_attr_pre_packed struct _BARFrmStruct {
 #define SIZE_OF_BASIC_MCS_SET                              16
 #define VALID_MCS_SIZE                                     77 //0-76
 #define MCS_RX_HIGHEST_SUPPORTED_RATE_BYTE_OFFSET          10
-// This is not clear, Count 8 based from NV supported MCS count    
+// This is not clear, Count 8 based from NV supported MCS count
 #define VALID_MAX_MCS_INDEX                                8
 
 #if 0
@@ -2124,74 +2130,74 @@ typedef __ani_attr_pre_packed struct _BARFrmStruct {
 //
 typedef enum eHTCapability
 {
-  eHT_LSIG_TXOP_PROTECTION,
-  eHT_STBC_CONTROL_FRAME,
-  eHT_PSMP,
-  eHT_DSSS_CCK_MODE_40MHZ,
-  eHT_MAX_AMSDU_LENGTH,
-  eHT_DELAYED_BA,
-  eHT_RX_STBC,
-  eHT_TX_STBC,
-  eHT_SHORT_GI_40MHZ,
-  eHT_SHORT_GI_20MHZ,
-  eHT_GREENFIELD,
-  eHT_MIMO_POWER_SAVE,
-  eHT_SUPPORTED_CHANNEL_WIDTH_SET,
-  eHT_ADVANCED_CODING,
-  eHT_MAX_RX_AMPDU_FACTOR,
-  eHT_MPDU_DENSITY,
-  eHT_PCO,
-  eHT_TRANSITION_TIME,
-  eHT_MCS_FEEDBACK,
-  eHT_TX_BEAMFORMING,
-  eHT_ANTENNA_SELECTION,
-  // The following come under Additional HT Capabilities
-  eHT_SI_GRANULARITY,
-  eHT_CONTROLLED_ACCESS,
-  eHT_RIFS_MODE,
-  eHT_RECOMMENDED_TX_WIDTH_SET,
-  eHT_EXTENSION_CHANNEL_OFFSET,
-  eHT_OP_MODE,
-  eHT_BASIC_STBC_MCS,
-  eHT_DUAL_CTS_PROTECTION,
-  eHT_LSIG_TXOP_PROTECTION_FULL_SUPPORT,
-  eHT_PCO_ACTIVE,
-  eHT_PCO_PHASE
+    eHT_LSIG_TXOP_PROTECTION,
+    eHT_STBC_CONTROL_FRAME,
+    eHT_PSMP,
+    eHT_DSSS_CCK_MODE_40MHZ,
+    eHT_MAX_AMSDU_LENGTH,
+    eHT_DELAYED_BA,
+    eHT_RX_STBC,
+    eHT_TX_STBC,
+    eHT_SHORT_GI_40MHZ,
+    eHT_SHORT_GI_20MHZ,
+    eHT_GREENFIELD,
+    eHT_MIMO_POWER_SAVE,
+    eHT_SUPPORTED_CHANNEL_WIDTH_SET,
+    eHT_ADVANCED_CODING,
+    eHT_MAX_RX_AMPDU_FACTOR,
+    eHT_MPDU_DENSITY,
+    eHT_PCO,
+    eHT_TRANSITION_TIME,
+    eHT_MCS_FEEDBACK,
+    eHT_TX_BEAMFORMING,
+    eHT_ANTENNA_SELECTION,
+    // The following come under Additional HT Capabilities
+    eHT_SI_GRANULARITY,
+    eHT_CONTROLLED_ACCESS,
+    eHT_RIFS_MODE,
+    eHT_RECOMMENDED_TX_WIDTH_SET,
+    eHT_EXTENSION_CHANNEL_OFFSET,
+    eHT_OP_MODE,
+    eHT_BASIC_STBC_MCS,
+    eHT_DUAL_CTS_PROTECTION,
+    eHT_LSIG_TXOP_PROTECTION_FULL_SUPPORT,
+    eHT_PCO_ACTIVE,
+    eHT_PCO_PHASE
 } tHTCapability;
 
 // HT Capabilities Info
 typedef __ani_attr_pre_packed struct sSirMacHTCapabilityInfo
 {
 #ifndef ANI_LITTLE_BIT_ENDIAN
-  tANI_U16  lsigTXOPProtection:1; // Dynamic state
-  tANI_U16  stbcControlFrame:1; // Static via CFG
-  tANI_U16  psmp:1; // Static via CFG
-  tANI_U16  dsssCckMode40MHz:1; // Static via CFG
-  tANI_U16  maximalAMSDUsize:1; // Static via CFG
-  tANI_U16  delayedBA:1; // Static via CFG
-  tANI_U16  rxSTBC:2; // Static via CFG
-  tANI_U16  txSTBC:1; // Static via CFG
-  tANI_U16  shortGI40MHz:1; // Static via CFG
-  tANI_U16  shortGI20MHz:1; // Static via CFG
-  tANI_U16  greenField:1; // Static via CFG
-  tANI_U16  mimoPowerSave:2; // Dynamic state
-  tANI_U16  supportedChannelWidthSet:1; // Static via CFG
-  tANI_U16  advCodingCap:1; // Static via CFG
+    tANI_U16  lsigTXOPProtection:1; // Dynamic state
+    tANI_U16  stbcControlFrame:1; // Static via CFG
+    tANI_U16  psmp:1; // Static via CFG
+    tANI_U16  dsssCckMode40MHz:1; // Static via CFG
+    tANI_U16  maximalAMSDUsize:1; // Static via CFG
+    tANI_U16  delayedBA:1; // Static via CFG
+    tANI_U16  rxSTBC:2; // Static via CFG
+    tANI_U16  txSTBC:1; // Static via CFG
+    tANI_U16  shortGI40MHz:1; // Static via CFG
+    tANI_U16  shortGI20MHz:1; // Static via CFG
+    tANI_U16  greenField:1; // Static via CFG
+    tANI_U16  mimoPowerSave:2; // Dynamic state
+    tANI_U16  supportedChannelWidthSet:1; // Static via CFG
+    tANI_U16  advCodingCap:1; // Static via CFG
 #else
-  tANI_U16  advCodingCap:1;
-  tANI_U16  supportedChannelWidthSet:1;
-  tANI_U16  mimoPowerSave:2;
-  tANI_U16  greenField:1;
-  tANI_U16  shortGI20MHz:1;
-  tANI_U16  shortGI40MHz:1;
-  tANI_U16  txSTBC:1;
-  tANI_U16  rxSTBC:2;
-  tANI_U16  delayedBA:1;
-  tANI_U16  maximalAMSDUsize:1;
-  tANI_U16  dsssCckMode40MHz:1;
-  tANI_U16  psmp:1;
-  tANI_U16  stbcControlFrame:1;
-  tANI_U16  lsigTXOPProtection:1;
+    tANI_U16  advCodingCap:1;
+    tANI_U16  supportedChannelWidthSet:1;
+    tANI_U16  mimoPowerSave:2;
+    tANI_U16  greenField:1;
+    tANI_U16  shortGI20MHz:1;
+    tANI_U16  shortGI40MHz:1;
+    tANI_U16  txSTBC:1;
+    tANI_U16  rxSTBC:2;
+    tANI_U16  delayedBA:1;
+    tANI_U16  maximalAMSDUsize:1;
+    tANI_U16  dsssCckMode40MHz:1;
+    tANI_U16  psmp:1;
+    tANI_U16  stbcControlFrame:1;
+    tANI_U16  lsigTXOPProtection:1;
 #endif
 } __ani_attr_packed tSirMacHTCapabilityInfo;
 
@@ -2199,13 +2205,13 @@ typedef __ani_attr_pre_packed struct sSirMacHTCapabilityInfo
 typedef __ani_attr_pre_packed struct sSirMacHTParametersInfo
 {
 #ifndef ANI_LITTLE_BIT_ENDIAN
-  tANI_U8  reserved:3;
-  tANI_U8  mpduDensity:3; // Dynamic state
-  tANI_U8  maxRxAMPDUFactor:2; // Dynamic state
+    tANI_U8  reserved:3;
+    tANI_U8  mpduDensity:3; // Dynamic state
+    tANI_U8  maxRxAMPDUFactor:2; // Dynamic state
 #else
-  tANI_U8  maxRxAMPDUFactor:2;
-  tANI_U8  mpduDensity:3;
-  tANI_U8  reserved:3;
+    tANI_U8  maxRxAMPDUFactor:2;
+    tANI_U8  mpduDensity:3;
+    tANI_U8  reserved:3;
 #endif
 } __ani_attr_packed tSirMacHTParametersInfo;
 
@@ -2213,17 +2219,17 @@ typedef __ani_attr_pre_packed struct sSirMacHTParametersInfo
 typedef __ani_attr_pre_packed struct sSirMacExtendedHTCapabilityInfo
 {
 #ifndef ANI_LITTLE_BIT_ENDIAN
-  tANI_U16  reserved2:6;
-  tANI_U16  mcsFeedback:2; // Static via CFG
-  tANI_U16  reserved1:5;
-  tANI_U16  transitionTime:2; // Static via CFG
-  tANI_U16  pco:1; // Static via CFG
+    tANI_U16  reserved2:6;
+    tANI_U16  mcsFeedback:2; // Static via CFG
+    tANI_U16  reserved1:5;
+    tANI_U16  transitionTime:2; // Static via CFG
+    tANI_U16  pco:1; // Static via CFG
 #else
-  tANI_U16  pco:1;
-  tANI_U16  transitionTime:2;
-  tANI_U16  reserved1:5;
-  tANI_U16  mcsFeedback:2;
-  tANI_U16  reserved2:6;
+    tANI_U16  pco:1;
+    tANI_U16  transitionTime:2;
+    tANI_U16  reserved1:5;
+    tANI_U16  mcsFeedback:2;
+    tANI_U16  reserved2:6;
 #endif
 } __ani_attr_packed tSirMacExtendedHTCapabilityInfo;
 
@@ -2245,39 +2251,39 @@ typedef __ani_attr_pre_packed struct sSirMacRxHighestSupportRate
 typedef __ani_attr_pre_packed struct sSirMacTxBFCapabilityInfo
 {
 #ifndef ANI_LITTLE_BIT_ENDIAN
-  tANI_U32  reserved:7;
-  tANI_U32  compressedSteeringMatrixBFAntennae:2; // Static via CFG
-  tANI_U32  uncompressedSteeringMatrixBFAntennae:2; // Static via CFG
-  tANI_U32  csiNumBFAntennae:2; // Static via CFG
-  tANI_U32  explicitCompressedSteeringMatrixFeedback:3; // Static via CFG
-  tANI_U32  explicitUncompressedSteeringMatrixFeedback:3; // Static via CFG
-  tANI_U32  explicitBFCSIFeedback:3; // Static via CFG
-  tANI_U32  explicitUncompressedSteeringMatrix:1; // Static via CFG
-  tANI_U32  explicitCSITxBF:1; // Static via CFG
-  tANI_U32  calibration:2; // Static via CFG
-  tANI_U32  implicitTxBF:1; // Static via CFG
-  tANI_U32  txZLF:1; // Static via CFG
-  tANI_U32  rxZLF:1; // Static via CFG
-  tANI_U32  txStaggeredSounding:1; // Static via CFG
-  tANI_U32  rxStaggeredSounding:1; // Static via CFG
-  tANI_U32  txBF:1; // Static via CFG
+    tANI_U32  reserved:7;
+    tANI_U32  compressedSteeringMatrixBFAntennae:2; // Static via CFG
+    tANI_U32  uncompressedSteeringMatrixBFAntennae:2; // Static via CFG
+    tANI_U32  csiNumBFAntennae:2; // Static via CFG
+    tANI_U32  explicitCompressedSteeringMatrixFeedback:3; // Static via CFG
+    tANI_U32  explicitUncompressedSteeringMatrixFeedback:3; // Static via CFG
+    tANI_U32  explicitBFCSIFeedback:3; // Static via CFG
+    tANI_U32  explicitUncompressedSteeringMatrix:1; // Static via CFG
+    tANI_U32  explicitCSITxBF:1; // Static via CFG
+    tANI_U32  calibration:2; // Static via CFG
+    tANI_U32  implicitTxBF:1; // Static via CFG
+    tANI_U32  txZLF:1; // Static via CFG
+    tANI_U32  rxZLF:1; // Static via CFG
+    tANI_U32  txStaggeredSounding:1; // Static via CFG
+    tANI_U32  rxStaggeredSounding:1; // Static via CFG
+    tANI_U32  txBF:1; // Static via CFG
 #else
-  tANI_U32  txBF:1;
-  tANI_U32  rxStaggeredSounding:1;
-  tANI_U32  txStaggeredSounding:1;
-  tANI_U32  rxZLF:1;
-  tANI_U32  txZLF:1;
-  tANI_U32  implicitTxBF:1;
-  tANI_U32  calibration:2;
-  tANI_U32  explicitCSITxBF:1;
-  tANI_U32  explicitUncompressedSteeringMatrix:1;
-  tANI_U32  explicitBFCSIFeedback:3;
-  tANI_U32  explicitUncompressedSteeringMatrixFeedback:3;
-  tANI_U32  explicitCompressedSteeringMatrixFeedback:3;
-  tANI_U32  csiNumBFAntennae:2;
-  tANI_U32  uncompressedSteeringMatrixBFAntennae:2;
-  tANI_U32  compressedSteeringMatrixBFAntennae:2;
-  tANI_U32  reserved:7;
+    tANI_U32  txBF:1;
+    tANI_U32  rxStaggeredSounding:1;
+    tANI_U32  txStaggeredSounding:1;
+    tANI_U32  rxZLF:1;
+    tANI_U32  txZLF:1;
+    tANI_U32  implicitTxBF:1;
+    tANI_U32  calibration:2;
+    tANI_U32  explicitCSITxBF:1;
+    tANI_U32  explicitUncompressedSteeringMatrix:1;
+    tANI_U32  explicitBFCSIFeedback:3;
+    tANI_U32  explicitUncompressedSteeringMatrixFeedback:3;
+    tANI_U32  explicitCompressedSteeringMatrixFeedback:3;
+    tANI_U32  csiNumBFAntennae:2;
+    tANI_U32  uncompressedSteeringMatrixBFAntennae:2;
+    tANI_U32  compressedSteeringMatrixBFAntennae:2;
+    tANI_U32  reserved:7;
 #endif
 } __ani_attr_packed tSirMacTxBFCapabilityInfo;
 
@@ -2285,23 +2291,23 @@ typedef __ani_attr_pre_packed struct sSirMacTxBFCapabilityInfo
 typedef __ani_attr_pre_packed struct sSirMacASCapabilityInfo
 {
 #ifndef ANI_LITTLE_BIT_ENDIAN
-  tANI_U8  reserved2:1;
-  tANI_U8  txSoundingPPDUs:1; // Static via CFG
-  tANI_U8  rxAS:1; // Static via CFG
-  tANI_U8  antennaIndicesFeedback:1; // Static via CFG
-  tANI_U8  explicitCSIFeedback:1; // Static via CFG
-  tANI_U8  antennaIndicesFeedbackTx:1; // Static via CFG
-  tANI_U8  explicitCSIFeedbackTx:1; // Static via CFG
-  tANI_U8  antennaSelection:1; // Static via CFG
+    tANI_U8  reserved2:1;
+    tANI_U8  txSoundingPPDUs:1; // Static via CFG
+    tANI_U8  rxAS:1; // Static via CFG
+    tANI_U8  antennaIndicesFeedback:1; // Static via CFG
+    tANI_U8  explicitCSIFeedback:1; // Static via CFG
+    tANI_U8  antennaIndicesFeedbackTx:1; // Static via CFG
+    tANI_U8  explicitCSIFeedbackTx:1; // Static via CFG
+    tANI_U8  antennaSelection:1; // Static via CFG
 #else
-  tANI_U8  antennaSelection:1;
-  tANI_U8  explicitCSIFeedbackTx:1;
-  tANI_U8  antennaIndicesFeedbackTx:1;
-  tANI_U8  explicitCSIFeedback:1;
-  tANI_U8  antennaIndicesFeedback:1;
-  tANI_U8  rxAS:1;
-  tANI_U8  txSoundingPPDUs:1;
-  tANI_U8  reserved2:1;
+    tANI_U8  antennaSelection:1;
+    tANI_U8  explicitCSIFeedbackTx:1;
+    tANI_U8  antennaIndicesFeedbackTx:1;
+    tANI_U8  explicitCSIFeedback:1;
+    tANI_U8  antennaIndicesFeedback:1;
+    tANI_U8  rxAS:1;
+    tANI_U8  txSoundingPPDUs:1;
+    tANI_U8  reserved2:1;
 #endif
 } __ani_attr_packed tSirMacASCapabilityInfo;
 
@@ -2309,17 +2315,17 @@ typedef __ani_attr_pre_packed struct sSirMacASCapabilityInfo
 typedef __ani_attr_pre_packed struct sSirMacHTInfoField1
 {
 #ifndef ANI_LITTLE_BIT_ENDIAN
-  tANI_U8  serviceIntervalGranularity:3; // Dynamic state
-  tANI_U8  controlledAccessOnly:1; // Static via CFG
-  tANI_U8  rifsMode:1; // Dynamic state
-  tANI_U8  recommendedTxWidthSet:1; // Dynamic state
-  tANI_U8  secondaryChannelOffset:2; // Dynamic state
+    tANI_U8  serviceIntervalGranularity:3; // Dynamic state
+    tANI_U8  controlledAccessOnly:1; // Static via CFG
+    tANI_U8  rifsMode:1; // Dynamic state
+    tANI_U8  recommendedTxWidthSet:1; // Dynamic state
+    tANI_U8  secondaryChannelOffset:2; // Dynamic state
 #else
-  tANI_U8  secondaryChannelOffset:2;
-  tANI_U8  recommendedTxWidthSet:1;
-  tANI_U8  rifsMode:1;
-  tANI_U8  controlledAccessOnly:1;
-  tANI_U8  serviceIntervalGranularity:3;
+    tANI_U8  secondaryChannelOffset:2;
+    tANI_U8  recommendedTxWidthSet:1;
+    tANI_U8  rifsMode:1;
+    tANI_U8  controlledAccessOnly:1;
+    tANI_U8  serviceIntervalGranularity:3;
 #endif
 } __ani_attr_packed tSirMacHTInfoField1;
 
@@ -2327,17 +2333,17 @@ typedef __ani_attr_pre_packed struct sSirMacHTInfoField1
 typedef __ani_attr_pre_packed struct sSirMacHTInfoField2
 {
 #ifndef ANI_LITTLE_BIT_ENDIAN
-  tANI_U16  reserved:11;
-  tANI_U16  obssNonHTStaPresent:1;  /*added for Obss  */
-  tANI_U16  transmitBurstLimit: 1;
-  tANI_U16  nonGFDevicesPresent:1;
-  tANI_U16  opMode:2; // Dynamic state
+    tANI_U16  reserved:11;
+    tANI_U16  obssNonHTStaPresent:1;  /*added for Obss  */
+    tANI_U16  transmitBurstLimit: 1;
+    tANI_U16  nonGFDevicesPresent:1;
+    tANI_U16  opMode:2; // Dynamic state
 #else
-  tANI_U16  opMode:2;
-  tANI_U16  nonGFDevicesPresent:1;
-  tANI_U16  transmitBurstLimit: 1;
-  tANI_U16  obssNonHTStaPresent:1;  /*added for Obss  */
-  tANI_U16  reserved:11;
+    tANI_U16  opMode:2;
+    tANI_U16  nonGFDevicesPresent:1;
+    tANI_U16  transmitBurstLimit: 1;
+    tANI_U16  obssNonHTStaPresent:1;  /*added for Obss  */
+    tANI_U16  reserved:11;
 #endif
 } __ani_attr_packed tSirMacHTInfoField2;
 
@@ -2345,21 +2351,21 @@ typedef __ani_attr_pre_packed struct sSirMacHTInfoField2
 typedef __ani_attr_pre_packed struct sSirMacHTInfoField3
 {
 #ifndef ANI_LITTLE_BIT_ENDIAN
-  tANI_U16  reserved:4;
-  tANI_U16  pcoPhase:1; // Dynamic state
-  tANI_U16  pcoActive:1; // Dynamic state
-  tANI_U16  lsigTXOPProtectionFullSupport:1; // Dynamic state
-  tANI_U16  secondaryBeacon:1; // Dynamic state
-  tANI_U16  dualCTSProtection:1; // Dynamic state
-  tANI_U16  basicSTBCMCS:7; // Dynamic state
+    tANI_U16  reserved:4;
+    tANI_U16  pcoPhase:1; // Dynamic state
+    tANI_U16  pcoActive:1; // Dynamic state
+    tANI_U16  lsigTXOPProtectionFullSupport:1; // Dynamic state
+    tANI_U16  secondaryBeacon:1; // Dynamic state
+    tANI_U16  dualCTSProtection:1; // Dynamic state
+    tANI_U16  basicSTBCMCS:7; // Dynamic state
 #else
-  tANI_U16  basicSTBCMCS:7;
-  tANI_U16  dualCTSProtection:1;
-  tANI_U16  secondaryBeacon:1;
-  tANI_U16  lsigTXOPProtectionFullSupport:1;
-  tANI_U16  pcoActive:1;
-  tANI_U16  pcoPhase:1;
-  tANI_U16  reserved:4;
+    tANI_U16  basicSTBCMCS:7;
+    tANI_U16  dualCTSProtection:1;
+    tANI_U16  secondaryBeacon:1;
+    tANI_U16  lsigTXOPProtectionFullSupport:1;
+    tANI_U16  pcoActive:1;
+    tANI_U16  pcoPhase:1;
+    tANI_U16  reserved:4;
 #endif
 } __ani_attr_packed tSirMacHTInfoField3;
 
@@ -2505,53 +2511,53 @@ typedef  struct sSirMacRpiMeasReportActionFrame
 
 typedef struct sSirMacNeighborReportReq
 {
-   tANI_U8 dialogToken;
-   tANI_U8 ssid_present;
-   tSirMacSSid ssid;  
+    tANI_U8 dialogToken;
+    tANI_U8 ssid_present;
+    tSirMacSSid ssid;
 } tSirMacNeighborReportReq, *tpSirMacNeighborReportReq;
 
 typedef struct sSirMacLinkReport
 {
-   tANI_U8 dialogToken;
-   tANI_U8 txPower;
-   tANI_U8 rxAntenna;
-   tANI_U8 txAntenna;
-   tANI_U8 rcpi;
-   tANI_U8 rsni;
+    tANI_U8 dialogToken;
+    tANI_U8 txPower;
+    tANI_U8 rxAntenna;
+    tANI_U8 txAntenna;
+    tANI_U8 rcpi;
+    tANI_U8 rsni;
 } tSirMacLinkReport, *tpSirMacLinkReport;
 
 #define BEACON_REPORT_MAX_IES 224 //Refer IEEE 802.11k-2008, Table 7-31d
 typedef struct sSirMacBeaconReport
 {
-   tANI_U8 regClass;
-   tANI_U8 channel;
-   tANI_U8 measStartTime[8];
-   tANI_U8 measDuration;
-   tANI_U8 phyType;
-   tANI_U8 bcnProbeRsp;
-   tANI_U8 rsni;
-   tANI_U8 rcpi;
-   tSirMacAddr bssid;
-   tANI_U8 antennaId;
-   tANI_U32 parentTSF;
-   tANI_U8 numIes;
-   tANI_U8 Ies[BEACON_REPORT_MAX_IES];  
+    tANI_U8 regClass;
+    tANI_U8 channel;
+    tANI_U8 measStartTime[8];
+    tANI_U8 measDuration;
+    tANI_U8 phyType;
+    tANI_U8 bcnProbeRsp;
+    tANI_U8 rsni;
+    tANI_U8 rcpi;
+    tSirMacAddr bssid;
+    tANI_U8 antennaId;
+    tANI_U32 parentTSF;
+    tANI_U8 numIes;
+    tANI_U8 Ies[BEACON_REPORT_MAX_IES];
 
 } tSirMacBeaconReport, *tpSirMacBeaconReport;
 
 #define RADIO_REPORTS_MAX_IN_A_FRAME 4
 typedef struct sSirMacRadioMeasureReport
 {
-   tANI_U8     token;
-   tANI_U8     refused;
-   tANI_U8     incapable;
-   tANI_U8     type;  
-   union 
-   {
-     tSirMacBeaconReport beaconReport;
-   }report;  
+    tANI_U8     token;
+    tANI_U8     refused;
+    tANI_U8     incapable;
+    tANI_U8     type;
+    union
+    {
+        tSirMacBeaconReport beaconReport;
+    } report;
 
-}tSirMacRadioMeasureReport, *tpSirMacRadioMeasureReport;
+} tSirMacRadioMeasureReport, *tpSirMacRadioMeasureReport;
 
 #endif
 
@@ -2643,10 +2649,10 @@ typedef __ani_attr_pre_packed struct sSirMacLinkTestReqData
 {
     tSirMacAniActionFrame hdr;
     tANI_U8                    frameStatus; // bit0 - first frame
-                                       // bit1 - last frame;
-                                       // if both bit0/1 are on,
-                                       // intermediate frame
-                                       // bit2-7 - reserved
+    // bit1 - last frame;
+    // if both bit0/1 are on,
+    // intermediate frame
+    // bit2-7 - reserved
     tANI_U8                    rate;
     tANI_U8                    randomData[SIR_MAC_MAX_RANDOM_LENGTH];
 } __ani_attr_packed tSirMacLinkTestReqData, *tpSirMacLinkTestReqData;

@@ -229,7 +229,7 @@ typedef enum
     HAL_STOP_TYPE_SYS_RESET,
     HAL_STOP_TYPE_SYS_DEEP_SLEEP,
     HAL_STOP_TYPE_RF_KILL,
-}tHalStopType;
+} tHalStopType;
 
 // macro to check for SUCCESS value of the halStatus
 #define HAL_STATUS_SUCCESS( variable ) ( eHAL_STATUS_SUCCESS == ( variable ) )
@@ -239,14 +239,15 @@ typedef enum sHalBitVal  // For Bit operations
 {
     eHAL_CLEAR,
     eHAL_SET
-}tHalBitVal;
+} tHalBitVal;
 
 // -------------------------------------------------------------
 /// MMH APIs
-enum {
-   eHI_PRI,
-   ePROT,
-   eDBG
+enum
+{
+    eHI_PRI,
+    ePROT,
+    eDBG
 };
 
 /// System role definition on a per BSS
@@ -273,11 +274,12 @@ typedef enum sHalCBsidebandType
     eHAL_SIDEBAND_LOWER,
     eHAL_SIDEBAND_UPPER,
     eHAL_SIDEBAND_COPY
-}tHalCBsidebandType;
+} tHalCBsidebandType;
 
 
 /// HAL states
-typedef enum {
+typedef enum
+{
     eHAL_IDLE,
     eHAL_INIT,
     eHAL_CFG, //CFG download completed.
@@ -307,7 +309,8 @@ typedef enum
 
 // HAL frame types.  Used on the TxRx APIs and the
 // corresponding PAL routines.
-typedef enum {
+typedef enum
+{
 
     HAL_TXRX_FRM_RAW,
     HAL_TXRX_FRM_ETH2,
@@ -349,9 +352,9 @@ typedef enum
 #define HAL_MAX_TXPOWER_INVALID       127
 
 #define MIN_STA_PWR_CAP_DBM         13
-#define MAX_STA_PWR_CAP_DBM         19 
+#define MAX_STA_PWR_CAP_DBM         19
 
-/* Moving the miscellaneous defination required by UMAC are moved here from 
+/* Moving the miscellaneous defination required by UMAC are moved here from
  * volansdefs.h */
 /* --------------------------------------------------------------------
  * Support definitions for taurus
@@ -399,7 +402,7 @@ typedef enum
 #define IS_VSTA_IDX(__x) \
                    (((__x) >= QWLAN_VSTA_MIN_IDX) && ((__x) < HAL_NUM_STA))
 
-                 
+
 // is the STA a General Purpose STA?
 #define IS_GPSTA_IDX(__x) \
     (((__x) >= (HAL_NUM_HW_STA-HAL_NUM_GPSTA)) && \

@@ -102,18 +102,20 @@
 
 #define MAX_CHANNEL MAX_2_4GHZ_CHANNEL + NUM_5GHZ_CHANNELS
 
-typedef struct {
-   u8 element_id;
-   u8 len;
-   u8 oui_1;
-   u8 oui_2;
-   u8 oui_3;
-   u32 type;
-   u32 age;
-}__attribute__((packed)) qcom_ie_age ;
+typedef struct
+{
+    u8 element_id;
+    u8 len;
+    u8 oui_1;
+    u8 oui_2;
+    u8 oui_3;
+    u32 type;
+    u32 age;
+} __attribute__((packed)) qcom_ie_age ;
 #endif
 
-enum qca_nl80211_vendor_subcmds {
+enum qca_nl80211_vendor_subcmds
+{
     QCA_NL80211_VENDOR_SUBCMD_UNSPEC = 0,
     QCA_NL80211_VENDOR_SUBCMD_TEST = 1,
 
@@ -166,7 +168,8 @@ enum qca_nl80211_vendor_subcmds {
     QCA_NL80211_VENDOR_SUBCMD_GET_CONCURRENCY_MATRIX = 42
 };
 
-enum qca_nl80211_vendor_subcmds_index {
+enum qca_nl80211_vendor_subcmds_index
+{
 #ifdef FEATURE_WLAN_CH_AVOID
     QCA_NL80211_VENDOR_SUBCMD_AVOID_FREQUENCY_INDEX,
 #endif /* FEATURE_WLAN_CH_AVOID */
@@ -228,7 +231,7 @@ enum qca_wlan_vendor_attr_tdls_enable
     /* keep last */
     QCA_WLAN_VENDOR_ATTR_TDLS_ENABLE_AFTER_LAST,
     QCA_WLAN_VENDOR_ATTR_TDLS_ENABLE_MAX =
-         QCA_WLAN_VENDOR_ATTR_TDLS_ENABLE_AFTER_LAST - 1,
+        QCA_WLAN_VENDOR_ATTR_TDLS_ENABLE_AFTER_LAST - 1,
 };
 
 enum qca_wlan_vendor_attr_tdls_disable
@@ -239,7 +242,7 @@ enum qca_wlan_vendor_attr_tdls_disable
     /* keep last */
     QCA_WLAN_VENDOR_ATTR_TDLS_DISABLE_AFTER_LAST,
     QCA_WLAN_VENDOR_ATTR_TDLS_DISABLE_MAX =
-       QCA_WLAN_VENDOR_ATTR_TDLS_DISABLE_AFTER_LAST - 1,
+        QCA_WLAN_VENDOR_ATTR_TDLS_DISABLE_AFTER_LAST - 1,
 };
 
 enum qca_wlan_vendor_attr_tdls_get_status
@@ -255,7 +258,7 @@ enum qca_wlan_vendor_attr_tdls_get_status
     /* keep last */
     QCA_WLAN_VENDOR_ATTR_TDLS_GET_STATUS_AFTER_LAST,
     QCA_WLAN_VENDOR_ATTR_TDLS_GET_STATUS_MAX =
-      QCA_WLAN_VENDOR_ATTR_TDLS_GET_STATUS_AFTER_LAST - 1,
+        QCA_WLAN_VENDOR_ATTR_TDLS_GET_STATUS_AFTER_LAST - 1,
 };
 
 enum qca_wlan_vendor_attr_tdls_state
@@ -285,7 +288,7 @@ enum qca_wlan_vendor_attr_ll_stats_set
     /* keep last */
     QCA_WLAN_VENDOR_ATTR_LL_STATS_SET_AFTER_LAST,
     QCA_WLAN_VENDOR_ATTR_LL_STATS_SET_MAX =
-                    QCA_WLAN_VENDOR_ATTR_LL_STATS_SET_AFTER_LAST - 1,
+        QCA_WLAN_VENDOR_ATTR_LL_STATS_SET_AFTER_LAST - 1,
 };
 
 enum qca_wlan_vendor_attr_ll_stats_get
@@ -303,7 +306,7 @@ enum qca_wlan_vendor_attr_ll_stats_get
     /* keep last */
     QCA_WLAN_VENDOR_ATTR_LL_STATS_GET_AFTER_LAST,
     QCA_WLAN_VENDOR_ATTR_LL_STATS_GET_MAX =
-                  QCA_WLAN_VENDOR_ATTR_LL_STATS_GET_AFTER_LAST - 1,
+        QCA_WLAN_VENDOR_ATTR_LL_STATS_GET_AFTER_LAST - 1,
 };
 
 enum qca_wlan_vendor_attr_ll_stats_clr
@@ -316,7 +319,7 @@ enum qca_wlan_vendor_attr_ll_stats_clr
 
     QCA_WLAN_VENDOR_ATTR_LL_STATS_CLR_AFTER_LAST,
     QCA_WLAN_VENDOR_ATTR_LL_STATS_CLR_MAX       =
-                        QCA_WLAN_VENDOR_ATTR_LL_STATS_CLR_AFTER_LAST - 1,
+        QCA_WLAN_VENDOR_ATTR_LL_STATS_CLR_AFTER_LAST - 1,
 };
 
 enum qca_wlan_vendor_attr_ll_stats_results
@@ -548,7 +551,7 @@ enum qca_wlan_vendor_attr_ll_stats_results
     /* keep last */
     QCA_WLAN_VENDOR_ATTR_LL_STATS_AFTER_LAST,
     QCA_WLAN_VENDOR_ATTR_LL_STATS_MAX   =
-                        QCA_WLAN_VENDOR_ATTR_LL_STATS_AFTER_LAST -1,
+        QCA_WLAN_VENDOR_ATTR_LL_STATS_AFTER_LAST -1,
 };
 
 
@@ -799,7 +802,8 @@ enum qca_wlan_vendor_attr_extscan_results
 };
 
 #endif /* WLAN_FEATURE_EXTSCAN */
-enum qca_wlan_vendor_attr_set_scanning_mac_oui{
+enum qca_wlan_vendor_attr_set_scanning_mac_oui
+{
     QCA_WLAN_VENDOR_ATTR_SET_SCANNING_MAC_OUI_INVALID = 0,
     QCA_WLAN_VENDOR_ATTR_SET_SCANNING_MAC_OUI = 1,
     /* keep last */
@@ -808,7 +812,8 @@ enum qca_wlan_vendor_attr_set_scanning_mac_oui{
         QCA_WLAN_VENDOR_ATTR_SET_SCANNING_MAC_OUI_AFTER_LAST - 1,
 };
 
-enum qca_wlan_vendor_attr_get_supported_features {
+enum qca_wlan_vendor_attr_get_supported_features
+{
     QCA_WLAN_VENDOR_ATTR_FEATURE_SET_INVALID = 0,
     /* Unsigned 32-bit value */
     QCA_WLAN_VENDOR_ATTR_FEATURE_SET = 1,
@@ -821,7 +826,8 @@ enum qca_wlan_vendor_attr_get_supported_features {
 /* NL attributes for data used by
  * QCA_NL80211_VENDOR_SUBCMD_GET_CONCURRENCY_MATRIX sub command.
  */
-enum qca_wlan_vendor_attr_get_concurrency_matrix {
+enum qca_wlan_vendor_attr_get_concurrency_matrix
+{
     QCA_WLAN_VENDOR_ATTR_GET_CONCURRENCY_MATRIX_INVALID = 0,
     /* Unsigned 32-bit value */
     QCA_WLAN_VENDOR_ATTR_GET_CONCURRENCY_MATRIX_CONFIG_PARAM_SET_SIZE_MAX = 1,
@@ -882,41 +888,41 @@ enum qca_wlan_vendor_attr_set_no_dfs_flag
 #define HDD_MAX_AVOID_FREQ_RANGES   4
 typedef struct sHddAvoidFreqRange
 {
-   u32 startFreq;
-   u32 endFreq;
+    u32 startFreq;
+    u32 endFreq;
 } tHddAvoidFreqRange;
 
 typedef struct sHddAvoidFreqList
 {
-   u32 avoidFreqRangeCount;
-   tHddAvoidFreqRange avoidFreqRange[HDD_MAX_AVOID_FREQ_RANGES];
+    u32 avoidFreqRangeCount;
+    tHddAvoidFreqRange avoidFreqRange[HDD_MAX_AVOID_FREQ_RANGES];
 } tHddAvoidFreqList;
 #endif /* FEATURE_WLAN_CH_AVOID */
 
 struct cfg80211_bss* wlan_hdd_cfg80211_update_bss_db( hdd_adapter_t *pAdapter,
-                                      tCsrRoamInfo *pRoamInfo
-                                      );
+        tCsrRoamInfo *pRoamInfo
+                                                    );
 
 #ifdef FEATURE_WLAN_LFR
 int wlan_hdd_cfg80211_pmksa_candidate_notify(
-                    hdd_adapter_t *pAdapter, tCsrRoamInfo *pRoamInfo,
-                    int index, bool preauth );
+    hdd_adapter_t *pAdapter, tCsrRoamInfo *pRoamInfo,
+    int index, bool preauth );
 #endif
 
 #ifdef FEATURE_WLAN_LFR_METRICS
 VOS_STATUS wlan_hdd_cfg80211_roam_metrics_preauth(hdd_adapter_t *pAdapter,
-                                                  tCsrRoamInfo *pRoamInfo);
+        tCsrRoamInfo *pRoamInfo);
 
 VOS_STATUS wlan_hdd_cfg80211_roam_metrics_preauth_status(
     hdd_adapter_t *pAdapter, tCsrRoamInfo *pRoamInfo, bool preauth_status);
 
 VOS_STATUS wlan_hdd_cfg80211_roam_metrics_handover(hdd_adapter_t *pAdapter,
-                                                   tCsrRoamInfo *pRoamInfo);
+        tCsrRoamInfo *pRoamInfo);
 #endif
 
 #ifdef FEATURE_WLAN_WAPI
 void wlan_hdd_cfg80211_set_key_wapi(hdd_adapter_t* pAdapter,
-              u8 key_index, const u8 *mac_addr, u8 *key , int key_Len);
+                                    u8 key_index, const u8 *mac_addr, u8 *key , int key_Len);
 #endif
 struct wiphy *wlan_hdd_cfg80211_wiphy_alloc(int priv_size);
 
@@ -929,9 +935,9 @@ int wlan_hdd_cfg80211_scan( struct wiphy *wiphy,
 int wlan_hdd_cfg80211_update_band(struct wiphy *wiphy, eCsrBand eBand);
 
 int wlan_hdd_cfg80211_init(struct device *dev,
-                               struct wiphy *wiphy,
-                               hdd_config_t *pCfg
-                                         );
+                           struct wiphy *wiphy,
+                           hdd_config_t *pCfg
+                          );
 
 int wlan_hdd_cfg80211_register( struct wiphy *wiphy);
 void wlan_hdd_cfg80211_register_frames(hdd_adapter_t* pAdapter);
@@ -952,15 +958,15 @@ int wlan_hdd_crda_reg_notifier(struct wiphy *wiphy, struct regulatory_request *r
 #endif
 
 extern v_VOID_t hdd_connSetConnectionState( hdd_station_ctx_t *pHddStaCtx,
-                                        eConnectionState connState );
+        eConnectionState connState );
 VOS_STATUS wlan_hdd_validate_operation_channel(hdd_adapter_t *pAdapter,int channel);
 #ifdef FEATURE_WLAN_TDLS
 int wlan_hdd_cfg80211_send_tdls_discover_req(struct wiphy *wiphy,
-                            struct net_device *dev, u8 *peer);
+        struct net_device *dev, u8 *peer);
 #endif
 #ifdef WLAN_FEATURE_GTK_OFFLOAD
 extern void wlan_hdd_cfg80211_update_replayCounterCallback(void *callbackContext,
-                            tpSirGtkOffloadGetInfoRspParams pGtkOffloadGetInfoRsp);
+        tpSirGtkOffloadGetInfoRspParams pGtkOffloadGetInfoRsp);
 #endif
 void* wlan_hdd_change_country_code_cb(void *pAdapter);
 void hdd_select_cbmode( hdd_adapter_t *pAdapter,v_U8_t operationChannel);
@@ -973,7 +979,7 @@ int wlan_hdd_send_avoid_freq_event(hdd_context_t *pHddCtx,
 
 #ifdef WLAN_FEATURE_EXTSCAN
 void wlan_hdd_cfg80211_extscan_callback(void *ctx, const tANI_U16 evType,
-                                      void *pMsg);
+                                        void *pMsg);
 #endif /* WLAN_FEATURE_EXTSCAN */
 
 #endif

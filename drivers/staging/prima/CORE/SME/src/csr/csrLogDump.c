@@ -30,7 +30,7 @@ Copyright (c) 2007 QUALCOMM Incorporated.
 All Rights Reserved.
 Qualcomm Confidential and Proprietary
 csrLogDump.c
-Implements the dump commands specific to the csr module. 
+Implements the dump commands specific to the csr module.
 ============================================================================*/
 #include "aniGlobal.h"
 #include "csrApi.h"
@@ -58,7 +58,7 @@ dump_csr( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI
     }
     return p;
 }
-static char *dump_btcSetEvent( tpAniSirGlobal pMac, tANI_U32 arg1, 
+static char *dump_btcSetEvent( tpAniSirGlobal pMac, tANI_U32 arg1,
                                tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p )
 {
     tSmeBtEvent btEvent;
@@ -102,8 +102,8 @@ static char *dump_btcSetEvent( tpAniSirGlobal pMac, tANI_U32 arg1,
     }
     return p;
 }
-static char* dump_csrApConcScanParams( tpAniSirGlobal pMac, tANI_U32 arg1, 
-                               tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p )
+static char* dump_csrApConcScanParams( tpAniSirGlobal pMac, tANI_U32 arg1,
+                                       tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p )
 {
     if( arg1 )
     {
@@ -119,11 +119,12 @@ static char* dump_csrApConcScanParams( tpAniSirGlobal pMac, tANI_U32 arg1,
     }
 
     smsLog(pMac, LOGE, FL(" Working %d %d %d"), (int) pMac->roam.configParam.nRestTimeConc,
-        (int)pMac->roam.configParam.nActiveMinChnTimeConc, (int) pMac->roam.configParam.nActiveMaxChnTimeConc);
+           (int)pMac->roam.configParam.nActiveMinChnTimeConc, (int) pMac->roam.configParam.nActiveMaxChnTimeConc);
     return p;
 }
 
-static tDumpFuncEntry csrMenuDumpTable[] = {
+static tDumpFuncEntry csrMenuDumpTable[] =
+{
     {0,     "CSR (850-860)",                                    NULL},
     {851,   "CSR: CSR testing connection to AniNet",            dump_csr},
     {852,   "BTC: Fake BT events (event, handle)",              dump_btcSetEvent},
@@ -132,7 +133,7 @@ static tDumpFuncEntry csrMenuDumpTable[] = {
 
 void csrDumpInit(tHalHandle hHal)
 {
-    logDumpRegisterTable( (tpAniSirGlobal)hHal, &csrMenuDumpTable[0], 
+    logDumpRegisterTable( (tpAniSirGlobal)hHal, &csrMenuDumpTable[0],
                           sizeof(csrMenuDumpTable)/sizeof(csrMenuDumpTable[0]) );
 }
 

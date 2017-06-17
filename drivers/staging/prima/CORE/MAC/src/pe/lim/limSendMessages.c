@@ -54,25 +54,26 @@
  *    - Bit Mask
  *    - Byte refrence
  */
-static tBeaconFilterIe beaconFilterTable[] = {
-   {SIR_MAC_DS_PARAM_SET_EID,    0, {0, 0, DS_PARAM_CHANNEL_MASK, 0}},
-   {SIR_MAC_ERP_INFO_EID,        0, {0, 0, ERP_FILTER_MASK,       0}},
-   {SIR_MAC_EDCA_PARAM_SET_EID,  0, {0, 0, EDCA_FILTER_MASK,      0}},
-   {SIR_MAC_QOS_CAPABILITY_EID,  0, {0, 0, QOS_FILTER_MASK,       0}},
-   {SIR_MAC_CHNL_SWITCH_ANN_EID, 1, {0, 0, 0,                     0}},
-   {SIR_MAC_HT_INFO_EID,         0, {0, 0, HT_BYTE0_FILTER_MASK,  0}}, //primary channel
-   {SIR_MAC_HT_INFO_EID,         0, {1, 0, HT_BYTE1_FILTER_MASK,  0}}, //Secondary Channel
-   {SIR_MAC_HT_INFO_EID,         0, {2, 0, HT_BYTE2_FILTER_MASK,  0}}, //HT  protection
-   {SIR_MAC_HT_INFO_EID,         0, {5, 0, HT_BYTE5_FILTER_MASK,  0}}
+static tBeaconFilterIe beaconFilterTable[] =
+{
+    {SIR_MAC_DS_PARAM_SET_EID,    0, {0, 0, DS_PARAM_CHANNEL_MASK, 0}},
+    {SIR_MAC_ERP_INFO_EID,        0, {0, 0, ERP_FILTER_MASK,       0}},
+    {SIR_MAC_EDCA_PARAM_SET_EID,  0, {0, 0, EDCA_FILTER_MASK,      0}},
+    {SIR_MAC_QOS_CAPABILITY_EID,  0, {0, 0, QOS_FILTER_MASK,       0}},
+    {SIR_MAC_CHNL_SWITCH_ANN_EID, 1, {0, 0, 0,                     0}},
+    {SIR_MAC_HT_INFO_EID,         0, {0, 0, HT_BYTE0_FILTER_MASK,  0}}, //primary channel
+    {SIR_MAC_HT_INFO_EID,         0, {1, 0, HT_BYTE1_FILTER_MASK,  0}}, //Secondary Channel
+    {SIR_MAC_HT_INFO_EID,         0, {2, 0, HT_BYTE2_FILTER_MASK,  0}}, //HT  protection
+    {SIR_MAC_HT_INFO_EID,         0, {5, 0, HT_BYTE5_FILTER_MASK,  0}}
 #if defined WLAN_FEATURE_VOWIFI
-   ,{SIR_MAC_PWR_CONSTRAINT_EID,  0, {0, 0, 0, 0}}
+    ,{SIR_MAC_PWR_CONSTRAINT_EID,  0, {0, 0, 0, 0}}
 #endif
 #ifdef WLAN_FEATURE_11AC
-   ,{SIR_MAC_VHT_OPMODE_EID,     0,  {0, 0, 0, 0}}
-   ,{SIR_MAC_VHT_OPERATION_EID,  0,  {0, 0, VHTOP_CHWIDTH_MASK, 0}}
+    ,{SIR_MAC_VHT_OPMODE_EID,     0,  {0, 0, 0, 0}}
+    ,{SIR_MAC_VHT_OPERATION_EID,  0,  {0, 0, VHTOP_CHWIDTH_MASK, 0}}
 #endif
-   ,{SIR_MAC_RSN_EID,             1, {0, 0, 0,                    0}}
-   ,{SIR_MAC_WPA_EID,             1, {0, 0, 0,                    0}}
+    ,{SIR_MAC_RSN_EID,             1, {0, 0, 0,                    0}}
+    ,{SIR_MAC_WPA_EID,             1, {0, 0, 0,                    0}}
 };
 
 /**
@@ -104,12 +105,12 @@ tSirRetStatus limSendCFParams(tpAniSirGlobal pMac, tANI_U8 bssIdx, tANI_U8 cfpCo
 
     pCFParams = vos_mem_malloc(sizeof( tUpdateCFParams ));
     if ( NULL == pCFParams )
-      {
+    {
         limLog( pMac, LOGP,
-            FL( "Unable to allocate memory during Update CF Params" ));
+                FL( "Unable to allocate memory during Update CF Params" ));
         retCode = eSIR_MEM_ALLOC_FAILED;
         goto returnFailure;
-      }
+    }
     vos_mem_set( (tANI_U8 *) pCFParams, sizeof(tUpdateCFParams), 0);
     pCFParams->cfpCount = cfpCount;
     pCFParams->cfpPeriod = cfpPeriod;
@@ -120,14 +121,14 @@ tSirRetStatus limSendCFParams(tpAniSirGlobal pMac, tANI_U8 bssIdx, tANI_U8 cfpCo
     msgQ.bodyptr = pCFParams;
     msgQ.bodyval = 0;
     limLog( pMac, LOG3,
-                FL( "Sending WDA_UPDATE_CF_IND..." ));
+            FL( "Sending WDA_UPDATE_CF_IND..." ));
     MTRACE(macTraceMsgTx(pMac, NO_SESSION, msgQ.type));
     if( eSIR_SUCCESS != (retCode = wdaPostCtrlMsg( pMac, &msgQ )))
     {
         vos_mem_free(pCFParams);
         limLog( pMac, LOGP,
-                    FL("Posting  WDA_UPDATE_CF_IND to WDA failed, reason=%X"),
-                    retCode );
+                FL("Posting  WDA_UPDATE_CF_IND to WDA failed, reason=%X"),
+                retCode );
     }
 returnFailure:
     return retCode;
@@ -154,7 +155,7 @@ returnFailure:
  *
  * @return success if message send is ok, else false.
  */
-tSirRetStatus limSendBeaconParams(tpAniSirGlobal pMac, 
+tSirRetStatus limSendBeaconParams(tpAniSirGlobal pMac,
                                   tpUpdateBeaconParams pUpdatedBcnParams,
                                   tpPESession  psessionEntry )
 {
@@ -166,7 +167,7 @@ tSirRetStatus limSendBeaconParams(tpAniSirGlobal pMac,
     if ( NULL == pBcnParams )
     {
         limLog( pMac, LOGP,
-            FL( "Unable to allocate memory during Update Beacon Params" ));
+                FL( "Unable to allocate memory during Update Beacon Params" ));
         return eSIR_MEM_ALLOC_FAILED;
     }
     vos_mem_copy((tANI_U8 *) pBcnParams,  pUpdatedBcnParams, sizeof(*pBcnParams));
@@ -175,8 +176,8 @@ tSirRetStatus limSendBeaconParams(tpAniSirGlobal pMac,
     msgQ.bodyptr = pBcnParams;
     msgQ.bodyval = 0;
     PELOG3(limLog( pMac, LOG3,
-                FL( "Sending WDA_UPDATE_BEACON_IND, paramChangeBitmap in hex = %x" ),
-                    pUpdatedBcnParams->paramChangeBitmap);)
+                   FL( "Sending WDA_UPDATE_BEACON_IND, paramChangeBitmap in hex = %x" ),
+                   pUpdatedBcnParams->paramChangeBitmap);)
     if(NULL == psessionEntry)
     {
         MTRACE(macTraceMsgTx(pMac, NO_SESSION, msgQ.type));
@@ -189,8 +190,8 @@ tSirRetStatus limSendBeaconParams(tpAniSirGlobal pMac,
     {
         vos_mem_free(pBcnParams);
         limLog( pMac, LOGP,
-                    FL("Posting  WDA_UPDATE_BEACON_IND to WDA failed, reason=%X"),
-                    retCode );
+                FL("Posting  WDA_UPDATE_BEACON_IND to WDA failed, reason=%X"),
+                retCode );
     }
     limSendBeaconInd(pMac, psessionEntry);
     return retCode;
@@ -217,7 +218,7 @@ tSirRetStatus limSendBeaconParams(tpAniSirGlobal pMac,
  *
  * @return success if message send is ok, else false.
  */
-#if !defined WLAN_FEATURE_VOWIFI  
+#if !defined WLAN_FEATURE_VOWIFI
 tSirRetStatus limSendSwitchChnlParams(tpAniSirGlobal pMac,
                                       tANI_U8 chnlNumber,
                                       ePhyChanBondState secondaryChnlOffset,
@@ -235,22 +236,22 @@ tSirRetStatus limSendSwitchChnlParams(tpAniSirGlobal pMac,
     tpPESession pSessionEntry;
     if((pSessionEntry = peFindSessionBySessionId(pMac, peSessionId)) == NULL)
     {
-       limLog( pMac, LOGP,
-             FL( "Unable to get Session for session Id %d" ), peSessionId);
-       return eSIR_FAILURE;
+        limLog( pMac, LOGP,
+                FL( "Unable to get Session for session Id %d" ), peSessionId);
+        return eSIR_FAILURE;
     }
     pChnlParams = vos_mem_malloc(sizeof( tSwitchChannelParams ));
     if ( NULL == pChnlParams )
     {
         limLog( pMac, LOGP,
-            FL( "Unable to allocate memory during Switch Channel Params" ));
+                FL( "Unable to allocate memory during Switch Channel Params" ));
         retCode = eSIR_MEM_ALLOC_FAILED;
         goto returnFailure;
     }
     vos_mem_set((tANI_U8 *) pChnlParams, sizeof(tSwitchChannelParams), 0);
     pChnlParams->secondaryChannelOffset = secondaryChnlOffset;
     pChnlParams->channelNumber= chnlNumber;
-#if defined WLAN_FEATURE_VOWIFI  
+#if defined WLAN_FEATURE_VOWIFI
     pChnlParams->maxTxPower = maxTxPower;
     vos_mem_copy( pChnlParams->selfStaMacAddr, pSessionEntry->selfMacAddr, sizeof(tSirMacAddr) );
 #else
@@ -270,24 +271,24 @@ tSirRetStatus limSendSwitchChnlParams(tpAniSirGlobal pMac,
     msgQ.reserved = 0;
     msgQ.bodyptr = pChnlParams;
     msgQ.bodyval = 0;
-#if defined WLAN_FEATURE_VOWIFI  
+#if defined WLAN_FEATURE_VOWIFI
     PELOG3(limLog( pMac, LOG3,
-        FL( "Sending WDA_CHNL_SWITCH_REQ with SecondaryChnOffset - %d, ChannelNumber - %d, maxTxPower - %d"),
-        pChnlParams->secondaryChannelOffset, pChnlParams->channelNumber, pChnlParams->maxTxPower);)
+                   FL( "Sending WDA_CHNL_SWITCH_REQ with SecondaryChnOffset - %d, ChannelNumber - %d, maxTxPower - %d"),
+                   pChnlParams->secondaryChannelOffset, pChnlParams->channelNumber, pChnlParams->maxTxPower);)
 #else
     PELOG3(limLog( pMac, LOG3,
-        FL( "Sending WDA_CHNL_SWITCH_REQ with SecondaryChnOffset - %d, ChannelNumber - %d, LocalPowerConstraint - %d"),
-        pChnlParams->secondaryChannelOffset, pChnlParams->channelNumber, pChnlParams->localPowerConstraint);)
+                   FL( "Sending WDA_CHNL_SWITCH_REQ with SecondaryChnOffset - %d, ChannelNumber - %d, LocalPowerConstraint - %d"),
+                   pChnlParams->secondaryChannelOffset, pChnlParams->channelNumber, pChnlParams->localPowerConstraint);)
 #endif
     MTRACE(macTraceMsgTx(pMac, peSessionId, msgQ.type));
     limLog(pMac,LOG1,"SessionId:%d WDA_CHNL_SWITCH_REQ for SSID:%s",peSessionId,
-            pSessionEntry->ssId.ssId);
+           pSessionEntry->ssId.ssId);
     if( eSIR_SUCCESS != (retCode = wdaPostCtrlMsg( pMac, &msgQ )))
     {
         vos_mem_free(pChnlParams);
         limLog( pMac, LOGP,
-                    FL("Posting  WDA_CHNL_SWITCH_REQ to WDA failed, reason=%X"),
-                    retCode );
+                FL("Posting  WDA_CHNL_SWITCH_REQ to WDA failed, reason=%X"),
+                retCode );
     }
 returnFailure:
     return retCode;
@@ -324,7 +325,7 @@ tSirRetStatus limSendEdcaParams(tpAniSirGlobal pMac, tSirMacEdcaParamRecord *pUp
     if ( NULL == pEdcaParams )
     {
         limLog( pMac, LOGP,
-            FL( "Unable to allocate memory during Update EDCA Params" ));
+                FL( "Unable to allocate memory during Update EDCA Params" ));
         retCode = eSIR_MEM_ALLOC_FAILED;
         return retCode;
     }
@@ -344,8 +345,8 @@ tSirRetStatus limSendEdcaParams(tpAniSirGlobal pMac, tSirMacEdcaParamRecord *pUp
         for(i=0; i<MAX_NUM_AC; i++)
         {
             PELOG1(limLog(pMac, LOG1, FL("AC[%d]:  AIFSN %d, ACM %d, CWmin %d, CWmax %d, TxOp %d "),
-                   i, pUpdatedEdcaParams[i].aci.aifsn, pUpdatedEdcaParams[i].aci.acm, 
-                   pUpdatedEdcaParams[i].cw.min, pUpdatedEdcaParams[i].cw.max, pUpdatedEdcaParams[i].txoplimit);)
+                          i, pUpdatedEdcaParams[i].aci.aifsn, pUpdatedEdcaParams[i].aci.acm,
+                          pUpdatedEdcaParams[i].cw.min, pUpdatedEdcaParams[i].cw.max, pUpdatedEdcaParams[i].txoplimit);)
         }
     }
     MTRACE(macTraceMsgTx(pMac, NO_SESSION, msgQ.type));
@@ -353,8 +354,8 @@ tSirRetStatus limSendEdcaParams(tpAniSirGlobal pMac, tSirMacEdcaParamRecord *pUp
     {
         vos_mem_free(pEdcaParams);
         limLog( pMac, LOGP,
-                    FL("Posting  WDA_UPDATE_EDCA_PROFILE_IND to WDA failed, reason=%X"),
-                    retCode );
+                FL("Posting  WDA_UPDATE_EDCA_PROFILE_IND to WDA failed, reason=%X"),
+                retCode );
     }
     return retCode;
 }
@@ -376,7 +377,7 @@ tSirRetStatus limSendEdcaParams(tpAniSirGlobal pMac, tSirMacEdcaParamRecord *pUp
  * @ param psessionEntry point to the session entry
  * @return none
  */
- void limSetActiveEdcaParams(tpAniSirGlobal pMac, tSirMacEdcaParamRecord *plocalEdcaParams, tpPESession psessionEntry)
+void limSetActiveEdcaParams(tpAniSirGlobal pMac, tSirMacEdcaParamRecord *plocalEdcaParams, tpPESession psessionEntry)
 {
     tANI_U8   ac, newAc, i;
     tANI_U8   acAdmitted;
@@ -428,28 +429,28 @@ tSirRetStatus limSendEdcaParams(tpAniSirGlobal pMac, tSirMacEdcaParamRecord *pUp
     WLAN_VOS_DIAG_LOG_ALLOC(log_ptr, vos_log_qos_edca_pkt_type, LOG_WLAN_QOS_EDCA_C);
     if(log_ptr)
     {
-       log_ptr->aci_be = psessionEntry->gLimEdcaParamsActive[EDCA_AC_BE].aci.aci;
-       log_ptr->cw_be  = psessionEntry->gLimEdcaParamsActive[EDCA_AC_BE].cw.max << 4 |
-          psessionEntry->gLimEdcaParamsActive[EDCA_AC_BE].cw.min;
-       log_ptr->txoplimit_be = psessionEntry->gLimEdcaParamsActive[EDCA_AC_BE].txoplimit;
-       log_ptr->aci_bk = psessionEntry->gLimEdcaParamsActive[EDCA_AC_BK].aci.aci;
-       log_ptr->cw_bk  = psessionEntry->gLimEdcaParamsActive[EDCA_AC_BK].cw.max << 4 |
-          psessionEntry->gLimEdcaParamsActive[EDCA_AC_BK].cw.min;
-       log_ptr->txoplimit_bk = psessionEntry->gLimEdcaParamsActive[EDCA_AC_BK].txoplimit;
-       log_ptr->aci_vi = psessionEntry->gLimEdcaParamsActive[EDCA_AC_VI].aci.aci;
-       log_ptr->cw_vi  = psessionEntry->gLimEdcaParamsActive[EDCA_AC_VI].cw.max << 4 |
-          psessionEntry->gLimEdcaParamsActive[EDCA_AC_VI].cw.min;
-       log_ptr->txoplimit_vi = psessionEntry->gLimEdcaParamsActive[EDCA_AC_VI].txoplimit;
-       log_ptr->aci_vo = psessionEntry->gLimEdcaParamsActive[EDCA_AC_VO].aci.aci;
-       log_ptr->cw_vo  = psessionEntry->gLimEdcaParamsActive[EDCA_AC_VO].cw.max << 4 |
-          psessionEntry->gLimEdcaParamsActive[EDCA_AC_VO].cw.min;
-       log_ptr->txoplimit_vo = psessionEntry->gLimEdcaParamsActive[EDCA_AC_VO].txoplimit;
+        log_ptr->aci_be = psessionEntry->gLimEdcaParamsActive[EDCA_AC_BE].aci.aci;
+        log_ptr->cw_be  = psessionEntry->gLimEdcaParamsActive[EDCA_AC_BE].cw.max << 4 |
+                          psessionEntry->gLimEdcaParamsActive[EDCA_AC_BE].cw.min;
+        log_ptr->txoplimit_be = psessionEntry->gLimEdcaParamsActive[EDCA_AC_BE].txoplimit;
+        log_ptr->aci_bk = psessionEntry->gLimEdcaParamsActive[EDCA_AC_BK].aci.aci;
+        log_ptr->cw_bk  = psessionEntry->gLimEdcaParamsActive[EDCA_AC_BK].cw.max << 4 |
+                          psessionEntry->gLimEdcaParamsActive[EDCA_AC_BK].cw.min;
+        log_ptr->txoplimit_bk = psessionEntry->gLimEdcaParamsActive[EDCA_AC_BK].txoplimit;
+        log_ptr->aci_vi = psessionEntry->gLimEdcaParamsActive[EDCA_AC_VI].aci.aci;
+        log_ptr->cw_vi  = psessionEntry->gLimEdcaParamsActive[EDCA_AC_VI].cw.max << 4 |
+                          psessionEntry->gLimEdcaParamsActive[EDCA_AC_VI].cw.min;
+        log_ptr->txoplimit_vi = psessionEntry->gLimEdcaParamsActive[EDCA_AC_VI].txoplimit;
+        log_ptr->aci_vo = psessionEntry->gLimEdcaParamsActive[EDCA_AC_VO].aci.aci;
+        log_ptr->cw_vo  = psessionEntry->gLimEdcaParamsActive[EDCA_AC_VO].cw.max << 4 |
+                          psessionEntry->gLimEdcaParamsActive[EDCA_AC_VO].cw.min;
+        log_ptr->txoplimit_vo = psessionEntry->gLimEdcaParamsActive[EDCA_AC_VO].txoplimit;
     }
     WLAN_VOS_DIAG_LOG_REPORT(log_ptr);
 #endif //FEATURE_WLAN_DIAG_SUPPORT
-    
+
     return;
- }
+}
 
 /** ---------------------------------------------------------
 \fn      limSetLinkState
@@ -458,7 +459,7 @@ tSirRetStatus limSendEdcaParams(tpAniSirGlobal pMac, tSirMacEdcaParamRecord *pUp
 \param   tSirLinkState      state
 \return  None
   -----------------------------------------------------------*/
- //Original code with out anu's change
+//Original code with out anu's change
 #if 0
 tSirRetStatus limSetLinkState(tpAniSirGlobal pMac, tSirLinkState state,tSirMacAddr bssId)
 {
@@ -474,9 +475,9 @@ tSirRetStatus limSetLinkState(tpAniSirGlobal pMac, tSirLinkState state,tSirMacAd
     return retCode;
 }
 #endif //0
-tSirRetStatus limSetLinkState(tpAniSirGlobal pMac, tSirLinkState state,tSirMacAddr bssId, 
-                              tSirMacAddr selfMacAddr, tpSetLinkStateCallback callback, 
-                              void *callbackArg) 
+tSirRetStatus limSetLinkState(tpAniSirGlobal pMac, tSirLinkState state,tSirMacAddr bssId,
+                              tSirMacAddr selfMacAddr, tpSetLinkStateCallback callback,
+                              void *callbackArg)
 {
     tSirMsgQ msgQ;
     tSirRetStatus retCode;
@@ -486,7 +487,7 @@ tSirRetStatus limSetLinkState(tpAniSirGlobal pMac, tSirLinkState state,tSirMacAd
     if ( NULL == pLinkStateParams )
     {
         limLog( pMac, LOGP,
-        FL( "Unable to allocate memory while sending Set Link State" ));
+                FL( "Unable to allocate memory while sending Set Link State" ));
         retCode = eSIR_SME_RESOURCES_UNAVAILABLE;
         return retCode;
     }
@@ -494,7 +495,7 @@ tSirRetStatus limSetLinkState(tpAniSirGlobal pMac, tSirLinkState state,tSirMacAd
     pLinkStateParams->state        = state;
     pLinkStateParams->callback     = callback;
     pLinkStateParams->callbackArg  = callbackArg;
-     
+
     /* Copy Mac address */
     sirCopyMacAddr(pLinkStateParams->bssid,bssId);
     sirCopyMacAddr(pLinkStateParams->selfMacAddr, selfMacAddr);
@@ -503,7 +504,7 @@ tSirRetStatus limSetLinkState(tpAniSirGlobal pMac, tSirLinkState state,tSirMacAd
     msgQ.reserved = 0;
     msgQ.bodyptr = pLinkStateParams;
     msgQ.bodyval = 0;
-    
+
     MTRACE(macTraceMsgTx(pMac, NO_SESSION, msgQ.type));
 
     retCode = (tANI_U32)wdaPostCtrlMsg(pMac, &msgQ);
@@ -516,8 +517,8 @@ tSirRetStatus limSetLinkState(tpAniSirGlobal pMac, tSirLinkState state,tSirMacAd
     return retCode;
 }
 #ifdef WLAN_FEATURE_VOWIFI_11R
-extern tSirRetStatus limSetLinkStateFT(tpAniSirGlobal pMac, tSirLinkState 
-state,tSirMacAddr bssId, tSirMacAddr selfMacAddr, int ft, tpPESession psessionEntry)
+extern tSirRetStatus limSetLinkStateFT(tpAniSirGlobal pMac, tSirLinkState
+                                       state,tSirMacAddr bssId, tSirMacAddr selfMacAddr, int ft, tpPESession psessionEntry)
 {
     tSirMsgQ msgQ;
     tSirRetStatus retCode;
@@ -527,7 +528,7 @@ state,tSirMacAddr bssId, tSirMacAddr selfMacAddr, int ft, tpPESession psessionEn
     if ( NULL == pLinkStateParams )
     {
         limLog( pMac, LOGP,
-        FL( "Unable to allocate memory while sending Set Link State" ));
+                FL( "Unable to allocate memory while sending Set Link State" ));
         retCode = eSIR_SME_RESOURCES_UNAVAILABLE;
         return retCode;
     }
@@ -565,7 +566,7 @@ state,tSirMacAddr bssId, tSirMacAddr selfMacAddr, int ft, tpPESession psessionEn
 
 /** ---------------------------------------------------------
 \fn      limSendSetTxPowerReq
-\brief   LIM sends a WDA_SET_TX_POWER_REQ message to WDA 
+\brief   LIM sends a WDA_SET_TX_POWER_REQ message to WDA
 \param   tpAniSirGlobal      pMac
 \param   tpSirSetTxPowerReq  request message
 \return  None
@@ -624,7 +625,7 @@ tSirRetStatus limSendSetTxPowerReq(tpAniSirGlobal pMac,  tANI_U32 *pMsgBuf)
 \return  None
   -----------------------------------------------------------*/
 tSirRetStatus limSendHT40OBSSScanInd(tpAniSirGlobal pMac,
-                                               tpPESession psessionEntry)
+                                     tpPESession psessionEntry)
 {
     tSirRetStatus           retCode = eSIR_SUCCESS;
     tSirHT40OBSSScanInd    *ht40OBSSScanInd;
@@ -640,46 +641,46 @@ tSirRetStatus limSendHT40OBSSScanInd(tpAniSirGlobal pMac,
     }
 
     VOS_TRACE(VOS_MODULE_ID_PE,VOS_TRACE_LEVEL_INFO,
-             "OBSS Scan Indication bssIdx- %d staId %d",
-             psessionEntry->bssIdx, psessionEntry->staId);
+              "OBSS Scan Indication bssIdx- %d staId %d",
+              psessionEntry->bssIdx, psessionEntry->staId);
 
     ht40OBSSScanInd->cmdType = HT40_OBSS_SCAN_PARAM_START;
     ht40OBSSScanInd->scanType = eSIR_ACTIVE_SCAN;
     ht40OBSSScanInd->OBSSScanPassiveDwellTime =
-           psessionEntry->obssHT40ScanParam.OBSSScanPassiveDwellTime;
+        psessionEntry->obssHT40ScanParam.OBSSScanPassiveDwellTime;
     ht40OBSSScanInd->OBSSScanActiveDwellTime =
-           psessionEntry->obssHT40ScanParam.OBSSScanActiveDwellTime;
+        psessionEntry->obssHT40ScanParam.OBSSScanActiveDwellTime;
     ht40OBSSScanInd->BSSChannelWidthTriggerScanInterval =
-           psessionEntry->obssHT40ScanParam.BSSChannelWidthTriggerScanInterval;
+        psessionEntry->obssHT40ScanParam.BSSChannelWidthTriggerScanInterval;
     ht40OBSSScanInd->OBSSScanPassiveTotalPerChannel =
-           psessionEntry->obssHT40ScanParam.OBSSScanPassiveTotalPerChannel;
+        psessionEntry->obssHT40ScanParam.OBSSScanPassiveTotalPerChannel;
     ht40OBSSScanInd->OBSSScanActiveTotalPerChannel =
-           psessionEntry->obssHT40ScanParam.OBSSScanActiveTotalPerChannel;
+        psessionEntry->obssHT40ScanParam.OBSSScanActiveTotalPerChannel;
     ht40OBSSScanInd->BSSWidthChannelTransitionDelayFactor =
-           psessionEntry->obssHT40ScanParam.BSSWidthChannelTransitionDelayFactor;
+        psessionEntry->obssHT40ScanParam.BSSWidthChannelTransitionDelayFactor;
     ht40OBSSScanInd->OBSSScanActivityThreshold =
-           psessionEntry->obssHT40ScanParam.OBSSScanActivityThreshold;
+        psessionEntry->obssHT40ScanParam.OBSSScanActivityThreshold;
     /* TODO update it from the associated BSS*/
     ht40OBSSScanInd->currentOperatingClass = 81;
 
     validChannelNum = WNI_CFG_VALID_CHANNEL_LIST_LEN;
     if (wlan_cfgGetStr(pMac, WNI_CFG_VALID_CHANNEL_LIST,
-                          validChanList,
-                          &validChannelNum) != eSIR_SUCCESS)
+                       validChanList,
+                       &validChannelNum) != eSIR_SUCCESS)
     {
         limLog(pMac, LOGE,
-                   FL("could not retrieve Valid channel list"));
+               FL("could not retrieve Valid channel list"));
     }
     /* Extract 24G channel list */
     channel24GNum = 0;
-    for( count =0 ;count < validChannelNum ;count++)
+    for( count =0 ; count < validChannelNum ; count++)
     {
-       if ((validChanList[count]> RF_CHAN_1) &&
-           (validChanList[count] < RF_CHAN_14))
-       {
-          ht40OBSSScanInd->channels[channel24GNum] = validChanList[count];
-          channel24GNum++;
-       }
+        if ((validChanList[count]> RF_CHAN_1) &&
+                (validChanList[count] < RF_CHAN_14))
+        {
+            ht40OBSSScanInd->channels[channel24GNum] = validChanList[count];
+            channel24GNum++;
+        }
     }
     ht40OBSSScanInd->channelCount = channel24GNum;
     /* FW API requests BSS IDX */
@@ -715,7 +716,7 @@ tSirRetStatus limSendHT40OBSSScanInd(tpAniSirGlobal pMac,
 \return  None
   -----------------------------------------------------------*/
 tSirRetStatus limSendHT40OBSSStopScanInd(tpAniSirGlobal pMac,
-                                               tpPESession psessionEntry)
+        tpPESession psessionEntry)
 {
     tSirRetStatus        retCode = eSIR_SUCCESS;
     tSirMsgQ             msgQ;
@@ -732,7 +733,7 @@ tSirRetStatus limSendHT40OBSSStopScanInd(tpAniSirGlobal pMac,
     msgQ.bodyptr = (void *)&bssIdx;
     msgQ.bodyval = 0;
     PELOGW(limLog(pMac, LOGW,
-         FL("Sending WDA_HT40_OBSS_STOP_SCAN_IND to WDA"));)
+                  FL("Sending WDA_HT40_OBSS_STOP_SCAN_IND to WDA"));)
     MTRACE(macTraceMsgTx(pMac, psessionEntry->peSessionId, msgQ.type));
     retCode = wdaPostCtrlMsg(pMac, &msgQ);
     if (eSIR_SUCCESS != retCode)
@@ -844,7 +845,7 @@ tSirRetStatus limSendBeaconFilterInfo(tpAniSirGlobal pMac,tpPESession psessionEn
         pIe->byte.offset = beaconFilterTable[i].byte.offset;
         pIe->byte.value =  beaconFilterTable[i].byte.value;
         pIe->byte.bitMask =  beaconFilterTable[i].byte.bitMask;
-        pIe->byte.ref =  beaconFilterTable[i].byte.ref; 
+        pIe->byte.ref =  beaconFilterTable[i].byte.ref;
         ptr += sizeof(tBeaconFilterIe);
     }
     msgQ.type = WDA_BEACON_FILTER_IND;
@@ -857,8 +858,8 @@ tSirRetStatus limSendBeaconFilterInfo(tpAniSirGlobal pMac,tpPESession psessionEn
     {
         vos_mem_free(pBeaconFilterMsg);
         limLog( pMac, LOGP,
-            FL("Posting  WDA_BEACON_FILTER_IND to WDA failed, reason=%X"),
-            retCode );
+                FL("Posting  WDA_BEACON_FILTER_IND to WDA failed, reason=%X"),
+                retCode );
         return retCode;
     }
     return retCode;
@@ -873,7 +874,7 @@ tSirRetStatus limSendBeaconFilterInfo(tpAniSirGlobal pMac,tpPESession psessionEn
  *          pTempParam            CB mode
  * \return eSIR_SUCCESS on success, eSIR_FAILURE else
  */
-tSirRetStatus limSendModeUpdate(tpAniSirGlobal pMac, 
+tSirRetStatus limSendModeUpdate(tpAniSirGlobal pMac,
                                 tUpdateVHTOpMode *pTempParam,
                                 tpPESession  psessionEntry )
 {
@@ -885,7 +886,7 @@ tSirRetStatus limSendModeUpdate(tpAniSirGlobal pMac,
     if ( NULL == pVhtOpMode )
     {
         limLog( pMac, LOGP,
-            FL( "Unable to allocate memory during Update Op Mode" ));
+                FL( "Unable to allocate memory during Update Op Mode" ));
         return eSIR_MEM_ALLOC_FAILED;
     }
     vos_mem_copy((tANI_U8 *)pVhtOpMode, pTempParam, sizeof(tUpdateVHTOpMode));
@@ -894,8 +895,8 @@ tSirRetStatus limSendModeUpdate(tpAniSirGlobal pMac,
     msgQ.bodyptr = pVhtOpMode;
     msgQ.bodyval = 0;
     limLog( pMac, LOG1,
-                FL( "Sending WDA_UPDATE_OP_MODE, opMode = %d staid = %d" ),
-                                    pVhtOpMode->opMode,pVhtOpMode->staId);
+            FL( "Sending WDA_UPDATE_OP_MODE, opMode = %d staid = %d" ),
+            pVhtOpMode->opMode,pVhtOpMode->staId);
     if(NULL == psessionEntry)
     {
         MTRACE(macTraceMsgTx(pMac, NO_SESSION, msgQ.type));
@@ -908,8 +909,8 @@ tSirRetStatus limSendModeUpdate(tpAniSirGlobal pMac,
     {
         vos_mem_free(pVhtOpMode);
         limLog( pMac, LOGP,
-                    FL("Posting  WDA_UPDATE_OP_MODE to WDA failed, reason=%X"),
-                    retCode );
+                FL("Posting  WDA_UPDATE_OP_MODE to WDA failed, reason=%X"),
+                retCode );
     }
 
     return retCode;
@@ -920,11 +921,11 @@ tSirRetStatus limSendModeUpdate(tpAniSirGlobal pMac,
 \fn      limSendTdlsLinkEstablish
 \brief   LIM sends a message to HAL to set tdls direct link
 \param   tpAniSirGlobal  pMac
-\param   
+\param
 \return  None
   -----------------------------------------------------------*/
-tSirRetStatus limSendTdlsLinkEstablish(tpAniSirGlobal pMac, tANI_U8 bIsPeerResponder, tANI_U8 linkIdenOffset, 
-                tANI_U8 ptiBufStatusOffset, tANI_U8 ptiFrameLen, tANI_U8 *ptiFrame, tANI_U8 *extCapability)
+tSirRetStatus limSendTdlsLinkEstablish(tpAniSirGlobal pMac, tANI_U8 bIsPeerResponder, tANI_U8 linkIdenOffset,
+                                       tANI_U8 ptiBufStatusOffset, tANI_U8 ptiFrameLen, tANI_U8 *ptiFrame, tANI_U8 *extCapability)
 {
     tSirMsgQ msgQ;
     tSirRetStatus retCode;
@@ -935,7 +936,7 @@ tSirRetStatus limSendTdlsLinkEstablish(tpAniSirGlobal pMac, tANI_U8 bIsPeerRespo
     if ( NULL == pTdlsLinkEstablish )
     {
         limLog( pMac, LOGP,
-        FL( "Unable to allocate memory while sending Tdls Link Establish " ));
+                FL( "Unable to allocate memory while sending Tdls Link Establish " ));
 
         retCode = eSIR_SME_RESOURCES_UNAVAILABLE;
         return retCode;
@@ -943,7 +944,7 @@ tSirRetStatus limSendTdlsLinkEstablish(tpAniSirGlobal pMac, tANI_U8 bIsPeerRespo
 
     vos_mem_set((tANI_U8 *) pTdlsLinkEstablish, sizeof(tSirTdlsLinkEstablishInd), 0);
 
-    pTdlsLinkEstablish->bIsResponder = !!bIsPeerResponder; 
+    pTdlsLinkEstablish->bIsResponder = !!bIsPeerResponder;
     pTdlsLinkEstablish->linkIdenOffset = linkIdenOffset;
     pTdlsLinkEstablish->ptiBufStatusOffset = ptiBufStatusOffset;
     pTdlsLinkEstablish->ptiTemplateLen = ptiFrameLen;
@@ -956,7 +957,7 @@ tSirRetStatus limSendTdlsLinkEstablish(tpAniSirGlobal pMac, tANI_U8 bIsPeerRespo
     msgQ.reserved = 0;
     msgQ.bodyptr = pTdlsLinkEstablish;
     msgQ.bodyval = 0;
-    
+
     MTRACE(macTraceMsgTx(pMac, 0, msgQ.type));
 
     retCode = (tANI_U32)wdaPostCtrlMsg(pMac, &msgQ);
@@ -973,7 +974,7 @@ tSirRetStatus limSendTdlsLinkEstablish(tpAniSirGlobal pMac, tANI_U8 bIsPeerRespo
 \fn      limSendTdlsLinkTeardown
 \brief   LIM sends a message to HAL to indicate tdls direct link is teardowned
 \param   tpAniSirGlobal  pMac
-\param   
+\param
 \return  None
   -----------------------------------------------------------*/
 tSirRetStatus limSendTdlsLinkTeardown(tpAniSirGlobal pMac, tANI_U16 staId)
@@ -987,7 +988,7 @@ tSirRetStatus limSendTdlsLinkTeardown(tpAniSirGlobal pMac, tANI_U16 staId)
     if ( NULL == pTdlsLinkTeardown )
     {
         limLog( pMac, LOGP,
-        FL( "Unable to allocate memory while sending Tdls Link Teardown " ));
+                FL( "Unable to allocate memory while sending Tdls Link Teardown " ));
 
         retCode = eSIR_SME_RESOURCES_UNAVAILABLE;
         return retCode;
@@ -1001,7 +1002,7 @@ tSirRetStatus limSendTdlsLinkTeardown(tpAniSirGlobal pMac, tANI_U16 staId)
     msgQ.reserved = 0;
     msgQ.bodyptr = pTdlsLinkTeardown;
     msgQ.bodyval = 0;
-    
+
     MTRACE(macTraceMsgTx(pMac, 0, msgQ.type));
 
     retCode = (tANI_U32)wdaPostCtrlMsg(pMac, &msgQ);
@@ -1028,8 +1029,8 @@ tSirRetStatus limSendTdlsLinkTeardown(tpAniSirGlobal pMac, tANI_U16 staId)
 \return  status
   -----------------------------------------------------------*/
 tSirRetStatus limSendExcludeUnencryptInd(tpAniSirGlobal pMac,
-                                         tANI_BOOLEAN excludeUnenc,
-                                         tpPESession  psessionEntry)
+        tANI_BOOLEAN excludeUnenc,
+        tpPESession  psessionEntry)
 {
     tSirRetStatus   retCode = eSIR_SUCCESS;
     tSirMsgQ msgQ;
@@ -1039,7 +1040,7 @@ tSirRetStatus limSendExcludeUnencryptInd(tpAniSirGlobal pMac,
     if ( NULL == pExcludeUnencryptParam )
     {
         limLog(pMac, LOGP,
-            FL( "Unable to allocate memory during limSendExcludeUnencryptInd"));
+               FL( "Unable to allocate memory during limSendExcludeUnencryptInd"));
         return eSIR_MEM_ALLOC_FAILED;
     }
 
@@ -1051,7 +1052,7 @@ tSirRetStatus limSendExcludeUnencryptInd(tpAniSirGlobal pMac,
     msgQ.bodyptr = pExcludeUnencryptParam;
     msgQ.bodyval = 0;
     PELOG3(limLog(pMac, LOG3,
-                FL("Sending WDA_EXCLUDE_UNENCRYPTED_IND"));)
+                  FL("Sending WDA_EXCLUDE_UNENCRYPTED_IND"));)
     MTRACE(macTraceMsgTx(pMac, psessionEntry->peSessionId, msgQ.type));
     retCode = wdaPostCtrlMsg(pMac, &msgQ);
     if (eSIR_SUCCESS != retCode)

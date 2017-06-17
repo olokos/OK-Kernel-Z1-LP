@@ -97,7 +97,8 @@ typedef tANI_U32 tDOT11F_U64[2];
  * Fixed Fields                                                      *
  ********************************************************************/
 
-typedef struct sDot11fFfAID {
+typedef struct sDot11fFfAID
+{
     tANI_U16 associd;
 } tDot11fFfAID;
 
@@ -107,7 +108,8 @@ void dot11fUnpackFfAID(tpAniSirGlobal, tANI_U8*, tDot11fFfAID*);
 
 void dot11fPackFfAID(tpAniSirGlobal, tDot11fFfAID*, tANI_U8*);
 
-typedef struct sDot11fFfAction {
+typedef struct sDot11fFfAction
+{
     tANI_U8 action;
 } tDot11fFfAction;
 
@@ -117,7 +119,8 @@ void dot11fUnpackFfAction(tpAniSirGlobal, tANI_U8*, tDot11fFfAction*);
 
 void dot11fPackFfAction(tpAniSirGlobal, tDot11fFfAction*, tANI_U8*);
 
-typedef struct sDot11fFfAddBAParameterSet {
+typedef struct sDot11fFfAddBAParameterSet
+{
     tANI_U16  amsduSupported: 1;
     tANI_U16          policy: 1;
     tANI_U16             tid: 4;
@@ -139,7 +142,8 @@ void dot11fPackFfAddBAParameterSet(tpAniSirGlobal, tDot11fFfAddBAParameterSet*, 
 #define ADDBAPARAMETERSET_BUFFERSIZE_OFFSET     6
 #define ADDBAPARAMETERSET_BUFFERSIZE_WIDTH      10
 
-typedef struct sDot11fFfAuthAlgo {
+typedef struct sDot11fFfAuthAlgo
+{
     tANI_U16 algo;
 } tDot11fFfAuthAlgo;
 
@@ -149,7 +153,8 @@ void dot11fUnpackFfAuthAlgo(tpAniSirGlobal, tANI_U8*, tDot11fFfAuthAlgo*);
 
 void dot11fPackFfAuthAlgo(tpAniSirGlobal, tDot11fFfAuthAlgo*, tANI_U8*);
 
-typedef struct sDot11fFfAuthSeqNo {
+typedef struct sDot11fFfAuthSeqNo
+{
     tANI_U16 no;
 } tDot11fFfAuthSeqNo;
 
@@ -159,7 +164,8 @@ void dot11fUnpackFfAuthSeqNo(tpAniSirGlobal, tANI_U8*, tDot11fFfAuthSeqNo*);
 
 void dot11fPackFfAuthSeqNo(tpAniSirGlobal, tDot11fFfAuthSeqNo*, tANI_U8*);
 
-typedef struct sDot11fFfBAStartingSequenceControl {
+typedef struct sDot11fFfBAStartingSequenceControl
+{
     tANI_U16  fragNumber: 4;
     tANI_U16         ssn: 12;
 } tDot11fFfBAStartingSequenceControl;
@@ -175,7 +181,8 @@ void dot11fPackFfBAStartingSequenceControl(tpAniSirGlobal, tDot11fFfBAStartingSe
 #define BASTARTINGSEQUENCECONTROL_SSN_OFFSET        4
 #define BASTARTINGSEQUENCECONTROL_SSN_WIDTH         12
 
-typedef struct sDot11fFfBATimeout {
+typedef struct sDot11fFfBATimeout
+{
     tANI_U16 timeout;
 } tDot11fFfBATimeout;
 
@@ -185,7 +192,8 @@ void dot11fUnpackFfBATimeout(tpAniSirGlobal, tANI_U8*, tDot11fFfBATimeout*);
 
 void dot11fPackFfBATimeout(tpAniSirGlobal, tDot11fFfBATimeout*, tANI_U8*);
 
-typedef struct sDot11fFfBeaconInterval {
+typedef struct sDot11fFfBeaconInterval
+{
     tANI_U16 interval;
 } tDot11fFfBeaconInterval;
 
@@ -195,7 +203,8 @@ void dot11fUnpackFfBeaconInterval(tpAniSirGlobal, tANI_U8*, tDot11fFfBeaconInter
 
 void dot11fPackFfBeaconInterval(tpAniSirGlobal, tDot11fFfBeaconInterval*, tANI_U8*);
 
-typedef struct sDot11fFfCapabilities {
+typedef struct sDot11fFfCapabilities
+{
     tANI_U16             ess: 1;
     tANI_U16            ibss: 1;
     tANI_U16      cfPollable: 1;
@@ -253,7 +262,8 @@ void dot11fPackFfCapabilities(tpAniSirGlobal, tDot11fFfCapabilities*, tANI_U8*);
 #define CAPABILITIES_IMMEDIATEBA_OFFSET    15
 #define CAPABILITIES_IMMEDIATEBA_WIDTH     1
 
-typedef struct sDot11fFfCategory {
+typedef struct sDot11fFfCategory
+{
     tANI_U8 category;
 } tDot11fFfCategory;
 
@@ -263,7 +273,8 @@ void dot11fUnpackFfCategory(tpAniSirGlobal, tANI_U8*, tDot11fFfCategory*);
 
 void dot11fPackFfCategory(tpAniSirGlobal, tDot11fFfCategory*, tANI_U8*);
 
-typedef struct sDot11fFfCurrentAPAddress {
+typedef struct sDot11fFfCurrentAPAddress
+{
     tANI_U8 mac[6];
 } tDot11fFfCurrentAPAddress;
 
@@ -273,7 +284,8 @@ void dot11fUnpackFfCurrentAPAddress(tpAniSirGlobal, tANI_U8*, tDot11fFfCurrentAP
 
 void dot11fPackFfCurrentAPAddress(tpAniSirGlobal, tDot11fFfCurrentAPAddress*, tANI_U8*);
 
-typedef struct sDot11fFfDelBAParameterSet {
+typedef struct sDot11fFfDelBAParameterSet
+{
     tANI_U16   reserved: 11;
     tANI_U16  initiator: 1;
     tANI_U16        tid: 4;
@@ -292,7 +304,8 @@ void dot11fPackFfDelBAParameterSet(tpAniSirGlobal, tDot11fFfDelBAParameterSet*, 
 #define DELBAPARAMETERSET_TID_OFFSET       12
 #define DELBAPARAMETERSET_TID_WIDTH        4
 
-typedef struct sDot11fFfDialogToken {
+typedef struct sDot11fFfDialogToken
+{
     tANI_U8 token;
 } tDot11fFfDialogToken;
 
@@ -302,7 +315,8 @@ void dot11fUnpackFfDialogToken(tpAniSirGlobal, tANI_U8*, tDot11fFfDialogToken*);
 
 void dot11fPackFfDialogToken(tpAniSirGlobal, tDot11fFfDialogToken*, tANI_U8*);
 
-typedef struct sDot11fFfLinkMargin {
+typedef struct sDot11fFfLinkMargin
+{
     tANI_U8 linkMargin;
 } tDot11fFfLinkMargin;
 
@@ -312,7 +326,8 @@ void dot11fUnpackFfLinkMargin(tpAniSirGlobal, tANI_U8*, tDot11fFfLinkMargin*);
 
 void dot11fPackFfLinkMargin(tpAniSirGlobal, tDot11fFfLinkMargin*, tANI_U8*);
 
-typedef struct sDot11fFfListenInterval {
+typedef struct sDot11fFfListenInterval
+{
     tANI_U16 interval;
 } tDot11fFfListenInterval;
 
@@ -322,7 +337,8 @@ void dot11fUnpackFfListenInterval(tpAniSirGlobal, tANI_U8*, tDot11fFfListenInter
 
 void dot11fPackFfListenInterval(tpAniSirGlobal, tDot11fFfListenInterval*, tANI_U8*);
 
-typedef struct sDot11fFfMaxTxPower {
+typedef struct sDot11fFfMaxTxPower
+{
     tANI_U8 maxTxPower;
 } tDot11fFfMaxTxPower;
 
@@ -332,7 +348,8 @@ void dot11fUnpackFfMaxTxPower(tpAniSirGlobal, tANI_U8*, tDot11fFfMaxTxPower*);
 
 void dot11fPackFfMaxTxPower(tpAniSirGlobal, tDot11fFfMaxTxPower*, tANI_U8*);
 
-typedef struct sDot11fFfNumOfRepetitions {
+typedef struct sDot11fFfNumOfRepetitions
+{
     tANI_U16 repetitions;
 } tDot11fFfNumOfRepetitions;
 
@@ -342,7 +359,8 @@ void dot11fUnpackFfNumOfRepetitions(tpAniSirGlobal, tANI_U8*, tDot11fFfNumOfRepe
 
 void dot11fPackFfNumOfRepetitions(tpAniSirGlobal, tDot11fFfNumOfRepetitions*, tANI_U8*);
 
-typedef struct sDot11fFfOperatingMode {
+typedef struct sDot11fFfOperatingMode
+{
     tANI_U8  chanWidth: 2;
     tANI_U8   reserved: 2;
     tANI_U8      rxNSS: 3;
@@ -364,7 +382,8 @@ void dot11fPackFfOperatingMode(tpAniSirGlobal, tDot11fFfOperatingMode*, tANI_U8*
 #define OPERATINGMODE_RXNSSTYPE_OFFSET 7
 #define OPERATINGMODE_RXNSSTYPE_WIDTH  1
 
-typedef struct sDot11fFfP2POUI {
+typedef struct sDot11fFfP2POUI
+{
     tANI_U32 oui;
 } tDot11fFfP2POUI;
 
@@ -374,7 +393,8 @@ void dot11fUnpackFfP2POUI(tpAniSirGlobal, tANI_U8*, tDot11fFfP2POUI*);
 
 void dot11fPackFfP2POUI(tpAniSirGlobal, tDot11fFfP2POUI*, tANI_U8*);
 
-typedef struct sDot11fFfP2POUISubType {
+typedef struct sDot11fFfP2POUISubType
+{
     tANI_U8 ouiSubtype;
 } tDot11fFfP2POUISubType;
 
@@ -384,7 +404,8 @@ void dot11fUnpackFfP2POUISubType(tpAniSirGlobal, tANI_U8*, tDot11fFfP2POUISubTyp
 
 void dot11fPackFfP2POUISubType(tpAniSirGlobal, tDot11fFfP2POUISubType*, tANI_U8*);
 
-typedef struct sDot11fFfRCPI {
+typedef struct sDot11fFfRCPI
+{
     tANI_U8 rcpi;
 } tDot11fFfRCPI;
 
@@ -394,7 +415,8 @@ void dot11fUnpackFfRCPI(tpAniSirGlobal, tANI_U8*, tDot11fFfRCPI*);
 
 void dot11fPackFfRCPI(tpAniSirGlobal, tDot11fFfRCPI*, tANI_U8*);
 
-typedef struct sDot11fFfRSNI {
+typedef struct sDot11fFfRSNI
+{
     tANI_U8 rsni;
 } tDot11fFfRSNI;
 
@@ -404,7 +426,8 @@ void dot11fUnpackFfRSNI(tpAniSirGlobal, tANI_U8*, tDot11fFfRSNI*);
 
 void dot11fPackFfRSNI(tpAniSirGlobal, tDot11fFfRSNI*, tANI_U8*);
 
-typedef struct sDot11fFfReason {
+typedef struct sDot11fFfReason
+{
     tANI_U16 code;
 } tDot11fFfReason;
 
@@ -414,7 +437,8 @@ void dot11fUnpackFfReason(tpAniSirGlobal, tANI_U8*, tDot11fFfReason*);
 
 void dot11fPackFfReason(tpAniSirGlobal, tDot11fFfReason*, tANI_U8*);
 
-typedef struct sDot11fFfRxAntennaId {
+typedef struct sDot11fFfRxAntennaId
+{
     tANI_U8 antennaId;
 } tDot11fFfRxAntennaId;
 
@@ -424,7 +448,8 @@ void dot11fUnpackFfRxAntennaId(tpAniSirGlobal, tANI_U8*, tDot11fFfRxAntennaId*);
 
 void dot11fPackFfRxAntennaId(tpAniSirGlobal, tDot11fFfRxAntennaId*, tANI_U8*);
 
-typedef struct sDot11fFfSMPowerModeSet {
+typedef struct sDot11fFfSMPowerModeSet
+{
     tANI_U8  PowerSave_En: 1;
     tANI_U8          Mode: 1;
     tANI_U8      reserved: 6;
@@ -443,7 +468,8 @@ void dot11fPackFfSMPowerModeSet(tpAniSirGlobal, tDot11fFfSMPowerModeSet*, tANI_U
 #define SMPOWERMODESET_RESERVED_OFFSET     2
 #define SMPOWERMODESET_RESERVED_WIDTH      6
 
-typedef struct sDot11fFfStatus {
+typedef struct sDot11fFfStatus
+{
     tANI_U16 status;
 } tDot11fFfStatus;
 
@@ -453,7 +479,8 @@ void dot11fUnpackFfStatus(tpAniSirGlobal, tANI_U8*, tDot11fFfStatus*);
 
 void dot11fPackFfStatus(tpAniSirGlobal, tDot11fFfStatus*, tANI_U8*);
 
-typedef struct sDot11fFfStatusCode {
+typedef struct sDot11fFfStatusCode
+{
     tANI_U8 statusCode;
 } tDot11fFfStatusCode;
 
@@ -463,7 +490,8 @@ void dot11fUnpackFfStatusCode(tpAniSirGlobal, tANI_U8*, tDot11fFfStatusCode*);
 
 void dot11fPackFfStatusCode(tpAniSirGlobal, tDot11fFfStatusCode*, tANI_U8*);
 
-typedef struct sDot11fFfTPCEleID {
+typedef struct sDot11fFfTPCEleID
+{
     tANI_U8 TPCId;
 } tDot11fFfTPCEleID;
 
@@ -473,7 +501,8 @@ void dot11fUnpackFfTPCEleID(tpAniSirGlobal, tANI_U8*, tDot11fFfTPCEleID*);
 
 void dot11fPackFfTPCEleID(tpAniSirGlobal, tDot11fFfTPCEleID*, tANI_U8*);
 
-typedef struct sDot11fFfTPCEleLen {
+typedef struct sDot11fFfTPCEleLen
+{
     tANI_U8 TPCLen;
 } tDot11fFfTPCEleLen;
 
@@ -483,7 +512,8 @@ void dot11fUnpackFfTPCEleLen(tpAniSirGlobal, tANI_U8*, tDot11fFfTPCEleLen*);
 
 void dot11fPackFfTPCEleLen(tpAniSirGlobal, tDot11fFfTPCEleLen*, tANI_U8*);
 
-typedef struct sDot11fFfTSInfo {
+typedef struct sDot11fFfTSInfo
+{
     tANI_U32    traffic_type: 1;
     tANI_U32            tsid: 4;
     tANI_U32       direction: 2;
@@ -523,7 +553,8 @@ void dot11fPackFfTSInfo(tpAniSirGlobal, tDot11fFfTSInfo*, tANI_U8*);
 #define TSINFO_UNUSED_OFFSET         17
 #define TSINFO_UNUSED_WIDTH          15
 
-typedef struct sDot11fFfTimeStamp {
+typedef struct sDot11fFfTimeStamp
+{
     tDOT11F_U64 timestamp;
 } tDot11fFfTimeStamp;
 
@@ -533,7 +564,8 @@ void dot11fUnpackFfTimeStamp(tpAniSirGlobal, tANI_U8*, tDot11fFfTimeStamp*);
 
 void dot11fPackFfTimeStamp(tpAniSirGlobal, tDot11fFfTimeStamp*, tANI_U8*);
 
-typedef struct sDot11fFfTransactionId {
+typedef struct sDot11fFfTransactionId
+{
     tANI_U8 transId[2];
 } tDot11fFfTransactionId;
 
@@ -543,7 +575,8 @@ void dot11fUnpackFfTransactionId(tpAniSirGlobal, tANI_U8*, tDot11fFfTransactionI
 
 void dot11fPackFfTransactionId(tpAniSirGlobal, tDot11fFfTransactionId*, tANI_U8*);
 
-typedef struct sDot11fFfTxAntennaId {
+typedef struct sDot11fFfTxAntennaId
+{
     tANI_U8 antennaId;
 } tDot11fFfTxAntennaId;
 
@@ -553,7 +586,8 @@ void dot11fUnpackFfTxAntennaId(tpAniSirGlobal, tANI_U8*, tDot11fFfTxAntennaId*);
 
 void dot11fPackFfTxAntennaId(tpAniSirGlobal, tDot11fFfTxAntennaId*, tANI_U8*);
 
-typedef struct sDot11fFfTxPower {
+typedef struct sDot11fFfTxPower
+{
     tANI_U8 txPower;
 } tDot11fFfTxPower;
 
@@ -563,7 +597,8 @@ void dot11fUnpackFfTxPower(tpAniSirGlobal, tANI_U8*, tDot11fFfTxPower*);
 
 void dot11fPackFfTxPower(tpAniSirGlobal, tDot11fFfTxPower*, tANI_U8*);
 
-typedef struct sDot11fFfVhtMembershipStatusArray {
+typedef struct sDot11fFfVhtMembershipStatusArray
+{
     tANI_U8 membershipStatusArray[8];
 } tDot11fFfVhtMembershipStatusArray;
 
@@ -573,7 +608,8 @@ void dot11fUnpackFfVhtMembershipStatusArray(tpAniSirGlobal, tANI_U8*, tDot11fFfV
 
 void dot11fPackFfVhtMembershipStatusArray(tpAniSirGlobal, tDot11fFfVhtMembershipStatusArray*, tANI_U8*);
 
-typedef struct sDot11fFfVhtUserPositionArray {
+typedef struct sDot11fFfVhtUserPositionArray
+{
     tANI_U8 userPositionArray[16];
 } tDot11fFfVhtUserPositionArray;
 
@@ -588,7 +624,8 @@ void dot11fPackFfVhtUserPositionArray(tpAniSirGlobal, tDot11fFfVhtUserPositionAr
  ********************************************************************/
 
 // ID 1 (0x0001)
-typedef struct sDot11fTLVAuthorizedMACs {
+typedef struct sDot11fTLVAuthorizedMACs
+{
     tANI_U8      present;
     tANI_U8      mac[6];
 } tDot11fTLVAuthorizedMACs;
@@ -613,7 +650,8 @@ tANI_U32 dot11fGetPackedTlvAuthorizedMACs(tpAniSirGlobal, tDot11fTLVAuthorizedMA
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 3 (0x0003)
-typedef struct sDot11fTLVRequestToEnroll {
+typedef struct sDot11fTLVRequestToEnroll
+{
     tANI_U8      present;
     tANI_U8      req;
 } tDot11fTLVRequestToEnroll;
@@ -638,7 +676,8 @@ tANI_U32 dot11fGetPackedTlvRequestToEnroll(tpAniSirGlobal, tDot11fTLVRequestToEn
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 0 (0x0000)
-typedef struct sDot11fTLVVersion2 {
+typedef struct sDot11fTLVVersion2
+{
     tANI_U8      present;
     tANI_U8            minor: 4;
     tANI_U8            major: 4;
@@ -664,7 +703,8 @@ tANI_U32 dot11fGetPackedTlvVersion2(tpAniSirGlobal, tDot11fTLVVersion2*, tANI_U3
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4183 (0x1057)
-typedef struct sDot11fTLVAPSetupLocked {
+typedef struct sDot11fTLVAPSetupLocked
+{
     tANI_U8      present;
     tANI_U8      fLocked;
 } tDot11fTLVAPSetupLocked;
@@ -689,7 +729,8 @@ tANI_U32 dot11fGetPackedTlvAPSetupLocked(tpAniSirGlobal, tDot11fTLVAPSetupLocked
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4098 (0x1002)
-typedef struct sDot11fTLVAssociationState {
+typedef struct sDot11fTLVAssociationState
+{
     tANI_U8      present;
     tANI_U16     state;
 } tDot11fTLVAssociationState;
@@ -714,7 +755,8 @@ tANI_U32 dot11fGetPackedTlvAssociationState(tpAniSirGlobal, tDot11fTLVAssociatio
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 11 (0x000b)
-typedef struct sDot11fTLVChannelList {
+typedef struct sDot11fTLVChannelList
+{
     tANI_U8      present;
     tANI_U8      countryString[3];
     tANI_U8      num_channelList;
@@ -741,7 +783,8 @@ tANI_U32 dot11fGetPackedTlvChannelList(tpAniSirGlobal, tDot11fTLVChannelList*, t
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4104 (0x1008)
-typedef struct sDot11fTLVConfigMethods {
+typedef struct sDot11fTLVConfigMethods
+{
     tANI_U8      present;
     tANI_U16     methods;
 } tDot11fTLVConfigMethods;
@@ -766,7 +809,8 @@ tANI_U32 dot11fGetPackedTlvConfigMethods(tpAniSirGlobal, tDot11fTLVConfigMethods
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4105 (0x1009)
-typedef struct sDot11fTLVConfigurationError {
+typedef struct sDot11fTLVConfigurationError
+{
     tANI_U8      present;
     tANI_U16     error;
 } tDot11fTLVConfigurationError;
@@ -791,7 +835,8 @@ tANI_U32 dot11fGetPackedTlvConfigurationError(tpAniSirGlobal, tDot11fTLVConfigur
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 5 (0x0005)
-typedef struct sDot11fTLVConfigurationTimeout {
+typedef struct sDot11fTLVConfigurationTimeout
+{
     tANI_U8      present;
     tANI_U8      GOConfigTimeout;
     tANI_U8      CLConfigTimeout;
@@ -817,7 +862,8 @@ tANI_U32 dot11fGetPackedTlvConfigurationTimeout(tpAniSirGlobal, tDot11fTLVConfig
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4113 (0x1011)
-typedef struct sDot11fTLVDeviceName {
+typedef struct sDot11fTLVDeviceName
+{
     tANI_U8      present;
     tANI_U8      num_text;
     tANI_U8      text[32];
@@ -843,7 +889,8 @@ tANI_U32 dot11fGetPackedTlvDeviceName(tpAniSirGlobal, tDot11fTLVDeviceName*, tAN
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4114 (0x1012)
-typedef struct sDot11fTLVDevicePasswordID {
+typedef struct sDot11fTLVDevicePasswordID
+{
     tANI_U8      present;
     tANI_U16     id;
 } tDot11fTLVDevicePasswordID;
@@ -868,7 +915,8 @@ tANI_U32 dot11fGetPackedTlvDevicePasswordID(tpAniSirGlobal, tDot11fTLVDevicePass
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 8 (0x0008)
-typedef struct sDot11fTLVExtendedListenTiming {
+typedef struct sDot11fTLVExtendedListenTiming
+{
     tANI_U8      present;
     tANI_U16     availibilityPeriod;
     tANI_U16     availibilityInterval;
@@ -894,7 +942,8 @@ tANI_U32 dot11fGetPackedTlvExtendedListenTiming(tpAniSirGlobal, tDot11fTLVExtend
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4 (0x0004)
-typedef struct sDot11fTLVGOIntent {
+typedef struct sDot11fTLVGOIntent
+{
     tANI_U8      present;
     tANI_U8      GOIntent;
 } tDot11fTLVGOIntent;
@@ -919,7 +968,8 @@ tANI_U32 dot11fGetPackedTlvGOIntent(tpAniSirGlobal, tDot11fTLVGOIntent*, tANI_U3
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 9 (0x0009)
-typedef struct sDot11fTLVIntendedP2PInterfaceAddress {
+typedef struct sDot11fTLVIntendedP2PInterfaceAddress
+{
     tANI_U8      present;
     tANI_U8      P2PInterfaceAddress[6];
 } tDot11fTLVIntendedP2PInterfaceAddress;
@@ -944,7 +994,8 @@ tANI_U32 dot11fGetPackedTlvIntendedP2PInterfaceAddress(tpAniSirGlobal, tDot11fTL
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 18 (0x0012)
-typedef struct sDot11fTLVInvitationFlags {
+typedef struct sDot11fTLVInvitationFlags
+{
     tANI_U8      present;
     tANI_U8      invitationFlags;
 } tDot11fTLVInvitationFlags;
@@ -969,7 +1020,8 @@ tANI_U32 dot11fGetPackedTlvInvitationFlags(tpAniSirGlobal, tDot11fTLVInvitationF
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 6 (0x0006)
-typedef struct sDot11fTLVListenChannel {
+typedef struct sDot11fTLVListenChannel
+{
     tANI_U8      present;
     tANI_U8      countryString[3];
     tANI_U8      regulatoryClass;
@@ -996,7 +1048,8 @@ tANI_U32 dot11fGetPackedTlvListenChannel(tpAniSirGlobal, tDot11fTLVListenChannel
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4129 (0x1021)
-typedef struct sDot11fTLVManufacturer {
+typedef struct sDot11fTLVManufacturer
+{
     tANI_U8      present;
     tANI_U8      num_name;
     tANI_U8      name[64];
@@ -1022,7 +1075,8 @@ tANI_U32 dot11fGetPackedTlvManufacturer(tpAniSirGlobal, tDot11fTLVManufacturer*,
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 1 (0x0001)
-typedef struct sDot11fTLVMinorReasonCode {
+typedef struct sDot11fTLVMinorReasonCode
+{
     tANI_U8      present;
     tANI_U8      minorReasonCode;
 } tDot11fTLVMinorReasonCode;
@@ -1047,7 +1101,8 @@ tANI_U32 dot11fGetPackedTlvMinorReasonCode(tpAniSirGlobal, tDot11fTLVMinorReason
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4131 (0x1023)
-typedef struct sDot11fTLVModelName {
+typedef struct sDot11fTLVModelName
+{
     tANI_U8      present;
     tANI_U8      num_text;
     tANI_U8      text[32];
@@ -1073,7 +1128,8 @@ tANI_U32 dot11fGetPackedTlvModelName(tpAniSirGlobal, tDot11fTLVModelName*, tANI_
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4132 (0x1024)
-typedef struct sDot11fTLVModelNumber {
+typedef struct sDot11fTLVModelNumber
+{
     tANI_U8      present;
     tANI_U8      num_text;
     tANI_U8      text[32];
@@ -1099,7 +1155,8 @@ tANI_U32 dot11fGetPackedTlvModelNumber(tpAniSirGlobal, tDot11fTLVModelNumber*, t
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 12 (0x000c)
-typedef struct sDot11fTLVNoticeOfAbsence {
+typedef struct sDot11fTLVNoticeOfAbsence
+{
     tANI_U8      present;
     tANI_U8      index;
     tANI_U8      CTSWindowOppPS;
@@ -1127,7 +1184,8 @@ tANI_U32 dot11fGetPackedTlvNoticeOfAbsence(tpAniSirGlobal, tDot11fTLVNoticeOfAbs
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 17 (0x0011)
-typedef struct sDot11fTLVOperatingChannel {
+typedef struct sDot11fTLVOperatingChannel
+{
     tANI_U8      present;
     tANI_U8      countryString[3];
     tANI_U8      regulatoryClass;
@@ -1154,7 +1212,8 @@ tANI_U32 dot11fGetPackedTlvOperatingChannel(tpAniSirGlobal, tDot11fTLVOperatingC
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 2 (0x0002)
-typedef struct sDot11fTLVP2PCapability {
+typedef struct sDot11fTLVP2PCapability
+{
     tANI_U8      present;
     tANI_U8      deviceCapability;
     tANI_U8      groupCapability;
@@ -1180,7 +1239,8 @@ tANI_U32 dot11fGetPackedTlvP2PCapability(tpAniSirGlobal, tDot11fTLVP2PCapability
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 3 (0x0003)
-typedef struct sDot11fTLVP2PDeviceId {
+typedef struct sDot11fTLVP2PDeviceId
+{
     tANI_U8      present;
     tANI_U8      P2PDeviceAddress[6];
 } tDot11fTLVP2PDeviceId;
@@ -1205,7 +1265,8 @@ tANI_U32 dot11fGetPackedTlvP2PDeviceId(tpAniSirGlobal, tDot11fTLVP2PDeviceId*, t
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 13 (0x000d)
-typedef struct sDot11fTLVP2PDeviceInfo {
+typedef struct sDot11fTLVP2PDeviceInfo
+{
     tANI_U8              present;
     tANI_U8              P2PDeviceAddress[6];
     tANI_U16             configMethod;
@@ -1233,7 +1294,8 @@ tANI_U32 dot11fGetPackedTlvP2PDeviceInfo(tpAniSirGlobal, tDot11fTLVP2PDeviceInfo
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 7 (0x0007)
-typedef struct sDot11fTLVP2PGroupBssid {
+typedef struct sDot11fTLVP2PGroupBssid
+{
     tANI_U8      present;
     tANI_U8      P2PGroupBssid[6];
 } tDot11fTLVP2PGroupBssid;
@@ -1258,7 +1320,8 @@ tANI_U32 dot11fGetPackedTlvP2PGroupBssid(tpAniSirGlobal, tDot11fTLVP2PGroupBssid
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 15 (0x000f)
-typedef struct sDot11fTLVP2PGroupId {
+typedef struct sDot11fTLVP2PGroupId
+{
     tANI_U8      present;
     tANI_U8      deviceAddress[6];
     tANI_U8      num_ssid;
@@ -1285,7 +1348,8 @@ tANI_U32 dot11fGetPackedTlvP2PGroupId(tpAniSirGlobal, tDot11fTLVP2PGroupId*, tAN
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 14 (0x000e)
-typedef struct sDot11fTLVP2PGroupInfo {
+typedef struct sDot11fTLVP2PGroupInfo
+{
     tANI_U8      present;
     tANI_U8      num_P2PClientInfoDesc;
     tANI_U8      P2PClientInfoDesc[1024];
@@ -1311,7 +1375,8 @@ tANI_U32 dot11fGetPackedTlvP2PGroupInfo(tpAniSirGlobal, tDot11fTLVP2PGroupInfo*,
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 0 (0x0000)
-typedef struct sDot11fTLVP2PStatus {
+typedef struct sDot11fTLVP2PStatus
+{
     tANI_U8      present;
     tANI_U8      status;
 } tDot11fTLVP2PStatus;
@@ -1336,7 +1401,8 @@ tANI_U32 dot11fGetPackedTlvP2PStatus(tpAniSirGlobal, tDot11fTLVP2PStatus*, tANI_
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4180 (0x1054)
-typedef struct sDot11fTLVPrimaryDeviceType {
+typedef struct sDot11fTLVPrimaryDeviceType
+{
     tANI_U8      present;
     tANI_U16     primary_category;
     tANI_U8      oui[4];
@@ -1363,7 +1429,8 @@ tANI_U32 dot11fGetPackedTlvPrimaryDeviceType(tpAniSirGlobal, tDot11fTLVPrimaryDe
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4156 (0x103c)
-typedef struct sDot11fTLVRFBands {
+typedef struct sDot11fTLVRFBands
+{
     tANI_U8      present;
     tANI_U8      bands;
 } tDot11fTLVRFBands;
@@ -1388,7 +1455,8 @@ tANI_U32 dot11fGetPackedTlvRFBands(tpAniSirGlobal, tDot11fTLVRFBands*, tANI_U32*
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4202 (0x106a)
-typedef struct sDot11fTLVRequestDeviceType {
+typedef struct sDot11fTLVRequestDeviceType
+{
     tANI_U8      present;
     tANI_U16     primary_category;
     tANI_U8      oui[4];
@@ -1415,7 +1483,8 @@ tANI_U32 dot11fGetPackedTlvRequestDeviceType(tpAniSirGlobal, tDot11fTLVRequestDe
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4154 (0x103a)
-typedef struct sDot11fTLVRequestType {
+typedef struct sDot11fTLVRequestType
+{
     tANI_U8      present;
     tANI_U8      reqType;
 } tDot11fTLVRequestType;
@@ -1440,7 +1509,8 @@ tANI_U32 dot11fGetPackedTlvRequestType(tpAniSirGlobal, tDot11fTLVRequestType*, t
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4155 (0x103b)
-typedef struct sDot11fTLVResponseType {
+typedef struct sDot11fTLVResponseType
+{
     tANI_U8      present;
     tANI_U8      resType;
 } tDot11fTLVResponseType;
@@ -1465,7 +1535,8 @@ tANI_U32 dot11fGetPackedTlvResponseType(tpAniSirGlobal, tDot11fTLVResponseType*,
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4161 (0x1041)
-typedef struct sDot11fTLVSelectedRegistrar {
+typedef struct sDot11fTLVSelectedRegistrar
+{
     tANI_U8      present;
     tANI_U8      selected;
 } tDot11fTLVSelectedRegistrar;
@@ -1490,7 +1561,8 @@ tANI_U32 dot11fGetPackedTlvSelectedRegistrar(tpAniSirGlobal, tDot11fTLVSelectedR
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4179 (0x1053)
-typedef struct sDot11fTLVSelectedRegistrarConfigMethods {
+typedef struct sDot11fTLVSelectedRegistrarConfigMethods
+{
     tANI_U8      present;
     tANI_U16     methods;
 } tDot11fTLVSelectedRegistrarConfigMethods;
@@ -1515,7 +1587,8 @@ tANI_U32 dot11fGetPackedTlvSelectedRegistrarConfigMethods(tpAniSirGlobal, tDot11
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4162 (0x1042)
-typedef struct sDot11fTLVSerialNumber {
+typedef struct sDot11fTLVSerialNumber
+{
     tANI_U8      present;
     tANI_U8      num_text;
     tANI_U8      text[32];
@@ -1541,7 +1614,8 @@ tANI_U32 dot11fGetPackedTlvSerialNumber(tpAniSirGlobal, tDot11fTLVSerialNumber*,
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4167 (0x1047)
-typedef struct sDot11fTLVUUID_E {
+typedef struct sDot11fTLVUUID_E
+{
     tANI_U8      present;
     tANI_U8      uuid[16];
 } tDot11fTLVUUID_E;
@@ -1566,7 +1640,8 @@ tANI_U32 dot11fGetPackedTlvUUID_E(tpAniSirGlobal, tDot11fTLVUUID_E*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4168 (0x1048)
-typedef struct sDot11fTLVUUID_R {
+typedef struct sDot11fTLVUUID_R
+{
     tANI_U8      present;
     tANI_U8      uuid[16];
 } tDot11fTLVUUID_R;
@@ -1591,7 +1666,8 @@ tANI_U32 dot11fGetPackedTlvUUID_R(tpAniSirGlobal, tDot11fTLVUUID_R*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4169 (0x1049)
-typedef struct sDot11fTLVVendorExtension {
+typedef struct sDot11fTLVVendorExtension
+{
     tANI_U8                   present;
     tANI_U8                   vendorId[3];
     tDot11fTLVVersion2        Version2;
@@ -1619,7 +1695,8 @@ tANI_U32 dot11fGetPackedTlvVendorExtension(tpAniSirGlobal, tDot11fTLVVendorExten
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4170 (0x104a)
-typedef struct sDot11fTLVVersion {
+typedef struct sDot11fTLVVersion
+{
     tANI_U8      present;
     tANI_U8            minor: 4;
     tANI_U8            major: 4;
@@ -1645,7 +1722,8 @@ tANI_U32 dot11fGetPackedTlvVersion(tpAniSirGlobal, tDot11fTLVVersion*, tANI_U32*
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4164 (0x1044)
-typedef struct sDot11fTLVWPSState {
+typedef struct sDot11fTLVWPSState
+{
     tANI_U8      present;
     tANI_U8      state;
 } tDot11fTLVWPSState;
@@ -1670,7 +1748,8 @@ tANI_U32 dot11fGetPackedTlvWPSState(tpAniSirGlobal, tDot11fTLVWPSState*, tANI_U3
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 16 (0x0010)
-typedef struct sDot11fTLVP2PInterface {
+typedef struct sDot11fTLVP2PInterface
+{
     tANI_U8      present;
     tANI_U8      P2PDeviceAddress[6];
 } tDot11fTLVP2PInterface;
@@ -1695,7 +1774,8 @@ tANI_U32 dot11fGetPackedTlvP2PInterface(tpAniSirGlobal, tDot11fTLVP2PInterface*,
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 10 (0x000a)
-typedef struct sDot11fTLVP2PManageability {
+typedef struct sDot11fTLVP2PManageability
+{
     tANI_U8      present;
     tANI_U8      manageability;
 } tDot11fTLVP2PManageability;
@@ -1724,7 +1804,8 @@ tANI_U32 dot11fGetPackedTlvP2PManageability(tpAniSirGlobal, tDot11fTLVP2PManagea
  ********************************************************************/
 
 // EID 1 (0x01)
-typedef struct sDot11fIEAPName {
+typedef struct sDot11fIEAPName
+{
     tANI_U8      present;
     tANI_U8      num_name;
     tANI_U8      name[32];
@@ -1750,7 +1831,8 @@ tANI_U32 dot11fGetPackedIEAPName(tpAniSirGlobal, tDot11fIEAPName*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 4 (0x04)
-typedef struct sDot11fIEBPIndicator {
+typedef struct sDot11fIEBPIndicator
+{
     tANI_U8      present;
     tANI_U8      indicator;
     tANI_U8      type;
@@ -1776,7 +1858,8 @@ tANI_U32 dot11fGetPackedIEBPIndicator(tpAniSirGlobal, tDot11fIEBPIndicator*, tAN
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 2 (0x02)
-typedef struct sDot11fIECondensedCountryStr {
+typedef struct sDot11fIECondensedCountryStr
+{
     tANI_U8      present;
     tANI_U8      countryStr[2];
 } tDot11fIECondensedCountryStr;
@@ -1801,7 +1884,8 @@ tANI_U32 dot11fGetPackedIECondensedCountryStr(tpAniSirGlobal, tDot11fIECondensed
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 2 (0x02)
-typedef struct sDot11fIEGTK {
+typedef struct sDot11fIEGTK
+{
     tANI_U8      present;
     tANI_U16            keyId: 2;
     tANI_U16         reserved: 14;
@@ -1831,7 +1915,8 @@ tANI_U32 dot11fGetPackedIEGTK(tpAniSirGlobal, tDot11fIEGTK*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 2 (0x02)
-typedef struct sDot11fIEHCF {
+typedef struct sDot11fIEHCF
+{
     tANI_U8      present;
     tANI_U8      enabled;
 } tDot11fIEHCF;
@@ -1856,7 +1941,8 @@ tANI_U32 dot11fGetPackedIEHCF(tpAniSirGlobal, tDot11fIEHCF*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 4 (0x04)
-typedef struct sDot11fIEIGTK {
+typedef struct sDot11fIEIGTK
+{
     tANI_U8      present;
     tANI_U8      keyID[2];
     tANI_U8      IPN[6];
@@ -1884,7 +1970,8 @@ tANI_U32 dot11fGetPackedIEIGTK(tpAniSirGlobal, tDot11fIEIGTK*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 9 (0x09)
-typedef struct sDot11fIELLAttr {
+typedef struct sDot11fIELLAttr
+{
     tANI_U8      present;
     tANI_U32     defer_threshold;
 } tDot11fIELLAttr;
@@ -1909,7 +1996,8 @@ tANI_U32 dot11fGetPackedIELLAttr(tpAniSirGlobal, tDot11fIELLAttr*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 8 (0x08)
-typedef struct sDot11fIELoadBalance {
+typedef struct sDot11fIELoadBalance
+{
     tANI_U8      present;
     tANI_U8      bssid[6];
     tANI_U8      channel;
@@ -1935,7 +2023,8 @@ tANI_U32 dot11fGetPackedIELoadBalance(tpAniSirGlobal, tDot11fIELoadBalance*, tAN
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 6 (0x06)
-typedef struct sDot11fIELoadInfo {
+typedef struct sDot11fIELoadInfo
+{
     tANI_U8      present;
     tANI_U16     num_stas;
     tANI_U16     channel_util;
@@ -1961,7 +2050,8 @@ tANI_U32 dot11fGetPackedIELoadInfo(tpAniSirGlobal, tDot11fIELoadInfo*, tANI_U32*
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 7 (0x07)
-typedef struct sDot11fIEPropAssocType {
+typedef struct sDot11fIEPropAssocType
+{
     tANI_U8      present;
     tANI_U8      type;
 } tDot11fIEPropAssocType;
@@ -1986,7 +2076,8 @@ tANI_U32 dot11fGetPackedIEPropAssocType(tpAniSirGlobal, tDot11fIEPropAssocType*,
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 10 (0x0a)
-typedef struct sDot11fIEPropCapability {
+typedef struct sDot11fIEPropCapability
+{
     tANI_U8      present;
     tANI_U16     capability;
 } tDot11fIEPropCapability;
@@ -2011,7 +2102,8 @@ tANI_U32 dot11fGetPackedIEPropCapability(tpAniSirGlobal, tDot11fIEPropCapability
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 15 (0x0f)
-typedef struct sDot11fIEPropChannSwitchAnn {
+typedef struct sDot11fIEPropChannSwitchAnn
+{
     tANI_U8      present;
     tANI_U8      mode;
     tANI_U8      primary_channel;
@@ -2039,7 +2131,8 @@ tANI_U32 dot11fGetPackedIEPropChannSwitchAnn(tpAniSirGlobal, tDot11fIEPropChannS
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 12 (0x0c)
-typedef struct sDot11fIEPropEDCAParams {
+typedef struct sDot11fIEPropEDCAParams
+{
     tANI_U8      present;
     tANI_U8      qos;
     tANI_U8      reserved;
@@ -2093,7 +2186,8 @@ tANI_U32 dot11fGetPackedIEPropEDCAParams(tpAniSirGlobal, tDot11fIEPropEDCAParams
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 16 (0x10)
-typedef struct sDot11fIEPropQuietBSS {
+typedef struct sDot11fIEPropQuietBSS
+{
     tANI_U8      present;
     tANI_U8      quiet_count;
     tANI_U8      quiet_period;
@@ -2121,7 +2215,8 @@ tANI_U32 dot11fGetPackedIEPropQuietBSS(tpAniSirGlobal, tDot11fIEPropQuietBSS*, t
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 0 (0x00)
-typedef struct sDot11fIEPropSuppRates {
+typedef struct sDot11fIEPropSuppRates
+{
     tANI_U8      present;
     tANI_U8      num_rates;
     tANI_U8      rates[12];
@@ -2147,7 +2242,8 @@ tANI_U32 dot11fGetPackedIEPropSuppRates(tpAniSirGlobal, tDot11fIEPropSuppRates*,
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 3 (0x03)
-typedef struct sDot11fIER0KH_ID {
+typedef struct sDot11fIER0KH_ID
+{
     tANI_U8      present;
     tANI_U8      num_PMK_R0_ID;
     tANI_U8      PMK_R0_ID[48];
@@ -2173,7 +2269,8 @@ tANI_U32 dot11fGetPackedIER0KH_ID(tpAniSirGlobal, tDot11fIER0KH_ID*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 1 (0x01)
-typedef struct sDot11fIER1KH_ID {
+typedef struct sDot11fIER1KH_ID
+{
     tANI_U8      present;
     tANI_U8      PMK_R1_ID[6];
 } tDot11fIER1KH_ID;
@@ -2198,7 +2295,8 @@ tANI_U32 dot11fGetPackedIER1KH_ID(tpAniSirGlobal, tDot11fIER1KH_ID*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 1 (0x01)
-typedef struct sDot11fIETSFInfo {
+typedef struct sDot11fIETSFInfo
+{
     tANI_U8      present;
     tANI_U16     TsfOffset;
     tANI_U16     BeaconIntvl;
@@ -2224,7 +2322,8 @@ tANI_U32 dot11fGetPackedIETSFInfo(tpAniSirGlobal, tDot11fIETSFInfo*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 18 (0x12)
-typedef struct sDot11fIETaurus {
+typedef struct sDot11fIETaurus
+{
     tANI_U8      present;
     tANI_U16     baTIDBitmap;
     tANI_U16     baPolicy;
@@ -2252,7 +2351,8 @@ tANI_U32 dot11fGetPackedIETaurus(tpAniSirGlobal, tDot11fIETaurus*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 14 (0x0e)
-typedef struct sDot11fIETitan {
+typedef struct sDot11fIETitan
+{
     tANI_U8      present;
     tANI_U8      concat_tcid_bitmap;
     tANI_U8      compression_tcid_bitmap;
@@ -2280,7 +2380,8 @@ tANI_U32 dot11fGetPackedIETitan(tpAniSirGlobal, tDot11fIETitan*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 17 (0x11)
-typedef struct sDot11fIETriggerStaBgScan {
+typedef struct sDot11fIETriggerStaBgScan
+{
     tANI_U8      present;
     tANI_U8      enable;
 } tDot11fIETriggerStaBgScan;
@@ -2305,7 +2406,8 @@ tANI_U32 dot11fGetPackedIETriggerStaBgScan(tpAniSirGlobal, tDot11fIETriggerStaBg
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 11 (0x0b)
-typedef struct sDot11fIEVersion {
+typedef struct sDot11fIEVersion
+{
     tANI_U8      present;
     tANI_U32     chip_rev;
     tANI_U8      card_type;
@@ -2333,7 +2435,8 @@ tANI_U32 dot11fGetPackedIEVersion(tpAniSirGlobal, tDot11fIEVersion*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 3 (0x03)
-typedef struct sDot11fIEWDS {
+typedef struct sDot11fIEWDS
+{
     tANI_U8      present;
     tANI_U8      num_wdsData;
     tANI_U8      wdsData[64];
@@ -2359,7 +2462,8 @@ tANI_U32 dot11fGetPackedIEWDS(tpAniSirGlobal, tDot11fIEWDS*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 51 (0x33)
-typedef struct sDot11fIEAPChannelReport {
+typedef struct sDot11fIEAPChannelReport
+{
     tANI_U8      present;
     tANI_U8      regulatoryClass;
     tANI_U8      num_channelList;
@@ -2386,7 +2490,8 @@ tANI_U32 dot11fGetPackedIEAPChannelReport(tpAniSirGlobal, tDot11fIEAPChannelRepo
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 2 (0x02)
-typedef struct sDot11fIEBcnReportingDetail {
+typedef struct sDot11fIEBcnReportingDetail
+{
     tANI_U8      present;
     tANI_U8      reportingDetail;
 } tDot11fIEBcnReportingDetail;
@@ -2411,7 +2516,8 @@ tANI_U32 dot11fGetPackedIEBcnReportingDetail(tpAniSirGlobal, tDot11fIEBcnReporti
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 1 (0x01)
-typedef struct sDot11fIEBeaconReportFrmBody {
+typedef struct sDot11fIEBeaconReportFrmBody
+{
     tANI_U8      present;
     tANI_U8      num_reportedFields;
     tANI_U8      reportedFields[224];
@@ -2437,7 +2543,8 @@ tANI_U32 dot11fGetPackedIEBeaconReportFrmBody(tpAniSirGlobal, tDot11fIEBeaconRep
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 1 (0x01)
-typedef struct sDot11fIEBeaconReporting {
+typedef struct sDot11fIEBeaconReporting
+{
     tANI_U8      present;
     tANI_U8      reportingCondition;
     tANI_U8      threshold;
@@ -2463,7 +2570,8 @@ tANI_U32 dot11fGetPackedIEBeaconReporting(tpAniSirGlobal, tDot11fIEBeaconReporti
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 66 (0x42)
-typedef struct sDot11fIEMeasurementPilot {
+typedef struct sDot11fIEMeasurementPilot
+{
     tANI_U8      present;
     tANI_U8      measurementPilot;
     tANI_U8      num_vendorSpecific;
@@ -2490,7 +2598,8 @@ tANI_U32 dot11fGetPackedIEMeasurementPilot(tpAniSirGlobal, tDot11fIEMeasurementP
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 71 (0x47)
-typedef struct sDot11fIEMultiBssid {
+typedef struct sDot11fIEMultiBssid
+{
     tANI_U8      present;
     tANI_U8      maxBSSIDIndicator;
     tANI_U8      num_vendorSpecific;
@@ -2517,7 +2626,8 @@ tANI_U32 dot11fGetPackedIEMultiBssid(tpAniSirGlobal, tDot11fIEMultiBssid*, tANI_
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 57 (0x39)
-typedef struct sDot11fIERICData {
+typedef struct sDot11fIERICData
+{
     tANI_U8      present;
     tANI_U8      Identifier;
     tANI_U8      resourceDescCount;
@@ -2544,7 +2654,8 @@ tANI_U32 dot11fGetPackedIERICData(tpAniSirGlobal, tDot11fIERICData*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 75 (0x4b)
-typedef struct sDot11fIERICDescriptor {
+typedef struct sDot11fIERICDescriptor
+{
     tANI_U8      present;
     tANI_U8      resourceType;
     tANI_U8      num_variableData;
@@ -2571,7 +2682,8 @@ tANI_U32 dot11fGetPackedIERICDescriptor(tpAniSirGlobal, tDot11fIERICDescriptor*,
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 70 (0x46)
-typedef struct sDot11fIERRMEnabledCap {
+typedef struct sDot11fIERRMEnabledCap
+{
     tANI_U8      present;
     tANI_U8  LinkMeasurement: 1;
     tANI_U8      NeighborRpt: 1;
@@ -2624,7 +2736,8 @@ tANI_U32 dot11fGetPackedIERRMEnabledCap(tpAniSirGlobal, tDot11fIERRMEnabledCap*,
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 10 (0x0a)
-typedef struct sDot11fIERequestedInfo {
+typedef struct sDot11fIERequestedInfo
+{
     tANI_U8      present;
     tANI_U8      num_requested_eids;
     tANI_U8      requested_eids[255];
@@ -2650,7 +2763,8 @@ tANI_U32 dot11fGetPackedIERequestedInfo(tpAniSirGlobal, tDot11fIERequestedInfo*,
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 0 (0x00)
-typedef struct sDot11fIESSID {
+typedef struct sDot11fIESSID
+{
     tANI_U8      present;
     tANI_U8      num_ssid;
     tANI_U8      ssid[32];
@@ -2676,7 +2790,8 @@ tANI_U32 dot11fGetPackedIESSID(tpAniSirGlobal, tDot11fIESSID*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 15 (0x0f)
-typedef struct sDot11fIESchedule {
+typedef struct sDot11fIESchedule
+{
     tANI_U8      present;
     tANI_U16      aggregation: 1;
     tANI_U16             tsid: 4;
@@ -2708,7 +2823,8 @@ tANI_U32 dot11fGetPackedIESchedule(tpAniSirGlobal, tDot11fIESchedule*, tANI_U32*
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 14 (0x0e)
-typedef struct sDot11fIETCLAS {
+typedef struct sDot11fIETCLAS
+{
     tANI_U8      present;
     tANI_U8      user_priority;
     tANI_U8      classifier_type;
@@ -2773,7 +2889,8 @@ tANI_U32 dot11fGetPackedIETCLAS(tpAniSirGlobal, tDot11fIETCLAS*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 44 (0x2c)
-typedef struct sDot11fIETCLASSPROC {
+typedef struct sDot11fIETCLASSPROC
+{
     tANI_U8      present;
     tANI_U8      processing;
 } tDot11fIETCLASSPROC;
@@ -2798,7 +2915,8 @@ tANI_U32 dot11fGetPackedIETCLASSPROC(tpAniSirGlobal, tDot11fIETCLASSPROC*, tANI_
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 43 (0x2b)
-typedef struct sDot11fIETSDelay {
+typedef struct sDot11fIETSDelay
+{
     tANI_U8      present;
     tANI_U32     delay;
 } tDot11fIETSDelay;
@@ -2823,7 +2941,8 @@ tANI_U32 dot11fGetPackedIETSDelay(tpAniSirGlobal, tDot11fIETSDelay*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 13 (0x0d)
-typedef struct sDot11fIETSPEC {
+typedef struct sDot11fIETSPEC
+{
     tANI_U8      present;
     tANI_U16     traffic_type: 1;
     tANI_U16             tsid: 4;
@@ -2873,7 +2992,8 @@ tANI_U32 dot11fGetPackedIETSPEC(tpAniSirGlobal, tDot11fIETSPEC*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x50, 0xf2, 0x02, 0x09}
-typedef struct sDot11fIEWMMSchedule {
+typedef struct sDot11fIEWMMSchedule
+{
     tANI_U8      present;
     tANI_U8      version /* Must be 1! */;
     tANI_U16      aggregation: 1;
@@ -2906,7 +3026,8 @@ tANI_U32 dot11fGetPackedIEWMMSchedule(tpAniSirGlobal, tDot11fIEWMMSchedule*, tAN
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x50, 0xf2, 0x02, 0x06}
-typedef struct sDot11fIEWMMTCLAS {
+typedef struct sDot11fIEWMMTCLAS
+{
     tANI_U8      present;
     tANI_U8      version /* Must be 1! */;
     tANI_U8      user_priority;
@@ -2972,7 +3093,8 @@ tANI_U32 dot11fGetPackedIEWMMTCLAS(tpAniSirGlobal, tDot11fIEWMMTCLAS*, tANI_U32*
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x50, 0xf2, 0x02, 0x07}
-typedef struct sDot11fIEWMMTCLASPROC {
+typedef struct sDot11fIEWMMTCLASPROC
+{
     tANI_U8      present;
     tANI_U8      version /* Must be 1! */;
     tANI_U8      processing;
@@ -2998,7 +3120,8 @@ tANI_U32 dot11fGetPackedIEWMMTCLASPROC(tpAniSirGlobal, tDot11fIEWMMTCLASPROC*, t
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x50, 0xf2, 0x02, 0x08}
-typedef struct sDot11fIEWMMTSDelay {
+typedef struct sDot11fIEWMMTSDelay
+{
     tANI_U8      present;
     tANI_U8      version /* Must be 1! */;
     tANI_U32     delay;
@@ -3024,7 +3147,8 @@ tANI_U32 dot11fGetPackedIEWMMTSDelay(tpAniSirGlobal, tDot11fIEWMMTSDelay*, tANI_
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x50, 0xf2, 0x02, 0x02}
-typedef struct sDot11fIEWMMTSPEC {
+typedef struct sDot11fIEWMMTSPEC
+{
     tANI_U8      present;
     tANI_U8      version /* Must be 1! */;
     tANI_U16     traffic_type: 1;
@@ -3075,7 +3199,8 @@ tANI_U32 dot11fGetPackedIEWMMTSPEC(tpAniSirGlobal, tDot11fIEWMMTSPEC*, tANI_U32*
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 197 (0xc5)
-typedef struct sDot11fIEAID {
+typedef struct sDot11fIEAID
+{
     tANI_U8      present;
     tANI_U16     assocId;
 } tDot11fIEAID;
@@ -3100,7 +3225,8 @@ tANI_U32 dot11fGetPackedIEAID(tpAniSirGlobal, tDot11fIEAID*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x0a, 0xf5}
-typedef struct sDot11fIEAirgo {
+typedef struct sDot11fIEAirgo
+{
     tANI_U8                     present;
     tDot11fIEPropSuppRates      PropSuppRates;
     tDot11fIEAPName             APName;
@@ -3141,7 +3267,8 @@ tANI_U32 dot11fGetPackedIEAirgo(tpAniSirGlobal, tDot11fIEAirgo*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 4 (0x04)
-typedef struct sDot11fIECFParams {
+typedef struct sDot11fIECFParams
+{
     tANI_U8      present;
     tANI_U8      cfp_count;
     tANI_U8      cfp_period;
@@ -3169,7 +3296,8 @@ tANI_U32 dot11fGetPackedIECFParams(tpAniSirGlobal, tDot11fIECFParams*, tANI_U32*
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 16 (0x10)
-typedef struct sDot11fIEChallengeText {
+typedef struct sDot11fIEChallengeText
+{
     tANI_U8      present;
     tANI_U8      num_text;
     tANI_U8      text[253];
@@ -3195,7 +3323,8 @@ tANI_U32 dot11fGetPackedIEChallengeText(tpAniSirGlobal, tDot11fIEChallengeText*,
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 37 (0x25)
-typedef struct sDot11fIEChanSwitchAnn {
+typedef struct sDot11fIEChanSwitchAnn
+{
     tANI_U8      present;
     tANI_U8      switchMode;
     tANI_U8      newChannel;
@@ -3222,7 +3351,8 @@ tANI_U32 dot11fGetPackedIEChanSwitchAnn(tpAniSirGlobal, tDot11fIEChanSwitchAnn*,
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 7 (0x07)
-typedef struct sDot11fIECountry {
+typedef struct sDot11fIECountry
+{
     tANI_U8      present;
     tANI_U8      country[3];
     tANI_U8      num_triplets;
@@ -3249,7 +3379,8 @@ tANI_U32 dot11fGetPackedIECountry(tpAniSirGlobal, tDot11fIECountry*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 3 (0x03)
-typedef struct sDot11fIEDSParams {
+typedef struct sDot11fIEDSParams
+{
     tANI_U8      present;
     tANI_U8      curr_channel;
 } tDot11fIEDSParams;
@@ -3274,7 +3405,8 @@ tANI_U32 dot11fGetPackedIEDSParams(tpAniSirGlobal, tDot11fIEDSParams*, tANI_U32*
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 12 (0x0c)
-typedef struct sDot11fIEEDCAParamSet {
+typedef struct sDot11fIEEDCAParamSet
+{
     tANI_U8      present;
     tANI_U8      qos;
     tANI_U8      reserved;
@@ -3328,7 +3460,8 @@ tANI_U32 dot11fGetPackedIEEDCAParamSet(tpAniSirGlobal, tDot11fIEEDCAParamSet*, t
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 42 (0x2a)
-typedef struct sDot11fIEERPInfo {
+typedef struct sDot11fIEERPInfo
+{
     tANI_U8      present;
     tANI_U8  non_erp_present: 1;
     tANI_U8         use_prot: 1;
@@ -3356,7 +3489,8 @@ tANI_U32 dot11fGetPackedIEERPInfo(tpAniSirGlobal, tDot11fIEERPInfo*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 156 (0x9c) {OUI 0x00, 0x40, 0x96, 0x00}
-typedef struct sDot11fIEESECckmOpaque {
+typedef struct sDot11fIEESECckmOpaque
+{
     tANI_U8      present;
     tANI_U8      num_data;
     tANI_U8      data[20];
@@ -3382,7 +3516,8 @@ tANI_U32 dot11fGetPackedIEESECckmOpaque(tpAniSirGlobal, tDot11fIEESECckmOpaque*,
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x40, 0x96, 0x01}
-typedef struct sDot11fIEESERadMgmtCap {
+typedef struct sDot11fIEESERadMgmtCap
+{
     tANI_U8      present;
     tANI_U8      mgmt_state;
     tANI_U8      mbssid_mask: 3;
@@ -3409,7 +3544,8 @@ tANI_U32 dot11fGetPackedIEESERadMgmtCap(tpAniSirGlobal, tDot11fIEESERadMgmtCap*,
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x40, 0x96, 0x07}
-typedef struct sDot11fIEESETrafStrmMet {
+typedef struct sDot11fIEESETrafStrmMet
+{
     tANI_U8      present;
     tANI_U8      tsid;
     tANI_U8      state;
@@ -3436,7 +3572,8 @@ tANI_U32 dot11fGetPackedIEESETrafStrmMet(tpAniSirGlobal, tDot11fIEESETrafStrmMet
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x40, 0x96, 0x08}
-typedef struct sDot11fIEESETrafStrmRateSet {
+typedef struct sDot11fIEESETrafStrmRateSet
+{
     tANI_U8      present;
     tANI_U8      tsid;
     tANI_U8      num_tsrates;
@@ -3463,7 +3600,8 @@ tANI_U32 dot11fGetPackedIEESETrafStrmRateSet(tpAniSirGlobal, tDot11fIEESETrafStr
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 150 (0x96) {OUI 0x00, 0x40, 0x96, 0x00}
-typedef struct sDot11fIEESETxmitPower {
+typedef struct sDot11fIEESETxmitPower
+{
     tANI_U8      present;
     tANI_U8      power_limit;
     tANI_U8      reserved;
@@ -3489,7 +3627,8 @@ tANI_U32 dot11fGetPackedIEESETxmitPower(tpAniSirGlobal, tDot11fIEESETxmitPower*,
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x40, 0x96, 0x03}
-typedef struct sDot11fIEESEVersion {
+typedef struct sDot11fIEESEVersion
+{
     tANI_U8      present;
     tANI_U8      version;
 } tDot11fIEESEVersion;
@@ -3514,7 +3653,8 @@ tANI_U32 dot11fGetPackedIEESEVersion(tpAniSirGlobal, tDot11fIEESEVersion*, tANI_
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 127 (0x7f)
-typedef struct sDot11fIEExtCap {
+typedef struct sDot11fIEExtCap
+{
     tANI_U8      present;
     tANI_U32 bssCoexistMgmtSupport: 1;
     tANI_U32        reserved1: 1;
@@ -3589,7 +3729,8 @@ tANI_U32 dot11fGetPackedIEExtCap(tpAniSirGlobal, tDot11fIEExtCap*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 62 (0x3e)
-typedef struct sDot11fIEExtChanSwitchAnn {
+typedef struct sDot11fIEExtChanSwitchAnn
+{
     tANI_U8      present;
     tANI_U8      secondaryChannelOffset;
 } tDot11fIEExtChanSwitchAnn;
@@ -3614,7 +3755,8 @@ tANI_U32 dot11fGetPackedIEExtChanSwitchAnn(tpAniSirGlobal, tDot11fIEExtChanSwitc
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 50 (0x32)
-typedef struct sDot11fIEExtSuppRates {
+typedef struct sDot11fIEExtSuppRates
+{
     tANI_U8      present;
     tANI_U8      num_rates;
     tANI_U8      rates[12];
@@ -3640,7 +3782,8 @@ tANI_U32 dot11fGetPackedIEExtSuppRates(tpAniSirGlobal, tDot11fIEExtSuppRates*, t
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 2 (0x02)
-typedef struct sDot11fIEFHParamSet {
+typedef struct sDot11fIEFHParamSet
+{
     tANI_U8      present;
     tANI_U16     dwell_time;
     tANI_U8      hop_set;
@@ -3668,7 +3811,8 @@ tANI_U32 dot11fGetPackedIEFHParamSet(tpAniSirGlobal, tDot11fIEFHParamSet*, tANI_
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 8 (0x08)
-typedef struct sDot11fIEFHParams {
+typedef struct sDot11fIEFHParams
+{
     tANI_U8      present;
     tANI_U8      radix;
     tANI_U8      nchannels;
@@ -3694,7 +3838,8 @@ tANI_U32 dot11fGetPackedIEFHParams(tpAniSirGlobal, tDot11fIEFHParams*, tANI_U32*
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 9 (0x09)
-typedef struct sDot11fIEFHPattTable {
+typedef struct sDot11fIEFHPattTable
+{
     tANI_U8      present;
     tANI_U8      flag;
     tANI_U8      nsets;
@@ -3724,7 +3869,8 @@ tANI_U32 dot11fGetPackedIEFHPattTable(tpAniSirGlobal, tDot11fIEFHPattTable*, tAN
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 55 (0x37)
-typedef struct sDot11fIEFTInfo {
+typedef struct sDot11fIEFTInfo
+{
     tANI_U8          present;
     tANI_U16             reserved: 8;
     tANI_U16              IECount: 8;
@@ -3757,7 +3903,8 @@ tANI_U32 dot11fGetPackedIEFTInfo(tpAniSirGlobal, tDot11fIEFTInfo*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 72 (0x48)
-typedef struct sDot11fIEHT2040BSSCoexistence {
+typedef struct sDot11fIEHT2040BSSCoexistence
+{
     tANI_U8      present;
     tANI_U8      infoRequest: 1;
     tANI_U8 fortyMHzIntolerant: 1;
@@ -3787,7 +3934,8 @@ tANI_U32 dot11fGetPackedIEHT2040BSSCoexistence(tpAniSirGlobal, tDot11fIEHT2040BS
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 73 (0x49)
-typedef struct sDot11fIEHT2040BSSIntolerantReport {
+typedef struct sDot11fIEHT2040BSSIntolerantReport
+{
     tANI_U8      present;
     tANI_U8      operatingClass;
     tANI_U8      num_channelList;
@@ -3814,7 +3962,8 @@ tANI_U32 dot11fGetPackedIEHT2040BSSIntolerantReport(tpAniSirGlobal, tDot11fIEHT2
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 45 (0x2d)
-typedef struct sDot11fIEHTCaps {
+typedef struct sDot11fIEHTCaps
+{
     tANI_U8      present;
     tANI_U16     advCodingCap: 1;
     tANI_U16 supportedChannelWidthSet: 1;
@@ -3887,7 +4036,8 @@ tANI_U32 dot11fGetPackedIEHTCaps(tpAniSirGlobal, tDot11fIEHTCaps*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 61 (0x3d)
-typedef struct sDot11fIEHTInfo {
+typedef struct sDot11fIEHTInfo
+{
     tANI_U8      present;
     tANI_U8      primaryChannel;
     tANI_U8 secondaryChannelOffset: 2;
@@ -3932,7 +4082,8 @@ tANI_U32 dot11fGetPackedIEHTInfo(tpAniSirGlobal, tDot11fIEHTInfo*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 6 (0x06)
-typedef struct sDot11fIEIBSSParams {
+typedef struct sDot11fIEIBSSParams
+{
     tANI_U8      present;
     tANI_U16     atim;
 } tDot11fIEIBSSParams;
@@ -3957,7 +4108,8 @@ tANI_U32 dot11fGetPackedIEIBSSParams(tpAniSirGlobal, tDot11fIEIBSSParams*, tANI_
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 101 (0x65)
-typedef struct sDot11fIELinkIdentifier {
+typedef struct sDot11fIELinkIdentifier
+{
     tANI_U8      present;
     tANI_U8      bssid[6];
     tANI_U8      InitStaAddr[6];
@@ -3984,7 +4136,8 @@ tANI_U32 dot11fGetPackedIELinkIdentifier(tpAniSirGlobal, tDot11fIELinkIdentifier
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 39 (0x27)
-typedef struct sDot11fIEMeasurementReport {
+typedef struct sDot11fIEMeasurementReport
+{
     tANI_U8      present;
     tANI_U8      token;
     tANI_U8             late: 1;
@@ -4040,7 +4193,7 @@ typedef struct sDot11fIEMeasurementReport {
             tANI_U8 BSSID[6];
             tANI_U8 antenna_id;
             tANI_U32 parent_TSF;
-    tDot11fIEBeaconReportFrmBody BeaconReportFrmBody;
+            tDot11fIEBeaconReportFrmBody BeaconReportFrmBody;
         } Beacon; /* type = 5 */
     } report;
 } tDot11fIEMeasurementReport;
@@ -4065,7 +4218,8 @@ tANI_U32 dot11fGetPackedIEMeasurementReport(tpAniSirGlobal, tDot11fIEMeasurement
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 38 (0x26)
-typedef struct sDot11fIEMeasurementRequest {
+typedef struct sDot11fIEMeasurementRequest
+{
     tANI_U8      present;
     tANI_U8      measurement_token;
     tANI_U8         parallel: 1;
@@ -4103,12 +4257,12 @@ typedef struct sDot11fIEMeasurementRequest {
             tANI_U16 meas_duration;
             tANI_U8 meas_mode;
             tANI_U8 BSSID[6];
-    tDot11fIESSID SSID;
-    tDot11fIEBeaconReporting BeaconReporting;
-    tDot11fIEBcnReportingDetail BcnReportingDetail;
-    tDot11fIERequestedInfo RequestedInfo;
-    tANI_U16 num_APChannelReport;
-    tDot11fIEAPChannelReport APChannelReport[2];
+            tDot11fIESSID SSID;
+            tDot11fIEBeaconReporting BeaconReporting;
+            tDot11fIEBcnReportingDetail BcnReportingDetail;
+            tDot11fIERequestedInfo RequestedInfo;
+            tANI_U16 num_APChannelReport;
+            tDot11fIEAPChannelReport APChannelReport[2];
         } Beacon; /* measurement_type = 5 */
     } measurement_request;
 } tDot11fIEMeasurementRequest;
@@ -4133,7 +4287,8 @@ tANI_U32 dot11fGetPackedIEMeasurementRequest(tpAniSirGlobal, tDot11fIEMeasuremen
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 54 (0x36)
-typedef struct sDot11fIEMobilityDomain {
+typedef struct sDot11fIEMobilityDomain
+{
     tANI_U8      present;
     tANI_U16     MDID;
     tANI_U8        overDSCap: 1;
@@ -4161,7 +4316,8 @@ tANI_U32 dot11fGetPackedIEMobilityDomain(tpAniSirGlobal, tDot11fIEMobilityDomain
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 52 (0x34)
-typedef struct sDot11fIENeighborReport {
+typedef struct sDot11fIENeighborReport
+{
     tANI_U8                      present;
     tANI_U8                      bssid[6];
     tANI_U8                   APReachability: 2;
@@ -4206,7 +4362,8 @@ tANI_U32 dot11fGetPackedIENeighborReport(tpAniSirGlobal, tDot11fIENeighborReport
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 74 (0x4a)
-typedef struct sDot11fIEOBSSScanParameters {
+typedef struct sDot11fIEOBSSScanParameters
+{
     tANI_U8      present;
     tANI_U16     obssScanPassiveDwell;
     tANI_U16     obssScanActiveDwell;
@@ -4237,7 +4394,8 @@ tANI_U32 dot11fGetPackedIEOBSSScanParameters(tpAniSirGlobal, tDot11fIEOBSSScanPa
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 199 (0xc7)
-typedef struct sDot11fIEOperatingMode {
+typedef struct sDot11fIEOperatingMode
+{
     tANI_U8      present;
     tANI_U8        chanWidth: 2;
     tANI_U8         reserved: 2;
@@ -4265,7 +4423,8 @@ tANI_U32 dot11fGetPackedIEOperatingMode(tpAniSirGlobal, tDot11fIEOperatingMode*,
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x50, 0x6f, 0x9a, 0x09} (Multi-IE)
-typedef struct sDot11fIEP2PAssocReq {
+typedef struct sDot11fIEP2PAssocReq
+{
     tANI_U8      present;
     tDot11fTLVP2PCapability P2PCapability;
     tDot11fTLVExtendedListenTiming ExtendedListenTiming;
@@ -4292,7 +4451,8 @@ tANI_U32 dot11fGetPackedIEP2PAssocReq(tpAniSirGlobal, tDot11fIEP2PAssocReq*, tAN
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x50, 0x6f, 0x9a, 0x09} (Multi-IE)
-typedef struct sDot11fIEP2PAssocRes {
+typedef struct sDot11fIEP2PAssocRes
+{
     tANI_U8      present;
     tDot11fTLVP2PStatus P2PStatus;
     tDot11fTLVExtendedListenTiming ExtendedListenTiming;
@@ -4318,7 +4478,8 @@ tANI_U32 dot11fGetPackedIEP2PAssocRes(tpAniSirGlobal, tDot11fIEP2PAssocRes*, tAN
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x50, 0x6f, 0x9a, 0x09} (Multi-IE)
-typedef struct sDot11fIEP2PBeacon {
+typedef struct sDot11fIEP2PBeacon
+{
     tANI_U8      present;
     tDot11fTLVP2PCapability P2PCapability;
     tDot11fTLVP2PDeviceId P2PDeviceId;
@@ -4345,7 +4506,8 @@ tANI_U32 dot11fGetPackedIEP2PBeacon(tpAniSirGlobal, tDot11fIEP2PBeacon*, tANI_U3
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x50, 0x6f, 0x9a, 0x09} (Multi-IE)
-typedef struct sDot11fIEP2PBeaconProbeRes {
+typedef struct sDot11fIEP2PBeaconProbeRes
+{
     tANI_U8      present;
     tDot11fTLVP2PCapability P2PCapability;
     tDot11fTLVP2PDeviceId P2PDeviceId;
@@ -4375,7 +4537,8 @@ tANI_U32 dot11fGetPackedIEP2PBeaconProbeRes(tpAniSirGlobal, tDot11fIEP2PBeaconPr
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x50, 0x6f, 0x9a, 0x09} (Multi-IE)
-typedef struct sDot11fIEP2PDeAuth {
+typedef struct sDot11fIEP2PDeAuth
+{
     tANI_U8      present;
     tDot11fTLVMinorReasonCode MinorReasonCode;
 } tDot11fIEP2PDeAuth;
@@ -4400,7 +4563,8 @@ tANI_U32 dot11fGetPackedIEP2PDeAuth(tpAniSirGlobal, tDot11fIEP2PDeAuth*, tANI_U3
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x50, 0x6f, 0x9a, 0x09} (Multi-IE)
-typedef struct sDot11fIEP2PDeviceDiscoverabilityReq {
+typedef struct sDot11fIEP2PDeviceDiscoverabilityReq
+{
     tANI_U8      present;
     tDot11fTLVP2PDeviceId P2PDeviceId;
     tDot11fTLVP2PGroupId P2PGroupId;
@@ -4426,7 +4590,8 @@ tANI_U32 dot11fGetPackedIEP2PDeviceDiscoverabilityReq(tpAniSirGlobal, tDot11fIEP
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x50, 0x6f, 0x9a, 0x09} (Multi-IE)
-typedef struct sDot11fIEP2PDeviceDiscoverabilityRes {
+typedef struct sDot11fIEP2PDeviceDiscoverabilityRes
+{
     tANI_U8      present;
     tDot11fTLVP2PStatus P2PStatus;
 } tDot11fIEP2PDeviceDiscoverabilityRes;
@@ -4451,7 +4616,8 @@ tANI_U32 dot11fGetPackedIEP2PDeviceDiscoverabilityRes(tpAniSirGlobal, tDot11fIEP
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x50, 0x6f, 0x9a, 0x09} (Multi-IE)
-typedef struct sDot11fIEP2PDisAssoc {
+typedef struct sDot11fIEP2PDisAssoc
+{
     tANI_U8      present;
     tDot11fTLVMinorReasonCode MinorReasonCode;
 } tDot11fIEP2PDisAssoc;
@@ -4476,7 +4642,8 @@ tANI_U32 dot11fGetPackedIEP2PDisAssoc(tpAniSirGlobal, tDot11fIEP2PDisAssoc*, tAN
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x50, 0x6f, 0x9a, 0x09} (Multi-IE)
-typedef struct sDot11fIEP2PGONegCnf {
+typedef struct sDot11fIEP2PGONegCnf
+{
     tANI_U8      present;
     tDot11fTLVP2PStatus P2PStatus;
     tDot11fTLVP2PCapability P2PCapability;
@@ -4505,7 +4672,8 @@ tANI_U32 dot11fGetPackedIEP2PGONegCnf(tpAniSirGlobal, tDot11fIEP2PGONegCnf*, tAN
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x50, 0x6f, 0x9a, 0x09} (Multi-IE)
-typedef struct sDot11fIEP2PGONegReq {
+typedef struct sDot11fIEP2PGONegReq
+{
     tANI_U8      present;
     tDot11fTLVP2PCapability P2PCapability;
     tDot11fTLVGOIntent GOIntent;
@@ -4538,7 +4706,8 @@ tANI_U32 dot11fGetPackedIEP2PGONegReq(tpAniSirGlobal, tDot11fIEP2PGONegReq*, tAN
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x50, 0x6f, 0x9a, 0x09} (Multi-IE)
-typedef struct sDot11fIEP2PGONegRes {
+typedef struct sDot11fIEP2PGONegRes
+{
     tANI_U8      present;
     tDot11fTLVP2PStatus P2PStatus;
     tDot11fTLVP2PCapability P2PCapability;
@@ -4571,7 +4740,8 @@ tANI_U32 dot11fGetPackedIEP2PGONegRes(tpAniSirGlobal, tDot11fIEP2PGONegRes*, tAN
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x50, 0xf2, 0x04} (Multi-IE)
-typedef struct sDot11fIEP2PGONegWPS {
+typedef struct sDot11fIEP2PGONegWPS
+{
     tANI_U8      present;
     tDot11fTLVVersion Version;
     tDot11fTLVDevicePasswordID DevicePasswordID;
@@ -4597,7 +4767,8 @@ tANI_U32 dot11fGetPackedIEP2PGONegWPS(tpAniSirGlobal, tDot11fIEP2PGONegWPS*, tAN
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x50, 0x6f, 0x9a, 0x09}
-typedef struct sDot11fIEP2PIEOpaque {
+typedef struct sDot11fIEP2PIEOpaque
+{
     tANI_U8      present;
     tANI_U8      num_data;
     tANI_U8      data[249];
@@ -4623,7 +4794,8 @@ tANI_U32 dot11fGetPackedIEP2PIEOpaque(tpAniSirGlobal, tDot11fIEP2PIEOpaque*, tAN
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x50, 0x6f, 0x9a, 0x09} (Multi-IE)
-typedef struct sDot11fIEP2PInvitationReq {
+typedef struct sDot11fIEP2PInvitationReq
+{
     tANI_U8      present;
     tDot11fTLVConfigurationTimeout ConfigurationTimeout;
     tDot11fTLVInvitationFlags InvitationFlags;
@@ -4654,7 +4826,8 @@ tANI_U32 dot11fGetPackedIEP2PInvitationReq(tpAniSirGlobal, tDot11fIEP2PInvitatio
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x50, 0x6f, 0x9a, 0x09} (Multi-IE)
-typedef struct sDot11fIEP2PInvitationRes {
+typedef struct sDot11fIEP2PInvitationRes
+{
     tANI_U8      present;
     tDot11fTLVP2PStatus P2PStatus;
     tDot11fTLVConfigurationTimeout ConfigurationTimeout;
@@ -4683,7 +4856,8 @@ tANI_U32 dot11fGetPackedIEP2PInvitationRes(tpAniSirGlobal, tDot11fIEP2PInvitatio
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x50, 0x6f, 0x9a, 0x09} (Multi-IE)
-typedef struct sDot11fIEP2PNoticeOfAbsence {
+typedef struct sDot11fIEP2PNoticeOfAbsence
+{
     tANI_U8      present;
     tDot11fTLVNoticeOfAbsence NoticeOfAbsence;
 } tDot11fIEP2PNoticeOfAbsence;
@@ -4708,7 +4882,8 @@ tANI_U32 dot11fGetPackedIEP2PNoticeOfAbsence(tpAniSirGlobal, tDot11fIEP2PNoticeO
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x50, 0x6f, 0x9a, 0x09} (Multi-IE)
-typedef struct sDot11fIEP2PPresenceResponse {
+typedef struct sDot11fIEP2PPresenceResponse
+{
     tANI_U8      present;
     tDot11fTLVP2PStatus P2PStatus;
     tDot11fTLVNoticeOfAbsence NoticeOfAbsence;
@@ -4734,7 +4909,8 @@ tANI_U32 dot11fGetPackedIEP2PPresenceResponse(tpAniSirGlobal, tDot11fIEP2PPresen
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x50, 0x6f, 0x9a, 0x09} (Multi-IE)
-typedef struct sDot11fIEP2PProbeReq {
+typedef struct sDot11fIEP2PProbeReq
+{
     tANI_U8      present;
     tDot11fTLVP2PCapability P2PCapability;
     tDot11fTLVP2PDeviceId P2PDeviceId;
@@ -4763,7 +4939,8 @@ tANI_U32 dot11fGetPackedIEP2PProbeReq(tpAniSirGlobal, tDot11fIEP2PProbeReq*, tAN
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x50, 0x6f, 0x9a, 0x09} (Multi-IE)
-typedef struct sDot11fIEP2PProbeRes {
+typedef struct sDot11fIEP2PProbeRes
+{
     tANI_U8      present;
     tDot11fTLVP2PCapability P2PCapability;
     tDot11fTLVExtendedListenTiming ExtendedListenTiming;
@@ -4792,7 +4969,8 @@ tANI_U32 dot11fGetPackedIEP2PProbeRes(tpAniSirGlobal, tDot11fIEP2PProbeRes*, tAN
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x50, 0x6f, 0x9a, 0x09} (Multi-IE)
-typedef struct sDot11fIEP2PProvisionDiscoveryReq {
+typedef struct sDot11fIEP2PProvisionDiscoveryReq
+{
     tANI_U8      present;
     tDot11fTLVP2PCapability P2PCapability;
     tDot11fTLVP2PDeviceInfo P2PDeviceInfo;
@@ -4819,7 +4997,8 @@ tANI_U32 dot11fGetPackedIEP2PProvisionDiscoveryReq(tpAniSirGlobal, tDot11fIEP2PP
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x50, 0xf2, 0x04} (Multi-IE)
-typedef struct sDot11fIEP2PWSCProvisionDiscoveryRes {
+typedef struct sDot11fIEP2PWSCProvisionDiscoveryRes
+{
     tANI_U8      present;
     tDot11fTLVConfigMethods ConfigMethods;
 } tDot11fIEP2PWSCProvisionDiscoveryRes;
@@ -4844,7 +5023,8 @@ tANI_U32 dot11fGetPackedIEP2PWSCProvisionDiscoveryRes(tpAniSirGlobal, tDot11fIEP
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 105 (0x69)
-typedef struct sDot11fIEPTIControl {
+typedef struct sDot11fIEPTIControl
+{
     tANI_U8      present;
     tANI_U8      tid;
     tANI_U16     sequence_control;
@@ -4870,7 +5050,8 @@ tANI_U32 dot11fGetPackedIEPTIControl(tpAniSirGlobal, tDot11fIEPTIControl*, tANI_
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 106 (0x6a)
-typedef struct sDot11fIEPUBufferStatus {
+typedef struct sDot11fIEPUBufferStatus
+{
     tANI_U8      present;
     tANI_U8 ac_bk_traffic_aval: 1;
     tANI_U8 ac_be_traffic_aval: 1;
@@ -4899,7 +5080,8 @@ tANI_U32 dot11fGetPackedIEPUBufferStatus(tpAniSirGlobal, tDot11fIEPUBufferStatus
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 33 (0x21)
-typedef struct sDot11fIEPowerCaps {
+typedef struct sDot11fIEPowerCaps
+{
     tANI_U8      present;
     tANI_U8      minTxPower;
     tANI_U8      maxTxPower;
@@ -4925,7 +5107,8 @@ tANI_U32 dot11fGetPackedIEPowerCaps(tpAniSirGlobal, tDot11fIEPowerCaps*, tANI_U3
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 32 (0x20)
-typedef struct sDot11fIEPowerConstraints {
+typedef struct sDot11fIEPowerConstraints
+{
     tANI_U8      present;
     tANI_U8      localPowerConstraints;
 } tDot11fIEPowerConstraints;
@@ -4950,7 +5133,8 @@ tANI_U32 dot11fGetPackedIEPowerConstraints(tpAniSirGlobal, tDot11fIEPowerConstra
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 11 (0x0b)
-typedef struct sDot11fIEQBSSLoad {
+typedef struct sDot11fIEQBSSLoad
+{
     tANI_U8      present;
     tANI_U16     stacount;
     tANI_U8      chautil;
@@ -4977,7 +5161,8 @@ tANI_U32 dot11fGetPackedIEQBSSLoad(tpAniSirGlobal, tDot11fIEQBSSLoad*, tANI_U32*
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 46 (0x2e)
-typedef struct sDot11fIEQOSCapsAp {
+typedef struct sDot11fIEQOSCapsAp
+{
     tANI_U8      present;
     tANI_U8            count: 4;
     tANI_U8             qack: 1;
@@ -5006,7 +5191,8 @@ tANI_U32 dot11fGetPackedIEQOSCapsAp(tpAniSirGlobal, tDot11fIEQOSCapsAp*, tANI_U3
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 46 (0x2e)
-typedef struct sDot11fIEQOSCapsStation {
+typedef struct sDot11fIEQOSCapsStation
+{
     tANI_U8      present;
     tANI_U8       acvo_uapsd: 1;
     tANI_U8       acvi_uapsd: 1;
@@ -5037,7 +5223,8 @@ tANI_U32 dot11fGetPackedIEQOSCapsStation(tpAniSirGlobal, tDot11fIEQOSCapsStation
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 110 (0x6e)
-typedef struct sDot11fIEQosMapSet {
+typedef struct sDot11fIEQosMapSet
+{
     tANI_U8      present;
     tANI_U8      num_dscp_exceptions;
     tANI_U8      dscp_exceptions[60];
@@ -5063,7 +5250,8 @@ tANI_U32 dot11fGetPackedIEQosMapSet(tpAniSirGlobal, tDot11fIEQosMapSet*, tANI_U3
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 40 (0x28)
-typedef struct sDot11fIEQuiet {
+typedef struct sDot11fIEQuiet
+{
     tANI_U8      present;
     tANI_U8      count;
     tANI_U8      period;
@@ -5091,7 +5279,8 @@ tANI_U32 dot11fGetPackedIEQuiet(tpAniSirGlobal, tDot11fIEQuiet*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 53 (0x35)
-typedef struct sDot11fIERCPIIE {
+typedef struct sDot11fIERCPIIE
+{
     tANI_U8      present;
     tANI_U8      rcpi;
 } tDot11fIERCPIIE;
@@ -5116,7 +5305,8 @@ tANI_U32 dot11fGetPackedIERCPIIE(tpAniSirGlobal, tDot11fIERCPIIE*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 57 (0x39)
-typedef struct sDot11fIERICDataDesc {
+typedef struct sDot11fIERICDataDesc
+{
     tANI_U8                present;
     tDot11fIERICData       RICData;
     tDot11fIERICDescriptor RICDescriptor;
@@ -5154,7 +5344,8 @@ tANI_U32 dot11fGetPackedIERICDataDesc(tpAniSirGlobal, tDot11fIERICDataDesc*, tAN
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 48 (0x30)
-typedef struct sDot11fIERSN {
+typedef struct sDot11fIERSN
+{
     tANI_U8      present;
     tANI_U16     version /* Must be 1! */;
     tANI_U8      gp_cipher_suite[4];
@@ -5188,7 +5379,8 @@ tANI_U32 dot11fGetPackedIERSN(tpAniSirGlobal, tDot11fIERSN*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 65 (0x41)
-typedef struct sDot11fIERSNIIE {
+typedef struct sDot11fIERSNIIE
+{
     tANI_U8      present;
     tANI_U8      rsni;
 } tDot11fIERSNIIE;
@@ -5213,7 +5405,8 @@ tANI_U32 dot11fGetPackedIERSNIIE(tpAniSirGlobal, tDot11fIERSNIIE*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 48 (0x30)
-typedef struct sDot11fIERSNOpaque {
+typedef struct sDot11fIERSNOpaque
+{
     tANI_U8      present;
     tANI_U8      num_data;
     tANI_U8      data[253];
@@ -5239,7 +5432,8 @@ tANI_U32 dot11fGetPackedIERSNOpaque(tpAniSirGlobal, tDot11fIERSNOpaque*, tANI_U3
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 36 (0x24)
-typedef struct sDot11fIESuppChannels {
+typedef struct sDot11fIESuppChannels
+{
     tANI_U8      present;
     tANI_U8      num_bands;
     tANI_U8      bands[48][2];
@@ -5265,7 +5459,8 @@ tANI_U32 dot11fGetPackedIESuppChannels(tpAniSirGlobal, tDot11fIESuppChannels*, t
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 59 (0x3b)
-typedef struct sDot11fIESuppOperatingClasses {
+typedef struct sDot11fIESuppOperatingClasses
+{
     tANI_U8      present;
     tANI_U8      num_classes;
     tANI_U8      classes[32];
@@ -5291,7 +5486,8 @@ tANI_U32 dot11fGetPackedIESuppOperatingClasses(tpAniSirGlobal, tDot11fIESuppOper
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 1 (0x01)
-typedef struct sDot11fIESuppRates {
+typedef struct sDot11fIESuppRates
+{
     tANI_U8      present;
     tANI_U8      num_rates;
     tANI_U8      rates[12];
@@ -5315,7 +5511,7 @@ typedef struct sDot11fIESuppRates {
                       ((_x) == 48) || \
                       ((_x) == 72) || \
                       ((_x) == 96) || \
-                      ((_x) == 108))  
+                      ((_x) == 108))
 
 #ifdef __cplusplus
 extern "C" {
@@ -5330,7 +5526,8 @@ tANI_U32 dot11fGetPackedIESuppRates(tpAniSirGlobal, tDot11fIESuppRates*, tANI_U3
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 5 (0x05)
-typedef struct sDot11fIETIM {
+typedef struct sDot11fIETIM
+{
     tANI_U8      present;
     tANI_U8      dtim_count;
     tANI_U8      dtim_period;
@@ -5359,7 +5556,8 @@ tANI_U32 dot11fGetPackedIETIM(tpAniSirGlobal, tDot11fIETIM*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 35 (0x23)
-typedef struct sDot11fIETPCReport {
+typedef struct sDot11fIETPCReport
+{
     tANI_U8      present;
     tANI_U8      tx_power;
     tANI_U8      link_margin;
@@ -5385,7 +5583,8 @@ tANI_U32 dot11fGetPackedIETPCReport(tpAniSirGlobal, tDot11fIETPCReport*, tANI_U3
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 34 (0x22)
-typedef struct sDot11fIETPCRequest {
+typedef struct sDot11fIETPCRequest
+{
     tANI_U8      present;
 } tDot11fIETPCRequest;
 
@@ -5409,7 +5608,8 @@ tANI_U32 dot11fGetPackedIETPCRequest(tpAniSirGlobal, tDot11fIETPCRequest*, tANI_
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 56 (0x38)
-typedef struct sDot11fIETimeoutInterval {
+typedef struct sDot11fIETimeoutInterval
+{
     tANI_U8      present;
     tANI_U8      timeoutType;
     tANI_U32     timeoutValue;
@@ -5435,7 +5635,8 @@ tANI_U32 dot11fGetPackedIETimeoutInterval(tpAniSirGlobal, tDot11fIETimeoutInterv
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 191 (0xbf)
-typedef struct sDot11fIEVHTCaps {
+typedef struct sDot11fIEVHTCaps
+{
     tANI_U8      present;
     tANI_U32       maxMPDULen: 2;
     tANI_U32 supportedChannelWidthSet: 2;
@@ -5485,7 +5686,8 @@ tANI_U32 dot11fGetPackedIEVHTCaps(tpAniSirGlobal, tDot11fIEVHTCaps*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 193 (0xc1)
-typedef struct sDot11fIEVHTExtBssLoad {
+typedef struct sDot11fIEVHTExtBssLoad
+{
     tANI_U8      present;
     tANI_U8      muMIMOCapStaCount;
     tANI_U8      ssUnderUtil;
@@ -5514,7 +5716,8 @@ tANI_U32 dot11fGetPackedIEVHTExtBssLoad(tpAniSirGlobal, tDot11fIEVHTExtBssLoad*,
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 192 (0xc0)
-typedef struct sDot11fIEVHTOperation {
+typedef struct sDot11fIEVHTOperation
+{
     tANI_U8      present;
     tANI_U8      chanWidth;
     tANI_U8      chanCenterFreqSeg1;
@@ -5542,7 +5745,8 @@ tANI_U32 dot11fGetPackedIEVHTOperation(tpAniSirGlobal, tDot11fIEVHTOperation*, t
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 68 (0x44)
-typedef struct sDot11fIEWAPI {
+typedef struct sDot11fIEWAPI
+{
     tANI_U8      present;
     tANI_U16     version /* Must be 1! */;
     tANI_U16     akm_suite_count;
@@ -5576,7 +5780,8 @@ tANI_U32 dot11fGetPackedIEWAPI(tpAniSirGlobal, tDot11fIEWAPI*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 68 (0x44)
-typedef struct sDot11fIEWAPIOpaque {
+typedef struct sDot11fIEWAPIOpaque
+{
     tANI_U8      present;
     tANI_U8      num_data;
     tANI_U8      data[253];
@@ -5602,7 +5807,8 @@ tANI_U32 dot11fGetPackedIEWAPIOpaque(tpAniSirGlobal, tDot11fIEWAPIOpaque*, tANI_
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x50, 0xf2, 0x08, 0x00}
-typedef struct sDot11fIEWFATPC {
+typedef struct sDot11fIEWFATPC
+{
     tANI_U8      present;
     tANI_U8      txPower;
     tANI_U8      linkMargin;
@@ -5628,7 +5834,8 @@ tANI_U32 dot11fGetPackedIEWFATPC(tpAniSirGlobal, tDot11fIEWFATPC*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x50, 0x6f, 0x9a, 0x0a}
-typedef struct sDot11fIEWFDIEOpaque {
+typedef struct sDot11fIEWFDIEOpaque
+{
     tANI_U8      present;
     tANI_U8      num_data;
     tANI_U8      data[249];
@@ -5654,7 +5861,8 @@ tANI_U32 dot11fGetPackedIEWFDIEOpaque(tpAniSirGlobal, tDot11fIEWFDIEOpaque*, tAN
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x50, 0xf2, 0x02, 0x05}
-typedef struct sDot11fIEWMMCaps {
+typedef struct sDot11fIEWMMCaps
+{
     tANI_U8      present;
     tANI_U8      version /* Must be 1! */;
     tANI_U8         reserved: 4;
@@ -5684,7 +5892,8 @@ tANI_U32 dot11fGetPackedIEWMMCaps(tpAniSirGlobal, tDot11fIEWMMCaps*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x50, 0xf2, 0x02, 0x00}
-typedef struct sDot11fIEWMMInfoAp {
+typedef struct sDot11fIEWMMInfoAp
+{
     tANI_U8      present;
     tANI_U8      version;
     tANI_U8  param_set_count: 4;
@@ -5712,7 +5921,8 @@ tANI_U32 dot11fGetPackedIEWMMInfoAp(tpAniSirGlobal, tDot11fIEWMMInfoAp*, tANI_U3
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x50, 0xf2, 0x02, 0x00}
-typedef struct sDot11fIEWMMInfoStation {
+typedef struct sDot11fIEWMMInfoStation
+{
     tANI_U8      present;
     tANI_U8      version;
     tANI_U8       acvo_uapsd: 1;
@@ -5744,7 +5954,8 @@ tANI_U32 dot11fGetPackedIEWMMInfoStation(tpAniSirGlobal, tDot11fIEWMMInfoStation
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x50, 0xf2, 0x02, 0x01}
-typedef struct sDot11fIEWMMParams {
+typedef struct sDot11fIEWMMParams
+{
     tANI_U8      present;
     tANI_U8      version /* Must be 1! */;
     tANI_U8      qosInfo;
@@ -5799,10 +6010,11 @@ tANI_U32 dot11fGetPackedIEWMMParams(tpAniSirGlobal, tDot11fIEWMMParams*, tANI_U3
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x50, 0xf2, 0x01}
-typedef struct sDot11fIEWPA {
+typedef struct sDot11fIEWPA
+{
     tANI_U8      present;
     tANI_U16     version /* Must be 1! */;
-    tANI_U8      multicast_cipher_present;   //field added to fix the bug in dot11fPackIEWPA 
+    tANI_U8      multicast_cipher_present;   //field added to fix the bug in dot11fPackIEWPA
     tANI_U8      multicast_cipher[4];
     tANI_U16     unicast_cipher_count;
     tANI_U8      unicast_ciphers[4][4];
@@ -5831,7 +6043,8 @@ tANI_U32 dot11fGetPackedIEWPA(tpAniSirGlobal, tDot11fIEWPA*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x50, 0xf2, 0x01}
-typedef struct sDot11fIEWPAOpaque {
+typedef struct sDot11fIEWPAOpaque
+{
     tANI_U8      present;
     tANI_U8      num_data;
     tANI_U8      data[249];
@@ -5857,7 +6070,8 @@ tANI_U32 dot11fGetPackedIEWPAOpaque(tpAniSirGlobal, tDot11fIEWPAOpaque*, tANI_U3
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x50, 0xf2, 0x04} (Multi-IE)
-typedef struct sDot11fIEWSC {
+typedef struct sDot11fIEWSC
+{
     tANI_U8      present;
     tDot11fTLVVersion Version;
     tDot11fTLVWPSState WPSState;
@@ -5903,7 +6117,8 @@ tANI_U32 dot11fGetPackedIEWSC(tpAniSirGlobal, tDot11fIEWSC*, tANI_U32*);
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 194 (0xc2)
-typedef struct sDot11fIEWiderBWChanSwitchAnn {
+typedef struct sDot11fIEWiderBWChanSwitchAnn
+{
     tANI_U8      present;
     tANI_U8      newChanWidth;
     tANI_U8      newCenterChanFreq0;
@@ -5930,7 +6145,8 @@ tANI_U32 dot11fGetPackedIEWiderBWChanSwitchAnn(tpAniSirGlobal, tDot11fIEWiderBWC
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x50, 0xf2, 0x04} (Multi-IE)
-typedef struct sDot11fIEWscAssocReq {
+typedef struct sDot11fIEWscAssocReq
+{
     tANI_U8      present;
     tDot11fTLVVersion Version;
     tDot11fTLVRequestType RequestType;
@@ -5957,7 +6173,8 @@ tANI_U32 dot11fGetPackedIEWscAssocReq(tpAniSirGlobal, tDot11fIEWscAssocReq*, tAN
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x50, 0xf2, 0x04} (Multi-IE)
-typedef struct sDot11fIEWscAssocRes {
+typedef struct sDot11fIEWscAssocRes
+{
     tANI_U8      present;
     tDot11fTLVVersion Version;
     tDot11fTLVResponseType ResponseType;
@@ -5984,7 +6201,8 @@ tANI_U32 dot11fGetPackedIEWscAssocRes(tpAniSirGlobal, tDot11fIEWscAssocRes*, tAN
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x50, 0xf2, 0x04} (Multi-IE)
-typedef struct sDot11fIEWscBeacon {
+typedef struct sDot11fIEWscBeacon
+{
     tANI_U8      present;
     tDot11fTLVVersion Version;
     tDot11fTLVWPSState WPSState;
@@ -6017,7 +6235,8 @@ tANI_U32 dot11fGetPackedIEWscBeacon(tpAniSirGlobal, tDot11fIEWscBeacon*, tANI_U3
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x50, 0xf2, 0x04} (Multi-IE)
-typedef struct sDot11fIEWscBeaconProbeRes {
+typedef struct sDot11fIEWscBeaconProbeRes
+{
     tANI_U8      present;
     tDot11fTLVVersion Version;
     tDot11fTLVWPSState WPSState;
@@ -6058,7 +6277,8 @@ tANI_U32 dot11fGetPackedIEWscBeaconProbeRes(tpAniSirGlobal, tDot11fIEWscBeaconPr
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x50, 0xf2, 0x04}
-typedef struct sDot11fIEWscIEOpaque {
+typedef struct sDot11fIEWscIEOpaque
+{
     tANI_U8      present;
     tANI_U8      num_data;
     tANI_U8      data[249];
@@ -6084,7 +6304,8 @@ tANI_U32 dot11fGetPackedIEWscIEOpaque(tpAniSirGlobal, tDot11fIEWscIEOpaque*, tAN
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x50, 0xf2, 0x04} (Multi-IE)
-typedef struct sDot11fIEWscProbeReq {
+typedef struct sDot11fIEWscProbeReq
+{
     tANI_U8      present;
     tDot11fTLVVersion Version;
     tDot11fTLVRequestType RequestType;
@@ -6123,7 +6344,8 @@ tANI_U32 dot11fGetPackedIEWscProbeReq(tpAniSirGlobal, tDot11fIEWscProbeReq*, tAN
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x50, 0xf2, 0x04} (Multi-IE)
-typedef struct sDot11fIEWscProbeRes {
+typedef struct sDot11fIEWscProbeRes
+{
     tANI_U8      present;
     tDot11fTLVVersion Version;
     tDot11fTLVWPSState WPSState;
@@ -6164,7 +6386,8 @@ tANI_U32 dot11fGetPackedIEWscProbeRes(tpAniSirGlobal, tDot11fIEWscProbeRes*, tAN
 }; /* End extern "C". */
 #endif /* C++ */
 // EID 221 (0xdd) {OUI 0x00, 0x50, 0xf2, 0x04} (Multi-IE)
-typedef struct sDot11fIEWscReassocRes {
+typedef struct sDot11fIEWscReassocRes
+{
     tANI_U8      present;
     tDot11fTLVVersion Version;
     tDot11fTLVResponseType ResponseType;
@@ -6194,7 +6417,8 @@ tANI_U32 dot11fGetPackedIEWscReassocRes(tpAniSirGlobal, tDot11fIEWscReassocRes*,
  * Frames
  **********************************************************************/
 
-typedef struct sDot11fAddBAReq{
+typedef struct sDot11fAddBAReq
+{
     tDot11fFfCategory                  Category;
     tDot11fFfAction                    Action;
     tDot11fFfDialogToken               DialogToken;
@@ -6217,7 +6441,8 @@ tANI_U32 dot11fGetPackedAddBAReqSize(tpAniSirGlobal pCtx, tDot11fAddBAReq *pFrm,
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fAddBARsp{
+typedef struct sDot11fAddBARsp
+{
     tDot11fFfCategory          Category;
     tDot11fFfAction            Action;
     tDot11fFfDialogToken       DialogToken;
@@ -6240,7 +6465,8 @@ tANI_U32 dot11fGetPackedAddBARspSize(tpAniSirGlobal pCtx, tDot11fAddBARsp *pFrm,
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fAddTSRequest{
+typedef struct sDot11fAddTSRequest
+{
     tDot11fFfCategory           Category;
     tDot11fFfAction             Action;
     tDot11fFfDialogToken        DialogToken;
@@ -6269,7 +6495,8 @@ tANI_U32 dot11fGetPackedAddTSRequestSize(tpAniSirGlobal pCtx, tDot11fAddTSReques
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fAddTSResponse{
+typedef struct sDot11fAddTSResponse
+{
     tDot11fFfCategory       Category;
     tDot11fFfAction         Action;
     tDot11fFfDialogToken    DialogToken;
@@ -6303,7 +6530,8 @@ tANI_U32 dot11fGetPackedAddTSResponseSize(tpAniSirGlobal pCtx, tDot11fAddTSRespo
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fAssocRequest{
+typedef struct sDot11fAssocRequest
+{
     tDot11fFfCapabilities   Capabilities;
     tDot11fFfListenInterval ListenInterval;
     tDot11fIESSID           SSID;
@@ -6346,7 +6574,8 @@ tANI_U32 dot11fGetPackedAssocRequestSize(tpAniSirGlobal pCtx, tDot11fAssocReques
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fAssocResponse{
+typedef struct sDot11fAssocResponse
+{
     tDot11fFfCapabilities       Capabilities;
     tDot11fFfStatus             Status;
     tDot11fFfAID                AID;
@@ -6395,7 +6624,8 @@ tANI_U32 dot11fGetPackedAssocResponseSize(tpAniSirGlobal pCtx, tDot11fAssocRespo
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fAuthentication{
+typedef struct sDot11fAuthentication
+{
     tDot11fFfAuthAlgo        AuthAlgo;
     tDot11fFfAuthSeqNo       AuthSeqNo;
     tDot11fFfStatus          Status;
@@ -6422,7 +6652,8 @@ tANI_U32 dot11fGetPackedAuthenticationSize(tpAniSirGlobal pCtx, tDot11fAuthentic
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fBeacon{
+typedef struct sDot11fBeacon
+{
     tDot11fFfTimeStamp            TimeStamp;
     tDot11fFfBeaconInterval       BeaconInterval;
     tDot11fFfCapabilities         Capabilities;
@@ -6486,7 +6717,8 @@ tANI_U32 dot11fGetPackedBeaconSize(tpAniSirGlobal pCtx, tDot11fBeacon *pFrm, tAN
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fBeacon1{
+typedef struct sDot11fBeacon1
+{
     tDot11fFfTimeStamp      TimeStamp;
     tDot11fFfBeaconInterval BeaconInterval;
     tDot11fFfCapabilities   Capabilities;
@@ -6510,7 +6742,8 @@ tANI_U32 dot11fGetPackedBeacon1Size(tpAniSirGlobal pCtx, tDot11fBeacon1 *pFrm, t
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fBeacon2{
+typedef struct sDot11fBeacon2
+{
     tDot11fIECountry              Country;
     tDot11fIEPowerConstraints     PowerConstraints;
     tDot11fIEChanSwitchAnn        ChanSwitchAnn;
@@ -6560,7 +6793,8 @@ tANI_U32 dot11fGetPackedBeacon2Size(tpAniSirGlobal pCtx, tDot11fBeacon2 *pFrm, t
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fBeaconIEs{
+typedef struct sDot11fBeaconIEs
+{
     tDot11fIESSID                 SSID;
     tDot11fIESuppRates            SuppRates;
     tDot11fIEFHParamSet           FHParamSet;
@@ -6622,7 +6856,8 @@ tANI_U32 dot11fGetPackedBeaconIEsSize(tpAniSirGlobal pCtx, tDot11fBeaconIEs *pFr
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fChannelSwitch{
+typedef struct sDot11fChannelSwitch
+{
     tDot11fFfCategory             Category;
     tDot11fFfAction               Action;
     tDot11fIEChanSwitchAnn        ChanSwitchAnn;
@@ -6644,7 +6879,8 @@ tANI_U32 dot11fGetPackedChannelSwitchSize(tpAniSirGlobal pCtx, tDot11fChannelSwi
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fDeAuth{
+typedef struct sDot11fDeAuth
+{
     tDot11fFfReason    Reason;
     tDot11fIEP2PDeAuth P2PDeAuth;
 } tDot11fDeAuth;
@@ -6663,7 +6899,8 @@ tANI_U32 dot11fGetPackedDeAuthSize(tpAniSirGlobal pCtx, tDot11fDeAuth *pFrm, tAN
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fDelBAInd{
+typedef struct sDot11fDelBAInd
+{
     tDot11fFfCategory          Category;
     tDot11fFfAction            Action;
     tDot11fFfDelBAParameterSet DelBAParameterSet;
@@ -6684,7 +6921,8 @@ tANI_U32 dot11fGetPackedDelBAIndSize(tpAniSirGlobal pCtx, tDot11fDelBAInd *pFrm,
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fDelTS{
+typedef struct sDot11fDelTS
+{
     tDot11fFfCategory Category;
     tDot11fFfAction   Action;
     tDot11fFfTSInfo   TSInfo;
@@ -6705,7 +6943,8 @@ tANI_U32 dot11fGetPackedDelTSSize(tpAniSirGlobal pCtx, tDot11fDelTS *pFrm, tANI_
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fDeviceDiscoverabilityReq{
+typedef struct sDot11fDeviceDiscoverabilityReq
+{
     tDot11fFfCategory                    Category;
     tDot11fFfAction                      Action;
     tDot11fFfP2POUI                      P2POUI;
@@ -6728,7 +6967,8 @@ tANI_U32 dot11fGetPackedDeviceDiscoverabilityReqSize(tpAniSirGlobal pCtx, tDot11
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fDeviceDiscoverabilityRes{
+typedef struct sDot11fDeviceDiscoverabilityRes
+{
     tDot11fFfCategory                    Category;
     tDot11fFfAction                      Action;
     tDot11fFfP2POUI                      P2POUI;
@@ -6751,7 +6991,8 @@ tANI_U32 dot11fGetPackedDeviceDiscoverabilityResSize(tpAniSirGlobal pCtx, tDot11
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fDisassociation{
+typedef struct sDot11fDisassociation
+{
     tDot11fFfReason      Reason;
     tDot11fIEP2PDisAssoc P2PDisAssoc;
 } tDot11fDisassociation;
@@ -6770,7 +7011,8 @@ tANI_U32 dot11fGetPackedDisassociationSize(tpAniSirGlobal pCtx, tDot11fDisassoci
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fGODiscoverabilityReq{
+typedef struct sDot11fGODiscoverabilityReq
+{
     tDot11fFfCategory      Category;
     tDot11fFfP2POUI        P2POUI;
     tDot11fFfP2POUISubType P2POUISubType;
@@ -6791,7 +7033,8 @@ tANI_U32 dot11fGetPackedGODiscoverabilityReqSize(tpAniSirGlobal pCtx, tDot11fGOD
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fGONegCnf{
+typedef struct sDot11fGONegCnf
+{
     tDot11fFfCategory      Category;
     tDot11fFfAction        Action;
     tDot11fFfP2POUI        P2POUI;
@@ -6814,7 +7057,8 @@ tANI_U32 dot11fGetPackedGONegCnfSize(tpAniSirGlobal pCtx, tDot11fGONegCnf *pFrm,
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fGONegReq{
+typedef struct sDot11fGONegReq
+{
     tDot11fFfCategory      Category;
     tDot11fFfAction        Action;
     tDot11fFfP2POUI        P2POUI;
@@ -6838,7 +7082,8 @@ tANI_U32 dot11fGetPackedGONegReqSize(tpAniSirGlobal pCtx, tDot11fGONegReq *pFrm,
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fGONegRes{
+typedef struct sDot11fGONegRes
+{
     tDot11fFfCategory      Category;
     tDot11fFfAction        Action;
     tDot11fFfP2POUI        P2POUI;
@@ -6862,7 +7107,8 @@ tANI_U32 dot11fGetPackedGONegResSize(tpAniSirGlobal pCtx, tDot11fGONegRes *pFrm,
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fHT2040BSSCoexistenceManagementActionFrame{
+typedef struct sDot11fHT2040BSSCoexistenceManagementActionFrame
+{
     tDot11fFfCategory                  Category;
     tDot11fFfAction                    Action;
     tDot11fIEHT2040BSSCoexistence      HT2040BSSCoexistence;
@@ -6883,7 +7129,8 @@ tANI_U32 dot11fGetPackedHT2040BSSCoexistenceManagementActionFrameSize(tpAniSirGl
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fInvitationReq{
+typedef struct sDot11fInvitationReq
+{
     tDot11fFfCategory         Category;
     tDot11fFfAction           Action;
     tDot11fFfP2POUI           P2POUI;
@@ -6906,7 +7153,8 @@ tANI_U32 dot11fGetPackedInvitationReqSize(tpAniSirGlobal pCtx, tDot11fInvitation
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fInvitationRes{
+typedef struct sDot11fInvitationRes
+{
     tDot11fFfCategory         Category;
     tDot11fFfAction           Action;
     tDot11fFfP2POUI           P2POUI;
@@ -6929,7 +7177,8 @@ tANI_U32 dot11fGetPackedInvitationResSize(tpAniSirGlobal pCtx, tDot11fInvitation
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fLinkMeasurementReport{
+typedef struct sDot11fLinkMeasurementReport
+{
     tDot11fFfCategory    Category;
     tDot11fFfAction      Action;
     tDot11fFfDialogToken DialogToken;
@@ -6957,7 +7206,8 @@ tANI_U32 dot11fGetPackedLinkMeasurementReportSize(tpAniSirGlobal pCtx, tDot11fLi
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fLinkMeasurementRequest{
+typedef struct sDot11fLinkMeasurementRequest
+{
     tDot11fFfCategory    Category;
     tDot11fFfAction      Action;
     tDot11fFfDialogToken DialogToken;
@@ -6979,7 +7229,8 @@ tANI_U32 dot11fGetPackedLinkMeasurementRequestSize(tpAniSirGlobal pCtx, tDot11fL
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fMeasurementReport{
+typedef struct sDot11fMeasurementReport
+{
     tDot11fFfCategory          Category;
     tDot11fFfAction            Action;
     tDot11fFfDialogToken       DialogToken;
@@ -7000,7 +7251,8 @@ tANI_U32 dot11fGetPackedMeasurementReportSize(tpAniSirGlobal pCtx, tDot11fMeasur
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fMeasurementRequest{
+typedef struct sDot11fMeasurementRequest
+{
     tDot11fFfCategory           Category;
     tDot11fFfAction             Action;
     tDot11fFfDialogToken        DialogToken;
@@ -7022,7 +7274,8 @@ tANI_U32 dot11fGetPackedMeasurementRequestSize(tpAniSirGlobal pCtx, tDot11fMeasu
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fNeighborReportRequest{
+typedef struct sDot11fNeighborReportRequest
+{
     tDot11fFfCategory    Category;
     tDot11fFfAction      Action;
     tDot11fFfDialogToken DialogToken;
@@ -7043,7 +7296,8 @@ tANI_U32 dot11fGetPackedNeighborReportRequestSize(tpAniSirGlobal pCtx, tDot11fNe
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fNeighborReportResponse{
+typedef struct sDot11fNeighborReportResponse
+{
     tDot11fFfCategory       Category;
     tDot11fFfAction         Action;
     tDot11fFfDialogToken    DialogToken;
@@ -7065,7 +7319,8 @@ tANI_U32 dot11fGetPackedNeighborReportResponseSize(tpAniSirGlobal pCtx, tDot11fN
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fNoticeOfAbs{
+typedef struct sDot11fNoticeOfAbs
+{
     tDot11fFfCategory           Category;
     tDot11fFfP2POUI             P2POUI;
     tDot11fFfP2POUISubType      P2POUISubType;
@@ -7087,7 +7342,8 @@ tANI_U32 dot11fGetPackedNoticeOfAbsSize(tpAniSirGlobal pCtx, tDot11fNoticeOfAbs 
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fOperatingMode{
+typedef struct sDot11fOperatingMode
+{
     tDot11fFfCategory      Category;
     tDot11fFfAction        Action;
     tDot11fFfOperatingMode OperatingMode;
@@ -7107,7 +7363,8 @@ tANI_U32 dot11fGetPackedOperatingModeSize(tpAniSirGlobal pCtx, tDot11fOperatingM
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fPresenceReq{
+typedef struct sDot11fPresenceReq
+{
     tDot11fFfCategory           Category;
     tDot11fFfP2POUI             P2POUI;
     tDot11fFfP2POUISubType      P2POUISubType;
@@ -7129,7 +7386,8 @@ tANI_U32 dot11fGetPackedPresenceReqSize(tpAniSirGlobal pCtx, tDot11fPresenceReq 
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fPresenceRes{
+typedef struct sDot11fPresenceRes
+{
     tDot11fFfCategory            Category;
     tDot11fFfP2POUI              P2POUI;
     tDot11fFfP2POUISubType       P2POUISubType;
@@ -7151,7 +7409,8 @@ tANI_U32 dot11fGetPackedPresenceResSize(tpAniSirGlobal pCtx, tDot11fPresenceRes 
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fProbeRequest{
+typedef struct sDot11fProbeRequest
+{
     tDot11fIESSID          SSID;
     tDot11fIESuppRates     SuppRates;
     tDot11fIERequestedInfo RequestedInfo;
@@ -7178,7 +7437,8 @@ tANI_U32 dot11fGetPackedProbeRequestSize(tpAniSirGlobal pCtx, tDot11fProbeReques
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fProbeResponse{
+typedef struct sDot11fProbeResponse
+{
     tDot11fFfTimeStamp          TimeStamp;
     tDot11fFfBeaconInterval     BeaconInterval;
     tDot11fFfCapabilities       Capabilities;
@@ -7238,7 +7498,8 @@ tANI_U32 dot11fGetPackedProbeResponseSize(tpAniSirGlobal pCtx, tDot11fProbeRespo
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fProvisionDiscoveryReq{
+typedef struct sDot11fProvisionDiscoveryReq
+{
     tDot11fFfCategory                 Category;
     tDot11fFfAction                   Action;
     tDot11fFfP2POUI                   P2POUI;
@@ -7261,7 +7522,8 @@ tANI_U32 dot11fGetPackedProvisionDiscoveryReqSize(tpAniSirGlobal pCtx, tDot11fPr
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fProvisionDiscoveryRes{
+typedef struct sDot11fProvisionDiscoveryRes
+{
     tDot11fFfCategory                    Category;
     tDot11fFfAction                      Action;
     tDot11fFfP2POUI                      P2POUI;
@@ -7284,7 +7546,8 @@ tANI_U32 dot11fGetPackedProvisionDiscoveryResSize(tpAniSirGlobal pCtx, tDot11fPr
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fQosMapConfigure{
+typedef struct sDot11fQosMapConfigure
+{
     tDot11fFfCategory  Category;
     tDot11fFfAction    Action;
     tDot11fIEQosMapSet QosMapSet;
@@ -7304,7 +7567,8 @@ tANI_U32 dot11fGetPackedQosMapConfigureSize(tpAniSirGlobal pCtx, tDot11fQosMapCo
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fRadioMeasurementReport{
+typedef struct sDot11fRadioMeasurementReport
+{
     tDot11fFfCategory          Category;
     tDot11fFfAction            Action;
     tDot11fFfDialogToken       DialogToken;
@@ -7326,7 +7590,8 @@ tANI_U32 dot11fGetPackedRadioMeasurementReportSize(tpAniSirGlobal pCtx, tDot11fR
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fRadioMeasurementRequest{
+typedef struct sDot11fRadioMeasurementRequest
+{
     tDot11fFfCategory           Category;
     tDot11fFfAction             Action;
     tDot11fFfDialogToken        DialogToken;
@@ -7349,7 +7614,8 @@ tANI_U32 dot11fGetPackedRadioMeasurementRequestSize(tpAniSirGlobal pCtx, tDot11f
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fReAssocRequest{
+typedef struct sDot11fReAssocRequest
+{
     tDot11fFfCapabilities       Capabilities;
     tDot11fFfListenInterval     ListenInterval;
     tDot11fFfCurrentAPAddress   CurrentAPAddress;
@@ -7400,7 +7666,8 @@ tANI_U32 dot11fGetPackedReAssocRequestSize(tpAniSirGlobal pCtx, tDot11fReAssocRe
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fReAssocResponse{
+typedef struct sDot11fReAssocResponse
+{
     tDot11fFfCapabilities       Capabilities;
     tDot11fFfStatus             Status;
     tDot11fFfAID                AID;
@@ -7450,7 +7717,8 @@ tANI_U32 dot11fGetPackedReAssocResponseSize(tpAniSirGlobal pCtx, tDot11fReAssocR
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fSMPowerSave{
+typedef struct sDot11fSMPowerSave
+{
     tDot11fFfCategory       Category;
     tDot11fFfAction         Action;
     tDot11fFfSMPowerModeSet SMPowerModeSet;
@@ -7470,7 +7738,8 @@ tANI_U32 dot11fGetPackedSMPowerSaveSize(tpAniSirGlobal pCtx, tDot11fSMPowerSave 
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fSaQueryReq{
+typedef struct sDot11fSaQueryReq
+{
     tDot11fFfCategory      Category;
     tDot11fFfAction        Action;
     tDot11fFfTransactionId TransactionId;
@@ -7490,7 +7759,8 @@ tANI_U32 dot11fGetPackedSaQueryReqSize(tpAniSirGlobal pCtx, tDot11fSaQueryReq *p
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fSaQueryRsp{
+typedef struct sDot11fSaQueryRsp
+{
     tDot11fFfCategory      Category;
     tDot11fFfAction        Action;
     tDot11fFfTransactionId TransactionId;
@@ -7510,7 +7780,8 @@ tANI_U32 dot11fGetPackedSaQueryRspSize(tpAniSirGlobal pCtx, tDot11fSaQueryRsp *p
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fTDLSDisReq{
+typedef struct sDot11fTDLSDisReq
+{
     tDot11fFfCategory       Category;
     tDot11fFfAction         Action;
     tDot11fFfDialogToken    DialogToken;
@@ -7531,7 +7802,8 @@ tANI_U32 dot11fGetPackedTDLSDisReqSize(tpAniSirGlobal pCtx, tDot11fTDLSDisReq *p
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fTDLSDisRsp{
+typedef struct sDot11fTDLSDisRsp
+{
     tDot11fFfCategory             Category;
     tDot11fFfAction               Action;
     tDot11fFfDialogToken          DialogToken;
@@ -7565,7 +7837,8 @@ tANI_U32 dot11fGetPackedTDLSDisRspSize(tpAniSirGlobal pCtx, tDot11fTDLSDisRsp *p
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fTDLSPeerTrafficInd{
+typedef struct sDot11fTDLSPeerTrafficInd
+{
     tDot11fFfCategory       Category;
     tDot11fFfAction         Action;
     tDot11fFfDialogToken    DialogToken;
@@ -7588,7 +7861,8 @@ tANI_U32 dot11fGetPackedTDLSPeerTrafficIndSize(tpAniSirGlobal pCtx, tDot11fTDLSP
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fTDLSPeerTrafficRsp{
+typedef struct sDot11fTDLSPeerTrafficRsp
+{
     tDot11fFfCategory       Category;
     tDot11fFfAction         Action;
     tDot11fFfDialogToken    DialogToken;
@@ -7609,7 +7883,8 @@ tANI_U32 dot11fGetPackedTDLSPeerTrafficRspSize(tpAniSirGlobal pCtx, tDot11fTDLSP
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fTDLSSetupCnf{
+typedef struct sDot11fTDLSSetupCnf
+{
     tDot11fFfCategory             Category;
     tDot11fFfAction               Action;
     tDot11fFfStatus               Status;
@@ -7640,7 +7915,8 @@ tANI_U32 dot11fGetPackedTDLSSetupCnfSize(tpAniSirGlobal pCtx, tDot11fTDLSSetupCn
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fTDLSSetupReq{
+typedef struct sDot11fTDLSSetupReq
+{
     tDot11fFfCategory             Category;
     tDot11fFfAction               Action;
     tDot11fFfDialogToken          DialogToken;
@@ -7678,7 +7954,8 @@ tANI_U32 dot11fGetPackedTDLSSetupReqSize(tpAniSirGlobal pCtx, tDot11fTDLSSetupRe
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fTDLSSetupRsp{
+typedef struct sDot11fTDLSSetupRsp
+{
     tDot11fFfCategory             Category;
     tDot11fFfAction               Action;
     tDot11fFfStatus               Status;
@@ -7718,7 +7995,8 @@ tANI_U32 dot11fGetPackedTDLSSetupRspSize(tpAniSirGlobal pCtx, tDot11fTDLSSetupRs
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fTDLSTeardown{
+typedef struct sDot11fTDLSTeardown
+{
     tDot11fFfCategory       Category;
     tDot11fFfAction         Action;
     tDot11fFfReason         Reason;
@@ -7740,7 +8018,8 @@ tANI_U32 dot11fGetPackedTDLSTeardownSize(tpAniSirGlobal pCtx, tDot11fTDLSTeardow
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fTPCReport{
+typedef struct sDot11fTPCReport
+{
     tDot11fFfCategory    Category;
     tDot11fFfAction      Action;
     tDot11fFfDialogToken DialogToken;
@@ -7761,7 +8040,8 @@ tANI_U32 dot11fGetPackedTPCReportSize(tpAniSirGlobal pCtx, tDot11fTPCReport *pFr
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fTPCRequest{
+typedef struct sDot11fTPCRequest
+{
     tDot11fFfCategory    Category;
     tDot11fFfAction      Action;
     tDot11fFfDialogToken DialogToken;
@@ -7782,7 +8062,8 @@ tANI_U32 dot11fGetPackedTPCRequestSize(tpAniSirGlobal pCtx, tDot11fTPCRequest *p
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fVHTGidManagementActionFrame{
+typedef struct sDot11fVHTGidManagementActionFrame
+{
     tDot11fFfCategory                 Category;
     tDot11fFfAction                   Action;
     tDot11fFfVhtMembershipStatusArray VhtMembershipStatusArray;
@@ -7803,7 +8084,8 @@ tANI_U32 dot11fGetPackedVHTGidManagementActionFrameSize(tpAniSirGlobal pCtx, tDo
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fWMMAddTSRequest{
+typedef struct sDot11fWMMAddTSRequest
+{
     tDot11fFfCategory           Category;
     tDot11fFfAction             Action;
     tDot11fFfDialogToken        DialogToken;
@@ -7826,7 +8108,8 @@ tANI_U32 dot11fGetPackedWMMAddTSRequestSize(tpAniSirGlobal pCtx, tDot11fWMMAddTS
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fWMMAddTSResponse{
+typedef struct sDot11fWMMAddTSResponse
+{
     tDot11fFfCategory       Category;
     tDot11fFfAction         Action;
     tDot11fFfDialogToken    DialogToken;
@@ -7849,7 +8132,8 @@ tANI_U32 dot11fGetPackedWMMAddTSResponseSize(tpAniSirGlobal pCtx, tDot11fWMMAddT
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fWMMDelTS{
+typedef struct sDot11fWMMDelTS
+{
     tDot11fFfCategory    Category;
     tDot11fFfAction      Action;
     tDot11fFfDialogToken DialogToken;

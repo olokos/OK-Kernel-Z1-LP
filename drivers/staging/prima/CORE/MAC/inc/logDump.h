@@ -44,20 +44,23 @@ Date:      04/06/2008
 
 typedef char * (*tpFunc)(tpAniSirGlobal, tANI_U32, tANI_U32, tANI_U32, tANI_U32, char *);
 
-typedef struct sDumpFuncEntry  {
+typedef struct sDumpFuncEntry
+{
     tANI_U32    id;
     char       *description;
     tpFunc      func;
 } tDumpFuncEntry;
 
-typedef struct sDumpModuleEntry  {
+typedef struct sDumpModuleEntry
+{
     tANI_U32    mindumpid;
     tANI_U32    maxdumpid;
     tANI_U32    nItems;
     tDumpFuncEntry     *dumpTable;
 } tDumpModuleEntry;
 
-typedef struct sRegList {
+typedef struct sRegList
+{
     tANI_U32    addr;
     char       *name;
 } tLogdRegList;

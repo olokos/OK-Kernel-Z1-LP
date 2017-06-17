@@ -175,7 +175,7 @@ typedef enum
 
     INVALID_RF_CHANNEL_V2 = 0xBAD,
     RF_CHANNEL_INVALID_MAX_FIELD_V2 = 0x7FFFFFFF  /* define as 4 bytes data */
-}eRfChannelsV2;
+} eRfChannelsV2;
 
 typedef PACKED_PRE struct PACKED_POST
 {
@@ -183,13 +183,13 @@ typedef PACKED_PRE struct PACKED_POST
     uAbsPwrPrecision antennaGain[NUM_RF_SUBBANDS];
     uAbsPwrPrecision bRatePowerOffset[NUM_2_4GHZ_CHANNELS];
     uAbsPwrPrecision gnRatePowerOffset[NUM_RF_CHANNELS_V2];
-}ALIGN_4 sRegulatoryDomainsV2;
+} ALIGN_4 sRegulatoryDomainsV2;
 
 typedef PACKED_PRE struct PACKED_POST
 {
     int16 bRssiOffset[NUM_RF_CHANNELS_V2];
     int16 gnRssiOffset[NUM_RF_CHANNELS_V2];
-}ALIGN_4 sRssiChannelOffsetsV2;
+} ALIGN_4 sRssiChannelOffsetsV2;
 
 typedef PACKED_PRE union PACKED_POST
 {
@@ -206,7 +206,7 @@ typedef PACKED_PRE union PACKED_POST
     int16             pktTypePwrLimits[NUM_802_11_MODES][NUM_RF_CHANNELS_V2]; // NV_TABLE_PACKET_TYPE_POWER_LIMITS
     sOfdmCmdPwrOffset    ofdmCmdPwrOffset;                                    // NV_TABLE_OFDM_CMD_PWR_OFFSET
     sTxBbFilterMode      txbbFilterMode;                                      // NV_TABLE_TX_BB_FILTER_MODE
-}ALIGN_4 uNvTablesV2;
+} ALIGN_4 uNvTablesV2;
 
 typedef PACKED_PRE struct PACKED_POST
 {
@@ -223,13 +223,13 @@ typedef PACKED_PRE struct PACKED_POST
     int16             pktTypePwrLimits[NUM_802_11_MODES][NUM_RF_CHANNELS_V2]; // NV_TABLE_PACKET_TYPE_POWER_LIMITS
     sOfdmCmdPwrOffset    ofdmCmdPwrOffset;                                    // NV_TABLE_OFDM_CMD_PWR_OFFSET
     sTxBbFilterMode      txbbFilterMode;                                      // NV_TABLE_TX_BB_FILTER_MODE
-}ALIGN_4 sNvTablesV2;
+} ALIGN_4 sNvTablesV2;
 
 typedef PACKED_PRE struct PACKED_POST
 {
     sNvFields fields;
     sNvTablesV2 tables;
-}ALIGN_4 sHalNvV2;
+} ALIGN_4 sHalNvV2;
 
 extern const sHalNvV2 nvDefaultsV2;
 

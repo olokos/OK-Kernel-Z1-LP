@@ -54,7 +54,7 @@ void               limAddPreAuthNode(tpAniSirGlobal, struct tLimPreAuthNode *);
 void               limDeletePreAuthNode(tpAniSirGlobal, tSirMacAddr);
 void               limReleasePreAuthNode(tpAniSirGlobal pMac, tpLimPreAuthNode pAuthNode);
 void               limRestoreFromAuthState(tpAniSirGlobal,
-                                           tSirResultCodes, tANI_U16,tpPESession);
+        tSirResultCodes, tANI_U16,tpPESession);
 
 // Encryption/Decryption related functions
 tCfgWepKeyEntry    *limLookUpKeyMappings(tSirMacAddr);
@@ -84,7 +84,8 @@ limCrcUpdate(tANI_U32 crc, tANI_U8 x)
     int i;
 
     z = crc^x;
-    for (i=0; i<8; i++) {
+    for (i=0; i<8; i++)
+    {
         fb = z & 1;
         z >>= 1;
         if (fb) z ^= PTAPS;

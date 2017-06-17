@@ -192,7 +192,7 @@ typedef struct sSirKeys
     tAniKeyDirection    keyDirection;
     tANI_U8                  keyRsc[WLAN_MAX_KEY_RSC_LEN];   // Usage is unknown
     tANI_U8                  paeRole;     // =1 for authenticator,
-                                     // =0 for supplicant
+    // =0 for supplicant
     tANI_U16                 keyLength;
     tANI_U8                  key[SIR_MAC_MAX_KEY_LENGTH];
 } tSirKeys, *tpSirKeys;
@@ -201,7 +201,7 @@ typedef struct sSirKeys
 typedef struct sSirKeyMaterial
 {
     tANI_U16         length;    // This is the length of all
-                           // data that follows
+    // data that follows
     tAniEdType  edType;    // Encryption/Decryption type
     tANI_U8          numKeys;
     tSirKeys    key[1];
@@ -227,7 +227,7 @@ typedef struct sBoaCommand
 {
     tANI_U8     length;
     tANI_U8     cmd[64];
-}tBoaCommand;
+} tBoaCommand;
 
 
 typedef __ani_attr_pre_packed struct sTrafStrmMetrics

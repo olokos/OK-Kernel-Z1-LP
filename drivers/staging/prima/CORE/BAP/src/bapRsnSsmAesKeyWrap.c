@@ -68,12 +68,14 @@
 
 #define ANI_SSM_AES_KEY_WRAP_IC_SIZE    ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE
 
-typedef struct tag_aes_key {
+typedef struct tag_aes_key
+{
     tANI_U32 eK[64], dK[64];
     int Nr;
 } AES_KEY;
 
-static tANI_U8 gAniSsmAesKeyWrapIv[] = {
+static tANI_U8 gAniSsmAesKeyWrapIv[] =
+{
     0xA6, 0xA6, 0xA6, 0xA6, 0xA6, 0xA6, 0xA6, 0xA6
 };
 
@@ -99,7 +101,7 @@ xor(tANI_U8 a[ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE], tANI_U32 t);
  * blocks. The first block is the IV from section 2.2.3 o the
  * RFC. Note: It is the caller's responsibility to free the returned
  * value.
- * 
+ *
  * @param plainText the plaintext data to wrap
  * @param len the length of the plaintext, which must be a multiple of
  * ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE.
@@ -126,39 +128,43 @@ aniSsmAesKeyWrap(v_U32_t cryptHandle, tANI_U8 *plainText, tANI_U32 len,
     tANI_U8 b[ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE*2];
 
     n = len / ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE;
-    if ((len % ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE) != 0) {
+    if ((len % ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE) != 0)
+    {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
-                 "Illegal number of input bytes to AES Key Wrap!");
+                   "Illegal number of input bytes to AES Key Wrap!");
         return ANI_E_ILLEGAL_ARG;
     }
 
     // Allocate enough storage for 'A' as well as 'R'
     r = vos_mem_malloc((n + 1) * ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
-    if (r == NULL) {
+    if (r == NULL)
+    {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
-                 "Could not allocate space for R");
+                   "Could not allocate space for R");
         return ANI_E_MALLOC_FAILED;
     }
 
     vos_mem_copy(a, gAniSsmAesKeyWrapIv, sizeof(a));
     vos_mem_copy(r + ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE, plainText, len);
 
-    for (j = 0; j <= 5; j++) {
-        for (i = 1; i <= n; i++) {
+    for (j = 0; j <= 5; j++)
+    {
+        for (i = 1; i <= n; i++)
+        {
 
-            retVal = aes(cryptHandle, keyEncKey, keyEncKeyLen, 
+            retVal = aes(cryptHandle, keyEncKey, keyEncKeyLen,
                          a,
                          r + i*ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE,
                          b);
 
-           if( !ANI_IS_STATUS_SUCCESS( retVal) ) goto error;
+            if( !ANI_IS_STATUS_SUCCESS( retVal) ) goto error;
 
             vos_mem_copy(a, b, ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
             t = n*j + i;
             xor(a, t);
             vos_mem_copy(r + i*ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE,
-                   b + sizeof(b) - ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE,
-                   ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
+                         b + sizeof(b) - ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE,
+                         ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
         }
     }
 
@@ -167,7 +173,7 @@ aniSsmAesKeyWrap(v_U32_t cryptHandle, tANI_U8 *plainText, tANI_U32 len,
 
     return ANI_OK;
 
- error:
+error:
     if (r != NULL)
         vos_mem_free(r);
 
@@ -210,7 +216,8 @@ aniSsmAesKeyUnwrap(v_U32_t cryptHandle, tANI_U8 *cipherText, tANI_U32 len,
     tANI_U8 b[ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE*2];
 
     n = len / ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE - 1;
-    if ((len % ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE) != 0) {
+    if ((len % ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE) != 0)
+    {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Illegal number of input bytes to AES Key Unwrap!");
         return ANI_E_ILLEGAL_ARG;
@@ -218,36 +225,40 @@ aniSsmAesKeyUnwrap(v_U32_t cryptHandle, tANI_U8 *cipherText, tANI_U32 len,
 
     // Allocate enough storage for 'A' as well as 'R'
     r = vos_mem_malloc((n + 1) *  ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
-    if (r == NULL) {
+    if (r == NULL)
+    {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Could not allocate space for R");
         return ANI_E_MALLOC_FAILED;
     }
 
     vos_mem_copy(a, cipherText, sizeof(a));
-    vos_mem_copy(r + ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE, 
-           cipherText + ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE, 
-           len - ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
+    vos_mem_copy(r + ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE,
+                 cipherText + ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE,
+                 len - ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
 
-    for (j = 5; j >= 0; j--) {
-        for (i = n; i >= 1; i--) {
+    for (j = 5; j >= 0; j--)
+    {
+        for (i = n; i >= 1; i--)
+        {
 
             t = n*j + i;
             xor(a, t);
-            retVal = aes_1(cryptHandle, keyEncKey, keyEncKeyLen, 
+            retVal = aes_1(cryptHandle, keyEncKey, keyEncKeyLen,
                            a,
                            r + i*ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE,
                            b);
-           if( !ANI_IS_STATUS_SUCCESS( retVal) ) goto error;
+            if( !ANI_IS_STATUS_SUCCESS( retVal) ) goto error;
 
             vos_mem_copy(a, b, ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
             vos_mem_copy(r + i*ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE,
-                   b + sizeof(b) - ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE,
-                   ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
+                         b + sizeof(b) - ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE,
+                         ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
         }
     }
 
-    if (vos_mem_compare2(a, gAniSsmAesKeyWrapIv, ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE) != 0) {
+    if (vos_mem_compare2(a, gAniSsmAesKeyWrapIv, ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE) != 0)
+    {
         retVal = ANI_E_MIC_FAILED;
         goto error;
     }
@@ -256,7 +267,7 @@ aniSsmAesKeyUnwrap(v_U32_t cryptHandle, tANI_U8 *cipherText, tANI_U32 len,
 
     return ANI_OK;
 
- error:
+error:
     if (r != NULL)
         vos_mem_free(r);
 
@@ -267,7 +278,8 @@ static int
 aes(v_U32_t cryptHandle, tANI_U8 *keyBytes, tANI_U32 keyLen,
     tANI_U8 a[ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE],
     tANI_U8 ri[ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE],
-    tANI_U8 b[AES_BLOCK_SIZE]) {
+    tANI_U8 b[AES_BLOCK_SIZE])
+{
 
     int retVal = 0;
 
@@ -280,13 +292,14 @@ aes(v_U32_t cryptHandle, tANI_U8 *keyBytes, tANI_U32 keyLen,
 
     // Concatenate A and R[i]
     vos_mem_copy(in, a, ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
-    vos_mem_copy(in + ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE, 
-           ri, ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
+    vos_mem_copy(in + ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE,
+                 ri, ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
     out = b;
 
 #if 0
     retVal = AES_set_encrypt_key(keyBytes, keyLen*8, &aesKey);
-    if (retVal != 0) {
+    if (retVal != 0)
+    {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "AES_set_encrypt_key returned %d", retVal);
         return ANI_E_FAILED;
@@ -298,7 +311,8 @@ aes(v_U32_t cryptHandle, tANI_U8 *keyBytes, tANI_U32 keyLen,
                              in, /* input */
                              out, /* output */
                              keyBytes); /* key */
-    if (retVal != 0) {
+    if (retVal != 0)
+    {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "vos_encrypt_AES returned %d", retVal);
         return ANI_E_FAILED;
@@ -311,7 +325,8 @@ static int
 aes_1(v_U32_t cryptHandle, tANI_U8 *keyBytes, tANI_U32 keyLen,
       tANI_U8 at[ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE],
       tANI_U8 ri[ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE],
-      tANI_U8 b[AES_BLOCK_SIZE]) {
+      tANI_U8 b[AES_BLOCK_SIZE])
+{
 
     int retVal;
 
@@ -324,13 +339,14 @@ aes_1(v_U32_t cryptHandle, tANI_U8 *keyBytes, tANI_U32 keyLen,
 
     // Concatenate A and R[i]
     vos_mem_copy(in, at, ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
-    vos_mem_copy(in + ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE, 
-           ri, ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
+    vos_mem_copy(in + ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE,
+                 ri, ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
     out = b;
 
 #if 0
     retVal = AES_set_decrypt_key(keyBytes, keyLen*8, &aesKey);
-    if (retVal != 0) {
+    if (retVal != 0)
+    {
         ANI_SSM_LOG_E("AES_set_encrypt_key returned %d", retVal);
         assert(0 && "AES_set_encrypt_key failed!");
         return ANI_E_FAILED;
@@ -342,7 +358,8 @@ aes_1(v_U32_t cryptHandle, tANI_U8 *keyBytes, tANI_U32 keyLen,
                              in, /* input */
                              out, /* output */
                              keyBytes); /* key */
-    if (retVal != 0) {
+    if (retVal != 0)
+    {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "vos_decrypt_AES returned %d", retVal);
     }
@@ -355,8 +372,8 @@ aes_1(v_U32_t cryptHandle, tANI_U8 *keyBytes, tANI_U32 keyLen,
 
 
 /*
- * Put a long in host order into a char array in network order. 
- * 
+ * Put a long in host order into a char array in network order.
+ *
  */
 static inline char *aniAsfWr32(char *cp, tANI_U32 x)
 {
@@ -376,8 +393,8 @@ static inline char *aniAsfWr32(char *cp, tANI_U32 x)
 // From file : aniAsfMisc.c
 
 /*
- * Put a long in host order into a char array in network order. 
- * 
+ * Put a long in host order into a char array in network order.
+ *
  */
 char *aniAsfPut32(char *cp, tANI_U32 x)
 {

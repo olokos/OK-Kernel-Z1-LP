@@ -49,7 +49,7 @@
 
 extern void sysMACCleanup(void *);
 extern tSirRetStatus sysBbtProcessMessageCore(struct sAniSirGlobal *, tpSirMsgQ,
-                                               tANI_U32, tANI_U32);
+        tANI_U32, tANI_U32);
 
 
 # endif /* __SYSSTARTUP_H */

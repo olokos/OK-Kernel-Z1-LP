@@ -27,7 +27,7 @@
 
 /**
  *
- * 
+ *
  * phyGlobal.h: Holds all globals for the phy, rf, and asic layers in hal
  * Author:  Mark Nelson
  * Date:    4/9/05
@@ -63,7 +63,8 @@
 typedef void (*funcHalSetChanCB)(tpAniSirGlobal, void*, tANI_U32, tANI_U16);
 
 // Structure to save the context from where the set channel is called
-typedef struct sPhySetChanCntx {
+typedef struct sPhySetChanCntx
+{
     tANI_U8 newChannel;
     tANI_U8 newRfBand;
     tANI_U8 newCbState;
@@ -100,6 +101,6 @@ typedef struct
     ePhyRxDisabledPktTypes modTypes;  //current disabled packet types
     volatile tANI_BOOLEAN setPhyMsgEvent;
     tANI_U32 hdetResidualDCO;
-}tAniSirPhy;
+} tAniSirPhy;
 
 #endif /* PHYGLOBAL_H */

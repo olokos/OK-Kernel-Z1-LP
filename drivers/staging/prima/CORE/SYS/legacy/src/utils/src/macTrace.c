@@ -79,9 +79,9 @@ tANI_U8* macTraceGetHDDWlanConnState(tANI_U16 connState)
         CASE_RETURN_STRING(eConnectionState_IbssConnected);
         CASE_RETURN_STRING(eConnectionState_Disconnecting);
 
-        default:
-            return( (tANI_U8*)"UNKNOWN" );
-            break;
+    default:
+        return( (tANI_U8*)"UNKNOWN" );
+        break;
     }
 }
 
@@ -108,9 +108,9 @@ tANI_U8* macTraceGetP2PConnState(tANI_U16 connState)
         CASE_RETURN_STRING(P2P_CLIENT_CONNECTING_STATE_2);
         CASE_RETURN_STRING(P2P_CLIENT_COMPLETED_STATE);
 
-        default:
-            return( (tANI_U8*)"UNKNOWN" );
-            break;
+    default:
+        return( (tANI_U8*)"UNKNOWN" );
+        break;
     }
 }
 #endif
@@ -132,17 +132,17 @@ tANI_U8* macTraceGetNeighbourRoamState(tANI_U16 neighbourRoamState)
         CASE_RETURN_STRING(eCSR_NEIGHBOR_ROAM_STATE_CONNECTED);
         CASE_RETURN_STRING(eCSR_NEIGHBOR_ROAM_STATE_CFG_CHAN_LIST_SCAN);
         CASE_RETURN_STRING(eCSR_NEIGHBOR_ROAM_STATE_REASSOCIATING);
-        #ifdef WLAN_FEATURE_VOWIFI_11R
+#ifdef WLAN_FEATURE_VOWIFI_11R
         CASE_RETURN_STRING(eCSR_NEIGHBOR_ROAM_STATE_REPORT_QUERY);
         CASE_RETURN_STRING(eCSR_NEIGHBOR_ROAM_STATE_REPORT_SCAN);
         CASE_RETURN_STRING(eCSR_NEIGHBOR_ROAM_STATE_PREAUTHENTICATING);
         CASE_RETURN_STRING(eCSR_NEIGHBOR_ROAM_STATE_PREAUTH_DONE);
-        #endif /* WLAN_FEATURE_VOWIFI_11R */
+#endif /* WLAN_FEATURE_VOWIFI_11R */
         CASE_RETURN_STRING(eNEIGHBOR_STATE_MAX);
 
-        default:
-            return( (tANI_U8*)"UNKNOWN" );
-            break;
+    default:
+        return( (tANI_U8*)"UNKNOWN" );
+        break;
     }
 }
 
@@ -164,9 +164,9 @@ tANI_U8* macTraceGetcsrRoamState(tANI_U16 csrRoamState)
         CASE_RETURN_STRING(eCSR_ROAMING_STATE_JOINING);
         CASE_RETURN_STRING(eCSR_ROAMING_STATE_JOINED);
 
-        default:
-            return( (tANI_U8*)"UNKNOWN" );
-            break;
+    default:
+        return( (tANI_U8*)"UNKNOWN" );
+        break;
     }
 }
 
@@ -201,9 +201,9 @@ tANI_U8* macTraceGetcsrRoamSubState(tANI_U16 csrRoamSubState)
         CASE_RETURN_STRING(eCSR_ROAM_SUBSTATE_JOINED_NON_REALTIME_TRAFFIC);
         CASE_RETURN_STRING(eCSR_ROAM_SUBSTATE_JOINED_REALTIME_TRAFFIC);
 
-        default:
-            return( (tANI_U8*)"UNKNOWN" );
-            break;
+    default:
+        return( (tANI_U8*)"UNKNOWN" );
+        break;
     }
 }
 
@@ -242,9 +242,9 @@ tANI_U8* macTraceGetLimSmeState(tANI_U16 limState)
         CASE_RETURN_STRING(eLIM_SME_CHANNEL_SCAN_STATE);
         CASE_RETURN_STRING(eLIM_SME_NORMAL_CHANNEL_SCAN_STATE);
 
-        default:
-            return( (tANI_U8*)"UNKNOWN" );
-            break;
+    default:
+        return( (tANI_U8*)"UNKNOWN" );
+        break;
     }
 }
 
@@ -287,9 +287,9 @@ tANI_U8* macTraceGetLimMlmState(tANI_U16 mlmState)
         CASE_RETURN_STRING(eLIM_MLM_WT_ADD_STA_RSP_STATE);
         CASE_RETURN_STRING(eLIM_MLM_WT_DEL_STA_RSP_STATE);
 
-        default:
-            return( (tANI_U8*)"UNKNOWN" );
-            break;
+    default:
+        return( (tANI_U8*)"UNKNOWN" );
+        break;
     }
 }
 
@@ -303,7 +303,7 @@ tANI_U8* macTraceGetLimMlmState(tANI_U16 mlmState)
   ---------------------------------------------------------------------------*/
 tANI_U8* macTraceGetTLState(tANI_U16 tlState)
 {
-   switch(tlState)
+    switch(tlState)
     {
         CASE_RETURN_STRING(WLANTL_STA_INIT);
         CASE_RETURN_STRING(WLANTL_STA_CONNECTED);
@@ -311,10 +311,10 @@ tANI_U8* macTraceGetTLState(tANI_U16 tlState)
         CASE_RETURN_STRING(WLANTL_STA_DISCONNECTED);
         CASE_RETURN_STRING(WLANTL_STA_MAX_STATE);
 
-        default:
-            return( (tANI_U8*)"UNKNOWN" );
-            break;
-   }
+    default:
+        return( (tANI_U8*)"UNKNOWN" );
+        break;
+    }
 }
 
 tANI_U8* macTraceGetSmeMsgString( tANI_U16 smeMsg )
@@ -528,9 +528,9 @@ tANI_U8* macTraceGetSmeMsgString( tANI_U16 smeMsg )
         CASE_RETURN_STRING(eWNI_SME_GET_TSM_STATS_RSP);
         CASE_RETURN_STRING(eWNI_SME_HT40_OBSS_SCAN_IND);
         CASE_RETURN_STRING(eWNI_SME_HT40_STOP_OBSS_SCAN_IND);
-        default:
-            return( (tANI_U8*)"UNKNOWN" );
-            break;
+    default:
+        return( (tANI_U8*)"UNKNOWN" );
+        break;
     }
 }
 
@@ -780,9 +780,9 @@ tANI_U8* macTraceGetWdaMsgString( tANI_U16 wdaMsg )
         CASE_RETURN_STRING(WDA_SET_BATCH_SCAN_REQ);
         CASE_RETURN_STRING(WDA_TRIGGER_BATCH_SCAN_RESULT_IND);
 #endif
-        default:
-            return((tANI_U8*) "UNKNOWN" );
-            break;
+    default:
+        return((tANI_U8*) "UNKNOWN" );
+        break;
     }
 }
 
@@ -843,9 +843,9 @@ tANI_U8* macTraceGetLimMsgString( tANI_U16 limMsg )
         CASE_RETURN_STRING(SIR_LIM_PERIODIC_JOIN_PROBE_REQ_TIMEOUT);
         CASE_RETURN_STRING(SIR_LIM_MSG_TYPES_END);
 
-        default:
-            return( (tANI_U8*)"UNKNOWN" );
-            break;
+    default:
+        return( (tANI_U8*)"UNKNOWN" );
+        break;
     }
 }
 
@@ -862,9 +862,9 @@ tANI_U8* macTraceGetCfgMsgString( tANI_U16 cfgMsg )
         CASE_RETURN_STRING(SIR_CFG_DOWNLOAD_COMPLETE_IND);
 
         CASE_RETURN_STRING(WNI_CFG_SET_REQ_NO_RSP);
-        default:
-            return( (tANI_U8*)"UNKNOWN" );
-            break;
+    default:
+        return( (tANI_U8*)"UNKNOWN" );
+        break;
     }
 }
 
@@ -874,9 +874,9 @@ tANI_U8* macTraceGetInfoLogString( tANI_U16 infoLog )
     {
         CASE_RETURN_STRING(eLOG_NODROP_MISSED_BEACON_SCENARIO);
         CASE_RETURN_STRING(eLOG_PROC_DEAUTH_FRAME_SCENARIO);
-        default:
-            return( (tANI_U8*)"UNKNOWN" );
-            break;
+    default:
+        return( (tANI_U8*)"UNKNOWN" );
+        break;
     }
 }
 
@@ -908,18 +908,18 @@ tANI_U8* macTraceMsgString(tpAniSirGlobal pMac, tANI_U32 msgType)
 
     switch(moduleId)
     {
-        case SIR_LIM_MODULE_ID:
-            if(msgId >= SIR_LIM_ITC_MSG_TYPES_BEGIN)
-                return macTraceGetLimMsgString((tANI_U16)msgType);
-            else
-                return macTraceGetSmeMsgString((tANI_U16)msgType);
-            break;
-        case SIR_WDA_MODULE_ID:
-                return macTraceGetWdaMsgString((tANI_U16)msgType);
-        case SIR_CFG_MODULE_ID:
-                return macTraceGetCfgMsgString((tANI_U16)msgType);
-        default:
-                return ((tANI_U8*)"Unknown MsgType");
+    case SIR_LIM_MODULE_ID:
+        if(msgId >= SIR_LIM_ITC_MSG_TYPES_BEGIN)
+            return macTraceGetLimMsgString((tANI_U16)msgType);
+        else
+            return macTraceGetSmeMsgString((tANI_U16)msgType);
+        break;
+    case SIR_WDA_MODULE_ID:
+        return macTraceGetWdaMsgString((tANI_U16)msgType);
+    case SIR_CFG_MODULE_ID:
+        return macTraceGetCfgMsgString((tANI_U16)msgType);
+    default:
+        return ((tANI_U8*)"Unknown MsgType");
     }
 }
 

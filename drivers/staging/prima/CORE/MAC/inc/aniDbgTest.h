@@ -120,7 +120,8 @@ typedef enum sANI_TEST_ID
 } tANI_TEST_ID;
 
 /// Test IDs for tests directly handled by the HDD
-typedef enum sANI_HDD_TEST_ID {
+typedef enum sANI_HDD_TEST_ID
+{
     ANI_HDD_TESTS_START = 0x10000,
     ANI_PCI_CFG_TEST = ANI_HDD_TESTS_START,
     ANI_EEPROM_TEST,
@@ -343,7 +344,7 @@ typedef struct sAniDbgCfgWriteRegParams
 typedef struct
 {
     unsigned long toneID;   //0 = -28, 1 = -24, ..., 6 = -4, 7 = +4, 8 = +8, 9 = +12, ..., 13 = +28
-}tAniDbgCfgSetToneId, *tpAniDbgCfgSetToneId;
+} tAniDbgCfgSetToneId, *tpAniDbgCfgSetToneId;
 
 
 // --------------------------------------------------------
@@ -510,12 +511,12 @@ typedef struct sAniDbgCalTestParams
 {
     unsigned int id;   // 0 - Cal; 1 - Set Channel
     unsigned int chId; // if id == 1; then chId is 1 - 14 or 36 - end of 11a
-}tAniDbgCalTestParams, *tpAniDbgCalTestParams;
+} tAniDbgCalTestParams, *tpAniDbgCalTestParams;
 
 typedef struct sAniDbgCalTestResponse
 {
     unsigned int rc;
-}tAniDbgCalTestResponse, *tpAniDbgCalTestResponse;
+} tAniDbgCalTestResponse, *tpAniDbgCalTestResponse;
 
 // ---------------------------------------------------------
 // Input params to Get DCO params
@@ -743,7 +744,7 @@ typedef struct sAniDbgInitPduTestResponse
 {
     // Output parameters
     unsigned int rc;  // Must be ZERO for success and must have error code
-                      // for failure
+    // for failure
 
     unsigned int expected;
     unsigned int i_current;
@@ -1044,7 +1045,7 @@ typedef struct sAniDbgRhpHashTblMultipleEntryTestParams
     unsigned int n; // number of entries
 
 } tAniDbgRhpHashTblMultipleEntryTestParams,
-    *tpAniDbgRhpHashTblMultipleEntryTestParams;
+*tpAniDbgRhpHashTblMultipleEntryTestParams;
 
 typedef struct sAniDbgRhpHashTblTestParams
 {
@@ -1068,7 +1069,8 @@ typedef struct sAniDbgRhpHashTblTestResponse
 // Here both pParms and pResponse structures are interpreted by the
 // User of the API based on testId
 
-typedef struct sANI_DBG_TEST_INFO {
+typedef struct sANI_DBG_TEST_INFO
+{
 
     tANI_TEST_ID testId;
 
@@ -1143,7 +1145,8 @@ extern void dbgTestCompleted(void *mpAdapterPtr);
 
 
 
-typedef struct sANI_DBG_MISC_INFO {
+typedef struct sANI_DBG_MISC_INFO
+{
 
     unsigned long sysMode;
     unsigned long sysIntrMask;
@@ -1151,16 +1154,17 @@ typedef struct sANI_DBG_MISC_INFO {
     unsigned long phyIntrMask;
     unsigned long intrStatus[32];
     unsigned long phyIntrStatus[16];
-    unsigned long eofSofExceptionResets;  
-    unsigned long bmuExceptionResets;      
-    unsigned long lowPduExceptionResets;  
+    unsigned long eofSofExceptionResets;
+    unsigned long bmuExceptionResets;
+    unsigned long lowPduExceptionResets;
     unsigned long userTriggeredResets;
     unsigned long logPExceptionResets;
 
 } tANI_DBG_MISC_INFO;
 
 
-typedef struct sANI_DBG_BMU_INFO {
+typedef struct sANI_DBG_BMU_INFO
+{
 
     unsigned long control;
     unsigned long fp_hptr;
@@ -1174,7 +1178,8 @@ typedef struct sANI_DBG_BMU_INFO {
 } tANI_DBG_BMU_INFO;
 
 
-typedef struct sANI_DBG_TFP_INFO {
+typedef struct sANI_DBG_TFP_INFO
+{
 
     unsigned long control;
     unsigned long modeEnable;
@@ -1196,7 +1201,8 @@ typedef struct sANI_DBG_TFP_INFO {
 } tANI_DBG_TFP_INFO;
 
 
-typedef struct sANI_DBG_RHP_INFO {
+typedef struct sANI_DBG_RHP_INFO
+{
 
     unsigned long sof;
     unsigned long sof_chunk;
@@ -1227,7 +1233,8 @@ typedef struct sANI_DBG_RHP_INFO {
 } tANI_DBG_RHP_INFO;
 
 
-typedef struct sANI_DBG_RFP_INFO {
+typedef struct sANI_DBG_RFP_INFO
+{
 
     unsigned long packets;
     unsigned long multicastPackets;
@@ -1245,7 +1252,8 @@ typedef struct sANI_DBG_RFP_INFO {
 
 } tANI_DBG_RFP_INFO;
 
-typedef struct sANI_DBG_SP_INFO {
+typedef struct sANI_DBG_SP_INFO
+{
 
     unsigned long wep_dky0_w0;
     unsigned long wep_dky0_w1;
@@ -1265,7 +1273,8 @@ typedef struct sANI_DBG_SP_INFO {
 
 } tANI_DBG_SP_INFO;
 
-typedef struct sANI_DBG_CP_INFO {
+typedef struct sANI_DBG_CP_INFO
+{
 
     unsigned long cp_control;
     unsigned long Compression_Expansion_Cnt;
@@ -1276,11 +1285,12 @@ typedef struct sANI_DBG_CP_INFO {
     unsigned long CP_Error_status;
 
     unsigned long Cp_maximum_pkt_len;
- 
+
 } tANI_DBG_CP_INFO;
 
 
-typedef struct sANI_DBG_STA_TX_WQ_INFO {
+typedef struct sANI_DBG_STA_TX_WQ_INFO
+{
 
     unsigned long txWqAddr;
     unsigned long txWqDump[4];
@@ -1299,7 +1309,8 @@ typedef struct sANI_DBG_STA_TX_WQ_INFO {
 
 
 
-typedef struct sANI_DBG_TC_DESC {
+typedef struct sANI_DBG_TC_DESC
+{
 
     unsigned long valid;
     unsigned long rxAckType;
@@ -1318,7 +1329,8 @@ typedef struct sANI_DBG_TC_DESC {
 } tANI_DBG_TC_DESC;
 
 
-typedef struct sANI_DBG_PWR_TEMPL {
+typedef struct sANI_DBG_PWR_TEMPL
+{
 
     unsigned long retryPhyMode;
     unsigned long retryCb;
@@ -1340,7 +1352,8 @@ typedef struct sANI_DBG_PWR_TEMPL {
 } tANI_DBG_PWR_TEMPL;
 
 
-typedef struct sANI_DBG_STA {
+typedef struct sANI_DBG_STA
+{
 
     unsigned long staDescAddr;
     unsigned long staDump[256];
@@ -1378,7 +1391,8 @@ typedef struct sANI_DBG_STA {
 } tANI_DBG_STA;
 
 
-typedef struct sANI_DBG_STA_INFO {
+typedef struct sANI_DBG_STA_INFO
+{
 
     unsigned long staId;    // input
 
@@ -1391,7 +1405,8 @@ typedef struct sANI_DBG_STA_INFO {
 } tANI_DBG_STA_INFO;
 
 
-typedef struct sANI_DBG_FPHY_INFO {
+typedef struct sANI_DBG_FPHY_INFO
+{
 
     unsigned long fphy_symPer;
     unsigned long cca_delayOffset;
@@ -1439,7 +1454,8 @@ typedef struct sAniDvtPhyfEntry
 #define ANI_DBG_FIFO_CMD_CLEAR  0x2
 
 
-typedef struct sANI_DBG_FPHY_FIFO {
+typedef struct sANI_DBG_FPHY_FIFO
+{
 
     unsigned long command; // set to either 'get' of 'clear' fifo
     unsigned long entries; // entries to read
@@ -1454,7 +1470,8 @@ typedef struct sANI_DBG_FPHY_FIFO {
 } tANI_DBG_FPHY_FIFO;
 
 
-typedef struct sANI_DBG_RPHY_MPI_INFO {
+typedef struct sANI_DBG_RPHY_MPI_INFO
+{
 
     unsigned long tfp_phy_sof;
     unsigned long tfp_phy_eof;
@@ -1471,7 +1488,8 @@ typedef struct sANI_DBG_RPHY_MPI_INFO {
 } tANI_DBG_RPHY_MPI_INFO;
 
 
-typedef struct sANI_DBG_RPHY_PMI_INFO {
+typedef struct sANI_DBG_RPHY_PMI_INFO
+{
 
     unsigned long rxa_mpi_pktstart;
     unsigned long rxb_mpi_pktstart;
@@ -1489,7 +1507,8 @@ typedef struct sANI_DBG_RPHY_PMI_INFO {
 
 } tANI_DBG_RPHY_PMI_INFO;
 
-typedef struct sANI_DBG_RPHY_PHYINT_INFO {
+typedef struct sANI_DBG_RPHY_PHYINT_INFO
+{
 
     unsigned long status;
     unsigned long fast_mask;
@@ -1499,7 +1518,8 @@ typedef struct sANI_DBG_RPHY_PHYINT_INFO {
 } tANI_DBG_RPHY_PHYINT_INFO;
 
 
-typedef struct sANI_DBG_RPHY_INFO {
+typedef struct sANI_DBG_RPHY_INFO
+{
 
     tANI_DBG_RPHY_MPI_INFO mpi;
     tANI_DBG_RPHY_PMI_INFO pmi;
@@ -1538,14 +1558,16 @@ typedef struct sANI_DBG_SCH_INFO
 } tANI_DBG_SCH_INFO;
 
 
-typedef struct sANI_DBG_HCF_INFO {
+typedef struct sANI_DBG_HCF_INFO
+{
 
     unsigned long       bSetInfo;     // 0 = read info, 1 = set info
     tANI_DBG_SCH_INFO   schInfo;
 
 } tANI_DBG_HCF_INFO;
 
-typedef struct sANI_DBG_AP_SWITCH_INFO {
+typedef struct sANI_DBG_AP_SWITCH_INFO
+{
 
 
     // Space to hold the SSIDList and the BSSID.
@@ -1555,7 +1577,8 @@ typedef struct sANI_DBG_AP_SWITCH_INFO {
 } tANI_DBG_AP_SWITCH_INFO;
 
 
-typedef struct sANI_DBG_INFO {
+typedef struct sANI_DBG_INFO
+{
 
     unsigned long dbgInfoMask; // indicates which members are valid
 

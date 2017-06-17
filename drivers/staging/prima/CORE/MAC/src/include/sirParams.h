@@ -68,69 +68,71 @@ typedef enum
     PHY_QUADRUPLE_CHANNEL_20MHZ_HIGH_40MHZ_HIGH = 10,//20/40MHZ offset-HIGH 40/80MHZ offset HIGH
 #endif
     PHY_CHANNEL_BONDING_STATE_MAX   = 11
-}ePhyChanBondState;
+} ePhyChanBondState;
 
 #define SIR_MIN(a,b)   (((a) < (b)) ? (a) : (b))
 #define SIR_MAX(a,b)   (((a) > (b)) ? (a) : (b))
 
-typedef enum {
-   MCC     = 0,
-   P2P     = 1,
-   DOT11AC = 2,
-   SLM_SESSIONIZATION = 3,
-   DOT11AC_OPMODE = 4,
-   SAP32STA = 5,
-   TDLS = 6,
-   P2P_GO_NOA_DECOUPLE_INIT_SCAN = 7,
-   WLANACTIVE_OFFLOAD = 8,
-   RTT = 20,
-   WOW = 22,
+typedef enum
+{
+    MCC     = 0,
+    P2P     = 1,
+    DOT11AC = 2,
+    SLM_SESSIONIZATION = 3,
+    DOT11AC_OPMODE = 4,
+    SAP32STA = 5,
+    TDLS = 6,
+    P2P_GO_NOA_DECOUPLE_INIT_SCAN = 7,
+    WLANACTIVE_OFFLOAD = 8,
+    RTT = 20,
+    WOW = 22,
 #ifdef WLAN_FEATURE_ROAM_SCAN_OFFLOAD
-   WLAN_ROAM_SCAN_OFFLOAD = 23,
+    WLAN_ROAM_SCAN_OFFLOAD = 23,
 #endif
-   IBSS_HEARTBEAT_OFFLOAD = 26,
-   WLAN_PERIODIC_TX_PTRN = 28,
+    IBSS_HEARTBEAT_OFFLOAD = 26,
+    WLAN_PERIODIC_TX_PTRN = 28,
 #ifdef FEATURE_WLAN_TDLS
-   ADVANCE_TDLS = 29,
+    ADVANCE_TDLS = 29,
 #endif
 
 #ifdef FEATURE_WLAN_BATCH_SCAN
-   BATCH_SCAN = 30,
+    BATCH_SCAN = 30,
 #endif
-   FW_IN_TX_PATH = 31,
-   EXTENDED_NSOFFLOAD_SLOT = 32,
-   CH_SWITCH_V1           = 33,
-   HT40_OBSS_SCAN         = 34,
-   UPDATE_CHANNEL_LIST    = 35,
-   WLAN_MCADDR_FLT        = 36,
-   WLAN_CH144             = 37,
+    FW_IN_TX_PATH = 31,
+    EXTENDED_NSOFFLOAD_SLOT = 32,
+    CH_SWITCH_V1           = 33,
+    HT40_OBSS_SCAN         = 34,
+    UPDATE_CHANNEL_LIST    = 35,
+    WLAN_MCADDR_FLT        = 36,
+    WLAN_CH144             = 37,
 #ifdef WLAN_FEATURE_NAN
-   NAN = 38,
+    NAN = 38,
 #endif
 #ifdef FEATURE_WLAN_TDLS
-   TDLS_SCAN_COEXISTENCE  = 39,
+    TDLS_SCAN_COEXISTENCE  = 39,
 #endif
 #ifdef WLAN_FEATURE_LINK_LAYER_STATS
-   LINK_LAYER_STATS_MEAS  = 40,
+    LINK_LAYER_STATS_MEAS  = 40,
 #endif
 
-   MU_MIMO                = 41,
+    MU_MIMO                = 41,
 #ifdef WLAN_FEATURE_EXTSCAN
-   EXTENDED_SCAN          = 42,
+    EXTENDED_SCAN          = 42,
 #endif
 
-   DYNAMIC_WMM_PS        = 43,
+    DYNAMIC_WMM_PS        = 43,
 
-   MAC_SPOOFED_SCAN      = 44,
-   BMU_ERROR_GENERIC_RECOVERY = 45,
-   DISA                  = 46,
-   FW_STATS              = 47,
-   WPS_PRBRSP_TMPL       = 48,
-   BCN_IE_FLT_DELTA      = 49,
-   //MAX_FEATURE_SUPPORTED = 128
+    MAC_SPOOFED_SCAN      = 44,
+    BMU_ERROR_GENERIC_RECOVERY = 45,
+    DISA                  = 46,
+    FW_STATS              = 47,
+    WPS_PRBRSP_TMPL       = 48,
+    BCN_IE_FLT_DELTA      = 49,
+    //MAX_FEATURE_SUPPORTED = 128
 } placeHolderInCapBitmap;
 
-typedef enum eSriLinkState {
+typedef enum eSriLinkState
+{
     eSIR_LINK_IDLE_STATE        = 0,
     eSIR_LINK_PREASSOC_STATE    = 1,
     eSIR_LINK_POSTASSOC_STATE   = 2,

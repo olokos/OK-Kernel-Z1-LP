@@ -31,15 +31,15 @@
 
 
 /**=========================================================================
-  
+
   \file  smeRrmInternal.h
-  
+
   \brief prototype for SME RRM APIs
-  
+
    Copyright 2008 (c) Qualcomm, Incorporated.  All Rights Reserved.
-   
+
    Qualcomm Confidential and Proprietary.
-  
+
   ========================================================================*/
 
 /* $Header$ */
@@ -54,20 +54,20 @@
 #include "palTimer.h"
 #include "rrmGlobal.h"
 
-/*-------------------------------------------------------------------------- 
+/*--------------------------------------------------------------------------
   Type declarations
   ------------------------------------------------------------------------*/
 typedef struct sRrmConfigParam
 {
-   tANI_U8 rrmEnabled;
-   tANI_U8 maxRandnInterval;
-}tRrmConfigParam, *tpRrmConfigParam;
+    tANI_U8 rrmEnabled;
+    tANI_U8 maxRandnInterval;
+} tRrmConfigParam, *tpRrmConfigParam;
 
 typedef struct sRrmNeighborReportDesc
 {
-   tListElem    List;
-   tSirNeighborBssDescription   *pNeighborBssDescription;
-   tANI_U32                     roamScore;
+    tListElem    List;
+    tSirNeighborBssDescription   *pNeighborBssDescription;
+    tANI_U32                     roamScore;
 } tRrmNeighborReportDesc, *tpRrmNeighborReportDesc;
 
 
@@ -89,31 +89,31 @@ typedef struct sRrmNeighborRequestControlInfo
 
 typedef struct sRrmSMEContext
 {
-   tANI_U16 token;
-   tCsrBssid sessionBssId;
-   tANI_U8 regClass;
-   tCsrChannelInfo channelList; //list of all channels to be measured.
-   tANI_U8 currentIndex;
-   tAniSSID ssId;  //SSID used in the measuring beacon report.
-   tSirMacAddr bssId; //bssid used for beacon report measurement.
-   tANI_U16 randnIntvl; //Randomization interval to be used in subsequent measurements.
-   tANI_U16 duration[SIR_ESE_MAX_MEAS_IE_REQS];
-   tANI_U8 measMode[SIR_ESE_MAX_MEAS_IE_REQS];
-   tRrmConfigParam rrmConfig;
-   vos_timer_t IterMeasTimer;
-   tDblLinkList neighborReportCache;
-   tRrmNeighborRequestControlInfo neighborReqControlInfo;
+    tANI_U16 token;
+    tCsrBssid sessionBssId;
+    tANI_U8 regClass;
+    tCsrChannelInfo channelList; //list of all channels to be measured.
+    tANI_U8 currentIndex;
+    tAniSSID ssId;  //SSID used in the measuring beacon report.
+    tSirMacAddr bssId; //bssid used for beacon report measurement.
+    tANI_U16 randnIntvl; //Randomization interval to be used in subsequent measurements.
+    tANI_U16 duration[SIR_ESE_MAX_MEAS_IE_REQS];
+    tANI_U8 measMode[SIR_ESE_MAX_MEAS_IE_REQS];
+    tRrmConfigParam rrmConfig;
+    vos_timer_t IterMeasTimer;
+    tDblLinkList neighborReportCache;
+    tRrmNeighborRequestControlInfo neighborReqControlInfo;
 
 #if defined(FEATURE_WLAN_ESE) && defined(FEATURE_WLAN_ESE_UPLOAD)
-   tCsrEseBeaconReq  eseBcnReqInfo;
+    tCsrEseBeaconReq  eseBcnReqInfo;
 #endif /* FEATURE_WLAN_ESE && FEATURE_WLAN_ESE_UPLOAD */
-   tRrmMsgReqSource msgSource;
-}tRrmSMEContext, *tpRrmSMEContext; 
+    tRrmMsgReqSource msgSource;
+} tRrmSMEContext, *tpRrmSMEContext;
 
 typedef struct sRrmNeighborReq
 {
-   tANI_U8 no_ssid;
-   tSirMacSSid ssid;
-}tRrmNeighborReq, *tpRrmNeighborReq;
+    tANI_U8 no_ssid;
+    tSirMacSSid ssid;
+} tRrmNeighborReq, *tpRrmNeighborReq;
 
 #endif //#if !defined( __SMERRMINTERNAL_H )

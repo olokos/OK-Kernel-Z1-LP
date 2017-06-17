@@ -134,9 +134,9 @@ static tANI_U8* smeTraceGetRxMsgString( tANI_U32 code )
         CASE_RETURN_STRING(TRACE_CODE_SME_RX_HDD_UPDATE_WESMODE);
         CASE_RETURN_STRING(TRACE_CODE_SME_RX_HDD_SET_SCANCTRL);
 
-        default:
-            return( "UNKNOWN" );
-            break;
+    default:
+        return( "UNKNOWN" );
+        break;
     }
 }
 static tANI_U8* smeTraceGetCommandString( tANI_U32 command )
@@ -171,25 +171,25 @@ static tANI_U8* smeTraceGetCommandString( tANI_U32 command )
 #endif
         CASE_RETURN_STRING(eSmeCommandRemainOnChannel);
         CASE_RETURN_STRING(eSmeCommandNoAUpdate);
-        default:
-            return( "UNKNOWN" );
-            break;
+    default:
+        return( "UNKNOWN" );
+        break;
     }
 }
 static void smeTraceDump(tpAniSirGlobal pMac, tpvosTraceRecord pRecord,
-                                                            tANI_U16 recIndex)
+                         tANI_U16 recIndex)
 {
     if (TRACE_CODE_SME_COMMAND == pRecord->code)
     {
         smsLog(pMac, LOGE, "%04d %012u S%d %-14s %-30s(0x%x)", recIndex,
-                   pRecord->time, pRecord->session, "SME COMMAND:",
-                   smeTraceGetCommandString(pRecord->data), pRecord->data );
+               pRecord->time, pRecord->session, "SME COMMAND:",
+               smeTraceGetCommandString(pRecord->data), pRecord->data );
     }
     else
     {
         smsLog(pMac, LOGE, "%04d %012u S%d %-14s %-30s(0x%x)", recIndex,
-                   pRecord->time, pRecord->session, "RX HDD MSG:",
-                   smeTraceGetRxMsgString(pRecord->code), pRecord->data );
+               pRecord->time, pRecord->session, "RX HDD MSG:",
+               smeTraceGetRxMsgString(pRecord->code), pRecord->data );
     }
 }
 

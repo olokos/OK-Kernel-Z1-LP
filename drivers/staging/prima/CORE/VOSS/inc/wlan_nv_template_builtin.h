@@ -132,17 +132,18 @@
 int allocNvBinTable(int tblIdx, int numEntries);
 int allocNvBinEnum(int enumIdx, int numEntries);
 
-typedef enum _nvFieldSizeEnums {
-   INDEX_ENUM_ALL = 0,
-   INDEX_ENUM_NUM_PHY_MAX_TX_CHAINS,
-   INDEX_ENUM_NUM_REG_DOMAINS,
-   INDEX_ENUM_NUM_RF_SUBBANDS,
-   INDEX_ENUM_NUM_RF_CHANNELS,
-   INDEX_ENUM_NUM_2_4GHZ_CHANNELS,
-   INDEX_ENUM_NUM_802_11_MODES,
-   INDEX_ENUM_NUM_HAL_PHY_RATES,
-   INDEX_ENUM_BUILTIN_LAST,
-   INDEX_ENUM_BUILTIN_MAX,
+typedef enum _nvFieldSizeEnums
+{
+    INDEX_ENUM_ALL = 0,
+    INDEX_ENUM_NUM_PHY_MAX_TX_CHAINS,
+    INDEX_ENUM_NUM_REG_DOMAINS,
+    INDEX_ENUM_NUM_RF_SUBBANDS,
+    INDEX_ENUM_NUM_RF_CHANNELS,
+    INDEX_ENUM_NUM_2_4GHZ_CHANNELS,
+    INDEX_ENUM_NUM_802_11_MODES,
+    INDEX_ENUM_NUM_HAL_PHY_RATES,
+    INDEX_ENUM_BUILTIN_LAST,
+    INDEX_ENUM_BUILTIN_MAX,
 } _NV_FIELD_SIZE_ENUMS;
 
 #define INDEX_ENUM_MAX  MAX(INDEX_ENUM_PREDEFINED_MAX, INDEX_ENUM_BUILTIN_MAX)
@@ -150,24 +151,25 @@ typedef enum _nvFieldSizeEnums {
 int getEnumNoOfFields(int enumIdx);
 extern _NV_TEMPLATE_ENUM NvEnumsBuiltIn[/*INDEX_ENUM_MAX*/][ENUM_ENTRIES_MAX];
 
-typedef enum _nvTableIDs {
-   TABLE_sHalNv,
-   TABLE_sNvFields,
-   TABLE_sRegulatoryChannel,
-   TABLE_sRssiChannelOffsets,
-   TABLE_sCalData,
-   TABLE_sTxBbFilterMode,
-   TABLE_sOfdmCmdPwrOffset,
-   TABLE_sDefaultCountry,
-   TABLE_sFwConfig,
-   TABLE_tTpcPowerTable,
-   TABLE_tRateGroupPwr,
-   TABLE_tRateGroupPwrVR,
-   TABLE_sRegulatoryDomains,
-   TABLE_sHwCalValues,
-   TABLE_sNvTables,
-   TABLE_BUILTIN_LAST,
-   TABLE_BUILTIN_MAX,
+typedef enum _nvTableIDs
+{
+    TABLE_sHalNv,
+    TABLE_sNvFields,
+    TABLE_sRegulatoryChannel,
+    TABLE_sRssiChannelOffsets,
+    TABLE_sCalData,
+    TABLE_sTxBbFilterMode,
+    TABLE_sOfdmCmdPwrOffset,
+    TABLE_sDefaultCountry,
+    TABLE_sFwConfig,
+    TABLE_tTpcPowerTable,
+    TABLE_tRateGroupPwr,
+    TABLE_tRateGroupPwrVR,
+    TABLE_sRegulatoryDomains,
+    TABLE_sHwCalValues,
+    TABLE_sNvTables,
+    TABLE_BUILTIN_LAST,
+    TABLE_BUILTIN_MAX,
 } _NV_TABLE_ID;
 
 #define TABLES_MAX    MAX(TABLE_PREDEFINED_MAX, TABLE_BUILTIN_MAX)

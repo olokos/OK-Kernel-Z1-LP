@@ -27,15 +27,15 @@
 
 #ifdef FEATURE_OEM_DATA_SUPPORT
 
-/*================================================================================ 
+/*================================================================================
     \file wlan_hdd_oemdata.c
-  
+
     \brief Linux Wireless Extensions for oem data req/rsp
-  
+
     $Id: wlan_hdd_oemdata.c,v 1.34 2010/04/15 01:49:23 -- VINAY
-  
+
     Copyright (C) Qualcomm Inc.
-    
+
 ================================================================================*/
 
 #include <linux/version.h>
@@ -48,14 +48,14 @@
 
 /*---------------------------------------------------------------------------------------------
 
-  \brief hdd_OemDataReqCallback() - 
+  \brief hdd_OemDataReqCallback() -
 
   This function also reports the results to the user space
 
   \return - eHalStatus enumeration
 
 -----------------------------------------------------------------------------------------------*/
-static eHalStatus hdd_OemDataReqCallback(tHalHandle hHal, 
+static eHalStatus hdd_OemDataReqCallback(tHalHandle hHal,
         void *pContext,
         tANI_U32 oemDataReqID,
         eOemDataReqStatus oemDataReqStatus)
@@ -86,10 +86,10 @@ static eHalStatus hdd_OemDataReqCallback(tHalHandle hHal,
         snprintf(buffer, IW_CUSTOM_MAX, "QCOM: OEM-DATA-REQ-SUCCESS");
         //everything went alright
     }
-    
+
     wrqu.data.pointer = buffer;
     wrqu.data.length = strlen(buffer);
-        
+
     wireless_send_event(dev, IWEVCUSTOM, &wrqu, buffer);
 
     return status;
@@ -97,11 +97,11 @@ static eHalStatus hdd_OemDataReqCallback(tHalHandle hHal,
 
 /**--------------------------------------------------------------------------------------------
 
-  \brief iw_get_oem_data_rsp() - 
+  \brief iw_get_oem_data_rsp() -
 
   This function gets the oem data response. This invokes
-  the respective sme functionality. Function for handling the oem data rsp 
-  IOCTL 
+  the respective sme functionality. Function for handling the oem data rsp
+  IOCTL
 
   \param - dev  - Pointer to the net device
          - info - Pointer to the iw_oem_data_req
@@ -112,10 +112,10 @@ static eHalStatus hdd_OemDataReqCallback(tHalHandle hHal,
 
 -----------------------------------------------------------------------------------------------*/
 int iw_get_oem_data_rsp(
-        struct net_device *dev, 
-        struct iw_request_info *info,
-        union iwreq_data *wrqu,
-        char *extra)
+    struct net_device *dev,
+    struct iw_request_info *info,
+    union iwreq_data *wrqu,
+    char *extra)
 {
     int                                   rc = 0;
     eHalStatus                            status;
@@ -126,9 +126,9 @@ int iw_get_oem_data_rsp(
 
     if ((WLAN_HDD_GET_CTX(pAdapter))->isLogpInProgress)
     {
-       VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
-                                  "%s:LOGP in Progress. Ignore!!!",__func__);
-       return -EBUSY;
+        VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
+                  "%s:LOGP in Progress. Ignore!!!",__func__);
+        return -EBUSY;
     }
 
     do
@@ -146,7 +146,7 @@ int iw_get_oem_data_rsp(
             if (pSmeOemDataRsp != NULL)
             {
                 pHddOemDataRsp = (struct iw_oem_data_rsp*)(extra);
-                vos_mem_copy(pHddOemDataRsp->oemDataRsp, pSmeOemDataRsp->oemDataRsp, OEM_DATA_RSP_SIZE); 
+                vos_mem_copy(pHddOemDataRsp->oemDataRsp, pSmeOemDataRsp->oemDataRsp, OEM_DATA_RSP_SIZE);
             }
             else
             {
@@ -155,17 +155,18 @@ int iw_get_oem_data_rsp(
                 break;
             }
         }
-    } while(0);
+    }
+    while(0);
 
     return rc;
 }
 
 /**--------------------------------------------------------------------------------------------
 
-  \brief iw_set_oem_data_req() - 
+  \brief iw_set_oem_data_req() -
 
   This function sets the oem data req configuration. This invokes
-  the respective sme oem data req functionality. Function for 
+  the respective sme oem data req functionality. Function for
   handling the set IOCTL for the oem data req configuration
 
   \param - dev  - Pointer to the net device
@@ -177,10 +178,10 @@ int iw_get_oem_data_rsp(
 
 -----------------------------------------------------------------------------------------------*/
 int iw_set_oem_data_req(
-        struct net_device *dev, 
-        struct iw_request_info *info,
-        union iwreq_data *wrqu,
-        char *extra)
+    struct net_device *dev,
+    struct iw_request_info *info,
+    union iwreq_data *wrqu,
+    char *extra)
 {
     int rc = 0;
     eHalStatus status = eHAL_STATUS_SUCCESS;
@@ -194,9 +195,9 @@ int iw_set_oem_data_req(
 
     if ((WLAN_HDD_GET_CTX(pAdapter))->isLogpInProgress)
     {
-       VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
-                                  "%s:LOGP in Progress. Ignore!!!",__func__);
-       return -EBUSY;
+        VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
+                  "%s:LOGP in Progress. Ignore!!!",__func__);
+        return -EBUSY;
     }
 
     do
@@ -224,12 +225,12 @@ int iw_set_oem_data_req(
             break;
         }
 
-        status = sme_OemDataReq(WLAN_HDD_GET_HAL_CTX(pAdapter), 
-                                                pAdapter->sessionId,
-                                                &oemDataReqConfig, 
-                                                &oemDataReqID, 
-                                                &hdd_OemDataReqCallback, 
-                                                dev);
+        status = sme_OemDataReq(WLAN_HDD_GET_HAL_CTX(pAdapter),
+                                pAdapter->sessionId,
+                                &oemDataReqConfig,
+                                &oemDataReqID,
+                                &hdd_OemDataReqCallback,
+                                dev);
         if (status != eHAL_STATUS_SUCCESS)
         {
             VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
@@ -237,11 +238,12 @@ int iw_set_oem_data_req(
             rc = -EFAULT;
             break;
         }
-    
+
         pwextBuf->oemDataReqID = oemDataReqID;
         pwextBuf->oemDataReqInProgress = TRUE;
 
-    } while(0);
+    }
+    while(0);
 
     return rc;
 }

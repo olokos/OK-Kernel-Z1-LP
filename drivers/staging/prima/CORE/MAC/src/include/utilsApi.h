@@ -580,28 +580,33 @@ sirCopyMacAddr(tANI_U8 to[], tANI_U8 from[])
 {
 #if defined( _X86_ )
     tANI_U32 align = (0x3 & ((tANI_U32) to | (tANI_U32) from ));
-    if( align ==0){
-       *((tANI_U16 *) &(to[4])) = *((tANI_U16 *) &(from[4]));
-       *((tANI_U32 *) to) = *((tANI_U32 *) from);
-    }else if (align == 2){
+    if( align ==0)
+    {
+        *((tANI_U16 *) &(to[4])) = *((tANI_U16 *) &(from[4]));
+        *((tANI_U32 *) to) = *((tANI_U32 *) from);
+    }
+    else if (align == 2)
+    {
         *((tANI_U16 *) &to[4]) = *((tANI_U16 *) &from[4]);
         *((tANI_U16 *) &to[2]) = *((tANI_U16 *) &from[2]);
         *((tANI_U16 *) &to[0]) = *((tANI_U16 *) &from[0]);
-    }else{
-       to[5] = from[5];
-       to[4] = from[4];
-       to[3] = from[3];
-       to[2] = from[2];
-       to[1] = from[1];
-       to[0] = from[0];
+    }
+    else
+    {
+        to[5] = from[5];
+        to[4] = from[4];
+        to[3] = from[3];
+        to[2] = from[2];
+        to[1] = from[1];
+        to[0] = from[0];
     }
 #else
-       to[0] = from[0];
-       to[1] = from[1];
-       to[2] = from[2];
-       to[3] = from[3];
-       to[4] = from[4];
-       to[5] = from[5];
+    to[0] = from[0];
+    to[1] = from[1];
+    to[2] = from[2];
+    to[3] = from[3];
+    to[4] = from[4];
+    to[5] = from[5];
 #endif
 }
 
@@ -611,28 +616,33 @@ sirCompareMacAddr(tANI_U8 addr1[], tANI_U8 addr2[])
 #if defined( _X86_ )
     tANI_U32 align = (0x3 & ((tANI_U32) addr1 | (tANI_U32) addr2 ));
 
-    if( align ==0){
+    if( align ==0)
+    {
         return ((*((tANI_U16 *) &(addr1[4])) == *((tANI_U16 *) &(addr2[4])))&&
                 (*((tANI_U32 *) addr1) == *((tANI_U32 *) addr2)));
-    }else if(align == 2){
+    }
+    else if(align == 2)
+    {
         return ((*((tANI_U16 *) &addr1[4]) == *((tANI_U16 *) &addr2[4])) &&
-            (*((tANI_U16 *) &addr1[2]) == *((tANI_U16 *) &addr2[2])) &&
-            (*((tANI_U16 *) &addr1[0]) == *((tANI_U16 *) &addr2[0])));
-    }else{
+                (*((tANI_U16 *) &addr1[2]) == *((tANI_U16 *) &addr2[2])) &&
+                (*((tANI_U16 *) &addr1[0]) == *((tANI_U16 *) &addr2[0])));
+    }
+    else
+    {
         return ( (addr1[5]==addr2[5])&&
-            (addr1[4]==addr2[4])&&
-            (addr1[3]==addr2[3])&&
-            (addr1[2]==addr2[2])&&
-            (addr1[1]==addr2[1])&&
-            (addr1[0]==addr2[0]));
+                 (addr1[4]==addr2[4])&&
+                 (addr1[3]==addr2[3])&&
+                 (addr1[2]==addr2[2])&&
+                 (addr1[1]==addr2[1])&&
+                 (addr1[0]==addr2[0]));
     }
 #else
-         return ( (addr1[0]==addr2[0])&&
-            (addr1[1]==addr2[1])&&
-            (addr1[2]==addr2[2])&&
-            (addr1[3]==addr2[3])&&
-            (addr1[4]==addr2[4])&&
-            (addr1[5]==addr2[5]));
+    return ( (addr1[0]==addr2[0])&&
+             (addr1[1]==addr2[1])&&
+             (addr1[2]==addr2[2])&&
+             (addr1[3]==addr2[3])&&
+             (addr1[4]==addr2[4])&&
+             (addr1[5]==addr2[5]));
 #endif
 }
 
@@ -644,10 +654,10 @@ static inline tANI_U8 convertCW(tANI_U16 cw)
 {
     tANI_U8 val = 0;
     while (cw > 0)
-        {
-            val++;
-            cw >>= 1;
-        }
+    {
+        val++;
+        cw >>= 1;
+    }
     if (val > 15)
         return 0xF;
     return val;
@@ -667,8 +677,8 @@ static inline tANI_U8 convertCW(tANI_U16 cw)
 
 /// Parse the next IE in a message
 extern tSirRetStatus sirParseNextIE(tpAniSirGlobal, tANI_U8 *pPayload,
-                                     tANI_U16 payloadLength, tANI_S16 lastType,
-                                     tANI_U8 *pType, tANI_U8 *pLength);
+                                    tANI_U16 payloadLength, tANI_S16 lastType,
+                                    tANI_U8 *pType, tANI_U8 *pLength);
 
 /// Check if the given channel is 11b channel
 #define SIR_IS_CHANNEL_11B(chId)  (chId <= 14)
@@ -705,7 +715,7 @@ halRoundS32(tANI_S32 p)
     else
         k = p;
 
-        return(k);
+    return(k);
 }
 
 // New functions for endianess conversion

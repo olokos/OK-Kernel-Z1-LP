@@ -26,7 +26,7 @@
  */
 
 #if !defined( WLAN_HDD_MIB_h__ )
-#define WLAN_HDD_MIB_h__ 
+#define WLAN_HDD_MIB_h__
 
 
 #include <vos_types.h>
@@ -37,29 +37,29 @@ typedef enum
     eMib_dot11DesiredBssType_independent = 2,
     eMib_dot11DesiredBssType_infra_ap =3,
     eMib_dot11DesiredBssType_any = 4
-    
+
 } eMib_dot11DesiredBssType;
 
 
-/** This is the maximum number of BSSIDs supported in the 
-      dot11DesiredBssidList.  All the code operates off of 
+/** This is the maximum number of BSSIDs supported in the
+      dot11DesiredBssidList.  All the code operates off of
       this maximum BSSID list count.  */
 #define MIB_DOT11_DESIRED_BSSID_LIST_MAX_COUNT ( 1 )
 
 typedef struct
 {
     v_U32_t cEntries;
-    
-    v_MACADDR_t BSSIDs[ MIB_DOT11_DESIRED_BSSID_LIST_MAX_COUNT ];     
+
+    v_MACADDR_t BSSIDs[ MIB_DOT11_DESIRED_BSSID_LIST_MAX_COUNT ];
 
 }  sMib_dot11DesiredBssidList;
 
 
 
-/** This is the maximum number of SSIDs supported in the 
-     dot11DesiredSsidList.  All the code operates off of 
+/** This is the maximum number of SSIDs supported in the
+     dot11DesiredSsidList.  All the code operates off of
      this maximum SSID list count.  */
-     
+
 #define MIB_DOT11_DESIRED_SSID_LIST_MAX_COUNT ( 1 )
 
 #define MIB_DOT11_SSID_MAX_LENGTH ( 32 )
@@ -68,14 +68,14 @@ typedef struct
 {
     v_U32_t ssidLength;
     v_U8_t  ssid[ MIB_DOT11_SSID_MAX_LENGTH ];
-    
+
 } sDot11Ssid;
 
 typedef struct
 {
     v_U32_t cEntries;
-    
-    sDot11Ssid SSIDs[ MIB_DOT11_DESIRED_SSID_LIST_MAX_COUNT ];     
+
+    sDot11Ssid SSIDs[ MIB_DOT11_DESIRED_SSID_LIST_MAX_COUNT ];
 
 }  sMib_dot11DesiredSsidList;
 
@@ -87,14 +87,14 @@ typedef enum
     eMib_dot11AutoConfigEnabled_None = 0U,
     eMib_dot11AutoConfigEnabled_Phy  = 0x00000001U,
     eMib_dot11AutoConfigEnabled_Mac  = 0x00000002U
-    
+
 } eMib_dot11AutoConfigEnabled;
 
 
 
 #define MIB_DOT11_SUPPORTED_PHY_TYPES_MAX_COUNT ( 3 )
 
-typedef enum tagMib_dot11PhyType 
+typedef enum tagMib_dot11PhyType
 {
     eMib_dot11PhyType_11b,
     eMib_dot11PhyType_11a,
@@ -104,26 +104,26 @@ typedef enum tagMib_dot11PhyType
 
 typedef struct tagMib_dot11SupportedPhyTypes
 {
-    v_U32_t cEntries;    
-    eMib_dot11PhyType phyTypes[ MIB_DOT11_SUPPORTED_PHY_TYPES_MAX_COUNT ];     
+    v_U32_t cEntries;
+    eMib_dot11PhyType phyTypes[ MIB_DOT11_SUPPORTED_PHY_TYPES_MAX_COUNT ];
 }  sMib_dot11SupportedPhyTypes;
 
 
 typedef enum
 {
-   eMib_DevicePowerState_D0, 
-   eMib_DevicePowerState_D1, 
-   eMib_DevicePowerState_D2, 
-   eMib_DevicePowerState_D3
-   
-} eMib_DevicePowerState;    
-   
+    eMib_DevicePowerState_D0,
+    eMib_DevicePowerState_D1,
+    eMib_DevicePowerState_D2,
+    eMib_DevicePowerState_D3
+
+} eMib_DevicePowerState;
+
 
 typedef enum
 {
     eMib_dot11NICPowerState_OFF = VOS_FALSE,
     eMib_dot11NICPowerState_ON  = VOS_TRUE
-    
+
 } eMib_dot11NICPowerState;
 
 
@@ -131,26 +131,26 @@ typedef enum
 {
     eMib_dot11HardwarePHYState_OFF = VOS_FALSE,
     eMib_dot11HardwarePHYState_ON  = VOS_TRUE
-    
+
 } eMib_dot11HardwarePHYState;
 
 
 typedef enum
 {
-    eMib_dot11PowerSavingLevel_None, 
+    eMib_dot11PowerSavingLevel_None,
     eMib_dot11PowerSavingLevel_MaxPS,
     eMib_dot11PowerSavingLevel_FastPS,
     eMib_dot11PowerSavingLevel_MaximumLevel
-    
-} eMib_dot11PowerSavingLevel;    
+
+} eMib_dot11PowerSavingLevel;
 
 
 #define MIB_DOT11_MAC_EXCLUSION_LIST_MAX_COUNT 4
 typedef struct
 {
     v_U32_t cEntries;
-    
-    v_MACADDR_t macAddrs[ MIB_DOT11_MAC_EXCLUSION_LIST_MAX_COUNT ];     
+
+    v_MACADDR_t macAddrs[ MIB_DOT11_MAC_EXCLUSION_LIST_MAX_COUNT ];
 
 } sMib_dot11MacExcludeList;
 
@@ -161,7 +161,7 @@ typedef enum
     eMib_dot11ExemptionAction_Always,
     eMib_dot11ExemptionAction_OnKeyMapUnavailable
 
-}eMib_dot11ExemptAction;
+} eMib_dot11ExemptAction;
 
 typedef enum
 {
@@ -169,7 +169,7 @@ typedef enum
     eMib_dot11ExemptPacket_Multicast,
     eMib_dot11ExemptPacket_Both
 
-}eMib_dot11ExemptPacket;
+} eMib_dot11ExemptPacket;
 
 typedef struct
 {
@@ -177,7 +177,7 @@ typedef struct
     eMib_dot11ExemptAction exemptAction;
     eMib_dot11ExemptPacket exemptPacket;
 
-}sMib_dot11PrivacyExemption;
+} sMib_dot11PrivacyExemption;
 
 typedef struct
 {
@@ -223,6 +223,6 @@ typedef struct sHddMib_s
     v_BOOL_t                      HiddenNetworkEnabled;
 
 
-}sHddMib_t;
+} sHddMib_t;
 
 #endif

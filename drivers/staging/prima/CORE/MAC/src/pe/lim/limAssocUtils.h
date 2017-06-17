@@ -65,33 +65,33 @@ void            limRejectAssociation(tpAniSirGlobal , tSirMacAddr, tANI_U8,
 
 #ifdef WLAN_FEATURE_11AC
 tSirRetStatus limPopulatePeerRateSet(tpAniSirGlobal pMac,
-                                         tpSirSupportedRates pRates,
-                                         tANI_U8* pSupportedMCSSet,
-                                         tANI_U8 basicOnly,
-                                         tpPESession psessionEntry,
-                                         tDot11fIEVHTCaps *pVHTCaps);
+                                     tpSirSupportedRates pRates,
+                                     tANI_U8* pSupportedMCSSet,
+                                     tANI_U8 basicOnly,
+                                     tpPESession psessionEntry,
+                                     tDot11fIEVHTCaps *pVHTCaps);
 #else
 tSirRetStatus limPopulatePeerRateSet(tpAniSirGlobal pMac,
-                                                                tpSirSupportedRates pRates,
-                                                                tANI_U8* pSupportedMCSSet,
-                                                                tANI_U8 basicOnly,
-                                                                tpPESession psessionEntry);
+                                     tpSirSupportedRates pRates,
+                                     tANI_U8* pSupportedMCSSet,
+                                     tANI_U8 basicOnly,
+                                     tpPESession psessionEntry);
 #endif
 
 #ifdef WLAN_FEATURE_11AC
 tSirRetStatus limPopulateOwnRateSet(tpAniSirGlobal pMac,
-                                         tpSirSupportedRates pRates,
-                                         tANI_U8* pSupportedMCSSet,
-                                         tANI_U8 basicOnly,
-                                         tpPESession psessionEntry,
-                                         tDot11fIEVHTCaps *pVHTCaps);
+                                    tpSirSupportedRates pRates,
+                                    tANI_U8* pSupportedMCSSet,
+                                    tANI_U8 basicOnly,
+                                    tpPESession psessionEntry,
+                                    tDot11fIEVHTCaps *pVHTCaps);
 
 #else
 tSirRetStatus limPopulateOwnRateSet(tpAniSirGlobal pMac,
-                                                                tpSirSupportedRates pRates,
-                                                                tANI_U8* pSupportedMCSSet,
-                                                                tANI_U8 basicOnly,
-                                                                tpPESession psessionEntry);
+                                    tpSirSupportedRates pRates,
+                                    tANI_U8* pSupportedMCSSet,
+                                    tANI_U8 basicOnly,
+                                    tpPESession psessionEntry);
 #endif
 
 #ifdef WLAN_FEATURE_11AC
@@ -106,11 +106,11 @@ limPopulateMatchingRateSet(tpAniSirGlobal pMac,
                            tDot11fIEVHTCaps *pVHTCaps);
 #else
 tSirRetStatus   limPopulateMatchingRateSet(tpAniSirGlobal,
-                                           tpDphHashNode,
-                                           tSirMacRateSet *,
-                                           tSirMacRateSet *,
-                                           tANI_U8* pSupportedMCSSet,
-                                           tSirMacPropRateSet *, tpPESession);
+        tpDphHashNode,
+        tSirMacRateSet *,
+        tSirMacRateSet *,
+        tANI_U8* pSupportedMCSSet,
+        tSirMacPropRateSet *, tpPESession);
 
 
 #endif
@@ -119,7 +119,7 @@ tSirRetStatus   limDelBss(tpAniSirGlobal, tpDphHashNode, tANI_U16, tpPESession);
 tSirRetStatus   limDelSta(tpAniSirGlobal, tpDphHashNode, tANI_BOOLEAN, tpPESession);
 #ifdef WLAN_FEATURE_VOWIFI_11R
 tSirRetStatus   limAddFTStaSelf(tpAniSirGlobal pMac, tANI_U16 assocId,
-                    tpPESession psessionEntry);
+                                tpPESession psessionEntry);
 #endif /* WLAN_FEATURE_VOWIFI_11R */
 tSirRetStatus   limAddStaSelf(tpAniSirGlobal, tANI_U16, tANI_U8, tpPESession);
 tStaRateMode limGetStaRateMode(tANI_U8 dot11Mode);
@@ -127,26 +127,26 @@ tStaRateMode limGetStaRateMode(tANI_U8 dot11Mode);
 
 void            limTeardownInfraBss(tpAniSirGlobal,tpPESession);
 void            limRestorePreReassocState(tpAniSirGlobal,
-                                          tSirResultCodes,
-                                          tANI_U16,tpPESession); 
+        tSirResultCodes,
+        tANI_U16,tpPESession);
 void            limPostReassocFailure(tpAniSirGlobal,
                                       tSirResultCodes,
                                       tANI_U16,tpPESession);
 eAniBoolean     limIsReassocInProgress(tpAniSirGlobal,tpPESession);
 void
 limSendDelStaCnf(tpAniSirGlobal pMac, tSirMacAddr staDsAddr,
-       tANI_U16 staDsAssocId, tLimMlmStaContext mlmStaContext, tSirResultCodes statusCode,tpPESession psessionEntry);
+                 tANI_U16 staDsAssocId, tLimMlmStaContext mlmStaContext, tSirResultCodes statusCode,tpPESession psessionEntry);
 
 void            limHandleCnfWaitTimeout(tpAniSirGlobal pMac, tANI_U16 staId);
 void            limDeleteDphHashEntry(tpAniSirGlobal, tSirMacAddr, tANI_U16,tpPESession);
 void            limCheckAndAnnounceJoinSuccess(tpAniSirGlobal,
-                                               tSirProbeRespBeacon *,
-                                               tpSirMacMgmtHdr,tpPESession);
+        tSirProbeRespBeacon *,
+        tpSirMacMgmtHdr,tpPESession);
 void limUpdateReAssocGlobals(tpAniSirGlobal pMac,
-                                    tpSirAssocRsp pAssocRsp,tpPESession psessionEntry);
+                             tpSirAssocRsp pAssocRsp,tpPESession psessionEntry);
 
-void limUpdateAssocStaDatas(tpAniSirGlobal pMac, 
-                                tpDphHashNode pStaDs,tpSirAssocRsp pAssocRsp,tpPESession psessionEntry);
+void limUpdateAssocStaDatas(tpAniSirGlobal pMac,
+                            tpDphHashNode pStaDs,tpSirAssocRsp pAssocRsp,tpPESession psessionEntry);
 void
 limFillSupportedRatesInfo(
     tpAniSirGlobal          pMac,
@@ -155,7 +155,7 @@ limFillSupportedRatesInfo(
     tpPESession           psessionEntry);
 
 tSirRetStatus limStaSendAddBss(tpAniSirGlobal pMac, tpSirAssocRsp pAssocRsp,
-                                    tpSchBeaconStruct pBeaconStruct, tpSirBssDescription bssDescription, tANI_U8 updateEntry, tpPESession psessionEntry);
+                               tpSchBeaconStruct pBeaconStruct, tpSirBssDescription bssDescription, tANI_U8 updateEntry, tpPESession psessionEntry);
 tSirRetStatus limStaSendAddBssPreAssoc( tpAniSirGlobal pMac, tANI_U8 updateEntry, tpPESession psessionEntry);
 
 void limPrepareAndSendDelStaCnf(tpAniSirGlobal pMac, tpDphHashNode pStaDs, tSirResultCodes statusCode,tpPESession);
@@ -185,7 +185,7 @@ void limSendSmeUnprotectedMgmtFrameInd(tpAniSirGlobal pMac, tANI_U8 frameType,
 
 #if defined(FEATURE_WLAN_ESE) && defined(FEATURE_WLAN_ESE_UPLOAD)
 void limSendSmeTsmIEInd( tpAniSirGlobal pMac, tpPESession psessionEntry,
-                            tANI_U8 tid, tANI_U8 state, tANI_U16 measInterval);
+                         tANI_U8 tid, tANI_U8 state, tANI_U16 measInterval);
 #endif /* FEATURE_WLAN_ESE && FEATURE_WLAN_ESE_UPLOAD */
 
 

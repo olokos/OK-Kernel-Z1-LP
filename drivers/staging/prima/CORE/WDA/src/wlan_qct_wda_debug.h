@@ -49,19 +49,19 @@
 #ifdef HAL_DEBUG_LOG2
 #define WDALOG2(x0)  x0
 #else
- #define WDALOG2(x0)
+#define WDALOG2(x0)
 #endif
 
 #ifdef HAL_DEBUG_LOG3
 #define WDALOG3(x0)  x0
 #else
- #define WDALOG3(x0)
+#define WDALOG3(x0)
 #endif
 
 #ifdef HAL_DEBUG_LOG4
 #define WDALOG4(x0)  x0
 #else
- #define WDALOG4(x0)
+#define WDALOG4(x0)
 #endif
 
 #define STR(x)  x

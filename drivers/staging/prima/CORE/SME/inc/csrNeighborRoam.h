@@ -25,15 +25,15 @@
  * to the Linux Foundation.
  */
 
-/** ------------------------------------------------------------------------- * 
-    ------------------------------------------------------------------------- *  
+/** ------------------------------------------------------------------------- *
+    ------------------------------------------------------------------------- *
 
-  
+
     \file csrNeighborRoam.h
-  
-    Exports and types for the neighbor roaming algorithm which is sepcifically 
+
+    Exports and types for the neighbor roaming algorithm which is sepcifically
     designed for Android.
-   
+
 ========================================================================== */
 #ifndef CSR_NEIGHBOR_ROAM_H
 #define CSR_NEIGHBOR_ROAM_H
@@ -54,7 +54,7 @@ typedef enum
     eCSR_NEIGHBOR_ROAM_STATE_REPORT_SCAN,
     eCSR_NEIGHBOR_ROAM_STATE_PREAUTHENTICATING,
     eCSR_NEIGHBOR_ROAM_STATE_PREAUTH_DONE,
-#endif /* WLAN_FEATURE_VOWIFI_11R */    
+#endif /* WLAN_FEATURE_VOWIFI_11R */
     eNEIGHBOR_STATE_MAX
 } eCsrNeighborRoamState;
 
@@ -127,9 +127,9 @@ typedef struct sCsr11rAssocNeighborInfo
 } tCsr11rAssocNeighborInfo, *tpCsr11rAssocNeighborInfo;
 #endif /* WLAN_FEATURE_VOWIFI_11R */
 
-/* Below macros are used to increase the registered neighbor Lookup threshold with TL when 
- * we dont see any AP during back ground scanning. The values are incremented from neighborLookupThreshold 
- * from CFG, incremented by 5,10,15...50(LOOKUP_THRESHOLD_INCREMENT_MULTIPLIER_MAX * 
+/* Below macros are used to increase the registered neighbor Lookup threshold with TL when
+ * we dont see any AP during back ground scanning. The values are incremented from neighborLookupThreshold
+ * from CFG, incremented by 5,10,15...50(LOOKUP_THRESHOLD_INCREMENT_MULTIPLIER_MAX *
  * NEIGHBOR_LOOKUP_THRESHOLD_INCREMENT_CONSTANT) */
 #define NEIGHBOR_LOOKUP_THRESHOLD_INCREMENT_CONSTANT    5
 #define LOOKUP_THRESHOLD_INCREMENT_MULTIPLIER_MAX       4
@@ -177,7 +177,7 @@ typedef struct sCsrNeighborRoamControlInfo
     tDblLinkList                roamableAPList;    // List of current FT candidates
     tANI_U32                    csrSessionId;
     tCsrRoamProfile             csrNeighborRoamProfile;
-#ifdef WLAN_FEATURE_VOWIFI_11R    
+#ifdef WLAN_FEATURE_VOWIFI_11R
     tANI_BOOLEAN                is11rAssoc;
     tCsr11rAssocNeighborInfo    FTRoamInfo;
 #endif /* WLAN_FEATURE_VOWIFI_11R */
@@ -234,23 +234,23 @@ VOS_STATUS csrNeighborRoamSetLookupRssiThreshold(tpAniSirGlobal pMac, v_U8_t nei
 VOS_STATUS csrNeighborRoamUpdateFastRoamingEnabled(tpAniSirGlobal pMac, const v_BOOL_t fastRoamEnabled);
 VOS_STATUS csrNeighborRoamUpdateEseModeEnabled(tpAniSirGlobal pMac, const v_BOOL_t eseMode);
 VOS_STATUS csrNeighborRoamChannelsFilterByBand(
-                      tpAniSirGlobal pMac,
-                      tANI_U8*  pInputChannelList,
-                      tANI_U8   inputNumOfChannels,
-                      tANI_U8*  pOutputChannelList,
-                      tANI_U8*  pMergedOutputNumOfChannels,
-                      tSirRFBand band
-                      );
+    tpAniSirGlobal pMac,
+    tANI_U8*  pInputChannelList,
+    tANI_U8   inputNumOfChannels,
+    tANI_U8*  pOutputChannelList,
+    tANI_U8*  pMergedOutputNumOfChannels,
+    tSirRFBand band
+);
 VOS_STATUS csrNeighborRoamReassocIndCallback(v_PVOID_t pAdapter,
-                                             v_U8_t trafficStatus,
-                                             v_PVOID_t pUserCtxt,
-                                             v_S7_t   avgRssi);
+        v_U8_t trafficStatus,
+        v_PVOID_t pUserCtxt,
+        v_S7_t   avgRssi);
 VOS_STATUS csrNeighborRoamMergeChannelLists(tpAniSirGlobal pMac,
-                                            tANI_U8  *pInputChannelList,
-                                            tANI_U8  inputNumOfChannels,
-                                            tANI_U8  *pOutputChannelList,
-                                            tANI_U8  outputNumOfChannels,
-                                            tANI_U8  *pMergedOutputNumOfChannels);
+        tANI_U8  *pInputChannelList,
+        tANI_U8  inputNumOfChannels,
+        tANI_U8  *pOutputChannelList,
+        tANI_U8  outputNumOfChannels,
+        tANI_U8  *pMergedOutputNumOfChannels);
 
 #ifdef WLAN_FEATURE_ROAM_SCAN_OFFLOAD
 #define ROAM_SCAN_OFFLOAD_START                     1
@@ -286,8 +286,8 @@ eHalStatus csrNeighborRoamStartLfrScan(tpAniSirGlobal pMac, tANI_U8 OffloadCmdSt
 
 #if defined(FEATURE_WLAN_ESE) && defined(FEATURE_WLAN_ESE_UPLOAD)
 VOS_STATUS csrSetCCKMIe(tpAniSirGlobal pMac, const tANI_U8 sessionId,
-                            const tANI_U8 *pCckmIe,
-                            const tANI_U8 ccKmIeLen);
+                        const tANI_U8 *pCckmIe,
+                        const tANI_U8 ccKmIeLen);
 VOS_STATUS csrRoamReadTSF(tpAniSirGlobal pMac, tANI_U8 *pTimestamp);
 
 

@@ -39,7 +39,8 @@
 
 #define NO_SESSION 0xFF
 
-typedef enum {
+typedef enum
+{
     TRACE_CODE_TL_STA_STATE,
     TRACE_CODE_TL_EAPOL_PKT_PENDING,
     TRACE_CODE_TL_GET_FRAMES_EAPOL,
@@ -55,7 +56,7 @@ typedef enum {
     TRACE_CODE_TL_FORWARD_CACHED_FRAMES,
     TRACE_CODE_TL_FLUSH_CACHED_FRAMES,
     TRACE_CODE_TL_CACHE_FRAME,
-}WLANTL_TraceCode;
+} WLANTL_TraceCode;
 
 void tlTraceDump(void *pMac, tpvosTraceRecord pRecord, tANI_U16 recIndex);
 void tlTraceInit(void);

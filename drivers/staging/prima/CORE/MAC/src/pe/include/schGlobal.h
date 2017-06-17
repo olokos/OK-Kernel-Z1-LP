@@ -81,7 +81,8 @@
 
 #define SCH_MAX_PROBE_RESP_SIZE 512
 
-struct schMisc {
+struct schMisc
+{
 
     tANI_U8 *gSchProbeRspTemplate;
 

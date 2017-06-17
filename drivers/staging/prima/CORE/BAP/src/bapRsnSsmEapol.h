@@ -26,7 +26,7 @@
  */
 
 /*
- * File:        $Header: //depot/software/projects/feature_branches/gen5_phase1/os/linux/classic/ap/apps/include/aniSsmEapol.h#1 $ 
+ * File:        $Header: //depot/software/projects/feature_branches/gen5_phase1/os/linux/classic/ap/apps/include/aniSsmEapol.h#1 $
  * Contains declarations of various utilities for EAPoL frame
  * parsing and creation.
  * range.
@@ -64,7 +64,7 @@
 #define SNAP_HEADER_SIZE   8
 
 #define ANI_EAPOL_KEY_DESC_TYPE_LEGACY_RC4   1
-// JEZ20041012 This needs to be fixed.  This needs to support BOTH 
+// JEZ20041012 This needs to be fixed.  This needs to support BOTH
 // the older WPA Key Descriptor type of 254 AS WELL AS the newer
 // Key Descriptor type of 2
 #define ANI_EAPOL_KEY_DESC_TYPE_RSN        254
@@ -90,7 +90,8 @@
 #define ANI_SSM_IE_RSN_GROUP_KEY_DATA_ENCAPS_ID 1
 #define ANI_SSM_GROUP_KEY_KDE_TX_BIT            0x04
 
-typedef struct sAniEapolLegacyRc4KeyDesc {
+typedef struct sAniEapolLegacyRc4KeyDesc
+{
     v_U16_t keyLen;
     v_U8_t  replayCounter[ANI_EAPOL_KEY_RC4_REPLAY_CTR_SIZE];
     v_U8_t  keyIv[ANI_EAPOL_KEY_RC4_IV_SIZE];
@@ -100,7 +101,8 @@ typedef struct sAniEapolLegacyRc4KeyDesc {
     v_U8_t  *key;
 } tAniEapolLegacyRc4KeyDesc;
 
-typedef struct sAniRsnKeyInfo {
+typedef struct sAniRsnKeyInfo
+{
     v_U32_t keyDescVers;
     tANI_BOOLEAN unicastFlag; // Pair-wise key
     v_U16_t keyId;
@@ -113,7 +115,8 @@ typedef struct sAniRsnKeyInfo {
     tANI_BOOLEAN encKeyDataFlag; // RSN only (Is 0 in WPA)
 } tAniRsnKeyInfo;
 
-typedef struct sAniEapolRsnKeyDesc {
+typedef struct sAniEapolRsnKeyDesc
+{
     tAniRsnKeyInfo info;
     v_U16_t keyLen;
     v_U8_t  replayCounter[ANI_EAPOL_KEY_RSN_REPLAY_CTR_SIZE];
@@ -174,8 +177,8 @@ aniEapolWriteStart(tAniPacket *packet,
  * @return ANI_OK if the operation succeeds
  */
 int
-aniEapolWriteEapPacket(tAniPacket *eapPacket, 
-                       tAniMacAddr dstMac, 
+aniEapolWriteEapPacket(tAniPacket *eapPacket,
+                       tAniMacAddr dstMac,
                        tAniMacAddr srcMac);
 
 /**
@@ -183,7 +186,7 @@ aniEapolWriteEapPacket(tAniPacket *eapPacket,
  *
  * FUNCTION:
  * Parses an EAPoL frame to the first level of headers (no EAP
- * headers are parsed). 
+ * headers are parsed).
  *
  * NOTE: This is a non-destructive read, that is the
  * headers are not stripped off the packet. However, any additional
@@ -201,10 +204,10 @@ aniEapolWriteEapPacket(tAniPacket *eapPacket,
  * @return the non-negative length of the EAPOL payload if the operation
  * succeeds
  */
-int 
+int
 aniEapolParse(tAniPacket *packet,
-              v_U8_t **dstMac, 
-              v_U8_t **srcMac, 
+              v_U8_t **dstMac,
+              v_U8_t **srcMac,
               v_U8_t **type);
 
 /**
@@ -234,8 +237,8 @@ aniEapolParse(tAniPacket *packet,
 int
 aniEapolWriteKey(v_U32_t cryptHandle,
                  tAniPacket *packet,
-                 tAniMacAddr dstMac, 
-                 tAniMacAddr srcMac, 
+                 tAniMacAddr dstMac,
+                 tAniMacAddr srcMac,
                  int descType,
                  void *keyDescData,
                  v_U8_t *micKey,

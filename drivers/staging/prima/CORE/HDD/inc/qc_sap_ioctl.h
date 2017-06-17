@@ -49,11 +49,12 @@ typedef struct sSSID
 
 typedef struct sSSIDInfo
 {
-   tSSID     ssid;   
-   u_int8_t  ssidHidden;
-}tSSIDInfo;
+    tSSID     ssid;
+    u_int8_t  ssidHidden;
+} tSSIDInfo;
 
-typedef enum {
+typedef enum
+{
     eQC_DOT11_MODE_ALL = 0,
     eQC_DOT11_MODE_ABG = 0x0001,    //11a/b/g only, no HT, no proprietary
     eQC_DOT11_MODE_11A = 0x0002,
@@ -74,18 +75,21 @@ typedef enum {
 
 typedef u_int8_t qcmacaddr[QCSAP_ADDR_LEN];
 
-struct qc_mac_acl_entry {
+struct qc_mac_acl_entry
+{
     qcmacaddr addr;
     int vlan_id;
 };
 
-typedef enum {
+typedef enum
+{
     eQC_AUTH_TYPE_OPEN_SYSTEM,
     eQC_AUTH_TYPE_SHARED_KEY,
     eQC_AUTH_TYPE_AUTO_SWITCH
-} eQcAuthType; 
+} eQcAuthType;
 
-typedef enum {
+typedef enum
+{
     eQC_WPS_BEACON_IE,
     eQC_WPS_PROBE_RSP_IE,
     eQC_WPS_ASSOC_RSP_IE
@@ -95,7 +99,8 @@ typedef enum {
 /*
  * Retrieve the WPA/RSN information element for an associated station.
  */
-struct sQcSapreq_wpaie {
+struct sQcSapreq_wpaie
+{
     u_int8_t    wpa_ie[QCSAP_MAX_OPT_IE];
     u_int8_t    wpa_macaddr[QCSAP_ADDR_LEN];
 };
@@ -103,7 +108,8 @@ struct sQcSapreq_wpaie {
 /*
  * Retrieve the WSC information element for an associated station.
  */
-struct sQcSapreq_wscie {
+struct sQcSapreq_wscie
+{
     u_int8_t    wsc_macaddr[QCSAP_ADDR_LEN];
     u_int8_t    wsc_ie[QCSAP_MAX_WSC_IE];
 };
@@ -112,10 +118,11 @@ struct sQcSapreq_wscie {
 /*
  * Retrieve the WPS PBC Probe Request IEs.
  */
-typedef struct sQcSapreq_WPSPBCProbeReqIES {
+typedef struct sQcSapreq_WPSPBCProbeReqIES
+{
     u_int8_t    macaddr[QCSAP_ADDR_LEN];
     u_int16_t   probeReqIELen;
-    u_int8_t    probeReqIE[512]; 
+    u_int8_t    probeReqIE[512];
 } sQcSapreq_WPSPBCProbeReqIES_t ;
 
 /*
@@ -124,9 +131,9 @@ typedef struct sQcSapreq_WPSPBCProbeReqIES {
 
 typedef struct
 {
-    v_U8_t            num_channels;    
+    v_U8_t            num_channels;
     v_U8_t            channels[WNI_CFG_VALID_CHANNEL_LIST_LEN];
-}tChannelListInfo, *tpChannelListInfo;
+} tChannelListInfo, *tpChannelListInfo;
 
 
 #ifdef __linux__
@@ -165,7 +172,7 @@ typedef struct
 
 #define QCSAP_IOCTL_MODIFY_ACL          (SIOCIWFIRSTPRIV+18)
 #define QCSAP_IOCTL_GET_CHANNEL_LIST    (SIOCIWFIRSTPRIV+19)
-#define QCSAP_IOCTL_SET_TX_POWER        (SIOCIWFIRSTPRIV+20) 
+#define QCSAP_IOCTL_SET_TX_POWER        (SIOCIWFIRSTPRIV+20)
 #define QCSAP_IOCTL_GET_STA_INFO        (SIOCIWFIRSTPRIV+21)
 #define QCSAP_IOCTL_SET_MAX_TX_POWER    (SIOCIWFIRSTPRIV+22)
 #define QCSAP_IOCTL_DATAPATH_SNAP_SHOT  (SIOCIWFIRSTPRIV+23)
@@ -175,7 +182,8 @@ typedef struct
 #define MAX_VAR_ARGS         7
 #define QCSAP_IOCTL_PRIV_GET_SOFTAP_LINK_SPEED (SIOCIWFIRSTPRIV + 31)
 
-enum { 
+enum
+{
     QCSAP_PARAM_MAX_ASSOC = 1,
     QCSAP_PARAM_GET_WLAN_DBG = 4,
     QCSAP_PARAM_CLR_ACL = 6,
@@ -186,7 +194,7 @@ enum {
     QCSAP_PARAM_SET_AUTO_CHANNEL = 11,
 };
 
-int iw_softap_get_channel_list(struct net_device *dev, 
+int iw_softap_get_channel_list(struct net_device *dev,
                                struct iw_request_info *info,
                                union iwreq_data *wrqu, char *extra);
 

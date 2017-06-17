@@ -80,15 +80,15 @@
  * Global Data Definitions
  * -------------------------------------------------------------------------*/
 extern struct crypto_ahash *wcnss_wlan_crypto_alloc_ahash(const char *alg_name,
-                                                          unsigned int type,
-                                                          unsigned int mask);
+        unsigned int type,
+        unsigned int mask);
 
 extern int wcnss_wlan_crypto_ahash_digest(struct ahash_request *req);
 extern void wcnss_wlan_crypto_free_ahash(struct crypto_ahash *tfm);
 extern int wcnss_wlan_crypto_ahash_setkey(struct crypto_ahash *tfm, const u8 *key,
-                                          unsigned int keylen);
+        unsigned int keylen);
 extern struct crypto_ablkcipher *wcnss_wlan_crypto_alloc_ablkcipher(const char *alg_name,
-                                                                    u32 type, u32 mask);
+        u32 type, u32 mask);
 extern void wcnss_wlan_ablkcipher_request_free(struct ablkcipher_request *req);
 extern void wcnss_wlan_crypto_free_ablkcipher(struct crypto_ablkcipher *tfm);
 
@@ -169,25 +169,25 @@ VOS_STATUS vos_crypto_deinit( v_U32_t hCryptProv )
   --------------------------------------------------------------------------*/
 VOS_STATUS vos_rand_get_bytes( v_U32_t cryptHandle, v_U8_t *pbBuf, v_U32_t numBytes )
 {
-   VOS_STATUS uResult = VOS_STATUS_E_FAILURE;
-   //v_UINT_t uCode;
+    VOS_STATUS uResult = VOS_STATUS_E_FAILURE;
+    //v_UINT_t uCode;
 //   HCRYPTPROV hCryptProv = (HCRYPTPROV) cryptHandle;
 
-   //check for invalid pointer
-   if ( NULL == pbBuf )
-   {
-      uResult = VOS_STATUS_E_FAULT;
-      return ( uResult );
-   }
+    //check for invalid pointer
+    if ( NULL == pbBuf )
+    {
+        uResult = VOS_STATUS_E_FAULT;
+        return ( uResult );
+    }
 
 //#if 0
-   // get_random_bytes() is a void procedure
-   get_random_bytes( pbBuf, numBytes);
-   // "Random sequence generated."
-   uResult = VOS_STATUS_SUCCESS;
+    // get_random_bytes() is a void procedure
+    get_random_bytes( pbBuf, numBytes);
+    // "Random sequence generated."
+    uResult = VOS_STATUS_SUCCESS;
 //#endif
 
-   return ( uResult );
+    return ( uResult );
 }
 
 
@@ -214,7 +214,8 @@ VOS_STATUS vos_rand_get_bytes( v_U32_t cryptHandle, v_U8_t *pbBuf, v_U32_t numBy
  *
  */
 
-struct hmac_sha1_result {
+struct hmac_sha1_result
+{
     struct completion completion;
     int err;
 };
@@ -247,14 +248,16 @@ int hmac_sha1(v_U8_t *key, v_U8_t ksize, char *plaintext, v_U8_t psize,
 
     tfm = wcnss_wlan_crypto_alloc_ahash("hmac(sha1)", CRYPTO_ALG_TYPE_AHASH,
                                         CRYPTO_ALG_TYPE_AHASH_MASK);
-    if (IS_ERR(tfm)) {
+    if (IS_ERR(tfm))
+    {
         VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR, "crypto_alloc_ahash failed");
         ret = PTR_ERR(tfm);
         goto err_tfm;
     }
 
     req = ahash_request_alloc(tfm, GFP_KERNEL);
-    if (!req) {
+    if (!req)
+    {
         VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR, "failed to allocate request for hmac(sha1)");
         ret = -ENOMEM;
         goto err_req;
@@ -264,7 +267,8 @@ int hmac_sha1(v_U8_t *key, v_U8_t ksize, char *plaintext, v_U8_t psize,
                                hmac_sha1_complete, &tresult);
 
     hash_buff = kzalloc(psize, GFP_KERNEL);
-    if (!hash_buff) {
+    if (!hash_buff)
+    {
         VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR, "failed to kzalloc hash_buff");
         ret = -ENOMEM;
         goto err_hash_buf;
@@ -274,11 +278,13 @@ int hmac_sha1(v_U8_t *key, v_U8_t ksize, char *plaintext, v_U8_t psize,
     vos_mem_copy(hash_buff, plaintext, psize);
     sg_init_one(&sg, hash_buff, psize);
 
-    if (ksize) {
+    if (ksize)
+    {
         crypto_ahash_clear_flags(tfm, ~0);
         ret = wcnss_wlan_crypto_ahash_setkey(tfm, key, ksize);
 
-        if (ret) {
+        if (ret)
+        {
             VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR, "crypto_ahash_setkey failed");
             goto err_setkey;
         }
@@ -289,7 +295,8 @@ int hmac_sha1(v_U8_t *key, v_U8_t ksize, char *plaintext, v_U8_t psize,
 
     VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR, "ret 0x%x", ret);
 
-    switch (ret) {
+    switch (ret)
+    {
     case 0:
         for (i=0; i< outlen; i++)
             output[i] = hash_result[i];
@@ -297,12 +304,15 @@ int hmac_sha1(v_U8_t *key, v_U8_t ksize, char *plaintext, v_U8_t psize,
     case -EINPROGRESS:
     case -EBUSY:
         ret = wait_for_completion_interruptible(&tresult.completion);
-        if (!ret && !tresult.err) {
+        if (!ret && !tresult.err)
+        {
             for (i=0; i< outlen; i++)
                 output[i] = hash_result[i];
             INIT_COMPLETION(tresult.completion);
             break;
-        } else {
+        }
+        else
+        {
             VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR, "wait_for_completion_interruptible failed");
             if (!ret)
                 ret = tresult.err;
@@ -324,24 +334,25 @@ err_tfm:
 }
 
 VOS_STATUS vos_sha1_hmac_str(v_U32_t cryptHandle, /* Handle */
-           v_U8_t *pText, /* pointer to data stream */
-           v_U32_t textLen, /* length of data stream */
-           v_U8_t *pKey, /* pointer to authentication key */
-           v_U32_t keyLen, /* length of authentication key */
-           v_U8_t digest[VOS_DIGEST_SHA1_SIZE])/* caller digest to be filled in */
+                             v_U8_t *pText, /* pointer to data stream */
+                             v_U32_t textLen, /* length of data stream */
+                             v_U8_t *pKey, /* pointer to authentication key */
+                             v_U32_t keyLen, /* length of authentication key */
+                             v_U8_t digest[VOS_DIGEST_SHA1_SIZE])/* caller digest to be filled in */
 {
     int ret = 0;
 
     ret = hmac_sha1(
-            pKey,                   //v_U8_t *key,
-            (v_U8_t) keyLen,        //v_U8_t ksize,
-            (char *)pText,          //char *plaintext,
-            (v_U8_t) textLen,       //v_U8_t psize,
-            digest,                 //v_U8_t *output,
-            VOS_DIGEST_SHA1_SIZE    //v_U8_t outlen
-            );
+              pKey,                   //v_U8_t *key,
+              (v_U8_t) keyLen,        //v_U8_t ksize,
+              (char *)pText,          //char *plaintext,
+              (v_U8_t) textLen,       //v_U8_t psize,
+              digest,                 //v_U8_t *output,
+              VOS_DIGEST_SHA1_SIZE    //v_U8_t outlen
+          );
 
-    if (ret != 0) {
+    if (ret != 0)
+    {
         VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR,"hmac_sha1() call failed");
         return VOS_STATUS_E_FAULT;
     }
@@ -371,7 +382,8 @@ VOS_STATUS vos_sha1_hmac_str(v_U32_t cryptHandle, /* Handle */
  * @return VOS_STATUS_SUCCSS if the operation succeeds
  *
  */
-struct hmac_md5_result {
+struct hmac_md5_result
+{
     struct completion completion;
     int err;
 };
@@ -380,13 +392,13 @@ static void hmac_md5_complete(struct crypto_async_request *req, int err)
 {
     struct hmac_md5_result *r = req->data;
     if (err == -EINPROGRESS)
-            return;
+        return;
     r->err = err;
     complete(&r->completion);
 }
 
 int hmac_md5(v_U8_t *key, v_U8_t ksize, char *plaintext, v_U8_t psize,
-                v_U8_t *output, v_U8_t outlen)
+             v_U8_t *output, v_U8_t outlen)
 {
     int ret = 0;
     struct crypto_ahash *tfm;
@@ -404,24 +416,27 @@ int hmac_md5(v_U8_t *key, v_U8_t ksize, char *plaintext, v_U8_t psize,
 
     tfm = wcnss_wlan_crypto_alloc_ahash("hmac(md5)", CRYPTO_ALG_TYPE_AHASH,
                                         CRYPTO_ALG_TYPE_AHASH_MASK);
-    if (IS_ERR(tfm)) {
+    if (IS_ERR(tfm))
+    {
         VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR, "crypto_alloc_ahash failed");
-                ret = PTR_ERR(tfm);
-                goto err_tfm;
+        ret = PTR_ERR(tfm);
+        goto err_tfm;
     }
 
     req = ahash_request_alloc(tfm, GFP_KERNEL);
-    if (!req) {
+    if (!req)
+    {
         VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR, "failed to allocate request for hmac(md5)");
         ret = -ENOMEM;
         goto err_req;
     }
 
     ahash_request_set_callback(req, CRYPTO_TFM_REQ_MAY_BACKLOG,
-                                        hmac_md5_complete, &tresult);
+                               hmac_md5_complete, &tresult);
 
     hash_buff = kzalloc(psize, GFP_KERNEL);
-    if (!hash_buff) {
+    if (!hash_buff)
+    {
         VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR, "failed to kzalloc hash_buff");
         ret = -ENOMEM;
         goto err_hash_buf;
@@ -431,11 +446,13 @@ int hmac_md5(v_U8_t *key, v_U8_t ksize, char *plaintext, v_U8_t psize,
     vos_mem_copy(hash_buff, plaintext, psize);
     sg_init_one(&sg, hash_buff, psize);
 
-    if (ksize) {
+    if (ksize)
+    {
         crypto_ahash_clear_flags(tfm, ~0);
         ret = wcnss_wlan_crypto_ahash_setkey(tfm, key, ksize);
 
-        if (ret) {
+        if (ret)
+        {
             VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR, "crypto_ahash_setkey failed");
             goto err_setkey;
         }
@@ -446,59 +463,64 @@ int hmac_md5(v_U8_t *key, v_U8_t ksize, char *plaintext, v_U8_t psize,
 
     VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR, "ret 0x%x", ret);
 
-    switch (ret) {
-        case 0:
+    switch (ret)
+    {
+    case 0:
+        for (i=0; i< outlen; i++)
+            output[i] = hash_result[i];
+        break;
+    case -EINPROGRESS:
+    case -EBUSY:
+        ret = wait_for_completion_interruptible(&tresult.completion);
+        if (!ret && !tresult.err)
+        {
             for (i=0; i< outlen; i++)
-                    output[i] = hash_result[i];
+                output[i] = hash_result[i];
+            INIT_COMPLETION(tresult.completion);
             break;
-        case -EINPROGRESS:
-        case -EBUSY:
-             ret = wait_for_completion_interruptible(&tresult.completion);
-             if (!ret && !tresult.err) {
-                 for (i=0; i< outlen; i++)
-                     output[i] = hash_result[i];
-                 INIT_COMPLETION(tresult.completion);
-                 break;
-             } else {
-                 VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR, "wait_for_completion_interruptible failed");
-                 if (!ret)
-                     ret = tresult.err;
-                 goto out;
-             }
-        default:
-              goto out;
         }
+        else
+        {
+            VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR, "wait_for_completion_interruptible failed");
+            if (!ret)
+                ret = tresult.err;
+            goto out;
+        }
+    default:
+        goto out;
+    }
 
 out:
 err_setkey:
-        kfree(hash_buff);
+    kfree(hash_buff);
 err_hash_buf:
-        ahash_request_free(req);
+    ahash_request_free(req);
 err_req:
-        wcnss_wlan_crypto_free_ahash(tfm);
+    wcnss_wlan_crypto_free_ahash(tfm);
 err_tfm:
-        return ret;
+    return ret;
 }
 
 VOS_STATUS vos_md5_hmac_str(v_U32_t cryptHandle, /* Handle */
-           v_U8_t *pText, /* pointer to data stream */
-           v_U32_t textLen, /* length of data stream */
-           v_U8_t *pKey, /* pointer to authentication key */
-           v_U32_t keyLen, /* length of authentication key */
-           v_U8_t digest[VOS_DIGEST_MD5_SIZE])/* caller digest to be filled in */
+                            v_U8_t *pText, /* pointer to data stream */
+                            v_U32_t textLen, /* length of data stream */
+                            v_U8_t *pKey, /* pointer to authentication key */
+                            v_U32_t keyLen, /* length of authentication key */
+                            v_U8_t digest[VOS_DIGEST_MD5_SIZE])/* caller digest to be filled in */
 {
     int ret = 0;
 
     ret = hmac_md5(
-            pKey,                   //v_U8_t *key,
-            (v_U8_t) keyLen,        //v_U8_t ksize,
-            (char *)pText,          //char *plaintext,
-            (v_U8_t) textLen,       //v_U8_t psize,
-            digest,                 //v_U8_t *output,
-            VOS_DIGEST_MD5_SIZE     //v_U8_t outlen
-            );
+              pKey,                   //v_U8_t *key,
+              (v_U8_t) keyLen,        //v_U8_t ksize,
+              (char *)pText,          //char *plaintext,
+              (v_U8_t) textLen,       //v_U8_t psize,
+              digest,                 //v_U8_t *output,
+              VOS_DIGEST_MD5_SIZE     //v_U8_t outlen
+          );
 
-    if (ret != 0) {
+    if (ret != 0)
+    {
         VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR,"hmac_md5() call failed");
         return VOS_STATUS_E_FAULT;
     }
@@ -507,7 +529,8 @@ VOS_STATUS vos_md5_hmac_str(v_U32_t cryptHandle, /* Handle */
 }
 
 
-struct ecb_aes_result {
+struct ecb_aes_result
+{
     struct completion completion;
     int err;
 };
@@ -570,14 +593,16 @@ VOS_STATUS vos_encrypt_AES(v_U32_t cryptHandle, /* Handle */
     init_completion(&result.completion);
 
     tfm =  wcnss_wlan_crypto_alloc_ablkcipher( "cbc(aes)", 0, 0);
-    if (IS_ERR(tfm)) {
+    if (IS_ERR(tfm))
+    {
         VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR, "crypto_alloc_ablkcipher failed");
         ret = PTR_ERR(tfm);
         goto err_tfm;
     }
 
     req = ablkcipher_request_alloc(tfm, GFP_KERNEL);
-    if (!req) {
+    if (!req)
+    {
         VOS_TRACE( VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "Failed to allocate request for cbc(aes)");
         ret = -ENOMEM;
         goto err_req;
@@ -590,7 +615,8 @@ VOS_STATUS vos_encrypt_AES(v_U32_t cryptHandle, /* Handle */
     crypto_ablkcipher_clear_flags(tfm, ~0);
 
     ret = crypto_ablkcipher_setkey(tfm, pKey, KEY_SIZE_AES_128);
-    if (ret) {
+    if (ret)
+    {
         VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR, "crypto_cipher_setkey failed");
         goto err_setkey;
     }
@@ -614,10 +640,11 @@ err_req:
     wcnss_wlan_crypto_free_ablkcipher(tfm);
 err_tfm:
     //return ret;
-    if (ret != 0) {
+    if (ret != 0)
+    {
         VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR,"%s() call failed", __func__);
         return VOS_STATUS_E_FAULT;
-   }
+    }
 
     return VOS_STATUS_SUCCESS;
 }
@@ -666,14 +693,16 @@ VOS_STATUS vos_decrypt_AES(v_U32_t cryptHandle, /* Handle */
     init_completion(&result.completion);
 
     tfm =  wcnss_wlan_crypto_alloc_ablkcipher( "cbc(aes)", 0, 0);
-    if (IS_ERR(tfm)) {
+    if (IS_ERR(tfm))
+    {
         VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR, "crypto_alloc_ablkcipher failed");
         ret = PTR_ERR(tfm);
         goto err_tfm;
     }
 
     req = ablkcipher_request_alloc(tfm, GFP_KERNEL);
-    if (!req) {
+    if (!req)
+    {
         VOS_TRACE( VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "Failed to allocate request for cbc(aes)");
         ret = -ENOMEM;
         goto err_req;
@@ -686,10 +715,11 @@ VOS_STATUS vos_decrypt_AES(v_U32_t cryptHandle, /* Handle */
     crypto_ablkcipher_clear_flags(tfm, ~0);
 
     ret = crypto_ablkcipher_setkey(tfm, pKey, KEY_SIZE_AES_128);
-    if (ret) {
+    if (ret)
+    {
         VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR, "crypto_cipher_setkey failed");
         goto err_setkey;
-       }
+    }
 
     memset(iv, 0, IV_SIZE_AES_128);
 
@@ -710,10 +740,11 @@ err_req:
     wcnss_wlan_crypto_free_ablkcipher(tfm);
 err_tfm:
     //return ret;
-    if (ret != 0) {
+    if (ret != 0)
+    {
         VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR,"%s() call failed", __func__);
         return VOS_STATUS_E_FAULT;
-      }
+    }
 
     return VOS_STATUS_SUCCESS;
 }
@@ -777,7 +808,7 @@ v_BOOL_t vos_skb_is_eapol(struct sk_buff *skb,
     if (unlikely(NULL == skb))
     {
         VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
-                    "vos_skb_is_eapol [%d]: NULL skb", __LINE__);
+                  "vos_skb_is_eapol [%d]: NULL skb", __LINE__);
         return VOS_STATUS_E_INVAL;
         VOS_ASSERT(0);
     }
@@ -792,7 +823,7 @@ v_BOOL_t vos_skb_is_eapol(struct sk_buff *skb,
     //check for the Qos Data, if Offset length is more 12.
     //it means it will 802.11 header skb
     if((pktOffset > VOS_ETHERTYPE_802_1_X_FRAME_OFFSET_IN_802_3_PKT)
-       && (skb->data[0] == VOS_NON_QOS_DATA_VALUE))
+            && (skb->data[0] == VOS_NON_QOS_DATA_VALUE))
     {
         // reduced 2 byte of Qos ctrl field in DOT11 header
         pktOffset = pktOffset - 2;
@@ -800,7 +831,7 @@ v_BOOL_t vos_skb_is_eapol(struct sk_buff *skb,
     pBuffer = &skb->data[pktOffset];
     if (pBuffer && vos_be16_to_cpu( *(unsigned short*)pBuffer ) == VOS_ETHERTYPE_802_1_X )
     {
-      fEAPOL = VOS_TRUE;
+        fEAPOL = VOS_TRUE;
     }
     VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO, "exit vos_skb_is_eapol fEAPOL = %d", fEAPOL);
     return fEAPOL;
@@ -810,309 +841,309 @@ void vos_record_roam_event(enum e_roaming_event roam_event, void *pBuff, v_ULONG
 {
     switch(roam_event)
     {
-        case e_HDD_DISABLE_TX_QUEUE:
-             gRoamDelayMetaInfo.hdd_monitor_tx = MONITOR_STOP;
-             gRoamDelayMetaInfo.disable_tx_queues_time = vos_timer_get_system_time();
-             break;
-        case e_SME_PREAUTH_REASSOC_START:
-             gRoamDelayMetaInfo.preauth_reassoc_start_time = vos_timer_get_system_time();
-             break;
-        case e_SME_PREAUTH_CALLBACK_HIT:
-             gRoamDelayMetaInfo.preauth_cb_time = vos_timer_get_system_time();
-             break;
-        case e_SME_ISSUE_REASSOC_REQ:
-             gRoamDelayMetaInfo.issue_reassoc_req_time = vos_timer_get_system_time();
-             //HACK buff len will carry the AuthType
-             gRoamDelayMetaInfo.hdd_auth_type = buff_len;
-             break;
-        case e_LIM_SEND_REASSOC_REQ:
-             gRoamDelayMetaInfo.send_reassoc_req_time = vos_timer_get_system_time();
-             //we can enable the rx eapol monitoring ASAP we send the REASSOC REQ Because
-             //there is very less delay in between REASSOC RSP and M1 Sent by the AP
-             gRoamDelayMetaInfo.hdd_monitor_rx = MONITOR_START;
-             gRoamDelayMetaInfo.dxe_monitor_rx = MONITOR_START;
-             break;
-        case e_CACHE_ROAM_PEER_MAC:
-             vos_mem_copy(&gRoamDelayMetaInfo.peer_mac_addr, pBuff, buff_len);
-             break;
-        case e_HDD_SEND_REASSOC_RSP:
-             gRoamDelayMetaInfo.hdd_sendassoc_rsp_time = vos_timer_get_system_time();
-             break;
-        case e_SME_DISASSOC_ISSUE:
-             gRoamDelayMetaInfo.disassoc_issue_time = vos_timer_get_system_time();
-             break;
-        case e_SME_DISASSOC_COMPLETE:
-             gRoamDelayMetaInfo.disassoc_comp_time = vos_timer_get_system_time();
-             break;
-        case e_LIM_ADD_BS_REQ:
-             gRoamDelayMetaInfo.lim_add_bss_req_time = vos_timer_get_system_time();
-             break;
-        case e_LIM_ADD_BS_RSP:
-             gRoamDelayMetaInfo.lim_add_bss_rsp_time = vos_timer_get_system_time();
-             break;
-        case e_HDD_ENABLE_TX_QUEUE:
-             gRoamDelayMetaInfo.hdd_monitor_tx = MONITOR_START;
-             gRoamDelayMetaInfo.enable_tx_queues_reassoc_time = vos_timer_get_system_time();
-             break;
-        case e_HDD_SET_PTK_REQ:
-             gRoamDelayMetaInfo.set_ptk_roam_key_time = vos_timer_get_system_time();
-             break;
-        case e_HDD_SET_GTK_REQ:
-             gRoamDelayMetaInfo.set_gtk_roam_key_time = vos_timer_get_system_time();
-             break;
-        case e_HDD_SET_PTK_RSP:
-             gRoamDelayMetaInfo.complete_ptk_roam_key_time = vos_timer_get_system_time();
-             //vos_mem_copy(&gRoamDelayMetaInfo.peer_mac_addr, pBuff, buff_len);
-             break;
-        case e_HDD_SET_GTK_RSP:
-             gRoamDelayMetaInfo.complete_gtk_roam_key_time = vos_timer_get_system_time();
-             break;
-        case e_TL_FIRST_XMIT_TIME:
-             if(gRoamDelayMetaInfo.log_tl)
-             {
-                 gRoamDelayMetaInfo.tl_fetch_pkt_time = vos_timer_get_system_time();
-                 gRoamDelayMetaInfo.log_tl = VOS_FALSE;
-             }
-             break;
-        case e_HDD_FIRST_XMIT_TIME:
-             if(gRoamDelayMetaInfo.hdd_monitor_tx != MONITOR_STOP)
-             {
-                 struct sk_buff *skb = (struct sk_buff *)pBuff;
-                 if(!skb)
-                 {
-                     VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
-                                "event e_HDD_FIRST_XMIT_TIME skb is null");
-                     return;
-                 }
-                 if((gRoamDelayMetaInfo.hdd_auth_type == eVOS_AUTH_TYPE_RSN_PSK) ||
+    case e_HDD_DISABLE_TX_QUEUE:
+        gRoamDelayMetaInfo.hdd_monitor_tx = MONITOR_STOP;
+        gRoamDelayMetaInfo.disable_tx_queues_time = vos_timer_get_system_time();
+        break;
+    case e_SME_PREAUTH_REASSOC_START:
+        gRoamDelayMetaInfo.preauth_reassoc_start_time = vos_timer_get_system_time();
+        break;
+    case e_SME_PREAUTH_CALLBACK_HIT:
+        gRoamDelayMetaInfo.preauth_cb_time = vos_timer_get_system_time();
+        break;
+    case e_SME_ISSUE_REASSOC_REQ:
+        gRoamDelayMetaInfo.issue_reassoc_req_time = vos_timer_get_system_time();
+        //HACK buff len will carry the AuthType
+        gRoamDelayMetaInfo.hdd_auth_type = buff_len;
+        break;
+    case e_LIM_SEND_REASSOC_REQ:
+        gRoamDelayMetaInfo.send_reassoc_req_time = vos_timer_get_system_time();
+        //we can enable the rx eapol monitoring ASAP we send the REASSOC REQ Because
+        //there is very less delay in between REASSOC RSP and M1 Sent by the AP
+        gRoamDelayMetaInfo.hdd_monitor_rx = MONITOR_START;
+        gRoamDelayMetaInfo.dxe_monitor_rx = MONITOR_START;
+        break;
+    case e_CACHE_ROAM_PEER_MAC:
+        vos_mem_copy(&gRoamDelayMetaInfo.peer_mac_addr, pBuff, buff_len);
+        break;
+    case e_HDD_SEND_REASSOC_RSP:
+        gRoamDelayMetaInfo.hdd_sendassoc_rsp_time = vos_timer_get_system_time();
+        break;
+    case e_SME_DISASSOC_ISSUE:
+        gRoamDelayMetaInfo.disassoc_issue_time = vos_timer_get_system_time();
+        break;
+    case e_SME_DISASSOC_COMPLETE:
+        gRoamDelayMetaInfo.disassoc_comp_time = vos_timer_get_system_time();
+        break;
+    case e_LIM_ADD_BS_REQ:
+        gRoamDelayMetaInfo.lim_add_bss_req_time = vos_timer_get_system_time();
+        break;
+    case e_LIM_ADD_BS_RSP:
+        gRoamDelayMetaInfo.lim_add_bss_rsp_time = vos_timer_get_system_time();
+        break;
+    case e_HDD_ENABLE_TX_QUEUE:
+        gRoamDelayMetaInfo.hdd_monitor_tx = MONITOR_START;
+        gRoamDelayMetaInfo.enable_tx_queues_reassoc_time = vos_timer_get_system_time();
+        break;
+    case e_HDD_SET_PTK_REQ:
+        gRoamDelayMetaInfo.set_ptk_roam_key_time = vos_timer_get_system_time();
+        break;
+    case e_HDD_SET_GTK_REQ:
+        gRoamDelayMetaInfo.set_gtk_roam_key_time = vos_timer_get_system_time();
+        break;
+    case e_HDD_SET_PTK_RSP:
+        gRoamDelayMetaInfo.complete_ptk_roam_key_time = vos_timer_get_system_time();
+        //vos_mem_copy(&gRoamDelayMetaInfo.peer_mac_addr, pBuff, buff_len);
+        break;
+    case e_HDD_SET_GTK_RSP:
+        gRoamDelayMetaInfo.complete_gtk_roam_key_time = vos_timer_get_system_time();
+        break;
+    case e_TL_FIRST_XMIT_TIME:
+        if(gRoamDelayMetaInfo.log_tl)
+        {
+            gRoamDelayMetaInfo.tl_fetch_pkt_time = vos_timer_get_system_time();
+            gRoamDelayMetaInfo.log_tl = VOS_FALSE;
+        }
+        break;
+    case e_HDD_FIRST_XMIT_TIME:
+        if(gRoamDelayMetaInfo.hdd_monitor_tx != MONITOR_STOP)
+        {
+            struct sk_buff *skb = (struct sk_buff *)pBuff;
+            if(!skb)
+            {
+                VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
+                           "event e_HDD_FIRST_XMIT_TIME skb is null");
+                return;
+            }
+            if((gRoamDelayMetaInfo.hdd_auth_type == eVOS_AUTH_TYPE_RSN_PSK) ||
                     (gRoamDelayMetaInfo.hdd_auth_type == eVOS_AUTH_TYPE_WPA_PSK))
-                 {
-                     //Hdd xmit will have only 802.3 pkt so offset will pass as accordingly
-                     if(vos_skb_is_eapol(skb, VOS_ETHERTYPE_802_1_X_FRAME_OFFSET_IN_802_3_PKT,
-                            VOS_ETHERTYPE_802_1_X_SIZE) == VOS_TRUE)
-                     {
-                          if(gRoamDelayMetaInfo.hdd_eapol_m2 == 0)
-                          {
-                              VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,"HDD XMIT m2");
-                              gRoamDelayMetaInfo.hdd_eapol_m2 = vos_timer_get_system_time();
-                              gRoamDelayMetaInfo.dxe_monitor_tx = MONITOR_START;
-                          }
-                          else if((gRoamDelayMetaInfo.hdd_eapol_m2) && (gRoamDelayMetaInfo.hdd_eapol_m4 == 0))
-                         {
-                              gRoamDelayMetaInfo.hdd_eapol_m4 = vos_timer_get_system_time();
-                              VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,"HDD XMIT m4");
-                              gRoamDelayMetaInfo.hdd_monitor_tx = MONITOR_EAPOL_DONE;
-                              //We should return from here so can cache the time for first data pkt
-                              return;
-                         }
-                     }
-                 }
-                 else
-                 {
-                    gRoamDelayMetaInfo.hdd_monitor_tx = MONITOR_EAPOL_DONE;
-                    gRoamDelayMetaInfo.dxe_monitor_tx = MONITOR_START;
-                 }
-                 //Eapol is done it must be first data frame capture it
-                 if(gRoamDelayMetaInfo.hdd_monitor_tx == MONITOR_EAPOL_DONE)
-                 {
-                     gRoamDelayMetaInfo.hdd_first_pkt_len = 50;
-                     gRoamDelayMetaInfo.hdd_first_xmit_time = vos_timer_get_system_time();
-                     gRoamDelayMetaInfo.log_tl = VOS_TRUE;
-                     gRoamDelayMetaInfo.hdd_monitor_tx = MONITOR_STOP;
-                     VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO,
-                                "HDD %s XMIT first data frame after roaming", __func__);
-                     if(skb->len < gRoamDelayMetaInfo.hdd_first_pkt_len)
-                         gRoamDelayMetaInfo.hdd_first_pkt_len = skb->len;
-                     vos_mem_copy(&gRoamDelayMetaInfo.hdd_first_pkt_data,
-                                  skb->data,gRoamDelayMetaInfo.hdd_first_pkt_len);
-                 }
-             }
-             break;
-        case e_HDD_RX_PKT_CBK_TIME:
-             if(gRoamDelayMetaInfo.hdd_monitor_rx != MONITOR_STOP)
-             {
-                 struct sk_buff *skb = (struct sk_buff *)pBuff;
-                 if(!skb)
-                 {
-                    VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
-                               "event e_HDD_RX_PKT_CBK_TIME skb is null");
-                    return;
-                 }
-                 if((gRoamDelayMetaInfo.hdd_auth_type == eVOS_AUTH_TYPE_RSN_PSK) ||
-                    (gRoamDelayMetaInfo.hdd_auth_type == eVOS_AUTH_TYPE_WPA_PSK))
-                 {
-                     if(vos_skb_is_eapol(skb, VOS_ETHERTYPE_802_1_X_FRAME_OFFSET_IN_802_3_PKT,
-                            VOS_ETHERTYPE_802_1_X_SIZE) == VOS_TRUE)
-                     {
-                         if(gRoamDelayMetaInfo.hdd_eapol_m1 == 0)
-                         {
-                             VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,"HDD recv m1");
-                             gRoamDelayMetaInfo.hdd_eapol_m1 = vos_timer_get_system_time();
-                         }
-                         else if((gRoamDelayMetaInfo.hdd_eapol_m1) && (gRoamDelayMetaInfo.hdd_eapol_m3 == 0))
-                         {
-                             gRoamDelayMetaInfo.hdd_eapol_m3 = vos_timer_get_system_time();
-                             VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,"HDD recv m3");
-                             gRoamDelayMetaInfo.hdd_monitor_rx = MONITOR_EAPOL_DONE;
-                         }
-                     }
-                 }
-                 else
-                 {
-                     gRoamDelayMetaInfo.hdd_monitor_rx = MONITOR_EAPOL_DONE;
-                 }
-                 if(gRoamDelayMetaInfo.hdd_monitor_rx == MONITOR_EAPOL_DONE)
-                 {
-                     gRoamDelayMetaInfo.hdd_monitor_rx = MONITOR_STOP;
-                 }
-             }
-             break;
-        case e_DXE_RX_PKT_TIME:
-             if(gRoamDelayMetaInfo.dxe_monitor_rx != MONITOR_STOP)
-             {
-                 vos_pkt_t *vos_pkt = NULL;
-                 struct sk_buff *skb = NULL;
-                 vos_pkt = (vos_pkt_t *)pBuff;
-                 if(!vos_pkt)
-                 {
-                    VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
-                               "event e_DXE_RX_PKT_TIME vos_pkt is null");
-                    return;
-                 }
-                 skb = vos_pkt->pSkb;
-                 if(!skb)
-                 {
-                    VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
-                               "event e_DXE_RX_PKT_TIME skb is null");
-                    return;
-                 }
-                 //DXE can RECV MGMT and DATA frame, we are interetsed in only DATA frame
-                 if(buff_len & VOS_MAC_DATA_FRAME)
-                 {
-                     if((gRoamDelayMetaInfo.hdd_auth_type == eVOS_AUTH_TYPE_RSN_PSK) ||
-                        (gRoamDelayMetaInfo.hdd_auth_type == eVOS_AUTH_TYPE_WPA_PSK))
-                     {
-                         if(vos_skb_is_eapol(skb, VOS_ETHERTYPE_802_1_X_FRAME_OFFSET_IN_802_11_PKT,
-                                VOS_ETHERTYPE_802_1_X_SIZE) == VOS_TRUE)
-                         {
-                             if(gRoamDelayMetaInfo.dxe_eapol_m1 == 0)
-                             {
-                                 VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,"DXE recv m1");
-                                 gRoamDelayMetaInfo.dxe_eapol_m1 = vos_timer_get_system_time();
-                             }
-                             else if((gRoamDelayMetaInfo.dxe_eapol_m1) && (gRoamDelayMetaInfo.dxe_eapol_m3 == 0))
-                             {
-                                 gRoamDelayMetaInfo.dxe_eapol_m3 = vos_timer_get_system_time();
-                                 VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,"DXE recv m3");
-                                 gRoamDelayMetaInfo.dxe_monitor_rx = MONITOR_EAPOL_DONE;
-                             }
-                         }
-                     }
-                     else
-                     {
-                         gRoamDelayMetaInfo.dxe_monitor_rx = MONITOR_EAPOL_DONE;
-                     }
-                     if(gRoamDelayMetaInfo.dxe_monitor_rx == MONITOR_EAPOL_DONE)
-                     {
-                         gRoamDelayMetaInfo.dxe_monitor_rx = MONITOR_STOP;
-                     }
-                 }
-                 /*
-                 else
-                 {
-                     printk("e_DXE_RX_PKT_TIME dump mgmt frames");
-                     vos_trace_hex_dump( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR, &skb->data[0], skb->len);
-                 }
-                 */
-             }
-             break;
-        case e_DXE_FIRST_XMIT_TIME:
-             if(gRoamDelayMetaInfo.dxe_monitor_tx != MONITOR_STOP)
-             {
-                 vos_pkt_t *vos_pkt = NULL;
-                 struct sk_buff *skb = NULL;
-                 vos_pkt = (vos_pkt_t *)pBuff;
-                 if(!vos_pkt)
-                 {
-                    VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
-                               "event e_DXE_FIRST_XMIT_TIME vos_pkt is null");
-                    return;
-                 }
-                 skb = vos_pkt->pSkb;
-                 if(!skb)
-                 {
-                    VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
-                               "event e_DXE_FIRST_XMIT_TIME skb is null");
-                    return;
-                 }
-                 //DXE can Txmit MGMT and DATA frame, we are interetsed in only DATA frame
-                 if(buff_len & VOS_MAC_DATA_FRAME)
-                 {
-                    if((gRoamDelayMetaInfo.hdd_auth_type == eVOS_AUTH_TYPE_RSN_PSK) ||
-                       (gRoamDelayMetaInfo.hdd_auth_type == eVOS_AUTH_TYPE_WPA_PSK))
+            {
+                //Hdd xmit will have only 802.3 pkt so offset will pass as accordingly
+                if(vos_skb_is_eapol(skb, VOS_ETHERTYPE_802_1_X_FRAME_OFFSET_IN_802_3_PKT,
+                                    VOS_ETHERTYPE_802_1_X_SIZE) == VOS_TRUE)
+                {
+                    if(gRoamDelayMetaInfo.hdd_eapol_m2 == 0)
                     {
-                        if(vos_skb_is_eapol(skb, VOS_ETHERTYPE_802_1_X_FRAME_OFFSET_IN_802_11_PKT,
-                               VOS_ETHERTYPE_802_1_X_SIZE) == VOS_TRUE)
+                        VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,"HDD XMIT m2");
+                        gRoamDelayMetaInfo.hdd_eapol_m2 = vos_timer_get_system_time();
+                        gRoamDelayMetaInfo.dxe_monitor_tx = MONITOR_START;
+                    }
+                    else if((gRoamDelayMetaInfo.hdd_eapol_m2) && (gRoamDelayMetaInfo.hdd_eapol_m4 == 0))
+                    {
+                        gRoamDelayMetaInfo.hdd_eapol_m4 = vos_timer_get_system_time();
+                        VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,"HDD XMIT m4");
+                        gRoamDelayMetaInfo.hdd_monitor_tx = MONITOR_EAPOL_DONE;
+                        //We should return from here so can cache the time for first data pkt
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                gRoamDelayMetaInfo.hdd_monitor_tx = MONITOR_EAPOL_DONE;
+                gRoamDelayMetaInfo.dxe_monitor_tx = MONITOR_START;
+            }
+            //Eapol is done it must be first data frame capture it
+            if(gRoamDelayMetaInfo.hdd_monitor_tx == MONITOR_EAPOL_DONE)
+            {
+                gRoamDelayMetaInfo.hdd_first_pkt_len = 50;
+                gRoamDelayMetaInfo.hdd_first_xmit_time = vos_timer_get_system_time();
+                gRoamDelayMetaInfo.log_tl = VOS_TRUE;
+                gRoamDelayMetaInfo.hdd_monitor_tx = MONITOR_STOP;
+                VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO,
+                           "HDD %s XMIT first data frame after roaming", __func__);
+                if(skb->len < gRoamDelayMetaInfo.hdd_first_pkt_len)
+                    gRoamDelayMetaInfo.hdd_first_pkt_len = skb->len;
+                vos_mem_copy(&gRoamDelayMetaInfo.hdd_first_pkt_data,
+                             skb->data,gRoamDelayMetaInfo.hdd_first_pkt_len);
+            }
+        }
+        break;
+    case e_HDD_RX_PKT_CBK_TIME:
+        if(gRoamDelayMetaInfo.hdd_monitor_rx != MONITOR_STOP)
+        {
+            struct sk_buff *skb = (struct sk_buff *)pBuff;
+            if(!skb)
+            {
+                VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
+                           "event e_HDD_RX_PKT_CBK_TIME skb is null");
+                return;
+            }
+            if((gRoamDelayMetaInfo.hdd_auth_type == eVOS_AUTH_TYPE_RSN_PSK) ||
+                    (gRoamDelayMetaInfo.hdd_auth_type == eVOS_AUTH_TYPE_WPA_PSK))
+            {
+                if(vos_skb_is_eapol(skb, VOS_ETHERTYPE_802_1_X_FRAME_OFFSET_IN_802_3_PKT,
+                                    VOS_ETHERTYPE_802_1_X_SIZE) == VOS_TRUE)
+                {
+                    if(gRoamDelayMetaInfo.hdd_eapol_m1 == 0)
+                    {
+                        VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,"HDD recv m1");
+                        gRoamDelayMetaInfo.hdd_eapol_m1 = vos_timer_get_system_time();
+                    }
+                    else if((gRoamDelayMetaInfo.hdd_eapol_m1) && (gRoamDelayMetaInfo.hdd_eapol_m3 == 0))
+                    {
+                        gRoamDelayMetaInfo.hdd_eapol_m3 = vos_timer_get_system_time();
+                        VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,"HDD recv m3");
+                        gRoamDelayMetaInfo.hdd_monitor_rx = MONITOR_EAPOL_DONE;
+                    }
+                }
+            }
+            else
+            {
+                gRoamDelayMetaInfo.hdd_monitor_rx = MONITOR_EAPOL_DONE;
+            }
+            if(gRoamDelayMetaInfo.hdd_monitor_rx == MONITOR_EAPOL_DONE)
+            {
+                gRoamDelayMetaInfo.hdd_monitor_rx = MONITOR_STOP;
+            }
+        }
+        break;
+    case e_DXE_RX_PKT_TIME:
+        if(gRoamDelayMetaInfo.dxe_monitor_rx != MONITOR_STOP)
+        {
+            vos_pkt_t *vos_pkt = NULL;
+            struct sk_buff *skb = NULL;
+            vos_pkt = (vos_pkt_t *)pBuff;
+            if(!vos_pkt)
+            {
+                VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
+                           "event e_DXE_RX_PKT_TIME vos_pkt is null");
+                return;
+            }
+            skb = vos_pkt->pSkb;
+            if(!skb)
+            {
+                VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
+                           "event e_DXE_RX_PKT_TIME skb is null");
+                return;
+            }
+            //DXE can RECV MGMT and DATA frame, we are interetsed in only DATA frame
+            if(buff_len & VOS_MAC_DATA_FRAME)
+            {
+                if((gRoamDelayMetaInfo.hdd_auth_type == eVOS_AUTH_TYPE_RSN_PSK) ||
+                        (gRoamDelayMetaInfo.hdd_auth_type == eVOS_AUTH_TYPE_WPA_PSK))
+                {
+                    if(vos_skb_is_eapol(skb, VOS_ETHERTYPE_802_1_X_FRAME_OFFSET_IN_802_11_PKT,
+                                        VOS_ETHERTYPE_802_1_X_SIZE) == VOS_TRUE)
+                    {
+                        if(gRoamDelayMetaInfo.dxe_eapol_m1 == 0)
                         {
-                             if(gRoamDelayMetaInfo.dxe_eapol_m2 == 0)
-                             {
-                                 VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,"DXE XMIT m2");
-                                 gRoamDelayMetaInfo.dxe_eapol_m2 = vos_timer_get_system_time();
-                             }
-                             else if((gRoamDelayMetaInfo.dxe_eapol_m2) && (gRoamDelayMetaInfo.dxe_eapol_m4 == 0))
-                            {
-                                 gRoamDelayMetaInfo.dxe_eapol_m4 = vos_timer_get_system_time();
-                                 VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,"DXE XMIT m4");
-                                 gRoamDelayMetaInfo.dxe_monitor_tx = MONITOR_EAPOL_DONE;
-                                 //We should return from here so can cache the time for first data pkt
-                                 return;
-                            }
+                            VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,"DXE recv m1");
+                            gRoamDelayMetaInfo.dxe_eapol_m1 = vos_timer_get_system_time();
+                        }
+                        else if((gRoamDelayMetaInfo.dxe_eapol_m1) && (gRoamDelayMetaInfo.dxe_eapol_m3 == 0))
+                        {
+                            gRoamDelayMetaInfo.dxe_eapol_m3 = vos_timer_get_system_time();
+                            VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,"DXE recv m3");
+                            gRoamDelayMetaInfo.dxe_monitor_rx = MONITOR_EAPOL_DONE;
                         }
                     }
-                    else
+                }
+                else
+                {
+                    gRoamDelayMetaInfo.dxe_monitor_rx = MONITOR_EAPOL_DONE;
+                }
+                if(gRoamDelayMetaInfo.dxe_monitor_rx == MONITOR_EAPOL_DONE)
+                {
+                    gRoamDelayMetaInfo.dxe_monitor_rx = MONITOR_STOP;
+                }
+            }
+            /*
+            else
+            {
+                printk("e_DXE_RX_PKT_TIME dump mgmt frames");
+                vos_trace_hex_dump( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR, &skb->data[0], skb->len);
+            }
+            */
+        }
+        break;
+    case e_DXE_FIRST_XMIT_TIME:
+        if(gRoamDelayMetaInfo.dxe_monitor_tx != MONITOR_STOP)
+        {
+            vos_pkt_t *vos_pkt = NULL;
+            struct sk_buff *skb = NULL;
+            vos_pkt = (vos_pkt_t *)pBuff;
+            if(!vos_pkt)
+            {
+                VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
+                           "event e_DXE_FIRST_XMIT_TIME vos_pkt is null");
+                return;
+            }
+            skb = vos_pkt->pSkb;
+            if(!skb)
+            {
+                VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
+                           "event e_DXE_FIRST_XMIT_TIME skb is null");
+                return;
+            }
+            //DXE can Txmit MGMT and DATA frame, we are interetsed in only DATA frame
+            if(buff_len & VOS_MAC_DATA_FRAME)
+            {
+                if((gRoamDelayMetaInfo.hdd_auth_type == eVOS_AUTH_TYPE_RSN_PSK) ||
+                        (gRoamDelayMetaInfo.hdd_auth_type == eVOS_AUTH_TYPE_WPA_PSK))
+                {
+                    if(vos_skb_is_eapol(skb, VOS_ETHERTYPE_802_1_X_FRAME_OFFSET_IN_802_11_PKT,
+                                        VOS_ETHERTYPE_802_1_X_SIZE) == VOS_TRUE)
                     {
-                        gRoamDelayMetaInfo.dxe_monitor_tx = MONITOR_EAPOL_DONE;
+                        if(gRoamDelayMetaInfo.dxe_eapol_m2 == 0)
+                        {
+                            VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,"DXE XMIT m2");
+                            gRoamDelayMetaInfo.dxe_eapol_m2 = vos_timer_get_system_time();
+                        }
+                        else if((gRoamDelayMetaInfo.dxe_eapol_m2) && (gRoamDelayMetaInfo.dxe_eapol_m4 == 0))
+                        {
+                            gRoamDelayMetaInfo.dxe_eapol_m4 = vos_timer_get_system_time();
+                            VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,"DXE XMIT m4");
+                            gRoamDelayMetaInfo.dxe_monitor_tx = MONITOR_EAPOL_DONE;
+                            //We should return from here so can cache the time for first data pkt
+                            return;
+                        }
                     }
-                    //HACK buff len is getting used as FRAME TYPE
-                    if(gRoamDelayMetaInfo.dxe_monitor_tx == MONITOR_EAPOL_DONE)
-                    {
-                        gRoamDelayMetaInfo.dxe_first_tx_time = vos_timer_get_system_time();
-                        gRoamDelayMetaInfo.dxe_monitor_tx = MONITOR_STOP;
-                        gRoamDelayMetaInfo.dxe_first_pkt_len = 75;
-                        if(skb->len < gRoamDelayMetaInfo.dxe_first_pkt_len)
-                            gRoamDelayMetaInfo.dxe_first_pkt_len = skb->len;
-                        vos_mem_copy(&gRoamDelayMetaInfo.dxe_first_pkt_data, skb->data,
-                                     gRoamDelayMetaInfo.dxe_first_pkt_len);
-                        VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO,
-                                   "DXE %s XMIT first data frame after roaming", __func__);
-                    }
-                 }
-             }
-             break;
-        case e_SME_VO_ADDTS_REQ:
-             gRoamDelayMetaInfo.hdd_addts_vo_req_time = vos_timer_get_system_time();
-             break;
-        case e_SME_VO_ADDTS_RSP:
-             gRoamDelayMetaInfo.hdd_addts_vo_rsp_time = vos_timer_get_system_time();
-             break;
-        case e_SME_VI_ADDTS_REQ:
-             gRoamDelayMetaInfo.hdd_addts_vi_req_time = vos_timer_get_system_time();
-             break;
-        case e_SME_VI_ADDTS_RSP:
-             gRoamDelayMetaInfo.hdd_addts_vi_rsp_time = vos_timer_get_system_time();
-             break;
-        case e_CACHE_ROAM_DELAY_DATA:
-             //Let us copy roam meta info
-             if(gRoamDelayCurrentIndex > ROAM_DELAY_TABLE_SIZE)
-                 gRoamDelayCurrentIndex = 0;
-             vos_mem_copy(&gRoamDelayTable[gRoamDelayCurrentIndex++],
-                          &gRoamDelayMetaInfo, sizeof(gRoamDelayMetaInfo));
-             vos_mem_set(&gRoamDelayMetaInfo, sizeof(gRoamDelayMetaInfo), 0);
-             break;
-        default:
-             VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
-                       "%s Invalid roam_event = %d received ", __func__, roam_event);
-             break;
+                }
+                else
+                {
+                    gRoamDelayMetaInfo.dxe_monitor_tx = MONITOR_EAPOL_DONE;
+                }
+                //HACK buff len is getting used as FRAME TYPE
+                if(gRoamDelayMetaInfo.dxe_monitor_tx == MONITOR_EAPOL_DONE)
+                {
+                    gRoamDelayMetaInfo.dxe_first_tx_time = vos_timer_get_system_time();
+                    gRoamDelayMetaInfo.dxe_monitor_tx = MONITOR_STOP;
+                    gRoamDelayMetaInfo.dxe_first_pkt_len = 75;
+                    if(skb->len < gRoamDelayMetaInfo.dxe_first_pkt_len)
+                        gRoamDelayMetaInfo.dxe_first_pkt_len = skb->len;
+                    vos_mem_copy(&gRoamDelayMetaInfo.dxe_first_pkt_data, skb->data,
+                                 gRoamDelayMetaInfo.dxe_first_pkt_len);
+                    VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO,
+                               "DXE %s XMIT first data frame after roaming", __func__);
+                }
+            }
+        }
+        break;
+    case e_SME_VO_ADDTS_REQ:
+        gRoamDelayMetaInfo.hdd_addts_vo_req_time = vos_timer_get_system_time();
+        break;
+    case e_SME_VO_ADDTS_RSP:
+        gRoamDelayMetaInfo.hdd_addts_vo_rsp_time = vos_timer_get_system_time();
+        break;
+    case e_SME_VI_ADDTS_REQ:
+        gRoamDelayMetaInfo.hdd_addts_vi_req_time = vos_timer_get_system_time();
+        break;
+    case e_SME_VI_ADDTS_RSP:
+        gRoamDelayMetaInfo.hdd_addts_vi_rsp_time = vos_timer_get_system_time();
+        break;
+    case e_CACHE_ROAM_DELAY_DATA:
+        //Let us copy roam meta info
+        if(gRoamDelayCurrentIndex > ROAM_DELAY_TABLE_SIZE)
+            gRoamDelayCurrentIndex = 0;
+        vos_mem_copy(&gRoamDelayTable[gRoamDelayCurrentIndex++],
+                     &gRoamDelayMetaInfo, sizeof(gRoamDelayMetaInfo));
+        vos_mem_set(&gRoamDelayMetaInfo, sizeof(gRoamDelayMetaInfo), 0);
+        break;
+    default:
+        VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
+                   "%s Invalid roam_event = %d received ", __func__, roam_event);
+        break;
     }
 }
 
@@ -1134,35 +1165,35 @@ void vos_dump_roam_time_log_service(void)
     vos_mem_copy(&gRoamDelayTable[gRoamDelayCurrentIndex++], &gRoamDelayMetaInfo, sizeof(gRoamDelayMetaInfo));
 
     VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
-         "** RoamDelay = ( B + C + D + E + ABS(F) + H + J + L + M )\n");
+               "** RoamDelay = ( B + C + D + E + ABS(F) + H + J + L + M )\n");
 
     VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
-         "||========================"
-         "===============|====== A ======|====== B ======|====== C ======|"
-         "====== D ======|====== E ======|====== F ======|====== G ======|"
-         "====== H ======|====== I ======|====== J ======|====== K ======|"
-         "====== L ======|====== M ======||\n");
+               "||========================"
+               "===============|====== A ======|====== B ======|====== C ======|"
+               "====== D ======|====== E ======|====== F ======|====== G ======|"
+               "====== H ======|====== I ======|====== J ======|====== K ======|"
+               "====== L ======|====== M ======||\n");
 
     VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
-         "||Sl | Peer MAC address  |"
-         " **RoamDelay** | PreAuth Timer | Disassoc Issue| Add BSS Req   |"
-         " AddBssRsp to  | ReassocReq to | ReassocRsp to | Disable to    |"
-         " M1-M2 DXE SW  | M1-M2 HDD SW  | M3-M4 DXE SW  | M3-M4 HDD SW  |"
-         " ReassocRsp to | HDD to DXE    ||\n");
+               "||Sl | Peer MAC address  |"
+               " **RoamDelay** | PreAuth Timer | Disassoc Issue| Add BSS Req   |"
+               " AddBssRsp to  | ReassocReq to | ReassocRsp to | Disable to    |"
+               " M1-M2 DXE SW  | M1-M2 HDD SW  | M3-M4 DXE SW  | M3-M4 HDD SW  |"
+               " ReassocRsp to | HDD to DXE    ||\n");
 
     VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
-         "||No.|                   |"
-         " ************* | to Roam Start | to Complete   | to Rsp time   |"
-         " Reassoc Req   | ReassocRsp    | Enable Tx Que | Enable Tx Que |"
-         "               |               |               |               |"
-         " Set GTK       | 1st data frame||\n");
+               "||No.|                   |"
+               " ************* | to Roam Start | to Complete   | to Rsp time   |"
+               " Reassoc Req   | ReassocRsp    | Enable Tx Que | Enable Tx Que |"
+               "               |               |               |               |"
+               " Set GTK       | 1st data frame||\n");
 
     VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
-         "||========================"
-         "================================================================"
-         "================================================================"
-         "================================================================"
-         "===============================||\n");
+               "||========================"
+               "================================================================"
+               "================================================================"
+               "================================================================"
+               "===============================||\n");
 
     for (index = 0; index < gRoamDelayCurrentIndex; index++)
     {
@@ -1224,24 +1255,24 @@ void vos_dump_roam_time_log_service(void)
                      slH + slJ + slL + slM;
 
         VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
-                "||%2ld:|<"MAC_ADDRESS_STR">|"
-                "%14ld |%14ld |%14ld |%14ld |"
-                "%14ld |%14ld |%14ld |%14ld |"
-                "%14ld |%14ld |%14ld |%14ld |"
-                "%14ld |%14ld ||\n",
-                (index+1), MAC_ADDR_ARRAY(currentRoamDelayInfo.peer_mac_addr),
-                slRoamDelay, slA, slB, slC,
-                slD, slE, slF, slG,
-                slH, slI, slJ, slK,
-                slL, slM );
+                   "||%2ld:|<"MAC_ADDRESS_STR">|"
+                   "%14ld |%14ld |%14ld |%14ld |"
+                   "%14ld |%14ld |%14ld |%14ld |"
+                   "%14ld |%14ld |%14ld |%14ld |"
+                   "%14ld |%14ld ||\n",
+                   (index+1), MAC_ADDR_ARRAY(currentRoamDelayInfo.peer_mac_addr),
+                   slRoamDelay, slA, slB, slC,
+                   slD, slE, slF, slG,
+                   slH, slI, slJ, slK,
+                   slL, slM );
     }
 
     VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
-         "||========================"
-         "================================================================"
-         "================================================================"
-         "================================================================"
-         "===============================||\n");
+               "||========================"
+               "================================================================"
+               "================================================================"
+               "================================================================"
+               "===============================||\n");
 
 }
 #endif /* DEBUG_ROAM_DELAY */

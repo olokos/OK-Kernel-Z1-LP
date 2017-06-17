@@ -102,7 +102,7 @@
 
 #define PROP_CAPABILITY_RESET(bitname, value) \
   ((value) = (value) & ~((tANI_U16)(1 << SIR_MAC_PROP_CAPABILITY_ ## bitname)))
-        
+
 #define PROP_CAPABILITY_GET(bitname, value) \
         (((value) >> SIR_MAC_PROP_CAPABILITY_ ## bitname) & 1)
 
@@ -128,11 +128,11 @@
           (dot11Mode ==  WNI_CFG_DOT11_MODE_TAURUS) || \
           (dot11Mode ==  WNI_CFG_DOT11_MODE_ALL)) ? TRUE: FALSE)
 #endif
-        /*
-        * When Titan capabilities can be turned on based on the 
-        * Proprietary Extensions CFG, then this macro can be used.
-        * Here Titan capabilities can be turned on for 11G/Gonly/N/NOnly mode also.
-        */
+/*
+* When Titan capabilities can be turned on based on the
+* Proprietary Extensions CFG, then this macro can be used.
+* Here Titan capabilities can be turned on for 11G/Gonly/N/NOnly mode also.
+*/
 #define IS_DOT11_MODE_TITAN_ALLOWED(dot11Mode) \
         (((dot11Mode == WNI_CFG_DOT11_MODE_TITAN) || \
           (dot11Mode == WNI_CFG_DOT11_MODE_TAURUS) || \
@@ -141,11 +141,11 @@
           (dot11Mode == WNI_CFG_DOT11_MODE_ALL)) ? TRUE: FALSE)
 
 
-        /*
-        * When Taurus capabilities can be turned on based on the 
-        * Proprietary Extensions CFG, then this macro can be used.
-        * Here Taurus capabilities can be turned on for 11N/Nonly mode also.
-        */
+/*
+* When Taurus capabilities can be turned on based on the
+* Proprietary Extensions CFG, then this macro can be used.
+* Here Taurus capabilities can be turned on for 11N/Nonly mode also.
+*/
 #define IS_DOT11_MODE_TAURUS_ALLOWED(dot11Mode) \
         (((dot11Mode == WNI_CFG_DOT11_MODE_TAURUS) || \
           (dot11Mode == WNI_CFG_DOT11_MODE_11N) || \
@@ -250,30 +250,30 @@ typedef struct sSirMacPropVersion
 typedef struct sQuietBssIEStruct
 {
 
-  // Indicates the number of TBTT's until the next beacon
-  // interval during which the next quiet interval will
-  // start
-  // 1 - Quiet Interval will start during the beacon
-  // interval starting at the next TBTT
-  // 0 - Reserved
-  tANI_U8 quietCount;
+    // Indicates the number of TBTT's until the next beacon
+    // interval during which the next quiet interval will
+    // start
+    // 1 - Quiet Interval will start during the beacon
+    // interval starting at the next TBTT
+    // 0 - Reserved
+    tANI_U8 quietCount;
 
-  // Shall be set to the number of beacon intervals between
-  // the start of regularly scheduled quiet intervals
-  // defined by this Quiet Element
-  // 0 - No periodic quiet interval is defined
-  tANI_U8 quietPeriod;
+    // Shall be set to the number of beacon intervals between
+    // the start of regularly scheduled quiet intervals
+    // defined by this Quiet Element
+    // 0 - No periodic quiet interval is defined
+    tANI_U8 quietPeriod;
 
-  // Duration of the quiet interval, expressed in TUs
-  // 1 TU = 1024 microseconds??
-  tANI_U16 quietDuration;
+    // Duration of the quiet interval, expressed in TUs
+    // 1 TU = 1024 microseconds??
+    tANI_U16 quietDuration;
 
-  // Set to the offset of the start of the quiet interval
-  // from the TBTT specified by the quietCount field,
-  // expressed in TUs. The value of this offset field will
-  // be less than one beacon interval
-  // 1 TU = 1024 microseconds??
-  tANI_U16 quietOffset;
+    // Set to the offset of the start of the quiet interval
+    // from the TBTT specified by the quietCount field,
+    // expressed in TUs. The value of this offset field will
+    // be less than one beacon interval
+    // 1 TU = 1024 microseconds??
+    tANI_U16 quietOffset;
 
 } tQuietBssIEStruct, *tpQuietBssIEStruct;
 
@@ -298,10 +298,10 @@ typedef struct sSirPropIEStruct
     tANI_U8                    edcaParamPresent:1;
     tANI_U8                    capabilityPresent:1;
     tANI_U8                    titanPresent:1;
-    tANI_U8                    taurusPresent:1;  
+    tANI_U8                    taurusPresent:1;
     tANI_U8                    propChannelSwitchPresent:1;
     tANI_U8                    quietBssPresent:1;
-    tANI_U8                    triggerStaScanPresent:1;                
+    tANI_U8                    triggerStaScanPresent:1;
     tANI_U8                    rsvd:5;
 
 

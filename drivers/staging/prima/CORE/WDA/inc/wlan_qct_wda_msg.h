@@ -30,14 +30,14 @@
 
 /*===========================================================================
 
-               W L A N   DEVICE ADAPTATION   L A Y E R 
-                       MSG MAPPING  
-                
-                   
+               W L A N   DEVICE ADAPTATION   L A Y E R
+                       MSG MAPPING
+
+
 DESCRIPTION
-  This file contains the external API exposed by the wlan adaptation layer 
-  
-      
+  This file contains the external API exposed by the wlan adaptation layer
+
+
   Copyright (c) 2008 QUALCOMM Incorporated. All Rights Reserved.
   Qualcomm Confidential and Proprietary
 ===========================================================================*/
@@ -72,23 +72,23 @@ when        who          what, where, why
 WPT_PACK_START
 typedef WPT_PACK_PRE struct
 {
-   /* Cfg Id. The Id required by HAL is exported by HAL
-    * in shared header file between UMAC and HAL.*/
-   tANI_U16   type;
+    /* Cfg Id. The Id required by HAL is exported by HAL
+     * in shared header file between UMAC and HAL.*/
+    tANI_U16   type;
 
-   /* Length of the Cfg. This parameter is used to go to next cfg 
-    * in the TLV format.*/
-   tANI_U16   length;
+    /* Length of the Cfg. This parameter is used to go to next cfg
+     * in the TLV format.*/
+    tANI_U16   length;
 
-   /* Padding bytes for unaligned address's */
-   tANI_U16    padBytes;
+    /* Padding bytes for unaligned address's */
+    tANI_U16    padBytes;
 
-   /* Reserve bytes for making cfgVal to align address */
-   tANI_U16    reserved;
+    /* Reserve bytes for making cfgVal to align address */
+    tANI_U16    reserved;
 
-   /* Following the uCfgLen field there should be a 'uCfgLen' bytes
-    * containing the uCfgValue ; tANI_U8 uCfgValue[uCfgLen] */
-}WPT_PACK_POST tHalCfg, *tpHalCfg;
+    /* Following the uCfgLen field there should be a 'uCfgLen' bytes
+     * containing the uCfgValue ; tANI_U8 uCfgValue[uCfgLen] */
+} WPT_PACK_POST tHalCfg, *tpHalCfg;
 WPT_PACK_END
 
 /////#define WDA_UT

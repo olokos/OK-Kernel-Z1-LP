@@ -39,7 +39,7 @@
 #define WLAN_FTM_FAILURE   1
 
 #define WLAN_FTM_START              1
-#define WLAN_FTM_STOP               2        
+#define WLAN_FTM_STOP               2
 #define WLAN_FTM_CMD                3
 
 
@@ -103,22 +103,25 @@
 
 #define MAX_NV_TABLE_SIZE  40000
 
-typedef enum {
+typedef enum
+{
     WLAN_FTM_CMD_START = 1,
-    WLAN_FTM_CMD_STOP,        
+    WLAN_FTM_CMD_STOP,
     WLAN_FTM_CMD_CMD
 } wlan_hdd_ftm_cmds;
-typedef struct ftm_hdr_s {
+typedef struct ftm_hdr_s
+{
     v_U16_t cmd_id;
     v_U16_t data_len;
     v_U16_t respPktSize;
 } ftm_hdr_t;
 
 /* The request buffer of FTM which contains a byte of command and the request */
-typedef struct wlan_hdd_ftm_payload_s {
+typedef struct wlan_hdd_ftm_payload_s
+{
     v_U16_t    ftm_cmd_type;
     v_U8_t    pFtmCmd[1];
-}wlan_hdd_ftm_payload;
+} wlan_hdd_ftm_payload;
 #define SIZE_OF_FTM_DIAG_HEADER_LEN 12
 /* the FTM command/response structure */
 typedef struct wlan_hdd_ftm_request_s
@@ -126,22 +129,23 @@ typedef struct wlan_hdd_ftm_request_s
     v_U8_t    cmd_code;
     v_U8_t    sub_sys_id;
     v_U16_t   mode_id;
-    ftm_hdr_t ftm_hdr; 
+    ftm_hdr_t ftm_hdr;
     v_U16_t   module_type;
     wlan_hdd_ftm_payload ftmpkt;
-}wlan_hdd_ftm_request_t;
+} wlan_hdd_ftm_request_t;
 
 typedef struct wlan_hdd_ftm_response_s
 {
     v_U8_t    cmd_code;
     v_U8_t    sub_sys_id;
     v_U16_t   mode_id;
-    ftm_hdr_t ftm_hdr; 
+    ftm_hdr_t ftm_hdr;
     v_U16_t   ftm_err_code;
     wlan_hdd_ftm_payload ftmpkt;
-}wlan_hdd_ftm_response_t;
+} wlan_hdd_ftm_response_t;
 
-typedef enum {
+typedef enum
+{
     WLAN_FTM_INITIALIZED,
     WLAN_FTM_STOPPED,
     WLAN_FTM_STARTED,
@@ -153,10 +157,10 @@ typedef struct wlan_hdd_ftm_status_s
     wlan_hdd_ftm_request_t    *pRequestBuf;
     wlan_hdd_ftm_response_t   *pResponseBuf;
     tAniNlHdr *wnl;
-        /**vos event */
+    /**vos event */
     vos_event_t  ftm_vos_event;
-    
-   /** completion variable for ftm command to complete*/
+
+    /** completion variable for ftm command to complete*/
     struct completion ftm_comp_var;
     v_BOOL_t  IsCmdPending;
     v_BOOL_t  cmd_iwpriv;
@@ -172,10 +176,10 @@ typedef struct wlan_hdd_ftm_status_s
 } wlan_hdd_ftm_status_t;
 typedef struct ftm_msg_s
 {
-    /* This field can be used as sequence 
+    /* This field can be used as sequence
         number/dialogue token for matching request/response */
     v_U16_t type;
-    
+
     /* This guy carries the command buffer along with command id */
     void *cmd_ptr;
     v_U32_t bodyval;

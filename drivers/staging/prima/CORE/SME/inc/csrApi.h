@@ -75,7 +75,7 @@ typedef enum
     eCSR_AUTH_TYPE_FAILED = 0xff,
     eCSR_AUTH_TYPE_UNKNOWN = eCSR_AUTH_TYPE_FAILED,
 
-}eCsrAuthType;
+} eCsrAuthType;
 
 
 typedef enum
@@ -104,7 +104,7 @@ typedef enum
     eCSR_ENCRYPT_TYPE_FAILED = 0xff,
     eCSR_ENCRYPT_TYPE_UNKNOWN = eCSR_ENCRYPT_TYPE_FAILED,
 
-}eCsrEncryptionType;
+} eCsrEncryptionType;
 
 /*---------------------------------------------------------------------------
    Enumeration of the various Security types
@@ -118,7 +118,7 @@ typedef enum
 #endif /* FEATURE_WLAN_WAPI */
     eCSR_SECURITY_TYPE_UNKNOWN,
 
-}eCsrSecurityType;
+} eCsrSecurityType;
 
 typedef enum
 {
@@ -144,7 +144,7 @@ typedef enum
     eCSR_DOT11_MODE_AUTO = 0x4000,
 
     eCSR_NUM_PHY_MODE = 16,     //specify the number of maximum bits for phyMode
-}eCsrPhyMode;
+} eCsrPhyMode;
 
 
 typedef tANI_U8 tCsrBssid[WNI_CFG_BSSID_LEN];
@@ -159,11 +159,12 @@ typedef enum
     eCSR_BSS_TYPE_WDS_AP,         // BT-AMP AP
     eCSR_BSS_TYPE_WDS_STA,        // BT-AMP station
     eCSR_BSS_TYPE_ANY,            // any BSS type (IBSS or Infrastructure).
-}eCsrRoamBssType;
+} eCsrRoamBssType;
 
 
 
-typedef enum {
+typedef enum
+{
     eCSR_SCAN_REQUEST_11D_SCAN = 1,
     eCSR_SCAN_REQUEST_FULL_SCAN,
     eCSR_SCAN_IDLE_MODE_SCAN,
@@ -174,19 +175,20 @@ typedef enum {
 
     eCSR_SCAN_SOFTAP_CHANNEL_RANGE,
     eCSR_SCAN_P2P_FIND_PEER,
-}eCsrRequestType;
-typedef enum {
+} eCsrRequestType;
+typedef enum
+{
     eCSR_SCAN_RESULT_GET = 0,
     eCSR_SCAN_RESULT_FLUSH = 1,     //to delete all cached scan results
-}eCsrScanResultCmd;
+} eCsrScanResultCmd;
 
 typedef enum
 {
     eCSR_SCAN_SUCCESS,
     eCSR_SCAN_FAILURE,
     eCSR_SCAN_ABORT,
-   eCSR_SCAN_FOUND_PEER,
-}eCsrScanStatus;
+    eCSR_SCAN_FOUND_PEER,
+} eCsrScanStatus;
 
 /* Reason to abort the scan
  * The reason can used later to decide whether to update the scan results
@@ -196,7 +198,7 @@ typedef enum
 {
     eCSR_SCAN_ABORT_DEFAULT,
     eCSR_SCAN_ABORT_DUE_TO_BAND_CHANGE, //Scan aborted due to band change
-}eCsrAbortReason;
+} eCsrAbortReason;
 
 #define CSR_SCAN_TIME_DEFAULT       0
 #define CSR_VALUE_IGNORED           0xFFFFFFFF
@@ -226,26 +228,26 @@ typedef struct tagCsrChannelInfo
 {
     tANI_U8 numOfChannels;
     tANI_U8 *ChannelList;   //it will be an array of channels
-}tCsrChannelInfo, *tpCsrChannelInfo;
+} tCsrChannelInfo, *tpCsrChannelInfo;
 
 typedef struct tagCsrSSIDInfo
 {
-   tSirMacSSid     SSID;
-   tANI_BOOLEAN    handoffPermitted;
-   tANI_BOOLEAN    ssidHidden;
-}tCsrSSIDInfo;
+    tSirMacSSid     SSID;
+    tANI_BOOLEAN    handoffPermitted;
+    tANI_BOOLEAN    ssidHidden;
+} tCsrSSIDInfo;
 
 typedef struct tagCsrSSIDs
 {
     tANI_U32 numOfSSIDs;
     tCsrSSIDInfo *SSIDList;   //To be allocated for array of SSIDs
-}tCsrSSIDs;
+} tCsrSSIDs;
 
 typedef struct tagCsrBSSIDs
 {
     tANI_U32 numOfBSSIDs;
     tCsrBssid *bssid;
-}tCsrBSSIDs;
+} tCsrBSSIDs;
 
 typedef struct tagCsrStaParams
 {
@@ -263,7 +265,7 @@ typedef struct tagCsrStaParams
     tANI_U8    supported_channels[SIR_MAC_MAX_SUPP_CHANNELS];
     tANI_U8    supported_oper_classes_len;
     tANI_U8    supported_oper_classes[SIR_MAC_MAX_SUPP_OPER_CLASSES];
-}tCsrStaParams;
+} tCsrStaParams;
 
 typedef struct tagCsrScanRequest
 {
@@ -282,7 +284,7 @@ typedef struct tagCsrScanRequest
     eCsrRequestType requestType;    //11d scan or full scan
     tANI_BOOLEAN p2pSearch;
     tANI_BOOLEAN skipDfsChnlInP2pSearch;
-}tCsrScanRequest;
+} tCsrScanRequest;
 
 typedef struct tagCsrBGScanRequest
 {
@@ -297,7 +299,7 @@ typedef struct tagCsrBGScanRequest
     tANI_U32 restTime;      //in units of milliseconds  //ignored when not connected
     tANI_U32 throughputImpact;      //specify whether BG scan cares about impacting throughput  //ignored when not connected
     tCsrBssid bssid;    //how to use it?? Apple
-}tCsrBGScanRequest, *tpCsrBGScanRequest;
+} tCsrBGScanRequest, *tpCsrBGScanRequest;
 
 
 typedef struct tagCsrScanResultInfo
@@ -309,7 +311,7 @@ typedef struct tagCsrScanResultInfo
     //This member must be the last in the structure because the end of tSirBssDescription is an
     //    array with nonknown size at this time
     tSirBssDescription BssDescriptor;
-}tCsrScanResultInfo;
+} tCsrScanResultInfo;
 
 typedef struct tagCsrEncryptionList
 {
@@ -317,13 +319,13 @@ typedef struct tagCsrEncryptionList
     tANI_U32 numEntries;
     eCsrEncryptionType encryptionType[eCSR_NUM_OF_ENCRYPT_TYPE];
 
-}tCsrEncryptionList, *tpCsrEncryptionList;
+} tCsrEncryptionList, *tpCsrEncryptionList;
 
 typedef struct tagCsrAuthList
 {
     tANI_U32 numEntries;
     eCsrAuthType authType[eCSR_NUM_OF_SUPPORT_AUTH_TYPE];
-}tCsrAuthList, *tpCsrAuthList;
+} tCsrAuthList, *tpCsrAuthList;
 
 #ifdef WLAN_FEATURE_VOWIFI_11R
 typedef struct tagCsrMobilityDomainInfo
@@ -385,31 +387,31 @@ typedef struct tagCsrScanResultFilter
     tANI_U8 MFPRequired;
     tANI_U8 MFPCapable;
 #endif
-}tCsrScanResultFilter;
+} tCsrScanResultFilter;
 
 
 typedef struct sCsrChnPower_
 {
-  tANI_U8 firstChannel;
-  tANI_U8 numChannels;
-  tANI_U8 maxtxPower;
-}sCsrChnPower;
+    tANI_U8 firstChannel;
+    tANI_U8 numChannels;
+    tANI_U8 maxtxPower;
+} sCsrChnPower;
 
 
 typedef struct sCsrChannel_
 {
     tANI_U8 numChannels;
     tANI_U8 channelList[WNI_CFG_VALID_CHANNEL_LIST_LEN];
-}sCsrChannel;
+} sCsrChannel;
 
 
 typedef struct tagCsr11dinfo
 {
-  sCsrChannel     Channels;
-  tANI_U8         countryCode[WNI_CFG_COUNTRY_CODE_LEN+1];
-  //max power channel list
-  sCsrChnPower    ChnPower[WNI_CFG_VALID_CHANNEL_LIST_LEN];
-}tCsr11dinfo;
+    sCsrChannel     Channels;
+    tANI_U8         countryCode[WNI_CFG_COUNTRY_CODE_LEN+1];
+    //max power channel list
+    sCsrChnPower    ChnPower[WNI_CFG_VALID_CHANNEL_LIST_LEN];
+} tCsr11dinfo;
 
 
 typedef enum
@@ -478,7 +480,7 @@ typedef enum
 #endif
     eCSR_ROAM_DISCONNECT_ALL_P2P_CLIENTS, //Disaconnect all the clients
     eCSR_ROAM_SEND_P2P_STOP_BSS, //Stopbss triggered from SME due to different
-                                 // beacon interval
+    // beacon interval
 #ifdef WLAN_FEATURE_11W
     eCSR_ROAM_UNPROT_MGMT_FRAME_IND,
 #endif
@@ -489,7 +491,7 @@ typedef enum
     eCSR_ROAM_ESE_ADJ_AP_REPORT_IND,
     eCSR_ROAM_ESE_BCN_REPORT_IND,
 #endif /* FEATURE_WLAN_ESE && FEATURE_WLAN_ESE_UPLOAD */
-}eRoamCmdStatus;
+} eRoamCmdStatus;
 
 
 //comment inside indicates what roaming callback gets
@@ -578,7 +580,7 @@ typedef enum
     eCSR_ROAM_RESULT_LINK_ESTABLISH_REQ_RSP,
 #endif
 
-}eCsrRoamResult;
+} eCsrRoamResult;
 
 
 
@@ -587,14 +589,14 @@ typedef enum
 -----------------------------------------------------------------------------*/
 typedef enum
 {
- eCSR_ROAM_LINK_QUAL_MIN_IND     = -1,
+    eCSR_ROAM_LINK_QUAL_MIN_IND     = -1,
 
- eCSR_ROAM_LINK_QUAL_POOR_IND            =  0,   /* bad link                */
- eCSR_ROAM_LINK_QUAL_GOOD_IND            =  1,   /* acceptable for voice    */
- eCSR_ROAM_LINK_QUAL_VERY_GOOD_IND       =  2,   /* suitable for voice      */
- eCSR_ROAM_LINK_QUAL_EXCELLENT_IND       =  3,   /* suitable for voice      */
+    eCSR_ROAM_LINK_QUAL_POOR_IND            =  0,   /* bad link                */
+    eCSR_ROAM_LINK_QUAL_GOOD_IND            =  1,   /* acceptable for voice    */
+    eCSR_ROAM_LINK_QUAL_VERY_GOOD_IND       =  2,   /* suitable for voice      */
+    eCSR_ROAM_LINK_QUAL_EXCELLENT_IND       =  3,   /* suitable for voice      */
 
- eCSR_ROAM_LINK_QUAL_MAX_IND  /* invalid value */
+    eCSR_ROAM_LINK_QUAL_MAX_IND  /* invalid value */
 
 } eCsrRoamLinkQualityInd;
 
@@ -607,7 +609,7 @@ typedef enum
     eCSR_DISCONNECT_REASON_HANDOFF,
     eCSR_DISCONNECT_REASON_IBSS_JOIN_FAILURE,
     eCSR_DISCONNECT_REASON_IBSS_LEAVE,
-}eCsrRoamDisconnectReason;
+} eCsrRoamDisconnectReason;
 
 typedef enum
 {
@@ -629,7 +631,7 @@ typedef enum
     // Participating in a Infra network and connected to a peer
     eCSR_ASSOC_STATE_TYPE_INFRA_CONNECTED,
 
-}eCsrConnectState;
+} eCsrConnectState;
 
 
 // This parameter is no longer supported in the Profile.  Need to set this in the global properties
@@ -646,7 +648,7 @@ typedef enum eCSR_MEDIUM_ACCESS
     eCSR_MEDIUM_ACCESS_WMM_eDCF_NoClassify,
     eCSR_MEDIUM_ACCESS_11e_eDCF = eCSR_MEDIUM_ACCESS_eDCF,
     eCSR_MEDIUM_ACCESS_11e_HCF  = eCSR_MEDIUM_ACCESS_HCF,
-}eCsrMediaAccessType;
+} eCsrMediaAccessType;
 
 typedef enum
 {
@@ -676,14 +678,14 @@ typedef enum
     eCSR_TX_RATE_216Mbps = 0x00200000,
     eCSR_TX_RATE_240Mbps = 0x00400000,
 
-}eCsrExposedTxRate;
+} eCsrExposedTxRate;
 
 typedef enum
 {
     eCSR_OPERATING_CHANNEL_ALL  = 0,
     eCSR_OPERATING_CHANNEL_AUTO = eCSR_OPERATING_CHANNEL_ALL,
     eCSR_OPERATING_CHANNEL_ANY  = eCSR_OPERATING_CHANNEL_ALL,
-}eOperationChannel;
+} eOperationChannel;
 
 typedef enum
 {
@@ -691,7 +693,7 @@ typedef enum
     eCSR_DOT11_FRAG_THRESH_MIN             = 256,
     eCSR_DOT11_FRAG_THRESH_MAX             = 2346,
     eCSR_DOT11_FRAG_THRESH_DEFAULT         = 2000
-}eCsrDot11FragThresh;
+} eCsrDot11FragThresh;
 
 
 //for channel bonding for ibss
@@ -701,7 +703,7 @@ typedef enum
     eCSR_CB_AUTO = 1,
     eCSR_CB_DOWN = 2,
     eCSR_CB_UP = 3,
-}eCsrCBChoice;
+} eCsrCBChoice;
 
 //For channel bonding, the channel number gap is 4, either up or down. For both 11a and 11g mode.
 #define CSR_CB_CHANNEL_GAP 4
@@ -719,7 +721,7 @@ typedef enum
     eCSR_SECURITY_WEP_KEYSIZE_MIN = eCSR_SECURITY_WEP_KEYSIZE_40,
     eCSR_SECURITY_WEP_KEYSIZE_MAX = eCSR_SECURITY_WEP_KEYSIZE_104,
     eCSR_SECURITY_WEP_KEYSIZE_MAX_BYTES = ( eCSR_SECURITY_WEP_KEYSIZE_MAX / 8 ),
-}eCsrWEPKeySize;
+} eCsrWEPKeySize;
 
 
 // Possible values for the WEP static key ID...
@@ -732,7 +734,7 @@ typedef enum
 
     eCSR_SECURITY_WEP_STATIC_KEY_ID_INVALID   = -1,
 
-}eCsrWEPStaticKeyID;
+} eCsrWEPStaticKeyID;
 
 // Two extra key indicies are used for the IGTK (which is used by BIP)
 #define CSR_MAX_NUM_KEY     (eCSR_SECURITY_WEP_STATIC_KEY_ID_MAX + 2 + 1)
@@ -742,7 +744,7 @@ typedef enum
     eCSR_SECURITY_SET_KEY_ACTION_NO_CHANGE,
     eCSR_SECURITY_SET_KEY_ACTION_SET_KEY,
     eCSR_SECURITY_SET_KEY_ACTION_DELETE_KEY,
-}eCsrSetKeyAction;
+} eCsrSetKeyAction;
 
 typedef enum
 {
@@ -750,39 +752,39 @@ typedef enum
     eCSR_BAND_24,
     eCSR_BAND_5G,
     eCSR_BAND_MAX,
-}eCsrBand;
+} eCsrBand;
 
 
 typedef enum
 {
-   // Roaming because HDD requested for reassoc by changing one of the fields in
-   // tCsrRoamModifyProfileFields. OR
-   // Roaming because SME requested for reassoc by changing one of the fields in
-   // tCsrRoamModifyProfileFields.
-   eCsrRoamReasonStaCapabilityChanged,
-   // Roaming because SME requested for reassoc to a different AP, as part of
-   // inter AP handoff.
-   eCsrRoamReasonBetterAP,
-   // Roaming because SME requested it as the link is lost - placeholder, will
-   // clean it up once handoff code gets in
-   eCsrRoamReasonSmeIssuedForLostLink,
+    // Roaming because HDD requested for reassoc by changing one of the fields in
+    // tCsrRoamModifyProfileFields. OR
+    // Roaming because SME requested for reassoc by changing one of the fields in
+    // tCsrRoamModifyProfileFields.
+    eCsrRoamReasonStaCapabilityChanged,
+    // Roaming because SME requested for reassoc to a different AP, as part of
+    // inter AP handoff.
+    eCsrRoamReasonBetterAP,
+    // Roaming because SME requested it as the link is lost - placeholder, will
+    // clean it up once handoff code gets in
+    eCsrRoamReasonSmeIssuedForLostLink,
 
-}eCsrRoamReasonCodes;
+} eCsrRoamReasonCodes;
 
 typedef enum
 {
-   eCsrRoamWmmAuto = 0,
-   eCsrRoamWmmQbssOnly = 1,
-   eCsrRoamWmmNoQos = 2,
+    eCsrRoamWmmAuto = 0,
+    eCsrRoamWmmQbssOnly = 1,
+    eCsrRoamWmmNoQos = 2,
 
 } eCsrRoamWmmUserModeType;
 
 typedef enum
 {
-   eCSR_REQUESTER_MIN = 0,
-   eCSR_DIAG,
-   eCSR_UMA_GAN,
-   eCSR_HDD
+    eCSR_REQUESTER_MIN = 0,
+    eCSR_DIAG,
+    eCSR_UMA_GAN,
+    eCSR_HDD
 } eCsrStatsRequesterType;
 
 typedef enum
@@ -795,26 +797,26 @@ typedef struct tagPmkidCandidateInfo
 {
     tCsrBssid BSSID;
     tANI_BOOLEAN preAuthSupported;
-}tPmkidCandidateInfo;
+} tPmkidCandidateInfo;
 
 typedef struct tagPmkidCacheInfo
 {
     tCsrBssid BSSID;
     tANI_U8 PMKID[CSR_RSN_PMKID_SIZE];
-}tPmkidCacheInfo;
+} tPmkidCacheInfo;
 
 #ifdef FEATURE_WLAN_WAPI
 typedef struct tagBkidCandidateInfo
 {
     tCsrBssid BSSID;
     tANI_BOOLEAN preAuthSupported;
-}tBkidCandidateInfo;
+} tBkidCandidateInfo;
 
 typedef struct tagBkidCacheInfo
 {
     tCsrBssid BSSID;
     tANI_U8 BKID[CSR_WAPI_BKID_SIZE];
-}tBkidCacheInfo;
+} tBkidCacheInfo;
 #endif /* FEATURE_WLAN_WAPI */
 
 typedef struct tagCsrKeys
@@ -822,22 +824,22 @@ typedef struct tagCsrKeys
     tANI_U8 KeyLength[ CSR_MAX_NUM_KEY ];   //Also use to indicate whether the key index is set
     tANI_U8 KeyMaterial[ CSR_MAX_NUM_KEY ][ CSR_MAX_KEY_LEN ];
     tANI_U8 defaultIndex;
-}tCsrKeys;
+} tCsrKeys;
 
 /* Following are fields which are part of tCsrRoamConnectedProfile might need
    modification dynamically once STA is up & running and this could trigger
    reassoc */
 typedef struct tagCsrRoamModifyProfileFields
 {
-   // during connect this specifies ACs U-APSD is to be setup
-   //   for (Bit0:VO; Bit1:VI; Bit2:BK; Bit3:BE all other bits are ignored).
-   //  During assoc response this COULD carry confirmation of what ACs U-APSD
-   // got setup for. Later if an APP looking for APSD, SME-QoS might need to
-   // modify this field
-   tANI_U8     uapsd_mask;
-   // HDD might ask to modify this field
-   tANI_U16    listen_interval;
-}tCsrRoamModifyProfileFields;
+    // during connect this specifies ACs U-APSD is to be setup
+    //   for (Bit0:VO; Bit1:VI; Bit2:BK; Bit3:BE all other bits are ignored).
+    //  During assoc response this COULD carry confirmation of what ACs U-APSD
+    // got setup for. Later if an APP looking for APSD, SME-QoS might need to
+    // modify this field
+    tANI_U8     uapsd_mask;
+    // HDD might ask to modify this field
+    tANI_U16    listen_interval;
+} tCsrRoamModifyProfileFields;
 
 typedef struct tagCsrRoamProfile
 {
@@ -920,7 +922,7 @@ typedef struct tagCsrRoamProfile
 #endif
     tVOS_CON_MODE csrPersona;
 
-}tCsrRoamProfile;
+} tCsrRoamProfile;
 
 
 typedef struct tagCsrRoamConnectedProfile
@@ -961,7 +963,7 @@ typedef struct tagCsrRoamConnectedProfile
     tANI_BOOLEAN    isESEAssoc;
 #endif
     tANI_U32 dot11Mode;
-}tCsrRoamConnectedProfile;
+} tCsrRoamConnectedProfile;
 
 
 #ifdef WLAN_FEATURE_VOWIFI_11R
@@ -985,7 +987,7 @@ typedef struct tagCsrNeighborRoamConfigParams
     tANI_U16       nNeighborResultsRefreshPeriod;
     tANI_U16       nEmptyScanRefreshPeriod;
     tANI_U8        nNeighborInitialForcedRoamTo5GhEnable;
-}tCsrNeighborRoamConfigParams;
+} tCsrNeighborRoamConfigParams;
 #endif
 
 typedef struct tagCsrConfigParam
@@ -1021,7 +1023,7 @@ typedef struct tagCsrConfigParam
     tANI_U8 bCatRssiOffset;     //to set the RSSI difference for each category
     tANI_U8 fEnableMCCMode; //to set MCC Enable/Disable mode
     tANI_U8 fAllowMCCGODiffBI; //to allow MCC GO different B.I than STA's. NOTE: make sure if RIVA firmware can handle this combination before enabling this
-                               //at the moment, this flag is provided only to pass Wi-Fi Cert. 5.1.12
+    //at the moment, this flag is provided only to pass Wi-Fi Cert. 5.1.12
     tCsr11dinfo  Csr11dinfo;
     //Whether to limit the channels to the ones set in Csr11dInfo. If true, the opertaional
     //channels are limited to the default channel list. It is an "AND" operation between the
@@ -1060,9 +1062,9 @@ typedef struct tagCsrConfigParam
     tANI_U32  nActiveMaxChnTimeConc;     //in units of milliseconds
     tANI_U32  nRestTimeConc;             //in units of milliseconds
     tANI_U8   nNumStaChanCombinedConc;   //number of channels combined for
-                                         //STA in each split scan operation
+    //STA in each split scan operation
     tANI_U8   nNumP2PChanCombinedConc;   //number of channels combined for
-                                         //P2P in each split scan operation
+    //P2P in each split scan operation
 #endif
 
     tANI_BOOLEAN IsIdleScanEnabled;
@@ -1156,13 +1158,13 @@ typedef struct tagCsrConfigParam
     tANI_BOOLEAN sendDeauthBeforeCon;
 
     eCsrBand  scanBandPreference;
-}tCsrConfigParam;
+} tCsrConfigParam;
 
 //Tush
 typedef struct tagCsrUpdateConfigParam
 {
-   tCsr11dinfo  Csr11dinfo;
-}tCsrUpdateConfigParam;
+    tCsr11dinfo  Csr11dinfo;
+} tCsrUpdateConfigParam;
 
 typedef struct tagCsrRoamInfo
 {
@@ -1174,8 +1176,8 @@ typedef struct tagCsrRoamInfo
     tANI_U32 nFrameLength;
     tANI_U8  frameType;
     tANI_U8 *pbFrames;  //Point to a buffer contain the beacon, assoc req, assoc rsp frame, in that order
-                        //user needs to use nBeaconLength, nAssocReqLength, nAssocRspLength to desice where
-                        //each frame starts and ends.
+    //user needs to use nBeaconLength, nAssocReqLength, nAssocRspLength to desice where
+    //each frame starts and ends.
     tANI_BOOLEAN fReassocReq;   //set to true if for re-association
     tANI_BOOLEAN fReassocRsp;   //set to true if for re-association
     tCsrBssid bssid;
@@ -1240,14 +1242,14 @@ typedef struct tagCsrRoamInfo
 
     tANI_S8 rxRssi;
     tANI_U32 maxRateFlags;
-}tCsrRoamInfo;
+} tCsrRoamInfo;
 
 typedef struct tagCsrFreqScanInfo
 {
     tANI_U32 nStartFreq;    //in unit of MHz
     tANI_U32 nEndFreq;      //in unit of MHz
     tSirScanType scanType;
-}tCsrFreqScanInfo;
+} tCsrFreqScanInfo;
 
 
 typedef struct sSirSmeAssocIndToUpperLayerCnf
@@ -1269,101 +1271,101 @@ typedef struct sSirSmeAssocIndToUpperLayerCnf
 
 typedef struct tagCsrSummaryStatsInfo
 {
-   tANI_U32 retry_cnt[4];
-   tANI_U32 multiple_retry_cnt[4];
-   tANI_U32 tx_frm_cnt[4];
-   //tANI_U32 num_rx_frm_crc_err; same as rx_error_cnt
-   //tANI_U32 num_rx_frm_crc_ok; same as rx_frm_cnt
-   tANI_U32 rx_frm_cnt;
-   tANI_U32 frm_dup_cnt;
-   tANI_U32 fail_cnt[4];
-   tANI_U32 rts_fail_cnt;
-   tANI_U32 ack_fail_cnt;
-   tANI_U32 rts_succ_cnt;
-   tANI_U32 rx_discard_cnt;
-   tANI_U32 rx_error_cnt;
-   tANI_U32 tx_byte_cnt;
+    tANI_U32 retry_cnt[4];
+    tANI_U32 multiple_retry_cnt[4];
+    tANI_U32 tx_frm_cnt[4];
+    //tANI_U32 num_rx_frm_crc_err; same as rx_error_cnt
+    //tANI_U32 num_rx_frm_crc_ok; same as rx_frm_cnt
+    tANI_U32 rx_frm_cnt;
+    tANI_U32 frm_dup_cnt;
+    tANI_U32 fail_cnt[4];
+    tANI_U32 rts_fail_cnt;
+    tANI_U32 ack_fail_cnt;
+    tANI_U32 rts_succ_cnt;
+    tANI_U32 rx_discard_cnt;
+    tANI_U32 rx_error_cnt;
+    tANI_U32 tx_byte_cnt;
 
-}tCsrSummaryStatsInfo;
+} tCsrSummaryStatsInfo;
 
 typedef struct tagCsrGlobalClassAStatsInfo
 {
-   tANI_U32 rx_frag_cnt;
-   tANI_U32 promiscuous_rx_frag_cnt;
-   //tANI_U32 rx_fcs_err;
-   tANI_U32 rx_input_sensitivity;
-   tANI_U32 max_pwr;
-   //tANI_U32 default_pwr;
-   tANI_U32 sync_fail_cnt;
-   tANI_U32 tx_rate;
-   //mcs index for HT20 and HT40 rates
-   tANI_U32  mcs_index;
-   //to defferentiate between HT20 and HT40 rates;short and long guard interval
-   tANI_U32  tx_rate_flags;
+    tANI_U32 rx_frag_cnt;
+    tANI_U32 promiscuous_rx_frag_cnt;
+    //tANI_U32 rx_fcs_err;
+    tANI_U32 rx_input_sensitivity;
+    tANI_U32 max_pwr;
+    //tANI_U32 default_pwr;
+    tANI_U32 sync_fail_cnt;
+    tANI_U32 tx_rate;
+    //mcs index for HT20 and HT40 rates
+    tANI_U32  mcs_index;
+    //to defferentiate between HT20 and HT40 rates;short and long guard interval
+    tANI_U32  tx_rate_flags;
 
-}tCsrGlobalClassAStatsInfo;
+} tCsrGlobalClassAStatsInfo;
 
 typedef struct tagCsrGlobalClassBStatsInfo
 {
-   tANI_U32 uc_rx_wep_unencrypted_frm_cnt;
-   tANI_U32 uc_rx_mic_fail_cnt;
-   tANI_U32 uc_tkip_icv_err;
-   tANI_U32 uc_aes_ccmp_format_err;
-   tANI_U32 uc_aes_ccmp_replay_cnt;
-   tANI_U32 uc_aes_ccmp_decrpt_err;
-   tANI_U32 uc_wep_undecryptable_cnt;
-   tANI_U32 uc_wep_icv_err;
-   tANI_U32 uc_rx_decrypt_succ_cnt;
-   tANI_U32 uc_rx_decrypt_fail_cnt;
-   tANI_U32 mcbc_rx_wep_unencrypted_frm_cnt;
-   tANI_U32 mcbc_rx_mic_fail_cnt;
-   tANI_U32 mcbc_tkip_icv_err;
-   tANI_U32 mcbc_aes_ccmp_format_err;
-   tANI_U32 mcbc_aes_ccmp_replay_cnt;
-   tANI_U32 mcbc_aes_ccmp_decrpt_err;
-   tANI_U32 mcbc_wep_undecryptable_cnt;
-   tANI_U32 mcbc_wep_icv_err;
-   tANI_U32 mcbc_rx_decrypt_succ_cnt;
-   tANI_U32 mcbc_rx_decrypt_fail_cnt;
+    tANI_U32 uc_rx_wep_unencrypted_frm_cnt;
+    tANI_U32 uc_rx_mic_fail_cnt;
+    tANI_U32 uc_tkip_icv_err;
+    tANI_U32 uc_aes_ccmp_format_err;
+    tANI_U32 uc_aes_ccmp_replay_cnt;
+    tANI_U32 uc_aes_ccmp_decrpt_err;
+    tANI_U32 uc_wep_undecryptable_cnt;
+    tANI_U32 uc_wep_icv_err;
+    tANI_U32 uc_rx_decrypt_succ_cnt;
+    tANI_U32 uc_rx_decrypt_fail_cnt;
+    tANI_U32 mcbc_rx_wep_unencrypted_frm_cnt;
+    tANI_U32 mcbc_rx_mic_fail_cnt;
+    tANI_U32 mcbc_tkip_icv_err;
+    tANI_U32 mcbc_aes_ccmp_format_err;
+    tANI_U32 mcbc_aes_ccmp_replay_cnt;
+    tANI_U32 mcbc_aes_ccmp_decrpt_err;
+    tANI_U32 mcbc_wep_undecryptable_cnt;
+    tANI_U32 mcbc_wep_icv_err;
+    tANI_U32 mcbc_rx_decrypt_succ_cnt;
+    tANI_U32 mcbc_rx_decrypt_fail_cnt;
 
-}tCsrGlobalClassBStatsInfo;
+} tCsrGlobalClassBStatsInfo;
 
 typedef struct tagCsrGlobalClassCStatsInfo
 {
-   tANI_U32 rx_amsdu_cnt;
-   tANI_U32 rx_ampdu_cnt;
-   tANI_U32 tx_20_frm_cnt;
-   tANI_U32 rx_20_frm_cnt;
-   tANI_U32 rx_mpdu_in_ampdu_cnt;
-   tANI_U32 ampdu_delimiter_crc_err;
+    tANI_U32 rx_amsdu_cnt;
+    tANI_U32 rx_ampdu_cnt;
+    tANI_U32 tx_20_frm_cnt;
+    tANI_U32 rx_20_frm_cnt;
+    tANI_U32 rx_mpdu_in_ampdu_cnt;
+    tANI_U32 ampdu_delimiter_crc_err;
 
-}tCsrGlobalClassCStatsInfo;
+} tCsrGlobalClassCStatsInfo;
 
 typedef struct tagCsrGlobalClassDStatsInfo
 {
-   tANI_U32 tx_uc_frm_cnt;
-   tANI_U32 tx_mc_frm_cnt;
-   tANI_U32 tx_bc_frm_cnt;
-   tANI_U32 rx_uc_frm_cnt;
-   tANI_U32 rx_mc_frm_cnt;
-   tANI_U32 rx_bc_frm_cnt;
-   tANI_U32 tx_uc_byte_cnt[4];
-   tANI_U32 tx_mc_byte_cnt;
-   tANI_U32 tx_bc_byte_cnt;
-   tANI_U32 rx_uc_byte_cnt[4];
-   tANI_U32 rx_mc_byte_cnt;
-   tANI_U32 rx_bc_byte_cnt;
-   tANI_U32 rx_byte_cnt;
-   tANI_U32 num_rx_bytes_crc_ok;
-   tANI_U32 rx_rate;
+    tANI_U32 tx_uc_frm_cnt;
+    tANI_U32 tx_mc_frm_cnt;
+    tANI_U32 tx_bc_frm_cnt;
+    tANI_U32 rx_uc_frm_cnt;
+    tANI_U32 rx_mc_frm_cnt;
+    tANI_U32 rx_bc_frm_cnt;
+    tANI_U32 tx_uc_byte_cnt[4];
+    tANI_U32 tx_mc_byte_cnt;
+    tANI_U32 tx_bc_byte_cnt;
+    tANI_U32 rx_uc_byte_cnt[4];
+    tANI_U32 rx_mc_byte_cnt;
+    tANI_U32 rx_bc_byte_cnt;
+    tANI_U32 rx_byte_cnt;
+    tANI_U32 num_rx_bytes_crc_ok;
+    tANI_U32 rx_rate;
 
-}tCsrGlobalClassDStatsInfo;
+} tCsrGlobalClassDStatsInfo;
 
 typedef struct tagCsrPerStaStatsInfo
 {
-   tANI_U32 tx_frag_cnt[4];
-   tANI_U32 tx_ampdu_cnt;
-   tANI_U32 tx_mpdu_in_ampdu_cnt;
+    tANI_U32 tx_frag_cnt[4];
+    tANI_U32 tx_ampdu_cnt;
+    tANI_U32 tx_mpdu_in_ampdu_cnt;
 } tCsrPerStaStatsInfo;
 
 typedef struct tagCsrRoamSetKey
@@ -1400,39 +1402,39 @@ typedef struct tagCsrLinkEstablishParams
     tANI_U8 supportedChannels[SIR_MAC_MAX_SUPP_CHANNELS];
     tANI_U8 supportedOperClassesLen;
     tANI_U8 supportedOperClasses[SIR_MAC_MAX_SUPP_OPER_CLASSES];
-}tCsrTdlsLinkEstablishParams;
+} tCsrTdlsLinkEstablishParams;
 
 typedef struct tagCsrTdlsSendMgmt
 {
-        tSirMacAddr peerMac;
-        tANI_U8 frameType;
-        tANI_U8 dialog;
-        tANI_U16 statusCode;
-        tANI_U8 responder;
-        tANI_U32 peerCapability;
-        tANI_U8 *buf;
-        tANI_U8 len;
+    tSirMacAddr peerMac;
+    tANI_U8 frameType;
+    tANI_U8 dialog;
+    tANI_U16 statusCode;
+    tANI_U8 responder;
+    tANI_U32 peerCapability;
+    tANI_U8 *buf;
+    tANI_U8 len;
 
-}tCsrTdlsSendMgmt;
+} tCsrTdlsSendMgmt;
 
 #ifdef FEATURE_WLAN_TDLS_INTERNAL
 typedef struct tagCsrTdlsDisRequest
 {
-        tSirMacAddr peerMac;
-            tANI_U8 disType;
-}tCsrTdlsDisRequest;
+    tSirMacAddr peerMac;
+    tANI_U8 disType;
+} tCsrTdlsDisRequest;
 
 typedef struct tagCsrTdlsSetupRequest
 {
-        tSirMacAddr peerMac;
-            tANI_U8 linkIndex;
-}tCsrTdlsSetupRequest;
+    tSirMacAddr peerMac;
+    tANI_U8 linkIndex;
+} tCsrTdlsSetupRequest;
 
 typedef struct tagCsrTdlsTeardownRequest
 {
-        tSirMacAddr peerMac;
-            tANI_U8 linkIndex;
-}tCsrTdlsTeardownRequest ;
+    tSirMacAddr peerMac;
+    tANI_U8 linkIndex;
+} tCsrTdlsTeardownRequest ;
 #endif
 #endif
 
@@ -1445,7 +1447,7 @@ typedef struct tagCsrHandoffRequest
 {
     tCsrBssid bssid;
     tANI_U8 channel;
-}tCsrHandoffRequest;
+} tCsrHandoffRequest;
 #endif
 
 #if defined(FEATURE_WLAN_ESE) && defined(FEATURE_WLAN_ESE_UPLOAD)
@@ -1488,7 +1490,7 @@ typedef eHalStatus (*csrScanCompleteCallback)(tHalHandle, void *p2, tANI_U32 sca
 //roamStatus is a flag indicating the status of the callback
 //roamResult is the result
 typedef eHalStatus (*csrRoamCompleteCallback)(void *pContext, tCsrRoamInfo *pParam, tANI_U32 roamId,
-                                              eRoamCmdStatus roamStatus, eCsrRoamResult roamResult);
+        eRoamCmdStatus roamStatus, eCsrRoamResult roamResult);
 
 typedef eHalStatus (*csrRoamSessionCloseCallback)(void *pContext);
 
@@ -1580,7 +1582,7 @@ void csrDumpInit(tHalHandle hHal);
 
 ---------------------------------------------------------------------------*/
 typedef void (* csrRoamLinkQualityIndCallback)
-             (eCsrRoamLinkQualityInd  ind, void *pContext);
+(eCsrRoamLinkQualityInd  ind, void *pContext);
 
 
 /*---------------------------------------------------------------------------

@@ -29,7 +29,7 @@
  * $File: //depot/software/projects/feature_branches/gen5_phase1/os/linux/classic/ap/apps/include/aniSsmServices.h $
  *
  * Contains definitions of common types that the SSM exports to other
- * modules. 
+ * modules.
  *
  * Author:      Mayank D. Upadhyay
  * Date:        23-January-2003
@@ -71,7 +71,7 @@
 
 /*
  * PMKSA ID data type
- * (PMKID is an HMAC-SHA1-128 value) 
+ * (PMKID is an HMAC-SHA1-128 value)
  */
 #define ANI_AAG_PMKID_SIZE 16
 
@@ -82,7 +82,8 @@
 
 
 // Upper level authentication types used by AA
-typedef enum eAniSsmAuthType {
+typedef enum eAniSsmAuthType
+{
     eANI_SSM_AT_UNDERFLOW = -1,
 
     // The numbers are fixed so that they can be re-used in the XCLI
@@ -97,7 +98,8 @@ typedef enum eAniSsmAuthType {
 } tAniSsmAuthType;
 
 // Upper level encryption types used by AA
-typedef enum eAniSsmCipherType {
+typedef enum eAniSsmCipherType
+{
     eANI_SSM_CT_UNDERFLOW = -1,
 
     // The numbers are fixed so that they can be re-used in the XCLI
@@ -115,7 +117,8 @@ typedef enum eAniSsmCipherType {
 
 
 // WPA modes
-typedef enum eAniSsmWpaModes {
+typedef enum eAniSsmWpaModes
+{
     eANI_SSM_WPA_UNDERFLOW = -1,
 
     eANI_SSM_WPA_DISABLE = 0,
@@ -125,19 +128,21 @@ typedef enum eAniSsmWpaModes {
     eANI_SSM_WPA_OVERFLOW = ((eANI_SSM_WPA_2 | eANI_SSM_WPA_1)  + 1)
 } tAniSsmWpaModes;
 
-typedef struct sAniSsmGroup {
+typedef struct sAniSsmGroup
+{
     v_U16_t len; // Valid range: 0..ANI_SSM_MAX_GROUP_SIZE
     v_U8_t  group[1];
 } tAniSsmGroup;
 
-typedef struct sAniSsmUserId {
+typedef struct sAniSsmUserId
+{
     v_U16_t len; // Valid range: 0..ANI_SSM_MAX_USERID_SIZE
     v_U8_t  userId[1];
 } tAniSsmUserId;
 
 /*
  * PMKSA ID data type
- * (PMKID is an HMAC-SHA1-128 value) 
+ * (PMKID is an HMAC-SHA1-128 value)
  */
 typedef v_U8_t tAniSsmPmkId[ANI_AAG_PMKID_SIZE];
 
@@ -199,7 +204,7 @@ aniSsmIsStaMacAllowed(const tAniMacAddr staMac, const tAniSSID *ssid);
  * open-auth in the lowest security level, the STA is required to
  * initiate EAPOL in order to establish WEP keys, or WEP cannot be not
  * used.)
- * 
+ *
  * @param secMode the security mode that is in force
  * @param macAuthType the MAC-level authentication type to check
  * @param ieLen is set 0 if no RSN IE is present, or to the number of
@@ -216,7 +221,7 @@ aniSsmIsStaMacAllowed(const tAniMacAddr staMac, const tAniSSID *ssid);
  */
 v_BOOL_t
 aniSsmIsSecModeAllowed(v_U32_t secMode,
-                       tAniAuthType macAuthType, 
+                       tAniAuthType macAuthType,
                        v_U8_t ieLen,
                        v_U8_t *ieData,
                        v_BOOL_t bpIndicator,

@@ -61,7 +61,7 @@ typedef struct tSuppContext tSuppContext;
 #define ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE 8 // Bytes
 
 #define  BAP_SET_RSN_KEY   1
-#define  BAP_RESET_RSN_KEY  0 
+#define  BAP_RESET_RSN_KEY  0
 
 
 #define AAG_ACL_LOOKUP_NEEDED(ctx) \
@@ -81,17 +81,17 @@ typedef struct tSuppContext tSuppContext;
 /************************
  * AuthRsnFsm structure:
  *************************/
-typedef struct tagAuthRsnFsm 
+typedef struct tagAuthRsnFsm
 {
     v_U8_t currentState;
-    
+
     tBtampContext *ctx;
-    tStaContext *staCtx; 
+    tStaContext *staCtx;
 
     // Variables used for EAPOL-Key messages
     v_U8_t aNonce[ANI_EAPOL_KEY_RSN_NONCE_SIZE];
     v_U8_t sNonce[ANI_EAPOL_KEY_RSN_NONCE_SIZE];
- 
+
     // Flags set by external events
     v_U8_t authReq;
     v_U8_t eapolAvail;
@@ -117,10 +117,11 @@ typedef struct tagAuthRsnFsm
  * SuppRsnFsm structure:
  *************************/
 
-typedef struct tagSuppRsnFsm {
+typedef struct tagSuppRsnFsm
+{
 
     v_U8_t currentState;
-    
+
     tBtampContext *ctx;
     tSuppContext *suppCtx;
 
@@ -152,21 +153,21 @@ typedef enum
 {
     //Internal to RSN
     //This event is triggered by RSN’s timers
-    RSN_FSM_TIMER_EXPIRED,  
+    RSN_FSM_TIMER_EXPIRED,
     //BAP use this event to inform auth/supp to start processing
-    //authentication. When BAP send this event to RSN, it is presumed 
+    //authentication. When BAP send this event to RSN, it is presumed
     //that the PMK is available.
-    RSN_FSM_AUTH_START,    
+    RSN_FSM_AUTH_START,
     //Internal to RSN
     //This event is triggered by the Rx routine when called by TL
-    RSN_FSM_EAPOL_FRAME_AVAILABLE,  
-    //BAP use this event to inform RSN that the connection is lost  
-    RSN_FSM_DISCONNECT,    
+    RSN_FSM_EAPOL_FRAME_AVAILABLE,
+    //BAP use this event to inform RSN that the connection is lost
+    RSN_FSM_DISCONNECT,
     //Internal to RSN
     //This event hannpens when RSN detect key integraty check fails
-    RSN_FSM_INTEG_FAILED,  
+    RSN_FSM_INTEG_FAILED,
 
-}tRsnFsmEvent;
+} tRsnFsmEvent;
 
 /**
  * Stores information about an EAP message that was last received or
@@ -191,7 +192,7 @@ typedef enum
  *     message is generated, this one is freed and the new one is
  *     stored.
  */
-typedef struct tEapInfo 
+typedef struct tEapInfo
 
 {
     tAniPacket *message;
@@ -199,7 +200,8 @@ typedef struct tEapInfo
 } tEapInfo;
 
 
-typedef enum eAniSsmAuthState {
+typedef enum eAniSsmAuthState
+{
     eANI_SSM_AUTH_STATE_INIT = 0,
     eANI_SSM_AS_PW_KEY_CONF_AWAITED,
     eANI_SSM_AS_PW_KEY_SET,
@@ -213,7 +215,8 @@ typedef enum eAniSsmAuthState {
  * EAP-Message and RADIUS state that is obtained from various network
  * packets.
  */
-struct tStaContext {
+struct tStaContext
+{
 
     // STA identification information
     tAniMacAddr suppMac;
@@ -221,7 +224,7 @@ struct tStaContext {
 
     // Local association point
     tAniMacAddr authMac;
-    v_U8_t ssidName[SIR_MAC_MAX_SSID_LENGTH + 1];    
+    v_U8_t ssidName[SIR_MAC_MAX_SSID_LENGTH + 1];
     tAagSsidEntry *ssid;
 
     // The different FSM's that can be instantiated for the STA
@@ -260,7 +263,8 @@ struct tStaContext {
 };
 
 
-struct tSuppContext {
+struct tSuppContext
+{
 
     // AP (peer) identification information
     tAniMacAddr authMac;
@@ -285,12 +289,14 @@ struct tSuppContext {
 
 };
 
-typedef struct tAniEapolKeyAvailEventData {
+typedef struct tAniEapolKeyAvailEventData
+{
     void *keyDesc;
     tAniPacket *eapolFrame;
 } tAniEapolKeyAvailEventData;
 
-typedef struct tAniAagTimerEventData {
+typedef struct tAniAagTimerEventData
+{
     vos_timer_t timer;
     void *appData;
 } tAniAagTimerEventData;
@@ -330,7 +336,8 @@ typedef void (*tAagTimerCallback)(void *data);
  * This structure stores contants used by the AuthFsm as defined in
  * [802.1X].
  */
-typedef struct tAuthFsmConsts {
+typedef struct tAuthFsmConsts
+{
     // Amount of time to ignore a misbehaving STA
     v_U16_t quietPeriod;
     // Number of reauthentication attempts allowed before ignoring STA
@@ -345,7 +352,8 @@ typedef struct tAuthFsmConsts {
  * This structure stores constants used by the AuthRsnFsm as defined in
  * [802.11i].
  */
-typedef struct tAuthRsnFsmConsts {
+typedef struct tAuthRsnFsmConsts
+{
     v_U32_t timeoutPeriod;
     v_U32_t maxTries;
 } tAuthRsnFsmConsts;
@@ -355,18 +363,20 @@ typedef struct tAuthRsnFsmConsts {
  * This structure stores contants used by the SuppFsm as defined in
  * [802.1X].
  */
-typedef struct tSuppFsmConsts {
+typedef struct tSuppFsmConsts
+{
     v_U16_t authPeriod;
     v_U16_t heldPeriod;
     v_U16_t startPeriod;
-    v_U8_t maxStart;    
+    v_U8_t maxStart;
 } tSuppFsmConsts;
 
 /**
  * This structure stores constants used by the SuppRsnFsm as defined in
  * [802.11i].
  */
-typedef struct tSuppRsnFsmConsts {
+typedef struct tSuppRsnFsmConsts
+{
     v_U32_t timeoutPeriod;
     v_U32_t maxTries;
 } tSuppRsnFsmConsts;
@@ -376,7 +386,8 @@ typedef struct tSuppRsnFsmConsts {
  * This structure stores constants used by the AuthRsnGroupKeyFsm as
  * defined in [802.11i].
  */
-typedef struct tAuthRsnGroupKeyFsmConsts {
+typedef struct tAuthRsnGroupKeyFsmConsts
+{
     v_U32_t timeoutPeriod;
     v_U32_t maxTries;
 } tAuthRsnGroupKeyFsmConsts;
@@ -387,7 +398,7 @@ typedef struct tAuthRsnGroupKeyFsmConsts {
  * FUNCTION
  * Frees a previously allocated RSN Key FSM in a STA context. If the
  * RSN Key FSM is not yet allocated, then this is an error.
- * 
+ *
  * @param ctx the STA context whose FSM instance is to be freed
  *
  * @return ANI_OK if the operation succeeds
@@ -400,7 +411,7 @@ authRsnFsmFree(tBtampContext *ctx);
  *
  * FUNCTION
  * Passes an event to the RSN key FSM instance for immediate processing.
- * 
+ *
  * @param fsm the RSN Key FSM instance
  * @param eventId the AAG event to process
  * @param arg an optional argument for this event
@@ -417,7 +428,7 @@ authRsnFsmProcessEvent(tAuthRsnFsm *fsm, tRsnFsmEvent eventId, void *arg);
  * FUNCTION
  * Allocates and initializes the state of an SuppFsm instance for the
  * given STA context.
- * 
+ *
  * @parm ctx the supplicant context whose SuppFsm is being created
  *
  * @return ANI_OK if the operation succeeds
@@ -430,7 +441,7 @@ suppRsnFsmCreate(tBtampContext *ctx);
  *
  * FUNCTION
  * Frees a previously allocated SuppFsm.
- * 
+ *
  * @param suppCtx the supplicant context whose suppFsm is to be freed
  *
  * @return ANI_OK if the operation succeeds
@@ -443,7 +454,7 @@ suppRsnFsmFree(tBtampContext *ctx);
  *
  * FUNCTION
  * Passes an event to the suppFsm for immediate processing.
- * 
+ *
  * Note: The pertinent event data is already stored in the context.
  *
  * @param suppFsm the suppFsm

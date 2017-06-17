@@ -28,15 +28,15 @@
 #ifdef FEATURE_OEM_DATA_SUPPORT
 
 /**===========================================================================
-  
+
   \file  wlan_hdd_oemdata.h
-  
+
   \brief Internal includes for the oem data
-  
+
                Copyright 2008 (c) Qualcomm, Incorporated.
                All Rights Reserved.
                Qualcomm Confidential and Proprietary.
-  
+
   ==========================================================================*/
 
 
@@ -57,16 +57,16 @@ struct iw_oem_data_req
 };
 
 int iw_set_oem_data_req(
-        struct net_device *dev,
-        struct iw_request_info *info,
-        union iwreq_data *wrqu,
-        char *extra);
+    struct net_device *dev,
+    struct iw_request_info *info,
+    union iwreq_data *wrqu,
+    char *extra);
 
 int iw_get_oem_data_rsp(
-        struct net_device *dev,
-        struct iw_request_info *info,
-        union iwreq_data *wrqu,
-        char *extra);
+    struct net_device *dev,
+    struct iw_request_info *info,
+    union iwreq_data *wrqu,
+    char *extra);
 
 struct iw_oem_data_rsp
 {

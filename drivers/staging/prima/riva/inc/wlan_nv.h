@@ -64,7 +64,7 @@ typedef enum
     NUM_NV_FIELDS,
     NV_MAX_FIELD = 0x7FFFFFFF  /* define as 4 bytes data */
 
-}eNvField;
+} eNvField;
 
 
 #define NV_FIELD_MAC_ADDR_SIZE      6
@@ -77,7 +77,7 @@ typedef enum
 
     NUM_PRODUCT_BANDS,
     NUM_PRODUCT_BANDS_INVALID = 0x7FFFFFFF  /* define as 4 bytes data */
-}eNvProductBands;           //NV_COMMON_PRODUCT_BANDS
+} eNvProductBands;          //NV_COMMON_PRODUCT_BANDS
 
 #define EXTERNAL_PA         1
 #define INTERNAL_PA         0
@@ -175,7 +175,7 @@ typedef PACKED_PRE union PACKED_POST
 {
     uint32 measurement;      //measured values can be passed to pttApi, but are maintained to 2 decimal places internally
     int16  reported;         //used internally only - reported values only maintain 2 decimals places
-}uAbsPwrPrecision;
+} uAbsPwrPrecision;
 
 typedef enum
 {
@@ -188,7 +188,7 @@ typedef enum
     //possible tx chain combinations
     PHY_NO_TX_CHAINS,
     PHY_TX_CHAIN_INVALID = 0x7FFFFFFF  /* define as 4 bytes data */
-}ePhyTxChains;
+} ePhyTxChains;
 
 //From wlanfw/inc/halRfTypes.h
 
@@ -206,7 +206,7 @@ typedef enum
 
     NUM_REG_DOMAINS,
     NUM_REG_DOMAINS_INVALID = 0x7FFFFFFF  /* define as 4 bytes data */
-}eRegDomainId;
+} eRegDomainId;
 
 typedef enum
 {
@@ -227,7 +227,7 @@ typedef enum
     NUM_RF_BANDS,
     BOTH_RF_BANDS,
     RF_SUBBAND_INVALID = 0x7FFFFFFF  /* define as 4 bytes data */
-}eRfSubBand;
+} eRfSubBand;
 
 typedef enum
 {
@@ -356,34 +356,34 @@ typedef enum
 
     INVALID_RF_CHANNEL = 0xBAD,
     RF_CHANNEL_INVALID_MAX_FIELD = 0x7FFFFFFF  /* define as 4 bytes data */
-}eRfChannels;
+} eRfChannels;
 
 typedef enum
 {
-   RF_CHAN_1_1 = RF_CHAN_1,
-   RF_CHAN_2_1 = RF_CHAN_2,
-   RF_CHAN_3_1 = RF_CHAN_3,
-   RF_CHAN_4_1 = RF_CHAN_4,
-   RF_CHAN_5_1 = RF_CHAN_5,
-   RF_CHAN_6_1 = RF_CHAN_6,
-   RF_CHAN_7_1 = RF_CHAN_7,
-   RF_CHAN_8_1 = RF_CHAN_8,
-   RF_CHAN_9_1 = RF_CHAN_9,
-   RF_CHAN_10_1 = RF_CHAN_10,
-   RF_CHAN_11_1 = RF_CHAN_11,
-   RF_CHAN_12_1 = RF_CHAN_12,
-   RF_CHAN_13_1 = RF_CHAN_13,
-   RF_CHAN_14_1 = RF_CHAN_14,
+    RF_CHAN_1_1 = RF_CHAN_1,
+    RF_CHAN_2_1 = RF_CHAN_2,
+    RF_CHAN_3_1 = RF_CHAN_3,
+    RF_CHAN_4_1 = RF_CHAN_4,
+    RF_CHAN_5_1 = RF_CHAN_5,
+    RF_CHAN_6_1 = RF_CHAN_6,
+    RF_CHAN_7_1 = RF_CHAN_7,
+    RF_CHAN_8_1 = RF_CHAN_8,
+    RF_CHAN_9_1 = RF_CHAN_9,
+    RF_CHAN_10_1 = RF_CHAN_10,
+    RF_CHAN_11_1 = RF_CHAN_11,
+    RF_CHAN_12_1 = RF_CHAN_12,
+    RF_CHAN_13_1 = RF_CHAN_13,
+    RF_CHAN_14_1 = RF_CHAN_14,
 // The above params are used for scripts.
-   NUM_2_4GHZ_CHANNELS,
-}eRfChannels_2_4GHz;
-	
+    NUM_2_4GHZ_CHANNELS,
+} eRfChannels_2_4GHz;
+
 enum
 {
-   NV_CHANNEL_DISABLE,
-   NV_CHANNEL_ENABLE,
-   NV_CHANNEL_DFS,
-   NV_CHANNEL_INVALID
+    NV_CHANNEL_DISABLE,
+    NV_CHANNEL_ENABLE,
+    NV_CHANNEL_DFS,
+    NV_CHANNEL_INVALID
 };
 typedef uint8 eNVChannelEnabledType;
 
@@ -391,7 +391,7 @@ typedef PACKED_PRE struct PACKED_POST
 {
     eNVChannelEnabledType   enabled;
     tPowerdBm pwrLimit;
-}sRegulatoryChannel;
+} sRegulatoryChannel;
 
 typedef PACKED_PRE struct PACKED_POST
 {
@@ -399,20 +399,20 @@ typedef PACKED_PRE struct PACKED_POST
     uAbsPwrPrecision antennaGain[NUM_RF_SUBBANDS];
     uAbsPwrPrecision bRatePowerOffset[NUM_2_4GHZ_CHANNELS];
     uAbsPwrPrecision gnRatePowerOffset[NUM_RF_CHANNELS];
-}ALIGN_4 sRegulatoryDomains;
+} ALIGN_4 sRegulatoryDomains;
 
 typedef PACKED_PRE struct PACKED_POST
 {
     int16 bRssiOffset[NUM_RF_CHANNELS];
     int16 gnRssiOffset[NUM_RF_CHANNELS];
-}ALIGN_4 sRssiChannelOffsets;
+} ALIGN_4 sRssiChannelOffsets;
 
 typedef PACKED_PRE struct PACKED_POST
 {
     uint16 targetFreq;           //number in MHz
     uint16 channelNum;           //channel number as in the eRfChannels enumeration
     eRfSubBand band;               //band that this channel belongs to
-}tRfChannelProps;
+} tRfChannelProps;
 
 typedef enum
 {
@@ -444,10 +444,10 @@ typedef PACKED_PRE struct PACKED_POST
     uint8     nv_TxBBFSel9MHz       : 1;
     uint8     hwParam1              : 7;
     uint8     hwParam2;
-    
+
     uint16    custom_tcxo_reg8;
     uint16    custom_tcxo_reg9;
-    
+
     uint32    hwParam3;
     uint32    hwParam4;
     uint32    hwParam5;
@@ -457,24 +457,24 @@ typedef PACKED_PRE struct PACKED_POST
     uint32    hwParam9;
     uint32    hwParam10;
     uint32    hwParam11;
-}sCalData;
+} sCalData;
 
 typedef PACKED_PRE struct PACKED_POST
 {
     uint32 validBmap;  //use eNvCalID
     sCalData calData;
-}sHwCalValues;
+} sHwCalValues;
 
 typedef PACKED_PRE struct PACKED_POST
 {
     uint32 txFirFilterMode;
-}sTxBbFilterMode;
+} sTxBbFilterMode;
 
 typedef PACKED_PRE struct PACKED_POST
 {
     int16 ofdmPwrOffset;
     int16 rsvd;
-}sOfdmCmdPwrOffset;
+} sOfdmCmdPwrOffset;
 
 //From wlanfw/inc/halPhyCfg.h
 typedef uint8 tTpcLutValue;
@@ -486,17 +486,17 @@ typedef uint8 tPowerDetect;        //7-bit power detect reading
 typedef PACKED_PRE struct PACKED_POST
 {
     tPowerDetect pwrDetAdc;            //= SENSED_PWR register, which reports the 8-bit ADC
-                                       // the stored ADC value gets shifted to 7-bits as the index to the LUT
+    // the stored ADC value gets shifted to 7-bits as the index to the LUT
     tPowerDetect adjustedPwrDet;       //7-bit value that goes into the LUT at the LUT[pwrDet] location
-                                       //MSB set if extraPrecision.hi8_adjustedPwrDet is used
-}tTpcCaldPowerPoint;
+    //MSB set if extraPrecision.hi8_adjustedPwrDet is used
+} tTpcCaldPowerPoint;
 
 typedef tTpcCaldPowerPoint tTpcCaldPowerTable[NUM_PHY_MAX_TX_CHAINS][MAX_TPC_CAL_POINTS];
 
 typedef PACKED_PRE struct PACKED_POST
 {
     tTpcCaldPowerTable empirical;                      //calibrated power points
-}tTpcConfig;
+} tTpcConfig;
 
 //From wlanfw/inc/phyTxPower.h
 #ifndef TPC_MEM_POWER_LUT_DEPTH
@@ -508,7 +508,7 @@ typedef tTpcLutValue tTpcPowerTable[NUM_PHY_MAX_TX_CHAINS][TPC_MEM_POWER_LUT_DEP
 typedef PACKED_PRE struct PACKED_POST
 {
     tTpcConfig *pwrSampled;             //points to CLPC data in calMemory
-}tPhyTxPowerBand;
+} tPhyTxPowerBand;
 
 //From halPhyRates.h
 typedef enum
@@ -602,7 +602,7 @@ typedef enum
 #ifdef WCN_PRONTO
     HAL_PHY_RATE_VHT_20MHZ_MCS_1NSS_NGI_86_5_MBPS,
 #endif
-    
+
     /*11AC rate 20MHZ Shortl GI*/
     HAL_PHY_RATE_VHT_20MHZ_MCS_1NSS_SGI_7_2_MBPS,
     HAL_PHY_RATE_VHT_20MHZ_MCS_1NSS_SGI_14_4_MBPS,
@@ -616,7 +616,7 @@ typedef enum
 #ifdef WCN_PRONTO
     HAL_PHY_RATE_VHT_20MHZ_MCS_1NSS_SGI_96_1_MBPS,
 #endif
-    
+
     /*11AC rates 40MHZ normal GI*/
     HAL_PHY_RATE_VHT_40MHZ_MCS_1NSS_CB_NGI_13_5_MBPS ,
     HAL_PHY_RATE_VHT_40MHZ_MCS_1NSS_CB_NGI_27_MBPS,
@@ -628,7 +628,7 @@ typedef enum
     HAL_PHY_RATE_VHT_40MHZ_MCS_1NSS_CB_NGI_135_MBPS,
     HAL_PHY_RATE_VHT_40MHZ_MCS_1NSS_CB_NGI_162_MBPS,
     HAL_PHY_RATE_VHT_40MHZ_MCS_1NSS_CB_NGI_180_MBPS,
-    
+
     /*11AC rates 40MHZ short GI*/
     HAL_PHY_RATE_VHT_40MHZ_MCS_1NSS_CB_SGI_15_MBPS ,
     HAL_PHY_RATE_VHT_40MHZ_MCS_1NSS_CB_SGI_30_MBPS,
@@ -640,7 +640,7 @@ typedef enum
     HAL_PHY_RATE_VHT_40MHZ_MCS_1NSS_CB_SGI_150_MBPS,
     HAL_PHY_RATE_VHT_40MHZ_MCS_1NSS_CB_SGI_180_MBPS,
     HAL_PHY_RATE_VHT_40MHZ_MCS_1NSS_CB_SGI_200_MBPS,
-    
+
     /*11AC rates 80 MHZ normal GI*/
     HAL_PHY_RATE_VHT_80MHZ_MCS_1NSS_CB_NGI_29_3_MBPS ,
     HAL_PHY_RATE_VHT_80MHZ_MCS_1NSS_CB_NGI_58_5_MBPS,
@@ -652,7 +652,7 @@ typedef enum
     HAL_PHY_RATE_VHT_80MHZ_MCS_1NSS_CB_NGI_292_5_MBPS,
     HAL_PHY_RATE_VHT_80MHZ_MCS_1NSS_CB_NGI_351_MBPS,
     HAL_PHY_RATE_VHT_80MHZ_MCS_1NSS_CB_NGI_390_MBPS,
-    
+
     /*11AC rates 80 MHZ short GI*/
     HAL_PHY_RATE_VHT_80MHZ_MCS_1NSS_CB_SGI_32_5_MBPS ,
     HAL_PHY_RATE_VHT_80MHZ_MCS_1NSS_CB_SGI_65_MBPS,
@@ -671,7 +671,7 @@ typedef enum
     MIN_RATE_INDEX = 0,
     MAX_RATE_INDEX = NUM_HAL_PHY_RATES - 1,
     HAL_PHY_RATE_INVALID_MAX_FIELD = 0x7FFFFFFF  /* define as 4 bytes data */
-}eHalPhyRates;
+} eHalPhyRates;
 
 #define NUM_RATE_POWER_GROUPS           NUM_HAL_PHY_RATES  //total number of rate power groups including the CB_RATE_POWER_OFFSET
 typedef uAbsPwrPrecision tRateGroupPwr[NUM_HAL_PHY_RATES];
@@ -682,7 +682,7 @@ typedef PACKED_PRE struct PACKED_POST
 {
     uint8 regDomain;                                  //from eRegDomainId
     uint8 countryCode[NV_FIELD_COUNTRY_CODE_SIZE];    // string identifier
-}sDefaultCountry;
+} sDefaultCountry;
 
 
 #define GF_PA_BIAS_SELECT_MASK         0X7 //(3 bits)
@@ -719,7 +719,7 @@ typedef PACKED_PRE struct PACKED_POST
 
 typedef PACKED_PRE struct PACKED_POST
 {
-    uint8 skuID; 
+    uint8 skuID;
     uint8 tpcMode2G;
     uint8 tpcMode5G;
     uint8 configItem1;
@@ -747,7 +747,7 @@ typedef PACKED_PRE struct PACKED_POST
     uint32 configItem2;
     uint32 configItem3;
     uint32 configItem4;
-}sFwConfig;
+} sFwConfig;
 
 
 #define NUM_RF_VR_RATE   13
@@ -768,7 +768,7 @@ typedef PACKED_PRE union PACKED_POST
     int16             pktTypePwrLimits[NUM_802_11_MODES][NUM_RF_CHANNELS]; // NV_TABLE_PACKET_TYPE_POWER_LIMITS
     sOfdmCmdPwrOffset    ofdmCmdPwrOffset;                                    // NV_TABLE_OFDM_CMD_PWR_OFFSET
     sTxBbFilterMode      txbbFilterMode;                                      // NV_TABLE_TX_BB_FILTER_MODE
-}ALIGN_4 uNvTables;
+} ALIGN_4 uNvTables;
 
 //From halPhy.h
 typedef tPowerdBm tChannelPwrLimit;
@@ -803,7 +803,7 @@ typedef enum
     NV_ALL_TABLES                   = 0xFFF,
     NV_BINARY_IMAGE                 = 0x1000,
     NV_MAX_TABLE                    = 0x7FFFFFFF  /* define as 4 bytes data */
-}eNvTable;
+} eNvTable;
 
 typedef PACKED_PRE struct PACKED_POST
 {
@@ -820,13 +820,13 @@ typedef PACKED_PRE struct PACKED_POST
     int16             pktTypePwrLimits[NUM_802_11_MODES][NUM_RF_CHANNELS]; // NV_TABLE_PACKET_TYPE_POWER_LIMITS
     sOfdmCmdPwrOffset    ofdmCmdPwrOffset;                                    // NV_TABLE_OFDM_CMD_PWR_OFFSET
     sTxBbFilterMode      txbbFilterMode;                                      // NV_TABLE_TX_BB_FILTER_MODE
-}ALIGN_4 sNvTables;
+} ALIGN_4 sNvTables;
 
 typedef PACKED_PRE struct PACKED_POST
 {
     sNvFields fields;
     sNvTables tables;
-}ALIGN_4 sHalNv;
+} ALIGN_4 sHalNv;
 
 extern const sHalNv nvDefaults;
 
