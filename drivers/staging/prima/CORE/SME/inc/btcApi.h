@@ -1,5 +1,25 @@
 /*
- * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+ *
+ * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
+ *
+ *
+ * Permission to use, copy, modify, and/or distribute this software for
+ * any purpose with or without fee is hereby granted, provided that the
+ * above copyright notice and this permission notice appear in all
+ * copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
+ * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
+ * AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
+ * DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
+ * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+ * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ * PERFORMANCE OF THIS SOFTWARE.
+ */
+/*
+ * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -19,12 +39,6 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
-/*
- * This file was originally distributed by Qualcomm Atheros, Inc.
- * under proprietary terms before Copyright ownership was assigned
- * to the Linux Foundation.
- */
-
 /******************************************************************************
 *
 * Name:  btcApi.h
@@ -41,7 +55,6 @@
 
 #include "vos_types.h"
 #include "vos_timer.h"
-#include "vos_nvitem.h"
 
 #define BT_INVALID_CONN_HANDLE (0xFFFF)  /**< Invalid connection handle */
 
@@ -107,11 +120,6 @@
 */
 #define BT_MAX_EVENT_DONE_TIMEOUT   45000
 
-/*
-    Maximum time duration to enable uapsd after the event is received from
-    firmware. This is added to handle back to back events from BTC.
-*/
-#define BTC_MAX_ENABLE_UAPSD_TIMER         (1000*60)
 
 /*
     To suppurt multiple SCO connections for BT+UAPSD work
@@ -138,71 +146,70 @@
 #define BTC_DHCP_ON_A2DP_DEF               (1)  // ON
 #define BTC_DHCP_ON_SCO_DEF                (0)  // OFF
 
-/*
- * Number of victim tables and mws coex configurations
- */
-#define MWS_COEX_MAX_VICTIM_TABLE             10
-#define MWS_COEX_MAX_CONFIG                   6
-
 /** Enumeration of all the different kinds of BT events
 */
-typedef enum eSmeBtEventType {
-    BT_EVENT_DEVICE_SWITCHED_ON,
-    BT_EVENT_DEVICE_SWITCHED_OFF,
-    BT_EVENT_INQUIRY_STARTED,
-    BT_EVENT_INQUIRY_STOPPED,
-    BT_EVENT_INQUIRY_SCAN_STARTED,
-    BT_EVENT_INQUIRY_SCAN_STOPPED,
-    BT_EVENT_PAGE_STARTED,
-    BT_EVENT_PAGE_STOPPED,
-    BT_EVENT_PAGE_SCAN_STARTED,
-    BT_EVENT_PAGE_SCAN_STOPPED,
-    BT_EVENT_CREATE_ACL_CONNECTION,
-    BT_EVENT_ACL_CONNECTION_COMPLETE,
-    BT_EVENT_CREATE_SYNC_CONNECTION,
-    BT_EVENT_SYNC_CONNECTION_COMPLETE,
-    BT_EVENT_SYNC_CONNECTION_UPDATED,
-    BT_EVENT_DISCONNECTION_COMPLETE,
-    BT_EVENT_MODE_CHANGED,
-    BT_EVENT_A2DP_STREAM_START,
-    BT_EVENT_A2DP_STREAM_STOP,
-    BT_EVENT_TYPE_MAX,    //This and beyond are invalid values
+typedef enum eSmeBtEventType
+{
+  BT_EVENT_DEVICE_SWITCHED_ON,
+  BT_EVENT_DEVICE_SWITCHED_OFF,
+  BT_EVENT_INQUIRY_STARTED,
+  BT_EVENT_INQUIRY_STOPPED,
+  BT_EVENT_INQUIRY_SCAN_STARTED,
+  BT_EVENT_INQUIRY_SCAN_STOPPED,
+  BT_EVENT_PAGE_STARTED,
+  BT_EVENT_PAGE_STOPPED,
+  BT_EVENT_PAGE_SCAN_STARTED,
+  BT_EVENT_PAGE_SCAN_STOPPED,
+  BT_EVENT_CREATE_ACL_CONNECTION,
+  BT_EVENT_ACL_CONNECTION_COMPLETE,
+  BT_EVENT_CREATE_SYNC_CONNECTION,
+  BT_EVENT_SYNC_CONNECTION_COMPLETE,
+  BT_EVENT_SYNC_CONNECTION_UPDATED,
+  BT_EVENT_DISCONNECTION_COMPLETE,
+  BT_EVENT_MODE_CHANGED,
+  BT_EVENT_A2DP_STREAM_START,
+  BT_EVENT_A2DP_STREAM_STOP,
+  BT_EVENT_TYPE_MAX,    //This and beyond are invalid values
 } tSmeBtEventType;
 
 /** BT-AMP events type
 */
-typedef enum eSmeBtAmpEventType {
-    BTAMP_EVENT_CONNECTION_START,
-    BTAMP_EVENT_CONNECTION_STOP,
-    BTAMP_EVENT_CONNECTION_TERMINATED,
-    BTAMP_EVENT_TYPE_MAX, //This and beyond are invalid values
+typedef enum eSmeBtAmpEventType
+{
+  BTAMP_EVENT_CONNECTION_START,
+  BTAMP_EVENT_CONNECTION_STOP,
+  BTAMP_EVENT_CONNECTION_TERMINATED,
+  BTAMP_EVENT_TYPE_MAX, //This and beyond are invalid values
 } tSmeBtAmpEventType;
 
 
 /**Data structure that specifies the needed event parameters for
     BT_EVENT_CREATE_ACL_CONNECTION and BT_EVENT_ACL_CONNECTION_COMPLETE
 */
-typedef struct sSmeBtAclConnectionParam {
-    v_U8_t       bdAddr[6];
-    v_U16_t      connectionHandle;
-    v_U8_t       status;
+typedef struct sSmeBtAclConnectionParam
+{
+   v_U8_t       bdAddr[6];
+   v_U16_t      connectionHandle;
+   v_U8_t       status;
 } tSmeBtAclConnectionParam, *tpSmeBtAclConnectionParam;
 
 /** Data structure that specifies the needed event parameters for
     BT_EVENT_CREATE_SYNC_CONNECTION, BT_EVENT_SYNC_CONNECTION_COMPLETE
     and BT_EVENT_SYNC_CONNECTION_UPDATED
 */
-typedef struct sSmeBtSyncConnectionParam {
-    v_U8_t       bdAddr[6];
-    v_U16_t      connectionHandle;
-    v_U8_t       status;
-    v_U8_t       linkType;
-    v_U8_t       scoInterval; //units in number of 625us slots
-    v_U8_t       scoWindow;   //units in number of 625us slots
-    v_U8_t       retransmisisonWindow; //units in number of 625us slots
+typedef struct sSmeBtSyncConnectionParam
+{
+   v_U8_t       bdAddr[6];
+   v_U16_t      connectionHandle;
+   v_U8_t       status;
+   v_U8_t       linkType;
+   v_U8_t       scoInterval; //units in number of 625us slots
+   v_U8_t       scoWindow;   //units in number of 625us slots
+   v_U8_t       retransmisisonWindow; //units in number of 625us slots
 } tSmeBtSyncConnectionParam, *tpSmeBtSyncConnectionParam;
 
-typedef struct sSmeBtSyncUpdateHist {
+typedef struct sSmeBtSyncUpdateHist
+{
     tSmeBtSyncConnectionParam btSyncConnection;
     v_BOOL_t fValid;
 } tSmeBtSyncUpdateHist, *tpSmeBtSyncUpdateHist;
@@ -210,7 +217,8 @@ typedef struct sSmeBtSyncUpdateHist {
 /**Data structure that specifies the needed event parameters for
     BT_EVENT_MODE_CHANGED
 */
-typedef struct sSmeBtAclModeChangeParam {
+typedef struct sSmeBtAclModeChangeParam
+{
     v_U16_t     connectionHandle;
     v_U8_t      mode;
 } tSmeBtAclModeChangeParam, *tpSmeBtAclModeChangeParam;
@@ -218,82 +226,82 @@ typedef struct sSmeBtAclModeChangeParam {
 /*Data structure that specifies the needed event parameters for
     BT_EVENT_DISCONNECTION_COMPLETE
 */
-typedef struct sSmeBtDisconnectParam {
-    v_U16_t connectionHandle;
+typedef struct sSmeBtDisconnectParam
+{
+   v_U16_t connectionHandle;
 } tSmeBtDisconnectParam, *tpSmeBtDisconnectParam;
 
 /*Data structure that specifies the needed event parameters for
     BT_EVENT_A2DP_STREAM_START
     BT_EVENT_A2DP_STREAM_STOP
 */
-typedef struct sSmeBtA2DPParam {
-    v_U8_t       bdAddr[6];
+typedef struct sSmeBtA2DPParam
+{
+   v_U8_t       bdAddr[6];
 } tSmeBtA2DPParam, *tpSmeBtA2DPParam;
 
 
 /** Generic Bluetooth Event structure for BTC
 */
-typedef struct sSmeBtcBtEvent {
-    tSmeBtEventType btEventType;
-    union {
-        v_U8_t                    bdAddr[6];    /**< For events with only a BT Addr in event_data */
-        tSmeBtAclConnectionParam  btAclConnection;
-        tSmeBtSyncConnectionParam btSyncConnection;
-        tSmeBtDisconnectParam     btDisconnect;
-        tSmeBtAclModeChangeParam  btAclModeChange;
-    } uEventParam;
+typedef struct sSmeBtcBtEvent
+{
+   tSmeBtEventType btEventType;
+   union
+   {
+      v_U8_t                    bdAddr[6];    /**< For events with only a BT Addr in event_data */
+      tSmeBtAclConnectionParam  btAclConnection;
+      tSmeBtSyncConnectionParam btSyncConnection;
+      tSmeBtDisconnectParam     btDisconnect;
+      tSmeBtAclModeChangeParam  btAclModeChange;
+   }uEventParam;
 } tSmeBtEvent, *tpSmeBtEvent;
 
 
 /**
     BT-AMP Event Structure
 */
-typedef struct sSmeBtAmpEvent {
-    tSmeBtAmpEventType btAmpEventType;
+typedef struct sSmeBtAmpEvent
+{
+  tSmeBtAmpEventType btAmpEventType;
 
 } tSmeBtAmpEvent, *tpSmeBtAmpEvent;
 
 
 /** Data structure that specifies the BTC Configuration parameters
 */
-typedef struct sSmeBtcConfig {
-    v_U8_t       btcExecutionMode;
-    v_U8_t       btcConsBtSlotsToBlockDuringDhcp;
-    v_U8_t       btcA2DPBtSubIntervalsDuringDhcp;
-    v_U8_t       btcActionOnPmFail;
-    v_U8_t       btcBtIntervalMode1;
-    v_U8_t       btcWlanIntervalMode1;
+typedef struct sSmeBtcConfig
+{
+   v_U8_t       btcExecutionMode;
+   v_U8_t       btcConsBtSlotsToBlockDuringDhcp;
+   v_U8_t       btcA2DPBtSubIntervalsDuringDhcp;
+   v_U8_t       btcActionOnPmFail;
+   v_U8_t       btcBtIntervalMode1;
+   v_U8_t       btcWlanIntervalMode1;
 
-    v_U32_t      btcStaticLenInqBt;
-    v_U32_t      btcStaticLenPageBt;
-    v_U32_t      btcStaticLenConnBt;
-    v_U32_t      btcStaticLenLeBt;
-    v_U32_t      btcStaticLenInqWlan;
-    v_U32_t      btcStaticLenPageWlan;
-    v_U32_t      btcStaticLenConnWlan;
-    v_U32_t      btcStaticLenLeWlan;
-    v_U32_t      btcDynMaxLenBt;
-    v_U32_t      btcDynMaxLenWlan;
-    v_U32_t      btcMaxScoBlockPerc;
-    v_U32_t      btcDhcpProtOnA2dp;
-    v_U32_t      btcDhcpProtOnSco;
-
-    v_U32_t      mwsCoexVictimWANFreq[MWS_COEX_MAX_VICTIM_TABLE];
-    v_U32_t      mwsCoexVictimWLANFreq[MWS_COEX_MAX_VICTIM_TABLE];
-    v_U32_t      mwsCoexVictimConfig[MWS_COEX_MAX_VICTIM_TABLE];
-    v_U32_t      mwsCoexVictimConfig2[MWS_COEX_MAX_VICTIM_TABLE];
-    v_U32_t      mwsCoexModemBackoff;
-    v_U32_t      mwsCoexConfig[MWS_COEX_MAX_CONFIG];
-    v_U32_t      SARPowerBackoff;
+   v_U32_t      btcStaticLenInqBt;
+   v_U32_t      btcStaticLenPageBt;
+   v_U32_t      btcStaticLenConnBt;
+   v_U32_t      btcStaticLenLeBt;
+   v_U32_t      btcStaticLenInqWlan;
+   v_U32_t      btcStaticLenPageWlan;
+   v_U32_t      btcStaticLenConnWlan;
+   v_U32_t      btcStaticLenLeWlan;
+   v_U32_t      btcDynMaxLenBt;
+   v_U32_t      btcDynMaxLenWlan;
+   v_U32_t      btcMaxScoBlockPerc;
+   v_U32_t      btcDhcpProtOnA2dp;
+   v_U32_t      btcDhcpProtOnSco;
 } tSmeBtcConfig, *tpSmeBtcConfig;
 
 
-typedef struct sSmeBtAclModeChangeEventHist {
+typedef struct sSmeBtAclModeChangeEventHist
+{
     tSmeBtAclModeChangeParam  btAclModeChange;
     v_BOOL_t fValid;
 } tSmeBtAclModeChangeEventHist, *tpSmeBtAclModeChangeEventHist;
 
-typedef struct sSmeBtAclEventHist {
+typedef struct sSmeBtAclEventHist
+{
     //At most, cached events are COMPLETION, DISCONNECT, CREATION, COMPLETION
     tSmeBtEventType btEventType[BT_MAX_NUM_EVENT_ACL_DEFERRED];
     tSmeBtAclConnectionParam  btAclConnection[BT_MAX_NUM_EVENT_ACL_DEFERRED];
@@ -301,7 +309,8 @@ typedef struct sSmeBtAclEventHist {
     tANI_U8 bNextEventIdx;
 } tSmeBtAclEventHist, *tpSmeBtAclEventHist;
 
-typedef struct sSmeBtSyncEventHist {
+typedef struct sSmeBtSyncEventHist
+{
     //At most, cached events are COMPLETION, DISCONNECT, CREATION, COMPLETION
     tSmeBtEventType btEventType[BT_MAX_NUM_EVENT_SCO_DEFERRED];
     tSmeBtSyncConnectionParam  btSyncConnection[BT_MAX_NUM_EVENT_SCO_DEFERRED];
@@ -309,7 +318,8 @@ typedef struct sSmeBtSyncEventHist {
     tANI_U8 bNextEventIdx;
 } tSmeBtSyncEventHist, *tpSmeBtSyncEventHist;
 
-typedef struct sSmeBtDisconnectEventHist {
+typedef struct sSmeBtDisconnectEventHist
+{
     tSmeBtDisconnectParam btDisconnect;
     v_BOOL_t fValid;
 } tSmeBtDisconnectEventHist, *tpSmeBtDisconnectEventHist;
@@ -318,46 +328,47 @@ typedef struct sSmeBtDisconnectEventHist {
 /*
   Data structure for the history of BT events
 */
-typedef struct sSmeBtcEventHist {
-    tSmeBtSyncEventHist btSyncConnectionEvent[BT_MAX_SCO_SUPPORT];
-    tSmeBtAclEventHist btAclConnectionEvent[BT_MAX_ACL_SUPPORT];
-    tSmeBtAclModeChangeEventHist btAclModeChangeEvent[BT_MAX_ACL_SUPPORT];
-    tSmeBtDisconnectEventHist btDisconnectEvent[BT_MAX_DISCONN_SUPPORT];
-    tSmeBtSyncUpdateHist btSyncUpdateEvent[BT_MAX_SCO_SUPPORT];
-    int nInquiryEvent;    //>0 for # of outstanding inquiriy starts
-    //<0 for # of outstanding inquiry stops
-    //0 == no inquiry event
-    int nPageEvent;  //>0 for # of outstanding page starts
-    //<0 for # of outstanding page stops
-    //0 == no page event
-    v_BOOL_t fA2DPStarted;
-    v_BOOL_t fA2DPStopped;
+typedef struct sSmeBtcEventHist
+{
+   tSmeBtSyncEventHist btSyncConnectionEvent[BT_MAX_SCO_SUPPORT];
+   tSmeBtAclEventHist btAclConnectionEvent[BT_MAX_ACL_SUPPORT];
+   tSmeBtAclModeChangeEventHist btAclModeChangeEvent[BT_MAX_ACL_SUPPORT];
+   tSmeBtDisconnectEventHist btDisconnectEvent[BT_MAX_DISCONN_SUPPORT];
+   tSmeBtSyncUpdateHist btSyncUpdateEvent[BT_MAX_SCO_SUPPORT];
+   int nInquiryEvent;    //>0 for # of outstanding inquiriy starts
+                         //<0 for # of outstanding inquiry stops
+                         //0 == no inquiry event
+   int nPageEvent;  //>0 for # of outstanding page starts
+                    //<0 for # of outstanding page stops
+                    //0 == no page event
+   v_BOOL_t fA2DPStarted;
+   v_BOOL_t fA2DPStopped;
 } tSmeBtcEventHist, *tpSmeBtcEventHist;
 
-typedef struct sSmeBtcEventReplay {
-    tSmeBtcEventHist btcEventHist;
-    v_BOOL_t fBTSwitchOn;
-    v_BOOL_t fBTSwitchOff;
-    //This is not directly tied to BT event so leave it alone when processing BT events
-    v_BOOL_t fRestoreHBMonitor;
+typedef struct sSmeBtcEventReplay
+{
+   tSmeBtcEventHist btcEventHist;
+   v_BOOL_t fBTSwitchOn;
+   v_BOOL_t fBTSwitchOff;
+   //This is not directly tied to BT event so leave it alone when processing BT events
+   v_BOOL_t fRestoreHBMonitor;
 } tSmeBtcEventReplay, *tpSmeBtcEventReplay;
 
-typedef struct sSmeBtcInfo {
-    tSmeBtcConfig btcConfig;
-    v_BOOL_t      btcReady;
-    v_U8_t        btcEventState;
-    v_U8_t        btcHBActive;    /* Is HB currently active */
-    v_U8_t        btcHBCount;     /* default HB count */
-    vos_timer_t   restoreHBTimer; /* Timer to restore heart beat */
-    tSmeBtcEventReplay btcEventReplay;
-    v_BOOL_t      fReplayBTEvents;
-    v_BOOL_t      btcUapsdOk;  /* Indicate whether BTC is ok with UAPSD */
-    v_BOOL_t      fA2DPTrafStop;/*flag to check A2DP_STOP event has come before MODE_CHANGED*/
-    v_U16_t       btcScoHandles[BT_MAX_SCO_SUPPORT];  /* Handles for SCO, if any*/
-    v_BOOL_t      fA2DPUp;        /*remember whether A2DP is in session*/
-    v_BOOL_t      btcScanCompromise;
-    v_U8_t        btcBssfordisableaggr[VOS_MAC_ADDRESS_LEN];
-    vos_timer_t   enableUapsdTimer;
+typedef struct sSmeBtcInfo
+{
+   tSmeBtcConfig btcConfig;
+   v_BOOL_t      btcReady;
+   v_U8_t        btcEventState;
+   v_U8_t        btcHBActive;    /* Is HB currently active */
+   v_U8_t        btcHBCount;     /* default HB count */
+   vos_timer_t   restoreHBTimer; /* Timer to restore heart beat */
+   tSmeBtcEventReplay btcEventReplay;
+   v_BOOL_t      fReplayBTEvents;
+   v_BOOL_t      btcUapsdOk;  /* Indicate whether BTC is ok with UAPSD */
+   v_BOOL_t      fA2DPTrafStop;/*flag to check A2DP_STOP event has come before MODE_CHANGED*/
+   v_U16_t       btcScoHandles[BT_MAX_SCO_SUPPORT];  /* Handles for SCO, if any*/
+   v_BOOL_t      fA2DPUp;        /*remember whether A2DP is in session*/
+   v_BOOL_t      btcScanCompromise;
 } tSmeBtcInfo, *tpSmeBtcInfo;
 
 

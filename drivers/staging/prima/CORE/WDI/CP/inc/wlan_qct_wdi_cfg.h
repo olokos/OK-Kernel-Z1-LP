@@ -1,5 +1,25 @@
 /*
- * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+ *
+ * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
+ *
+ *
+ * Permission to use, copy, modify, and/or distribute this software for
+ * any purpose with or without fee is hereby granted, provided that the
+ * above copyright notice and this permission notice appear in all
+ * copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
+ * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
+ * AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
+ * DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
+ * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+ * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ * PERFORMANCE OF THIS SOFTWARE.
+ */
+/*
+ * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -19,29 +39,23 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
-/*
- * This file was originally distributed by Qualcomm Atheros, Inc.
- * under proprietary terms before Copyright ownership was assigned
- * to the Linux Foundation.
- */
-
 #ifndef WLAN_QCT_WDI_CFG_H
 #define WLAN_QCT_WDI_CFG_H
 
 /*===========================================================================
 
-         W L A N   D E V I C E   A B S T R A C T I O N   L A Y E R
+         W L A N   D E V I C E   A B S T R A C T I O N   L A Y E R 
               C O N F I G U R A T I O N   D E F I N E S
-                         E X T E R N A L   A P I
-
+                         E X T E R N A L   A P I                
+                   
 DESCRIPTION
   This file contains the configuration defines to be used by the UMAC for
   setting up the config parameters in DAL.
-
+ 
   !! The values in here should be an identical match of the HAL defines
-  by the same name !!
-
-
+  by the same name !! 
+  
+      
   Copyright (c) 2010 QUALCOMM Incorporated. All Rights Reserved.
   Qualcomm Confidential and Proprietary
 ===========================================================================*/

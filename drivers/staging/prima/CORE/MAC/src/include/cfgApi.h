@@ -1,5 +1,25 @@
 /*
- * Copyright (c) 2011-2014 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+ *
+ * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
+ *
+ *
+ * Permission to use, copy, modify, and/or distribute this software for
+ * any purpose with or without fee is hereby granted, provided that the
+ * above copyright notice and this permission notice appear in all
+ * copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
+ * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
+ * AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
+ * DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
+ * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+ * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ * PERFORMANCE OF THIS SOFTWARE.
+ */
+/*
+ * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -20,19 +40,14 @@
  */
 
 /*
- * This file was originally distributed by Qualcomm Atheros, Inc.
- * under proprietary terms before Copyright ownership was assigned
- * to the Linux Foundation.
- */
-
-/*
- *
- * Author:      Kevin Nguyen
+ *  
+ * Airgo Networks, Inc proprietary. All rights reserved.
+ * Author:      Kevin Nguyen    
  * Date:        04/09/02
  * History:-
  * 04/09/02        Created.
  * --------------------------------------------------------------------
- *
+ * 
  */
 
 #ifndef __CFGAPI_H
@@ -61,10 +76,11 @@ typedef enum eCfgStatusTypes {
 } tCfgStatusTypes;
 
 // WEP key mapping table row structure
-typedef struct {
+typedef struct
+{
     tANI_U8    keyMappingAddr[SIR_MAC_ADDR_LENGTH];
     tANI_U32   wepOn;
-    tANI_U8    key[SIR_MAC_KEY_LENGTH];
+    tANI_U8    key[SIR_MAC_KEY_LENGTH]; 
     tANI_U32   status;
 } tCfgWepKeyEntry;
 
@@ -100,7 +116,7 @@ tSirRetStatus cfgSetStr(tpAniSirGlobal, tANI_U16, tANI_U8*, tANI_U32);
 tSirRetStatus cfgSetStrNotify(tpAniSirGlobal, tANI_U16, tANI_U8*, tANI_U32, int);
 
 //Cfg Download function for Prima or Integrated solutions.
-void processCfgDownloadReq(tpAniSirGlobal);
+void processCfgDownloadReq(tpAniSirGlobal, tANI_U16, tANI_U32*);
 
 /// Get string parameter value
 tSirRetStatus wlan_cfgGetStr(tpAniSirGlobal, tANI_U16, tANI_U8*, tANI_U32*);

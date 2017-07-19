@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,19 +18,36 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
-
 /*
- * This file was originally distributed by Qualcomm Atheros, Inc.
- * under proprietary terms before Copyright ownership was assigned
- * to the Linux Foundation.
+ * Copyright (c) 2012, The Linux Foundation. All rights reserved.
+ *
+ * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
+ *
+ *
+ * Permission to use, copy, modify, and/or distribute this software for
+ * any purpose with or without fee is hereby granted, provided that the
+ * above copyright notice and this permission notice appear in all
+ * copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
+ * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
+ * AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
+ * DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
+ * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+ * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ * PERFORMANCE OF THIS SOFTWARE.
  */
-
 /*============================================================================
+Copyright (c) 2007 QUALCOMM Incorporated.
+All Rights Reserved.
+Qualcomm Confidential and Proprietary
 
 logDump.c
 */
 
 /*
+ * Woodside Networks, Inc proprietary. All rights reserved.
  * This file contains the utility functions to dump various
  * MAC states and to enable/disable certain features during
  * debugging.
@@ -42,7 +59,7 @@ logDump.c
  *
  */
 
-/*
+/* 
  * @note : Bytes is to print overflow message information.
  */
 
@@ -85,16 +102,13 @@ logDump.c
 #include "wlan_qct_wda.h"
 
 #define HAL_LOG_DUMP_CMD_START 0
-
-/* Dump command id for Host modules starts from 300 onwards,
- * hence do not extend the HAL commands beyond 300.
- */
 #define HAL_LOG_DUMP_CMD_END 299
 
 static int debug;
 
-void
-logPrintf(tpAniSirGlobal pMac, tANI_U32 cmd, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4) {
+    void
+logPrintf(tpAniSirGlobal pMac, tANI_U32 cmd, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4)
+{
     static tANI_U8 buf[MAX_LOGDUMP_SIZE + MAX_OVERFLOW_MSG];
     tANI_U16 bufLen;
     pMac->gCurrentLogSize = 0;
@@ -117,7 +131,8 @@ logPrintf(tpAniSirGlobal pMac, tANI_U32 cmd, tANI_U32 arg1, tANI_U32 arg2, tANI_
   So we print the buffer immediately and we would also aggregate where
   the TestDbg might use this buffer to print out at the application level.
   */
-int log_sprintf(tpAniSirGlobal pMac, char *pBuf, char *fmt, ...) {
+int log_sprintf(tpAniSirGlobal pMac, char *pBuf, char *fmt, ...)
+{
     tANI_S32 ret = 0;
 #ifdef WLAN_DEBUG
 
@@ -144,7 +159,7 @@ int log_sprintf(tpAniSirGlobal pMac, char *pBuf, char *fmt, ...) {
 
 #if    defined (ANI_OS_TYPE_ANDROID)
         ret = snprintf(pBuf, MAX_OVERFLOW_MSG, "\n-> ***********"
-                       "\nOutput Exceeded the Buffer Size, message truncated!!\n<- ***********\n");
+                "\nOutput Exceeded the Buffer Size, message truncated!!\n<- ***********\n");
 #endif
         /* If an output error is encountered, a negative value is returned by snprintf */
         if (ret < 0)
@@ -162,95 +177,53 @@ int log_sprintf(tpAniSirGlobal pMac, char *pBuf, char *fmt, ...) {
 }
 
 
-char* dumpLOG( tpAniSirGlobal pMac, char *p ) {
+char* dumpLOG( tpAniSirGlobal pMac, char *p )
+{
     tANI_U32 i;
 
     for( i = SIR_FIRST_MODULE_ID; i <= SIR_LAST_MODULE_ID; i++ ) {
         p += log_sprintf(pMac, p, "[0x%2x]", i);
-        switch (i) {
-        case SIR_HAL_MODULE_ID:
-            p += log_sprintf( pMac, p, "HAL ");
-            break;
-        case SIR_CFG_MODULE_ID:
-            p += log_sprintf( pMac, p, "CFG ");
-            break;
-        case SIR_LIM_MODULE_ID:
-            p += log_sprintf( pMac, p, "LIM ");
-            break;
-        case SIR_ARQ_MODULE_ID:
-            p += log_sprintf( pMac, p, "ARQ ");
-            break;
-        case SIR_SCH_MODULE_ID:
-            p += log_sprintf( pMac, p, "SCH ");
-            break;
-        case SIR_PMM_MODULE_ID:
-            p += log_sprintf( pMac, p, "PMM ");
-            break;
-        case SIR_MNT_MODULE_ID:
-            p += log_sprintf( pMac, p, "MNT ");
-            break;
-        case SIR_DBG_MODULE_ID:
-            p += log_sprintf( pMac, p, "DBG ");
-            break;
-        case SIR_DPH_MODULE_ID:
-            p += log_sprintf( pMac, p, "DPH ");
-            break;
-        case SIR_SYS_MODULE_ID:
-            p += log_sprintf( pMac, p, "SYS ");
-            break;
-        case SIR_PHY_MODULE_ID:
-            p += log_sprintf( pMac, p, "PHY ");
-            break;
-        case SIR_DVT_MODULE_ID:
-            p += log_sprintf( pMac, p, "DVT ");
-            break;
-        case SIR_SMS_MODULE_ID:
-            p += log_sprintf( pMac, p, "SMS ");
-            break;
-        default:
-            p += log_sprintf( pMac, p, "UNK ", i);
-            break;
+        switch (i)
+        {
+            case SIR_HAL_MODULE_ID: p += log_sprintf( pMac, p, "HAL "); break;
+            case SIR_CFG_MODULE_ID: p += log_sprintf( pMac, p, "CFG "); break;
+            case SIR_LIM_MODULE_ID: p += log_sprintf( pMac, p, "LIM "); break;
+            case SIR_ARQ_MODULE_ID: p += log_sprintf( pMac, p, "ARQ "); break;
+            case SIR_SCH_MODULE_ID: p += log_sprintf( pMac, p, "SCH "); break;
+            case SIR_PMM_MODULE_ID: p += log_sprintf( pMac, p, "PMM "); break;
+            case SIR_MNT_MODULE_ID: p += log_sprintf( pMac, p, "MNT "); break;
+            case SIR_DBG_MODULE_ID: p += log_sprintf( pMac, p, "DBG "); break;
+            case SIR_DPH_MODULE_ID: p += log_sprintf( pMac, p, "DPH "); break;
+            case SIR_SYS_MODULE_ID: p += log_sprintf( pMac, p, "SYS "); break;
+            case SIR_PHY_MODULE_ID: p += log_sprintf( pMac, p, "PHY "); break;
+            case SIR_DVT_MODULE_ID: p += log_sprintf( pMac, p, "DVT "); break;
+            case SIR_SMS_MODULE_ID: p += log_sprintf( pMac, p, "SMS "); break;
+            default: p += log_sprintf( pMac, p, "UNK ", i); break;
         }
 
         p += log_sprintf( pMac, p,
-                          ": debug level is [0x%x] ",
-                          pMac->utils.gLogDbgLevel[i - SIR_FIRST_MODULE_ID]);
+                ": debug level is [0x%x] ",
+                pMac->utils.gLogDbgLevel[i - SIR_FIRST_MODULE_ID]);
 
-        switch( pMac->utils.gLogDbgLevel[i - SIR_FIRST_MODULE_ID] ) {
-        case LOGOFF:
-            p += log_sprintf( pMac, p, "LOG disabled\n");
-            break;
-        case LOGP:
-            p += log_sprintf( pMac, p, "LOGP(Panic only)\n");
-            break;
-        case LOGE:
-            p += log_sprintf( pMac, p, "LOGE(Errors only)\n");
-            break;
-        case LOGW:
-            p += log_sprintf( pMac, p, "LOGW(Warnings)\n");
-            break;
-        case LOG1:
-            p += log_sprintf( pMac, p, "LOG1(Minimal debug)\n");
-            break;
-        case LOG2:
-            p += log_sprintf( pMac, p, "LOG2(Verbose)\n");
-            break;
-        case LOG3:
-            p += log_sprintf( pMac, p, "LOG3(Very Verbose)\n");
-            break;
-        case LOG4:
-            p += log_sprintf( pMac, p, "LOG4(Very Very Verbose)\n");
-            break;
-        default:
-            p += log_sprintf( pMac, p, "Unknown\n");
-            break;
+        switch( pMac->utils.gLogDbgLevel[i - SIR_FIRST_MODULE_ID] )
+        {
+            case LOGOFF: p += log_sprintf( pMac, p, "LOG disabled\n"); break;
+            case LOGP: p += log_sprintf( pMac, p, "LOGP(Panic only)\n"); break;
+            case LOGE: p += log_sprintf( pMac, p, "LOGE(Errors only)\n"); break;
+            case LOGW: p += log_sprintf( pMac, p, "LOGW(Warnings)\n"); break;
+            case LOG1: p += log_sprintf( pMac, p, "LOG1(Minimal debug)\n"); break;
+            case LOG2: p += log_sprintf( pMac, p, "LOG2(Verbose)\n"); break;
+            case LOG3: p += log_sprintf( pMac, p, "LOG3(Very Verbose)\n"); break;
+            case LOG4: p += log_sprintf( pMac, p, "LOG4(Very Very Verbose)\n"); break;
+            default: p += log_sprintf( pMac, p, "Unknown\n"); break;
         }
     }
 
     return p;
 }
 
-char* setLOGLevel( tpAniSirGlobal pMac, char *p, tANI_U32 module, tANI_U32 level ) {
+char* setLOGLevel( tpAniSirGlobal pMac, char *p, tANI_U32 module, tANI_U32 level )
+{
     tANI_U32 i;
 
     if((module > SIR_LAST_MODULE_ID || module < SIR_FIRST_MODULE_ID) && module != 0xff ) {
@@ -274,26 +247,36 @@ char* setLOGLevel( tpAniSirGlobal pMac, char *p, tANI_U32 module, tANI_U32 level
     return dumpLOG( pMac, p );
 }
 
-static void Log_getCfg(tpAniSirGlobal pMac, tANI_U16 cfgId) {
+static void Log_getCfg(tpAniSirGlobal pMac, tANI_U16 cfgId)
+{
 #define CFG_CTL_INT           0x00080000
-    if ((pMac->cfg.gCfgEntry[cfgId].control & CFG_CTL_INT) != 0) {
+    if ((pMac->cfg.gCfgEntry[cfgId].control & CFG_CTL_INT) != 0)
+    {
         tANI_U32  val;
 
         // Get integer parameter
-        if (wlan_cfgGetInt(pMac, (tANI_U16)cfgId, &val) != eSIR_SUCCESS) {
+        if (wlan_cfgGetInt(pMac, (tANI_U16)cfgId, &val) != eSIR_SUCCESS)
+        {
             sysLog(pMac, LOGE, FL("Get cfgId 0x%x failed\n"), cfgId);
-        } else {
+        }
+        else
+        {
             sysLog( pMac, LOGE, FL("WNI_CFG_%s(%d  0x%x) = %ld\n"),  gCfgParamName[cfgId], cfgId, cfgId, val );
         }
-    } else {
+    }
+    else
+    {
         tANI_U8 buf[CFG_MAX_STR_LEN] = {0} ;
         tANI_U32 valueLen ;
 
         // Get string parameter
         valueLen = CFG_MAX_STR_LEN ;
-        if (wlan_cfgGetStr(pMac, cfgId, buf, &valueLen) != eSIR_SUCCESS) {
+        if (wlan_cfgGetStr(pMac, cfgId, buf, &valueLen) != eSIR_SUCCESS)
+        {
             sysLog(pMac, LOGE, FL("Get cfgId 0x%x failed\n"), cfgId);
-        } else {
+        }
+        else
+        {
             sysLog( pMac, LOGE, FL("WNI_CFG_%s(%d  0x%x) len=%ld\n"),  gCfgParamName[cfgId], cfgId, cfgId, valueLen );
             sirDumpBuf(pMac, SIR_WDA_MODULE_ID, LOG1, buf, valueLen) ;
         }
@@ -302,30 +285,30 @@ static void Log_getCfg(tpAniSirGlobal pMac, tANI_U16 cfgId) {
     return;
 }
 
-static void Log_setCfg(tpAniSirGlobal pMac, tANI_U16 cfgId, tANI_U32 val) {
+static void Log_setCfg(tpAniSirGlobal pMac, tANI_U16 cfgId, tANI_U32 val)
+{
     sysLog(pMac, LOGE, FL("Set %s(0x%x) to value 0x%x\n"),
            gCfgParamName[cfgId], cfgId, val);
 
     if (cfgSetInt(pMac, (tANI_U16)cfgId, val) != eSIR_SUCCESS)
         sysLog(pMac, LOGE, FL("setting cfgId 0x%x to value 0x%x failed \n"),
                cfgId, val);
-    return;
+     return;
 }
 
 
-char * dump_cfg_get( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
-    (void) arg2;
-    (void) arg3;
-    (void) arg4;
+char * dump_cfg_get( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
+{
+    (void) arg2; (void) arg3; (void) arg4;
     Log_getCfg(pMac, (tANI_U16) arg1);
     return p;
 }
 
-char * dump_cfg_group_get( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
+char * dump_cfg_group_get( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
+{
     tANI_U32 i, startId, endId;
 
-    (void) arg3;
-    (void) arg4;
+    (void) arg3; (void) arg4;
 
     if (arg1 < CFG_PARAM_MAX_NUM) {
         startId = arg1;
@@ -344,30 +327,30 @@ char * dump_cfg_group_get( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tA
 
     return p;
 }
-char * dump_cfg_set( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
-    (void) arg3;
-    (void) arg4;
+char * dump_cfg_set( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
+{
+    (void) arg3; (void) arg4;
     Log_setCfg(pMac, (tANI_U16) arg1, arg2);
     return p;
 }
 
-char * dump_log_level_set( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
-    (void) arg1;
-    (void) arg2;
-    (void) arg3;
-    (void) arg4;
+char * dump_log_level_set( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
+{
+    (void) arg1; (void) arg2; (void) arg3; (void) arg4;
     p = setLOGLevel( pMac, p, arg1, arg2 );
     return p;
 }
 
 
 /* Initialize the index */
-void logDumpInit(tpAniSirGlobal pMac) {
+void logDumpInit(tpAniSirGlobal pMac)
+{
     pMac->dumpTablecurrentId = 0;
 
 }
 
-void logDumpRegisterTable( tpAniSirGlobal pMac, tDumpFuncEntry *pEntry, tANI_U32   nItems ) {
+void logDumpRegisterTable( tpAniSirGlobal pMac, tDumpFuncEntry *pEntry, tANI_U32   nItems )
+{
 
     pMac->dumpTableEntry[pMac->dumpTablecurrentId]->nItems = nItems;
     pMac->dumpTableEntry[pMac->dumpTablecurrentId]->mindumpid = pEntry->id;
@@ -380,7 +363,8 @@ void logDumpRegisterTable( tpAniSirGlobal pMac, tDumpFuncEntry *pEntry, tANI_U32
 /*
  * print nItems from the menu list ponted to by m
  */
-static tANI_U32 print_menu(tpAniSirGlobal pMac, char  *p, tANI_U32 startId) {
+static tANI_U32 print_menu(tpAniSirGlobal pMac, char  *p, tANI_U32 startId)
+{
     tANI_U32 currentId = 0;
     tANI_U32 i, j;
     tANI_S32 ret = 0;
@@ -392,11 +376,11 @@ static tANI_U32 print_menu(tpAniSirGlobal pMac, char  *p, tANI_U32 startId) {
         nItems = pMac->dumpTableEntry[i]->nItems;
 
         for (j = 0; j < nItems; j++, pEntry++) {
-            if (pEntry->description == NULL)
+            if (pEntry->description == NULL) 
                 continue;
 
             if (pEntry->id == 0) {
-                ret = log_sprintf( pMac,p, "---- %s\n", pEntry->description);
+                ret = log_sprintf( pMac,p, "---- %s\n", pEntry->description); 
 
                 if (ret <= 0)
                     break;
@@ -424,7 +408,8 @@ static tANI_U32 print_menu(tpAniSirGlobal pMac, char  *p, tANI_U32 startId) {
     return currentId;
 }
 
-int logRtaiDump( tpAniSirGlobal pMac, tANI_U32 cmd, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, tANI_U8 *pBuf) {
+int logRtaiDump( tpAniSirGlobal pMac, tANI_U32 cmd, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, tANI_U8 *pBuf)
+{
     char *p = (char *)pBuf;
     tANI_U32 i;
     tANI_U32 nItems = 0;
@@ -433,40 +418,43 @@ int logRtaiDump( tpAniSirGlobal pMac, tANI_U32 cmd, tANI_U32 arg1, tANI_U32 arg2
     pMac->gCurrentLogSize = 0;
     if (debug) {
         p += log_sprintf( pMac,p, "Cmd = %d Args (0x%x,0x%x,0x%x,0x%x)\n\n",
-                          cmd, arg1, arg2, arg3, arg4);
+                cmd, arg1, arg2, arg3, arg4);
     }
 
     if( cmd == MAX_DUMP_CMD || cmd == 0 ) {
         pMac->menuCurrent = print_menu(pMac, p, pMac->menuCurrent);
         return pMac->gCurrentLogSize;
     }
-    if(cmd <= HAL_LOG_DUMP_CMD_END) {
-        WDA_HALDumpCmdReq(pMac, cmd, arg1, arg2, arg3, arg4, p);
-    } else {
-        for(i = 0; i < pMac->dumpTablecurrentId; i++) {
-            if( (cmd > pMac->dumpTableEntry[i]->mindumpid) && (cmd <= pMac->dumpTableEntry[i]->maxdumpid)) {
-                pEntry = pMac->dumpTableEntry[i]->dumpTable;
-                nItems = pMac->dumpTableEntry[i]->nItems;
-                break;
-            } else {
-                continue;
-            }
-        }
-
-        if((nItems > 0) && (pEntry != NULL)) {
-            for (i = 0; i < nItems; i++, pEntry++) {
-                if( cmd == pEntry->id ) {
-                    if ( pEntry->func != NULL ) {
-                        pEntry->func(pMac, arg1, arg2, arg3, arg4, p);
-                    } else {
-                        p += log_sprintf( pMac,p, "Cmd not supported\n");
-                    }
-                    break;
-                }
-            }
-        } else {
-            p += log_sprintf( pMac,p, "Cmd not found \n");
-        }
+    if(cmd <= HAL_LOG_DUMP_CMD_END)
+    {
+       WDA_HALDumpCmdReq(pMac, cmd, arg1, arg2, arg3, arg4, p);
+    }
+    else
+    {
+       for(i = 0; i < pMac->dumpTablecurrentId; i++) {
+           if( (cmd > pMac->dumpTableEntry[i]->mindumpid) && (cmd <= pMac->dumpTableEntry[i]->maxdumpid)) {
+               pEntry = pMac->dumpTableEntry[i]->dumpTable;
+               nItems = pMac->dumpTableEntry[i]->nItems;
+               break;
+           } else {
+               continue;
+           }
+       }
+       
+       if((nItems > 0) && (pEntry != NULL)) {
+           for (i = 0; i < nItems; i++, pEntry++) {
+               if( cmd == pEntry->id ) {
+                   if ( pEntry->func != NULL ) {
+                       pEntry->func(pMac, arg1, arg2, arg3, arg4, p);
+                   } else {
+                       p += log_sprintf( pMac,p, "Cmd not supported\n");
+                   }
+                   break;
+               }
+           }
+       } else {
+           p += log_sprintf( pMac,p, "Cmd not found \n");
+       }
     }
     if (debug)
         p += log_sprintf( pMac,p, "Returned %d bytes\n", pMac->gCurrentLogSize);

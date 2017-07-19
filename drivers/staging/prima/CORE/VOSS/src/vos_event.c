@@ -1,5 +1,25 @@
 /*
- * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+ *
+ * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
+ *
+ *
+ * Permission to use, copy, modify, and/or distribute this software for
+ * any purpose with or without fee is hereby granted, provided that the
+ * above copyright notice and this permission notice appear in all
+ * copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
+ * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
+ * AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
+ * DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
+ * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+ * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ * PERFORMANCE OF THIS SOFTWARE.
+ */
+/*
+ * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -19,11 +39,6 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
-/*
- * This file was originally distributed by Qualcomm Atheros, Inc.
- * under proprietary terms before Copyright ownership was assigned
- * to the Linux Foundation.
- */
 
 /*============================================================================
   FILE:         vos_event.c
@@ -109,29 +124,32 @@
 
   ( *** indicates return values do NOT exist yet )
   -------------------------------------------------------------------------*/
-VOS_STATUS vos_event_init ( vos_event_t* event ) {
+VOS_STATUS vos_event_init ( vos_event_t* event )
+{
 
-    // Check for null pointer
-    if ( NULL == event ) {
-        VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
-                  "NULL event passed into %s", __func__);
-        VOS_ASSERT(0);
-        return VOS_STATUS_E_FAULT;
-    }
+   // Check for null pointer
+   if ( NULL == event )
+   {
+      VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
+                "NULL event passed into %s", __func__);
+      VOS_ASSERT(0);
+      return VOS_STATUS_E_FAULT;
+   }
 
-    // check for 'already initialized' event
-    if ( LINUX_EVENT_COOKIE == event->cookie ) {
-        VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
-                  "Initialized event passed into %s", __func__);
-        VOS_ASSERT(0);
-        return VOS_STATUS_E_BUSY;
-    }
+   // check for 'already initialized' event
+   if ( LINUX_EVENT_COOKIE == event->cookie )
+   {
+      VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
+                "Initialized event passed into %s", __func__);
+      VOS_ASSERT(0);
+      return VOS_STATUS_E_BUSY;
+   }
 
-    // initialize new event
-    init_completion(&event->complete);
-    event->cookie = LINUX_EVENT_COOKIE;
+   // initialize new event
+   init_completion(&event->complete);
+   event->cookie = LINUX_EVENT_COOKIE;
 
-    return VOS_STATUS_SUCCESS;
+   return VOS_STATUS_SUCCESS;
 }
 
 /*--------------------------------------------------------------------------
@@ -161,27 +179,30 @@ VOS_STATUS vos_event_init ( vos_event_t* event ) {
 
   -------------------------------------------------------------------------*/
 
-VOS_STATUS vos_event_set ( vos_event_t* event ) {
+VOS_STATUS vos_event_set ( vos_event_t* event )
+{
 
-    // Check for null pointer
-    if ( NULL == event ) {
-        VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
-                  "NULL event passed into %s", __func__);
-        VOS_ASSERT(0);
-        return VOS_STATUS_E_FAULT;
-    }
+   // Check for null pointer
+   if ( NULL == event )
+   {
+      VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
+                "NULL event passed into %s", __func__);
+      VOS_ASSERT(0);
+      return VOS_STATUS_E_FAULT;
+   }
 
-    // check if event refers to an initialized object
-    if ( LINUX_EVENT_COOKIE != event->cookie ) {
-        VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
-                  "Uninitialized event passed into %s", __func__);
-        VOS_ASSERT(0);
-        return VOS_STATUS_E_INVAL;
-    }
+   // check if event refers to an initialized object
+   if ( LINUX_EVENT_COOKIE != event->cookie )
+   {
+      VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
+                "Uninitialized event passed into %s", __func__);
+      VOS_ASSERT(0);
+      return VOS_STATUS_E_INVAL;
+   }
 
-    complete(&event->complete);
+   complete(&event->complete);
 
-    return VOS_STATUS_SUCCESS;
+   return VOS_STATUS_SUCCESS;
 }
 
 /*--------------------------------------------------------------------------
@@ -213,27 +234,30 @@ VOS_STATUS vos_event_set ( vos_event_t* event ) {
   \sa
 
   -------------------------------------------------------------------------*/
-VOS_STATUS vos_event_reset ( vos_event_t* event ) {
+VOS_STATUS vos_event_reset ( vos_event_t* event )
+{
 
-    // check for null pointer
-    if ( NULL == event ) {
-        VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
-                  "NULL event passed into %s", __func__);
-        VOS_ASSERT(0);
-        return VOS_STATUS_E_FAULT;
-    }
+   // check for null pointer
+   if ( NULL == event )
+   {
+      VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
+                "NULL event passed into %s", __func__);
+      VOS_ASSERT(0);
+      return VOS_STATUS_E_FAULT;
+   }
 
-    // check to make sure it is an 'already initialized' event
-    if ( LINUX_EVENT_COOKIE != event->cookie ) {
-        VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
-                  "Uninitialized event passed into %s", __func__);
-        VOS_ASSERT(0);
-        return VOS_STATUS_E_INVAL;
-    }
+   // check to make sure it is an 'already initialized' event
+   if ( LINUX_EVENT_COOKIE != event->cookie )
+   {
+      VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
+                "Uninitialized event passed into %s", __func__);
+      VOS_ASSERT(0);
+      return VOS_STATUS_E_INVAL;
+   }
 
-    // (re)initialize event
-    INIT_COMPLETION(event->complete);
-    return VOS_STATUS_SUCCESS;
+   // (re)initialize event
+   INIT_COMPLETION(event->complete);
+   return VOS_STATUS_SUCCESS;
 }
 
 
@@ -288,9 +312,10 @@ VOS_STATUS vos_event_reset ( vos_event_t* event ) {
    --------------------------------------------------------------------------*/
 VOS_STATUS vos_wait_events ( vos_event_t* events,
                              v_U8_t numEvents, v_U32_t timeout,
-                             v_U8_t *pEventIndex ) {
+                             v_U8_t *pEventIndex )
+{
 
-    return vos_wait_single_event(events,timeout);
+   return vos_wait_single_event(events,timeout);
 }
 
 /*--------------------------------------------------------------------------
@@ -329,30 +354,33 @@ VOS_STATUS vos_wait_events ( vos_event_t* events,
    ( *** indicates return values do NOT exist yet )
   -------------------------------------------------------------------------*/
 
-VOS_STATUS vos_event_destroy ( vos_event_t* event ) {
-    // check for null pointer
-    if ( NULL == event ) {
-        VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
-                  "NULL event passed into %s", __func__);
-        VOS_ASSERT(0);
-        return VOS_STATUS_E_FAULT;
-    }
+VOS_STATUS vos_event_destroy ( vos_event_t* event )
+{
+   // check for null pointer
+   if ( NULL == event )
+   {
+      VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
+                "NULL event passed into %s", __func__);
+      VOS_ASSERT(0);
+      return VOS_STATUS_E_FAULT;
+   }
 
-    // check to make sure it is an 'already initialized' event
-    if ( LINUX_EVENT_COOKIE != event->cookie ) {
-        VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
-                  "Uninitialized event passed into %s", __func__);
-        VOS_ASSERT(0);
-        return VOS_STATUS_E_INVAL;
-    }
+   // check to make sure it is an 'already initialized' event
+   if ( LINUX_EVENT_COOKIE != event->cookie )
+   {
+      VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
+                "Uninitialized event passed into %s", __func__);
+      VOS_ASSERT(0);
+      return VOS_STATUS_E_INVAL;
+   }
 
-    // make sure nobody is waiting on the event
-    complete_all(&event->complete);
+   // make sure nobody is waiting on the event
+   complete_all(&event->complete);
 
-    // destroy the event
-    memset(event, 0, sizeof(vos_event_t));
+   // destroy the event
+   memset(event, 0, sizeof(vos_event_t));
 
-    return VOS_STATUS_SUCCESS;
+   return VOS_STATUS_SUCCESS;
 }
 
 /*----------------------------------------------------------------------------
@@ -381,49 +409,58 @@ VOS_STATUS vos_event_destroy ( vos_event_t* event ) {
   \sa vos_wait_multiple_events()
 
   --------------------------------------------------------------------------*/
-VOS_STATUS vos_wait_single_event ( vos_event_t* event, v_U32_t timeout) {
+VOS_STATUS vos_wait_single_event ( vos_event_t* event, v_U32_t timeout)
+{
 
-    if (in_interrupt()) {
-        VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
-                  "%s cannot be called from interrupt context!!!", __func__);
-        VOS_ASSERT(0);
-        return VOS_STATUS_E_FAULT;
-    }
+   if (in_interrupt())
+   {
+      VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
+                "%s cannot be called from interrupt context!!!", __func__);
+      VOS_ASSERT(0);
+      return VOS_STATUS_E_FAULT;
+   }
 
-    // check for null pointer
-    if ( NULL == event ) {
-        VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
-                  "NULL event passed into %s", __func__);
-        VOS_ASSERT(0);
-        return VOS_STATUS_E_FAULT;
-    }
+   // check for null pointer
+   if ( NULL == event )
+   {
+      VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
+                "NULL event passed into %s", __func__);
+      VOS_ASSERT(0);
+      return VOS_STATUS_E_FAULT;
+   }
 
-    // check if cookie is same as that of initialized event
-    if ( LINUX_EVENT_COOKIE != event->cookie ) {
-        VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
-                  "Uninitialized event passed into %s", __func__);
-        VOS_ASSERT(0);
-        return VOS_STATUS_E_INVAL;
-    }
+   // check if cookie is same as that of initialized event
+   if ( LINUX_EVENT_COOKIE != event->cookie )
+   {
+      VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
+                "Uninitialized event passed into %s", __func__);
+      VOS_ASSERT(0);
+      return VOS_STATUS_E_INVAL;
+   }
 
-    if (timeout) {
-        long ret;
-        ret =
-            wait_for_completion_timeout(&event->complete,
-                                        msecs_to_jiffies(timeout));
-        if ( 0 >= ret ) {
-            return VOS_STATUS_E_TIMEOUT;
-        }
-    } else {
-        int ret;
-        ret = wait_for_completion_interruptible(&event->complete);
-        if ( 0 != ret ) {
-            // negative means interrupted
-            return VOS_STATUS_E_TIMEOUT;
-        }
-    }
+   if (timeout)
+   {
+      long ret;
+      ret =
+         wait_for_completion_timeout(&event->complete,
+                                                   msecs_to_jiffies(timeout));
+      if ( 0 >= ret )
+      {
+        return VOS_STATUS_E_TIMEOUT;
+      }
+   }
+   else
+   {
+      int ret;
+      ret = wait_for_completion_interruptible(&event->complete);
+      if ( 0 != ret )
+      {
+         // negative means interrupted
+         return VOS_STATUS_E_TIMEOUT;
+      }
+   }
 
-    return VOS_STATUS_SUCCESS;
+   return VOS_STATUS_SUCCESS;
 }
 
 /*----------------------------------------------------------------------------
@@ -476,7 +513,8 @@ VOS_STATUS vos_wait_single_event ( vos_event_t* event, v_U32_t timeout) {
 
   --------------------------------------------------------------------------*/
 VOS_STATUS vos_wait_multiple_events( vos_event_t **events, v_U8_t numEvents,
-                                     v_U32_t timeout, v_U8_t *pEventIndex ) {
-    // NO LONGER SUPPORTED
-    return VOS_STATUS_E_FAILURE;
+   v_U32_t timeout, v_U8_t *pEventIndex )
+{
+   // NO LONGER SUPPORTED
+   return VOS_STATUS_E_FAILURE;
 }

@@ -1,5 +1,25 @@
 /*
- * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+ *
+ * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
+ *
+ *
+ * Permission to use, copy, modify, and/or distribute this software for
+ * any purpose with or without fee is hereby granted, provided that the
+ * above copyright notice and this permission notice appear in all
+ * copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
+ * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
+ * AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
+ * DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
+ * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+ * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ * PERFORMANCE OF THIS SOFTWARE.
+ */
+/*
+ * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -20,12 +40,7 @@
  */
 
 /*
- * This file was originally distributed by Qualcomm Atheros, Inc.
- * under proprietary terms before Copyright ownership was assigned
- * to the Linux Foundation.
- */
-
-/*
+ * Woodside Networks, Inc proprietary. All rights reserved.
  * $File: //depot/software/projects/feature_branches/gen5_phase1/os/linux/classic/ap/apps/ssm/auth8021x/ani8021xPrf.c $
  *
  * Contains definitions for routines to calculate the 802.11i PRF
@@ -81,7 +96,8 @@
  * or 0 for invalid cipher types.
  */
 int
-aagGetKeyMaterialLen(eCsrEncryptionType cipherType) {
+aagGetKeyMaterialLen(eCsrEncryptionType cipherType)
+{
     switch (cipherType) {
     case eCSR_ENCRYPT_TYPE_AES:
         return AAG_RSN_KEY_MATERIAL_LEN_CCMP;
@@ -113,11 +129,12 @@ int
 aagPtkPrf(v_U32_t cryptHandle,
           v_U8_t result[AAG_PRF_MAX_OUTPUT_SIZE],
           v_U32_t prfLen,
-          tAniPacket *pmk,
+          tAniPacket *pmk, 
           tAniMacAddr authAddr,
           tAniMacAddr suppAddr,
           v_U8_t aNonce[ANI_EAPOL_KEY_RSN_NONCE_SIZE],
-          v_U8_t sNonce[ANI_EAPOL_KEY_RSN_NONCE_SIZE]) {
+          v_U8_t sNonce[ANI_EAPOL_KEY_RSN_NONCE_SIZE])
+{
     v_U8_t *lowMac;
     v_U8_t *highMac;
     v_U8_t *lowNonce;
@@ -151,13 +168,14 @@ aagPtkPrf(v_U32_t cryptHandle,
     vos_mem_copy(text + AAG_PTK_PRF_HN_POS, highNonce, ANI_EAPOL_KEY_RSN_NONCE_SIZE);
 
     keyLen = aniAsfPacketGetBytes(pmk, &keyBytes);
-    if( !ANI_IS_STATUS_SUCCESS( keyLen ) ) {
+    if( !ANI_IS_STATUS_SUCCESS( keyLen ) )
+    {
         return keyLen;
     }
 
     return aagPrf(cryptHandle,
-                  result,
-                  keyBytes, keyLen,
+                  result, 
+                  keyBytes, keyLen, 
                   (v_U8_t *)AAG_PTK_PRF_CONST, AAG_PTK_PRF_CONST_LEN,
                   text, sizeof(text),
                   prfLen);
@@ -184,7 +202,8 @@ aagGtkPrf(v_U32_t cryptHandle,
           v_U32_t prfLen,
           v_U8_t gmk[AAG_RSN_GMK_SIZE],
           tAniMacAddr authAddr,
-          v_U8_t gNonce[ANI_EAPOL_KEY_RSN_NONCE_SIZE]) {
+          v_U8_t gNonce[ANI_EAPOL_KEY_RSN_NONCE_SIZE])
+{
     v_U8_t text[AAG_GTK_PRF_TEXT_LEN];
 
     vos_mem_copy(text + AAG_GTK_PRF_MAC_POS, authAddr, sizeof(tAniMacAddr));
@@ -222,7 +241,8 @@ aagPrf(v_U32_t cryptHandle,
        v_U8_t *key, v_U8_t keyLen,
        v_U8_t *a, v_U8_t aLen,
        v_U8_t *b, v_U8_t bLen,
-       v_U32_t prfLen) {
+       v_U32_t prfLen)
+{
     static v_U8_t y;
 
     v_U8_t *hmacText = NULL;
@@ -232,7 +252,8 @@ aagPrf(v_U32_t cryptHandle,
     int i, retVal=0;
 
     hmacText = vos_mem_malloc( aLen + bLen + 2 );
-    if( NULL == hmacText ) {
+    if( NULL == hmacText )
+    {
         return ANI_E_NULL_VALUE;
     }
 
@@ -244,14 +265,18 @@ aagPrf(v_U32_t cryptHandle,
     numLoops = prfLen + AAG_PTK_PRF_ADD_PARAM;
     numLoops /= AAG_PTK_PRF_DIV_PARAM;
 
-    for (i = 0; i < numLoops; i++) {
+    for (i = 0; i < numLoops; i++) 
+    {
         VOS_ASSERT((resultOffset - result + VOS_DIGEST_SHA1_SIZE)
-                   <= AAG_PRF_MAX_OUTPUT_SIZE);
+               <= AAG_PRF_MAX_OUTPUT_SIZE);
         hmacText[loopCtrPos] = i;
-        if( VOS_IS_STATUS_SUCCESS( vos_sha1_hmac_str(cryptHandle, hmacText, loopCtrPos + 1, key, keyLen, resultOffset) ) ) {
+        if( VOS_IS_STATUS_SUCCESS( vos_sha1_hmac_str(cryptHandle, hmacText, loopCtrPos + 1, key, keyLen, resultOffset) ) )
+        {
             resultOffset += VOS_DIGEST_SHA1_SIZE;
             retVal = ANI_OK;
-        } else {
+        }
+        else
+        {
             retVal = ANI_ERROR;
         }
     }

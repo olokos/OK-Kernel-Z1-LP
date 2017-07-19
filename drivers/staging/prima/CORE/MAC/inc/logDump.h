@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -19,13 +19,10 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
-/*
- * This file was originally distributed by Qualcomm Atheros, Inc.
- * under proprietary terms before Copyright ownership was assigned
- * to the Linux Foundation.
- */
-
 /*============================================================================
+Copyright (c) 2007 Qualcomm Technologies, Inc.
+All Rights Reserved.
+Qualcomm Technologies Confidential and Proprietary
 
 logDump.h
 
@@ -44,13 +41,13 @@ Date:      04/06/2008
 
 typedef char * (*tpFunc)(tpAniSirGlobal, tANI_U32, tANI_U32, tANI_U32, tANI_U32, char *);
 
-typedef struct sDumpFuncEntry {
+typedef struct sDumpFuncEntry  {
     tANI_U32    id;
     char       *description;
     tpFunc      func;
 } tDumpFuncEntry;
 
-typedef struct sDumpModuleEntry {
+typedef struct sDumpModuleEntry  {
     tANI_U32    mindumpid;
     tANI_U32    maxdumpid;
     tANI_U32    nItems;

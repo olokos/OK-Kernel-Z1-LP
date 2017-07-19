@@ -1,5 +1,25 @@
 /*
- * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+ *
+ * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
+ *
+ *
+ * Permission to use, copy, modify, and/or distribute this software for
+ * any purpose with or without fee is hereby granted, provided that the
+ * above copyright notice and this permission notice appear in all
+ * copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
+ * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
+ * AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
+ * DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
+ * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+ * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ * PERFORMANCE OF THIS SOFTWARE.
+ */
+/*
+ * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -20,12 +40,7 @@
  */
 
 /*
- * This file was originally distributed by Qualcomm Atheros, Inc.
- * under proprietary terms before Copyright ownership was assigned
- * to the Linux Foundation.
- */
-
-/*
+ * Airgo Networks, Inc proprietary. All rights reserved.
  * This file contains the source code for composing and sending messages
  * to host.
  *
@@ -74,25 +89,28 @@ extern void SysProcessMmhMsg(tpAniSirGlobal pMac, tSirMsgQ* pMsg);
  */
 void
 cfgSendHostMsg(tpAniSirGlobal pMac, tANI_U16 msgType, tANI_U32 msgLen, tANI_U32 paramNum, tANI_U32 *pParamList,
-               tANI_U32 dataLen, tANI_U32 *pData) {
+              tANI_U32 dataLen, tANI_U32 *pData)
+{
     tANI_U32        *pMsg, *pEnd;
     tSirMsgQ    mmhMsg;
 
     // sanity
-    if ((paramNum > 0) && (NULL == pParamList)) {
+    if ((paramNum > 0) && (NULL == pParamList))
+    {
         PELOGE(cfgLog(pMac, LOGE,
                       FL("pParamList NULL when paramNum greater than 0!"));)
         return;
     }
-    if ((dataLen > 0) && (NULL == pData)) {
+    if ((dataLen > 0) && (NULL == pData))
+    {
         PELOGE(cfgLog(pMac, LOGE,
                       FL("pData NULL when dataLen greater than 0!"));)
         return;
     }
 
     // Allocate message buffer
-    pMsg = vos_mem_malloc(msgLen);
-    if ( NULL == pMsg ) {
+    if( eHAL_STATUS_SUCCESS != palAllocateMemory( pMac->hHdd, (void **)&pMsg, msgLen))
+    {
         PELOGE(cfgLog(pMac, LOGE,
                       FL("Memory allocation failure!"));)
         return;
@@ -105,34 +123,39 @@ cfgSendHostMsg(tpAniSirGlobal pMac, tANI_U16 msgType, tANI_U32 msgLen, tANI_U32 
     ((tSirMbMsg*)pMsg)->type   = msgType;
     ((tSirMbMsg*)pMsg)->msgLen = (tANI_U16)msgLen;
 
-    switch (msgType) {
-    case WNI_CFG_GET_RSP:
-    case WNI_CFG_PARAM_UPDATE_IND:
-    case WNI_CFG_DNLD_REQ:
-    case WNI_CFG_DNLD_CNF:
-    case WNI_CFG_SET_CNF:
-        // Fill in parameters
-        pMsg++;
-        if (NULL != pParamList) {
-            pEnd  = pMsg + paramNum;
-            while (pMsg < pEnd) {
-                *pMsg++ = *pParamList++;
+    switch (msgType)
+    {
+        case WNI_CFG_GET_RSP:
+        case WNI_CFG_PARAM_UPDATE_IND:
+        case WNI_CFG_DNLD_REQ:
+        case WNI_CFG_DNLD_CNF:
+        case WNI_CFG_SET_CNF:
+            // Fill in parameters
+            pMsg++;
+            if (NULL != pParamList)
+            {
+                pEnd  = pMsg + paramNum;
+                while (pMsg < pEnd)
+                {
+                    *pMsg++ = *pParamList++;
+                }
             }
-        }
-        // Copy data if there is any
-        if (NULL != pData) {
-            pEnd = pMsg + (dataLen >> 2);
-            while (pMsg < pEnd) {
-                *pMsg++ = *pData++;
+            // Copy data if there is any
+            if (NULL != pData)
+            {
+                pEnd = pMsg + (dataLen >> 2);
+                while (pMsg < pEnd)
+                {
+                    *pMsg++ = *pData++;
+                }
             }
-        }
-        break;
+            break;
 
-    default:
-        PELOGE(cfgLog(pMac, LOGE,
-                      FL("Unknown msg %d!"), (int) msgType);)
-        vos_mem_free( pMsg);
-        return;
+        default:
+           PELOGE(cfgLog(pMac, LOGE,
+                         FL("Unknown msg %d!"), (int) msgType);)
+            palFreeMemory( pMac->hHdd, pMsg);
+            return;
     }
 
     // Ship it
