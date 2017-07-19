@@ -458,9 +458,7 @@ static ssize_t store_max_screen_off_khz(struct cpufreq_policy *policy,
  		        maxscroff = buf[0] - '0';
  
  	return count;
- }#ifdef CONFIG_MSM_SLEEPER
- +	&msm_cpufreq_attr_max_screen_off, 
- +#endif
+ }
  
  struct freq_attr msm_cpufreq_attr_max_screen_off = {
  	.attr = { .name = "screen_off_max",
@@ -472,7 +470,6 @@ static ssize_t store_max_screen_off_khz(struct cpufreq_policy *policy,
  
 /** end maxscreen off sysfs interface **/
 #endif
- 
 
 static struct freq_attr *msm_freq_attr[] = {
     &cpufreq_freq_attr_scaling_available_freqs,
