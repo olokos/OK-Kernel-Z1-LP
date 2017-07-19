@@ -2070,9 +2070,9 @@ struct net_device *init_ft1000_card(struct pcmcia_device *link,
 
     static const struct net_device_ops ft1000ops = {	// Slavius 21.10.2009 due to kernel changes
         .ndo_open = &ft1000_open,
-         .ndo_stop = &ft1000_close,
-          .ndo_start_xmit = &ft1000_start_xmit,
-           .ndo_get_stats = &ft1000_stats,
+        .ndo_stop = &ft1000_close,
+        .ndo_start_xmit = &ft1000_start_xmit,
+        .ndo_get_stats = &ft1000_stats,
     };
 
     DEBUG(1, "ft1000_hw: init_ft1000_card()\n");

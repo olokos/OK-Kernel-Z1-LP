@@ -101,15 +101,14 @@
 #define LIM_SET_RADAR_DETECTED(pMac, val)   (pMac->lim.gLimSpecMgmt.fRadarDetCurOperChan = val)
 #define LIM_MIN_BCN_PR_LENGTH  12
 #define LIM_BCN_PR_CAPABILITY_OFFSET 10
-typedef enum eMgmtFrmDropReason
-{
+typedef enum eMgmtFrmDropReason {
     eMGMT_DROP_NO_DROP,
     eMGMT_DROP_NOT_LAST_IBSS_BCN,
     eMGMT_DROP_INFRA_BCN_IN_IBSS,
     eMGMT_DROP_SCAN_MODE_FRAME,
     eMGMT_DROP_NON_SCAN_MODE_FRAME,
     eMGMT_DROP_INVALID_SIZE,
-}tMgmtFrmDropReason;
+} tMgmtFrmDropReason;
 
 
 /// During TD ring clean up at HDD in RTAI, will call this call back
@@ -153,14 +152,18 @@ extern tANI_U8 limIsSystemInScanState(tpAniSirGlobal);
  * Beacon Processing module to call this.
  */
 extern tSirRetStatus limHandleIBSScoalescing(tpAniSirGlobal,
-                                              tpSchBeaconStruct,
-                                              tANI_U8 *,tpPESession);
+        tpSchBeaconStruct,
+        tANI_U8 *,tpPESession);
 /// Function used by other Sirius modules to read global SME state
- static inline tLimSmeStates
-limGetSmeState(tpAniSirGlobal pMac) { return pMac->lim.gLimSmeState; }
+static inline tLimSmeStates
+limGetSmeState(tpAniSirGlobal pMac) {
+    return pMac->lim.gLimSmeState;
+}
 /// Function used by other Sirius modules to read global system role
- static inline tLimSystemRole
-limGetSystemRole(tpPESession psessionEntry) { return psessionEntry->limSystemRole; }
+static inline tLimSystemRole
+limGetSystemRole(tpPESession psessionEntry) {
+    return psessionEntry->limSystemRole;
+}
 //limGetAID(tpPESession psessionEntry) { return psessionEntry->limAID; }
 extern void limReceivedHBHandler(tpAniSirGlobal, tANI_U8, tpPESession);
 //extern void limResetHBPktCount(tpPESession);
@@ -179,10 +182,10 @@ extern void limSendSmeTDLSDelStaInd(tpAniSirGlobal pMac, tpDphHashNode pStaDs, t
 
 /// Function that checks for change in AP's capabilties on STA
 extern void limDetectChangeInApCapabilities(tpAniSirGlobal,
-                                             tpSirProbeRespBeacon,tpPESession);
-tSirRetStatus limUpdateShortSlot(tpAniSirGlobal pMac, 
-                                                            tpSirProbeRespBeacon pBeacon, 
-                                                            tpUpdateBeaconParams pBeaconParams,tpPESession);
+        tpSirProbeRespBeacon,tpPESession);
+tSirRetStatus limUpdateShortSlot(tpAniSirGlobal pMac,
+                                 tpSirProbeRespBeacon pBeacon,
+                                 tpUpdateBeaconParams pBeaconParams,tpPESession);
 
 /// creates an addts request action frame and sends it out to staid
 extern void limSendAddtsReq (tpAniSirGlobal pMac, tANI_U16 staid, tANI_U8 tsid, tANI_U8 userPrio, tANI_U8 wme);
@@ -215,36 +218,34 @@ extern tSirRetStatus limCheckRxSeqNumber(tpAniSirGlobal pMac, tANI_U8 *pRxPacket
 #define limGet11dMode(psessionEntry, pVal) (*(pVal) = (psessionEntry)->lim11dEnabled)
 #define limGetAckPolicy(pMac, pVal)         (*(pVal) = pMac->lim.ackPolicy)
 /* ----------------------------------------------------------------------- */
-static inline void limGetPhyMode(tpAniSirGlobal pMac, tANI_U32 *phyMode, tpPESession psessionEntry)
-{
-   *phyMode = psessionEntry ? psessionEntry->gLimPhyMode : pMac->lim.gLimPhyMode;
+static inline void limGetPhyMode(tpAniSirGlobal pMac, tANI_U32 *phyMode, tpPESession psessionEntry) {
+    *phyMode = psessionEntry ? psessionEntry->gLimPhyMode : pMac->lim.gLimPhyMode;
 }
 
 /* ----------------------------------------------------------------------- */
-static inline void limGetRfBand(tpAniSirGlobal pMac, tSirRFBand *band, tpPESession psessionEntry)
-{
-   *band = psessionEntry ? psessionEntry->limRFBand : SIR_BAND_UNKNOWN;
+static inline void limGetRfBand(tpAniSirGlobal pMac, tSirRFBand *band, tpPESession psessionEntry) {
+    *band = psessionEntry ? psessionEntry->limRFBand : SIR_BAND_UNKNOWN;
 }
 
 /*--------------------------------------------------------------------------
-  
+
   \brief peProcessMessages() - Message Processor for PE
-  
+
   Voss calls this function to dispatch the message to PE
-  
+
   \param pMac - Pointer to Global MAC structure
   \param pMsg - Pointer to the message structure
-  
+
   \return  tANI_U32 - TX_SUCCESS for success.
-  
+
   --------------------------------------------------------------------------*/
 tSirRetStatus peProcessMessages(tpAniSirGlobal pMac, tSirMsgQ* pMsg);
 /** -------------------------------------------------------------
 \fn peFreeMsg
 \brief Called by VOS scheduler (function vos_sched_flush_mc_mqs)
 \      to free a given PE message on the TX and MC thread.
-\      This happens when there are messages pending in the PE 
-\      queue when system is being stopped and reset. 
+\      This happens when there are messages pending in the PE
+\      queue when system is being stopped and reset.
 \param   tpAniSirGlobal pMac
 \param   tSirMsgQ       pMsg
 \return none

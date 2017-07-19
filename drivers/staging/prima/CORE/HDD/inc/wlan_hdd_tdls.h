@@ -57,8 +57,7 @@ should not be more than 2000 */
 #define TDLS_IS_CONNECTED(peer)  \
         ((eTDLS_LINK_CONNECTED == (peer)->link_status) || \
          (eTDLS_LINK_TEARING == (peer)->link_status))
-typedef struct
-{
+typedef struct {
     tANI_U32    tdls;
     tANI_U32    tx_period_t;
     tANI_U32    tx_packet_n;
@@ -71,8 +70,7 @@ typedef struct
     tANI_S32    rssi_teardown_threshold;
 } tdls_config_params_t;
 
-typedef struct
-{
+typedef struct {
     struct wiphy *wiphy;
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,6,0))
     struct net_device *dev;
@@ -91,7 +89,7 @@ typedef enum {
     eTDLS_SUPPORT_ENABLED, /* implicit trigger */
 } eTDLSSupportMode;
 
-typedef enum eTDLSCapType{
+typedef enum eTDLSCapType {
     eTDLS_CAP_NOT_SUPPORTED = -1,
     eTDLS_CAP_UNKNOWN = 0,
     eTDLS_CAP_SUPPORTED = 1,
@@ -245,18 +243,18 @@ void wlan_hdd_tdls_check_power_save_prohibited(hdd_adapter_t *pAdapter);
 void wlan_hdd_tdls_free_scan_request (tdls_scan_context_t *tdls_scan_ctx);
 
 int wlan_hdd_tdls_copy_scan_context(hdd_context_t *pHddCtx,
-                            struct wiphy *wiphy,
+                                    struct wiphy *wiphy,
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,6,0))
-                            struct net_device *dev,
+                                    struct net_device *dev,
 #endif
-                            struct cfg80211_scan_request *request);
+                                    struct cfg80211_scan_request *request);
 
 int wlan_hdd_tdls_scan_callback (hdd_adapter_t *pAdapter,
-                                struct wiphy *wiphy,
+                                 struct wiphy *wiphy,
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,6,0))
-                                struct net_device *dev,
+                                 struct net_device *dev,
 #endif
-                                struct cfg80211_scan_request *request);
+                                 struct cfg80211_scan_request *request);
 
 void wlan_hdd_tdls_scan_done_callback(hdd_adapter_t *pAdapter);
 
@@ -264,8 +262,8 @@ void wlan_hdd_tdls_timer_restart(hdd_adapter_t *pAdapter,
                                  vos_timer_t *timer,
                                  v_U32_t expirationTime);
 void wlan_hdd_tdls_indicate_teardown(hdd_adapter_t *pAdapter,
-                                           hddTdlsPeer_t *curr_peer,
-                                           tANI_U16 reason);
+                                     hddTdlsPeer_t *curr_peer,
+                                     tANI_U16 reason);
 
 int wlan_hdd_tdls_add_force_peer(hdd_adapter_t *pAdapter, u8 *mac);
 

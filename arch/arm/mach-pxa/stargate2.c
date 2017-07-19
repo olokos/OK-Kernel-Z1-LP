@@ -250,7 +250,7 @@ static struct regulator_init_data stargate2_ldo_init_data[] = {
         },
     },
     [vcc_io] = { /* Same or higher than everything
-		  * bar vccbat and vccusb */
+	  * bar vccbat and vccusb */
         .constraints = { /* default 2.8V */
             .name = "vcc_io",
             .min_uV = 2692000,

@@ -90,88 +90,75 @@ extern tVOS_CONCURRENCY_MODE hdd_get_concurrency_mode ( void );
   \sa
   --------------------------------------------------------------------------*/
 VOS_STATUS vos_get_binary_blob( VOS_BINARY_ID binaryId,
-                                v_VOID_t *pBuffer, v_SIZE_t *pBufferSize )
-{
-  VOS_STATUS VosSts = VOS_STATUS_SUCCESS;
+                                v_VOID_t *pBuffer, v_SIZE_t *pBufferSize ) {
+    VOS_STATUS VosSts = VOS_STATUS_SUCCESS;
     char *pFileName;
 
     v_CONTEXT_t pVosContext = vos_get_global_context(VOS_MODULE_ID_SYS,NULL);
 
     // get the correct file name from binary Id
-    switch (binaryId)
-    {
-        case VOS_BINARY_ID_CONFIG:
-           pFileName = WLAN_CFG_FILE;
-           break;
-        case VOS_BINARY_ID_COUNTRY_INFO:
-           pFileName = WLAN_COUNTRY_INFO_FILE;
-           break;
-        case VOS_BINARY_ID_HO_CONFIG:
-           pFileName = WLAN_HO_CFG_FILE;
-           break;
-        default:
-           VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "Invalid binaryID");
-           return VosSts;
+    switch (binaryId) {
+    case VOS_BINARY_ID_CONFIG:
+        pFileName = WLAN_CFG_FILE;
+        break;
+    case VOS_BINARY_ID_COUNTRY_INFO:
+        pFileName = WLAN_COUNTRY_INFO_FILE;
+        break;
+    case VOS_BINARY_ID_HO_CONFIG:
+        pFileName = WLAN_HO_CFG_FILE;
+        break;
+    default:
+        VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "Invalid binaryID");
+        return VosSts;
     }
-    if(0 == *pBufferSize )
-    {
-       /*  just a file size request.  set the value and return  VOS_STATUS_E_NOMEM*/
-       VosSts = hdd_get_cfg_file_size(((VosContextType*)(pVosContext))->pHDDContext,pFileName,pBufferSize);
+    if(0 == *pBufferSize ) {
+        /*  just a file size request.  set the value and return  VOS_STATUS_E_NOMEM*/
+        VosSts = hdd_get_cfg_file_size(((VosContextType*)(pVosContext))->pHDDContext,pFileName,pBufferSize);
 
-       if ( !VOS_IS_STATUS_SUCCESS( VosSts ))
-       {
-          VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
-                                    "%s : vos_open failed\n",__func__);
+        if ( !VOS_IS_STATUS_SUCCESS( VosSts )) {
+            VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
+                      "%s : vos_open failed\n",__func__);
 
-          return VOS_STATUS_E_FAILURE;
-       }
-       VosSts = VOS_STATUS_E_NOMEM;
-    }
-    else
-    {
-       if(NULL != pBuffer) {
-          // read the contents into the buffer
-          VosSts = hdd_read_cfg_file(((VosContextType*)(pVosContext))->pHDDContext,pFileName,pBuffer,pBufferSize);
-       }
-       else {
-             VosSts = VOS_STATUS_E_FAILURE;
-       }
+            return VOS_STATUS_E_FAILURE;
+        }
+        VosSts = VOS_STATUS_E_NOMEM;
+    } else {
+        if(NULL != pBuffer) {
+            // read the contents into the buffer
+            VosSts = hdd_read_cfg_file(((VosContextType*)(pVosContext))->pHDDContext,pFileName,pBuffer,pBufferSize);
+        } else {
+            VosSts = VOS_STATUS_E_FAILURE;
+        }
     }
 
     return VosSts;
 }
 
 
-tVOS_CON_MODE vos_get_conparam( void )
-{
+tVOS_CON_MODE vos_get_conparam( void ) {
     tVOS_CON_MODE con_mode;
     con_mode = hdd_get_conparam ( );
     return con_mode;
 }
-tVOS_CONCURRENCY_MODE vos_get_concurrency_mode( void )
-{
+tVOS_CONCURRENCY_MODE vos_get_concurrency_mode( void ) {
     tVOS_CONCURRENCY_MODE con_mode;
     con_mode = hdd_get_concurrency_mode ( );
     return con_mode;
 }
 
-v_BOOL_t vos_concurrent_sessions_running(void)
-{
+v_BOOL_t vos_concurrent_sessions_running(void) {
     v_U8_t i=0;
     v_U8_t j=0;
     hdd_context_t *pHddCtx;
     v_CONTEXT_t pVosContext = vos_get_global_context( VOS_MODULE_ID_HDD, NULL );
 
-    if (NULL != pVosContext)
-    {
-       pHddCtx = vos_get_context( VOS_MODULE_ID_HDD, pVosContext);
-       if (NULL != pHddCtx)
-       {
-          for (i=0; i < VOS_MAX_NO_OF_MODE; i++)
-          {
-             j += pHddCtx->no_of_sessions[i];
-          }
-       }
+    if (NULL != pVosContext) {
+        pHddCtx = vos_get_context( VOS_MODULE_ID_HDD, pVosContext);
+        if (NULL != pHddCtx) {
+            for (i=0; i < VOS_MAX_NO_OF_MODE; i++) {
+                j += pHddCtx->no_of_sessions[i];
+            }
+        }
     }
 
     return (j>1);

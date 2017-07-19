@@ -73,10 +73,8 @@ static tpTraceCb traceCBTable[VOS_MODULE_ID_MAX];
 
 
 
-tANI_U8* macTraceGetSmeMsgString( tANI_U16 smeMsg )
-{
-    switch( smeMsg )
-    {
+tANI_U8* macTraceGetSmeMsgString( tANI_U16 smeMsg ) {
+    switch( smeMsg ) {
         CASE_RETURN_STRING(eWNI_SME_START_REQ);
         CASE_RETURN_STRING(eWNI_SME_START_RSP);
         CASE_RETURN_STRING(eWNI_SME_SYS_READY_IND);
@@ -278,17 +276,15 @@ tANI_U8* macTraceGetSmeMsgString( tANI_U16 smeMsg )
         CASE_RETURN_STRING(eWNI_SME_MSG_TYPES_END);
         CASE_RETURN_STRING(eWNI_SME_GET_ROAM_RSSI_REQ);
         CASE_RETURN_STRING(eWNI_SME_GET_ROAM_RSSI_RSP);
-        default:
-            return( (tANI_U8*)"UNKNOWN" );
-            break;
+    default:
+        return( (tANI_U8*)"UNKNOWN" );
+        break;
     }
 }
 
 
-tANI_U8* macTraceGetWdaMsgString( tANI_U16 wdaMsg )
-{
-    switch( wdaMsg )
-    {
+tANI_U8* macTraceGetWdaMsgString( tANI_U16 wdaMsg ) {
+    switch( wdaMsg ) {
         CASE_RETURN_STRING(WDA_APP_SETUP_NTF);
         CASE_RETURN_STRING(WDA_NIC_OPER_NTF);
         CASE_RETURN_STRING(WDA_INIT_START_REQ);
@@ -526,18 +522,16 @@ tANI_U8* macTraceGetWdaMsgString( tANI_U16 wdaMsg )
 #ifdef WLAN_FEATURE_11AC
         CASE_RETURN_STRING(WDA_UPDATE_OP_MODE);
 #endif
-        default:
-            return((tANI_U8*) "UNKNOWN" );
-            break;
+    default:
+        return((tANI_U8*) "UNKNOWN" );
+        break;
     }
 }
 
 
 
-tANI_U8* macTraceGetLimMsgString( tANI_U16 limMsg )
-{
-    switch( limMsg )
-    {
+tANI_U8* macTraceGetLimMsgString( tANI_U16 limMsg ) {
+    switch( limMsg ) {
         CASE_RETURN_STRING(SIR_LIM_RETRY_INTERRUPT_MSG);
         CASE_RETURN_STRING(SIR_BB_XPORT_MGMT_MSG );
         CASE_RETURN_STRING(SIR_LIM_INV_KEY_INTERRUPT_MSG );
@@ -592,19 +586,17 @@ tANI_U8* macTraceGetLimMsgString( tANI_U16 limMsg )
         CASE_RETURN_STRING(SIR_LIM_PERIODIC_JOIN_PROBE_REQ_TIMEOUT);
         CASE_RETURN_STRING(SIR_LIM_MSG_TYPES_END);
 
-        default:
-            return( (tANI_U8*)"UNKNOWN" );
-            break;
+    default:
+        return( (tANI_U8*)"UNKNOWN" );
+        break;
     }
 }
 
 
 
 
-tANI_U8* macTraceGetCfgMsgString( tANI_U16 cfgMsg )
-{
-    switch( cfgMsg )
-    {
+tANI_U8* macTraceGetCfgMsgString( tANI_U16 cfgMsg ) {
+    switch( cfgMsg ) {
         CASE_RETURN_STRING(WNI_CFG_PARAM_UPDATE_IND);
         CASE_RETURN_STRING(WNI_CFG_DNLD_REQ);
         CASE_RETURN_STRING(WNI_CFG_DNLD_CNF);
@@ -614,26 +606,23 @@ tANI_U8* macTraceGetCfgMsgString( tANI_U16 cfgMsg )
         CASE_RETURN_STRING(SIR_CFG_DOWNLOAD_COMPLETE_IND);
 
         CASE_RETURN_STRING(WNI_CFG_SET_REQ_NO_RSP);
-        default:
-            return( (tANI_U8*)"UNKNOWN" );
-            break;
+    default:
+        return( (tANI_U8*)"UNKNOWN" );
+        break;
     }
 }
 
-tANI_U8* macTraceGetInfoLogString( tANI_U16 infoLog )
-{
-    switch( infoLog )
-    {
+tANI_U8* macTraceGetInfoLogString( tANI_U16 infoLog ) {
+    switch( infoLog ) {
         CASE_RETURN_STRING(eLOG_NODROP_MISSED_BEACON_SCENARIO);
         CASE_RETURN_STRING(eLOG_PROC_DEAUTH_FRAME_SCENARIO);
-        default:
-            return( (tANI_U8*)"UNKNOWN" );
-            break;
+    default:
+        return( (tANI_U8*)"UNKNOWN" );
+        break;
     }
 }
 
-tANI_U8* macTraceGetModuleString( tANI_U8 moduleId  )
-{
+tANI_U8* macTraceGetModuleString( tANI_U8 moduleId  ) {
     return ((tANI_U8*)"PE");
     //return gVosTraceInfo[moduleId].moduleNameStr;
 }
@@ -647,8 +636,7 @@ tANI_U8* macTraceGetModuleString( tANI_U8 moduleId  )
 
 
 
-void macTraceInit(tpAniSirGlobal pMac)
-{
+void macTraceInit(tpAniSirGlobal pMac) {
     tANI_U8 i;
     gTraceData.head = INVALID_TRACE_ADDR;
     gTraceData.tail = INVALID_TRACE_ADDR;
@@ -666,13 +654,11 @@ void macTraceInit(tpAniSirGlobal pMac)
 
 
 
-void macTraceReset(tpAniSirGlobal pMac)
-{
+void macTraceReset(tpAniSirGlobal pMac) {
 }
 
 
-void macTrace(tpAniSirGlobal pMac,  tANI_U8 code, tANI_U8 session, tANI_U32 data)
-{
+void macTrace(tpAniSirGlobal pMac,  tANI_U8 code, tANI_U8 session, tANI_U32 data) {
     //Today macTrace is being invoked by PE only, need to remove this function once PE is migrated to using new trace API.
     macTraceNew(pMac, VOS_MODULE_ID_PE, code, session, data);
 
@@ -685,22 +671,18 @@ void macTrace(tpAniSirGlobal pMac,  tANI_U8 code, tANI_U8 session, tANI_U32 data
         return;
     gTraceData.num++;
 
-    if (gTraceData.head == INVALID_TRACE_ADDR)
-    {
+    if (gTraceData.head == INVALID_TRACE_ADDR) {
         /* first record */
         gTraceData.head = 0;
         gTraceData.tail = 0;
-    }
-    else
-    {
+    } else {
         /* queue is not empty */
         tANI_U32 tail = gTraceData.tail + 1;
 
         if (tail == MAX_TRACE_RECORDS)
             tail = 0;
 
-        if (gTraceData.head == tail)
-        {
+        if (gTraceData.head == tail) {
             /* full */
             if (++gTraceData.head == MAX_TRACE_RECORDS)
                 gTraceData.head = 0;
@@ -717,20 +699,18 @@ void macTrace(tpAniSirGlobal pMac,  tANI_U8 code, tANI_U8 session, tANI_U32 data
     rec->module =  VOS_MODULE_ID_PE;
     gTraceData.numSinceLastDump ++;
 
-    if(gTraceData.numSinceLastDump == gTraceData.dumpCount)
-        {
-            limLog(pMac, LOGE, "Trace Dump last %d traces\n",  gTraceData.dumpCount);
-            macTraceDumpAll(pMac, 0, 0, gTraceData.dumpCount);
-            gTraceData.numSinceLastDump = 0;
-        }
-    #endif
+    if(gTraceData.numSinceLastDump == gTraceData.dumpCount) {
+        limLog(pMac, LOGE, "Trace Dump last %d traces\n",  gTraceData.dumpCount);
+        macTraceDumpAll(pMac, 0, 0, gTraceData.dumpCount);
+        gTraceData.numSinceLastDump = 0;
+    }
+#endif
 
 }
 
 
 
-void macTraceNew(tpAniSirGlobal pMac, tANI_U8 module, tANI_U8 code, tANI_U8 session, tANI_U32 data)
-{
+void macTraceNew(tpAniSirGlobal pMac, tANI_U8 module, tANI_U8 code, tANI_U8 session, tANI_U32 data) {
     tpTraceRecord rec = NULL;
 
     //limLog(pMac, LOGE, "mac Trace code: %d, data: %x, head: %d, tail: %d\n",  code, data, gTraceData.head, gTraceData.tail);
@@ -744,22 +724,18 @@ void macTraceNew(tpAniSirGlobal pMac, tANI_U8 module, tANI_U8 code, tANI_U8 sess
 
     gTraceData.num++;
 
-    if (gTraceData.head == INVALID_TRACE_ADDR)
-    {
+    if (gTraceData.head == INVALID_TRACE_ADDR) {
         /* first record */
         gTraceData.head = 0;
         gTraceData.tail = 0;
-    }
-    else
-    {
+    } else {
         /* queue is not empty */
         tANI_U32 tail = gTraceData.tail + 1;
 
         if (tail == MAX_TRACE_RECORDS)
             tail = 0;
 
-        if (gTraceData.head == tail)
-        {
+        if (gTraceData.head == tail) {
             /* full */
             if (++gTraceData.head == MAX_TRACE_RECORDS)
                 gTraceData.head = 0;
@@ -785,25 +761,23 @@ void macTraceNew(tpAniSirGlobal pMac, tANI_U8 module, tANI_U8 code, tANI_U8 sess
 
 
 
-tANI_U8* macTraceMsgString(tpAniSirGlobal pMac, tANI_U32 msgType)
-{
+tANI_U8* macTraceMsgString(tpAniSirGlobal pMac, tANI_U32 msgType) {
     tANI_U16 msgId = (tANI_U16)MAC_TRACE_GET_MSG_ID(msgType);
     tANI_U8 moduleId = (tANI_U8)MAC_TRACE_GET_MODULE_ID(msgType);
 
-    switch(moduleId)
-    {
-        case SIR_LIM_MODULE_ID:
-            if(msgId >= SIR_LIM_ITC_MSG_TYPES_BEGIN)
-                return macTraceGetLimMsgString((tANI_U16)msgType);
-            else
-                return macTraceGetSmeMsgString((tANI_U16)msgType);
-            break;
-        case SIR_WDA_MODULE_ID:
-                return macTraceGetWdaMsgString((tANI_U16)msgType);
-        case SIR_CFG_MODULE_ID:
-                return macTraceGetCfgMsgString((tANI_U16)msgType);
-        default:
-                return ((tANI_U8*)"Unknown MsgType");
+    switch(moduleId) {
+    case SIR_LIM_MODULE_ID:
+        if(msgId >= SIR_LIM_ITC_MSG_TYPES_BEGIN)
+            return macTraceGetLimMsgString((tANI_U16)msgType);
+        else
+            return macTraceGetSmeMsgString((tANI_U16)msgType);
+        break;
+    case SIR_WDA_MODULE_ID:
+        return macTraceGetWdaMsgString((tANI_U16)msgType);
+    case SIR_CFG_MODULE_ID:
+        return macTraceGetCfgMsgString((tANI_U16)msgType);
+    default:
+        return ((tANI_U8*)"Unknown MsgType");
     }
 }
 
@@ -812,48 +786,40 @@ tANI_U8* macTraceMsgString(tpAniSirGlobal pMac, tANI_U32 msgType)
 
 
 
-void macTraceDumpAll(tpAniSirGlobal pMac, tANI_U8 code, tANI_U8 session, tANI_U32 count)
-{
+void macTraceDumpAll(tpAniSirGlobal pMac, tANI_U8 code, tANI_U8 session, tANI_U32 count) {
     tpTraceRecord pRecord;
     tANI_S32 i, tail;
 
 
-    if(!gTraceData.enable)
-    {
+    if(!gTraceData.enable) {
         VOS_TRACE( VOS_MODULE_ID_SYS, VOS_TRACE_LEVEL_ERROR, "Tracing Disabled \n");
         return;
     }
 
     VOS_TRACE( VOS_MODULE_ID_SYS, VOS_TRACE_LEVEL_ERROR,
-                            "Total Records: %d, Head: %d, Tail: %d\n", gTraceData.num, gTraceData.head, gTraceData.tail);
+               "Total Records: %d, Head: %d, Tail: %d\n", gTraceData.num, gTraceData.head, gTraceData.tail);
 
     pe_AcquireGlobalLock( &pMac->lim );
-    if (gTraceData.head != INVALID_TRACE_ADDR)
-    {
+    if (gTraceData.head != INVALID_TRACE_ADDR) {
 
         i = gTraceData.head;
         tail = gTraceData.tail;
 
-        if (count)
-        {
+        if (count) {
             if (count > gTraceData.num)
                 count = gTraceData.num;
             if (count > MAX_TRACE_RECORDS)
                 count = MAX_TRACE_RECORDS;
-            if(tail >= (count + 1))
-            {
+            if(tail >= (count + 1)) {
                 i = tail - count + 1;
-            }
-            else
-            {
+            } else {
                 i = MAX_TRACE_RECORDS - ((count + 1) - tail);
             }
         }
 
         pRecord = &gTraceTbl[i];
 
-        for (;;)
-        {
+        for (;;) {
             if (   (code == 0 || (code == pRecord->code)) &&
                     (traceCBTable[pRecord->module] != NULL))
                 traceCBTable[pRecord->module](pMac, pRecord, (tANI_U16)i);
@@ -862,12 +828,10 @@ void macTraceDumpAll(tpAniSirGlobal pMac, tANI_U8 code, tANI_U8 session, tANI_U3
                 break;
             i += 1;
 
-            if (i == MAX_TRACE_RECORDS)
-            {
+            if (i == MAX_TRACE_RECORDS) {
                 i = 0;
                 pRecord = &gTraceTbl[0];
-            }
-            else
+            } else
                 pRecord += 1;
         }
         gTraceData.numSinceLastDump = 0;
@@ -878,15 +842,13 @@ void macTraceDumpAll(tpAniSirGlobal pMac, tANI_U8 code, tANI_U8 session, tANI_U3
 }
 
 
-void macTraceCfg(tpAniSirGlobal pMac, tANI_U32 enable, tANI_U32 dumpCount, tANI_U32 code, tANI_U32 session)
-{
+void macTraceCfg(tpAniSirGlobal pMac, tANI_U32 enable, tANI_U32 dumpCount, tANI_U32 code, tANI_U32 session) {
     gTraceData.enable = (tANI_U8)enable;
     gTraceData.dumpCount= (tANI_U16)dumpCount;
     gTraceData.numSinceLastDump = 0;
 }
 
-void macTraceRegister( tpAniSirGlobal pMac, VOS_MODULE_ID moduleId,    tpTraceCb traceCb)
-{
+void macTraceRegister( tpAniSirGlobal pMac, VOS_MODULE_ID moduleId,    tpTraceCb traceCb) {
     traceCBTable[moduleId] = traceCb;
 }
 

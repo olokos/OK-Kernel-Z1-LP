@@ -2039,10 +2039,14 @@ static void get_tx_error(struct airo_info *ai, s32 fid) {
         ai->dev->stats.tx_aborted_errors++;
     if (le16_to_cpu(status) & 4) /* Transmit lifetime exceeded */
         ai->dev->stats.tx_heartbeat_errors++;
-    if (le16_to_cpu(status) & 8) { /* Aid fail */ }
+    if (le16_to_cpu(status) & 8) {
+        /* Aid fail */
+    }
     if (le16_to_cpu(status) & 0x10) /* MAC disabled */
         ai->dev->stats.tx_carrier_errors++;
-    if (le16_to_cpu(status) & 0x20) { /* Association lost */ }
+    if (le16_to_cpu(status) & 0x20) {
+        /* Association lost */
+    }
     /* We produce a TXDROP event only for retry or lifetime
      * exceeded, because that's the only status that really mean
      * that this particular node went away.

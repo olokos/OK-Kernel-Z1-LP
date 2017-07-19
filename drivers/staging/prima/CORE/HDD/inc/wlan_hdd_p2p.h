@@ -85,47 +85,47 @@ typedef enum  { P2P_NOT_ACTIVE,
                 P2P_CLIENT_DISCONNECTED_STATE,
                 P2P_CLIENT_CONNECTING_STATE_2,
                 P2P_CLIENT_COMPLETED_STATE
-               }tP2PConnectionStatus;
+              } tP2PConnectionStatus;
 
 extern tP2PConnectionStatus globalP2PConnectionStatus;
 #endif
 
-typedef struct p2p_app_setP2pPs{
-   tANI_U8     opp_ps;
-   tANI_U32     ctWindow;
-   tANI_U8     count;
-   tANI_U32     duration;
-   tANI_U32    interval;
-   tANI_U32    single_noa_duration;
-   tANI_U8      psSelection;
-}p2p_app_setP2pPs_t;
+typedef struct p2p_app_setP2pPs {
+    tANI_U8     opp_ps;
+    tANI_U32     ctWindow;
+    tANI_U8     count;
+    tANI_U32     duration;
+    tANI_U32    interval;
+    tANI_U32    single_noa_duration;
+    tANI_U8      psSelection;
+} p2p_app_setP2pPs_t;
 
 int wlan_hdd_cfg80211_remain_on_channel( struct wiphy *wiphy,
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0))
-                                struct wireless_dev *wdev,
+        struct wireless_dev *wdev,
 #else
-                                struct net_device *dev,
+        struct net_device *dev,
 #endif
-                                struct ieee80211_channel *chan,
-                                enum nl80211_channel_type channel_type,
-                                unsigned int duration, u64 *cookie );
+        struct ieee80211_channel *chan,
+        enum nl80211_channel_type channel_type,
+        unsigned int duration, u64 *cookie );
 
 int wlan_hdd_cfg80211_cancel_remain_on_channel( struct wiphy *wiphy,
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0))
-                                       struct wireless_dev *wdev,
+        struct wireless_dev *wdev,
 #else
-                                       struct net_device *dev,
+        struct net_device *dev,
 #endif
-                                       u64 cookie );
+        u64 cookie );
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38))
-int wlan_hdd_cfg80211_mgmt_tx_cancel_wait(struct wiphy *wiphy, 
+int wlan_hdd_cfg80211_mgmt_tx_cancel_wait(struct wiphy *wiphy,
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0))
-                                          struct wireless_dev *wdev,
+        struct wireless_dev *wdev,
 #else
-                                          struct net_device *dev,
+        struct net_device *dev,
 #endif
-                                          u64 cookie);
+        u64 cookie);
 #endif
 
 int hdd_setP2pPs( struct net_device *dev, void *msgData );
@@ -173,17 +173,17 @@ int wlan_hdd_action( struct wiphy *wiphy, struct net_device *dev,
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,7,0))
 struct wireless_dev* wlan_hdd_add_virtual_intf(
-                  struct wiphy *wiphy, const char *name,
-                  enum nl80211_iftype type,
-                  u32 *flags, struct vif_params *params );
+    struct wiphy *wiphy, const char *name,
+    enum nl80211_iftype type,
+    u32 *flags, struct vif_params *params );
 #elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0))
 struct wireless_dev* wlan_hdd_add_virtual_intf(
-                  struct wiphy *wiphy, char *name, enum nl80211_iftype type,
-                  u32 *flags, struct vif_params *params );
+    struct wiphy *wiphy, char *name, enum nl80211_iftype type,
+    u32 *flags, struct vif_params *params );
 #elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38))
 struct net_device* wlan_hdd_add_virtual_intf(
-                  struct wiphy *wiphy, char *name, enum nl80211_iftype type,
-                  u32 *flags, struct vif_params *params );
+    struct wiphy *wiphy, char *name, enum nl80211_iftype type,
+    u32 *flags, struct vif_params *params );
 #else
 int wlan_hdd_add_virtual_intf( struct wiphy *wiphy, char *name,
                                enum nl80211_iftype type,

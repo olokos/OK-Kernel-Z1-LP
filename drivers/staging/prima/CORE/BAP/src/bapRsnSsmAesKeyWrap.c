@@ -114,7 +114,7 @@ xor(tANI_U8 a[ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE], tANI_U32 t);
  * blocks. The first block is the IV from section 2.2.3 o the
  * RFC. Note: It is the caller's responsibility to free the returned
  * value.
- * 
+ *
  * @param plainText the plaintext data to wrap
  * @param len the length of the plaintext, which must be a multiple of
  * ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE.
@@ -129,8 +129,7 @@ xor(tANI_U8 a[ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE], tANI_U32 t);
 int
 aniSsmAesKeyWrap(v_U32_t cryptHandle, tANI_U8 *plainText, tANI_U32 len,
                  tANI_U8 *keyEncKey, tANI_U32 keyEncKeyLen,
-                 tANI_U8 **cipherTextPtr)
-{
+                 tANI_U8 **cipherTextPtr) {
     int i, j, n;
     int retVal;
 
@@ -143,7 +142,7 @@ aniSsmAesKeyWrap(v_U32_t cryptHandle, tANI_U8 *plainText, tANI_U32 len,
     n = len / ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE;
     if ((len % ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE) != 0) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
-                 "Illegal number of input bytes to AES Key Wrap!");
+                   "Illegal number of input bytes to AES Key Wrap!");
         return ANI_E_ILLEGAL_ARG;
     }
 
@@ -151,7 +150,7 @@ aniSsmAesKeyWrap(v_U32_t cryptHandle, tANI_U8 *plainText, tANI_U32 len,
     r = vos_mem_malloc((n + 1) * ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
     if (r == NULL) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
-                 "Could not allocate space for R");
+                   "Could not allocate space for R");
         return ANI_E_MALLOC_FAILED;
     }
 
@@ -161,19 +160,19 @@ aniSsmAesKeyWrap(v_U32_t cryptHandle, tANI_U8 *plainText, tANI_U32 len,
     for (j = 0; j <= 5; j++) {
         for (i = 1; i <= n; i++) {
 
-            retVal = aes(cryptHandle, keyEncKey, keyEncKeyLen, 
+            retVal = aes(cryptHandle, keyEncKey, keyEncKeyLen,
                          a,
                          r + i*ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE,
                          b);
 
-           if( !ANI_IS_STATUS_SUCCESS( retVal) ) goto error;
+            if( !ANI_IS_STATUS_SUCCESS( retVal) ) goto error;
 
             vos_mem_copy(a, b, ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
             t = n*j + i;
             xor(a, t);
             vos_mem_copy(r + i*ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE,
-                   b + sizeof(b) - ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE,
-                   ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
+                         b + sizeof(b) - ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE,
+                         ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
         }
     }
 
@@ -182,7 +181,7 @@ aniSsmAesKeyWrap(v_U32_t cryptHandle, tANI_U8 *plainText, tANI_U32 len,
 
     return ANI_OK;
 
- error:
+error:
     if (r != NULL)
         vos_mem_free(r);
 
@@ -212,8 +211,7 @@ aniSsmAesKeyWrap(v_U32_t cryptHandle, tANI_U8 *plainText, tANI_U32 len,
 int
 aniSsmAesKeyUnwrap(v_U32_t cryptHandle, tANI_U8 *cipherText, tANI_U32 len,
                    tANI_U8 *keyEncKey, tANI_U32 keyEncKeyLen,
-                   tANI_U8 **plainTextPtr)
-{
+                   tANI_U8 **plainTextPtr) {
     int i, j;
     int retVal;
 
@@ -240,25 +238,25 @@ aniSsmAesKeyUnwrap(v_U32_t cryptHandle, tANI_U8 *cipherText, tANI_U32 len,
     }
 
     vos_mem_copy(a, cipherText, sizeof(a));
-    vos_mem_copy(r + ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE, 
-           cipherText + ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE, 
-           len - ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
+    vos_mem_copy(r + ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE,
+                 cipherText + ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE,
+                 len - ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
 
     for (j = 5; j >= 0; j--) {
         for (i = n; i >= 1; i--) {
 
             t = n*j + i;
             xor(a, t);
-            retVal = aes_1(cryptHandle, keyEncKey, keyEncKeyLen, 
+            retVal = aes_1(cryptHandle, keyEncKey, keyEncKeyLen,
                            a,
                            r + i*ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE,
                            b);
-           if( !ANI_IS_STATUS_SUCCESS( retVal) ) goto error;
+            if( !ANI_IS_STATUS_SUCCESS( retVal) ) goto error;
 
             vos_mem_copy(a, b, ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
             vos_mem_copy(r + i*ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE,
-                   b + sizeof(b) - ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE,
-                   ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
+                         b + sizeof(b) - ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE,
+                         ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
         }
     }
 
@@ -271,7 +269,7 @@ aniSsmAesKeyUnwrap(v_U32_t cryptHandle, tANI_U8 *cipherText, tANI_U32 len,
 
     return ANI_OK;
 
- error:
+error:
     if (r != NULL)
         vos_mem_free(r);
 
@@ -295,8 +293,8 @@ aes(v_U32_t cryptHandle, tANI_U8 *keyBytes, tANI_U32 keyLen,
 
     // Concatenate A and R[i]
     vos_mem_copy(in, a, ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
-    vos_mem_copy(in + ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE, 
-           ri, ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
+    vos_mem_copy(in + ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE,
+                 ri, ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
     out = b;
 
 #if 0
@@ -339,8 +337,8 @@ aes_1(v_U32_t cryptHandle, tANI_U8 *keyBytes, tANI_U32 keyLen,
 
     // Concatenate A and R[i]
     vos_mem_copy(in, at, ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
-    vos_mem_copy(in + ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE, 
-           ri, ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
+    vos_mem_copy(in + ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE,
+                 ri, ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE);
     out = b;
 
 #if 0
@@ -370,11 +368,10 @@ aes_1(v_U32_t cryptHandle, tANI_U8 *keyBytes, tANI_U32 keyLen,
 
 
 /*
- * Put a long in host order into a char array in network order. 
- * 
+ * Put a long in host order into a char array in network order.
+ *
  */
-static inline char *aniAsfWr32(char *cp, tANI_U32 x)
-{
+static inline char *aniAsfWr32(char *cp, tANI_U32 x) {
     tAniU32ValAry r;
     int i;
 
@@ -391,18 +388,16 @@ static inline char *aniAsfWr32(char *cp, tANI_U32 x)
 // From file : aniAsfMisc.c
 
 /*
- * Put a long in host order into a char array in network order. 
- * 
+ * Put a long in host order into a char array in network order.
+ *
  */
-char *aniAsfPut32(char *cp, tANI_U32 x)
-{
+char *aniAsfPut32(char *cp, tANI_U32 x) {
     return(aniAsfWr32(cp, x));
 }
 
 
 static int
-xor(tANI_U8 a[ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE], tANI_U32 t)
-{
+xor(tANI_U8 a[ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE], tANI_U32 t) {
     tANI_U8 tmp[4];
     aniAsfPut32((char *)tmp, t);
     a[ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE-1] ^= tmp[3];

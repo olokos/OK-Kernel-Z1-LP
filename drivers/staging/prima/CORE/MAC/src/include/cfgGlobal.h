@@ -65,14 +65,12 @@
 /*--------------------------------------------------------------------*/
 /* Configuration Control Structure                                    */
 /*--------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     tANI_U32   control;
 } tCfgCtl;
 
 
-typedef struct sAniSirCfg
-{
+typedef struct sAniSirCfg {
     // CFG module status
     tANI_U8    gCfgStatus;
 

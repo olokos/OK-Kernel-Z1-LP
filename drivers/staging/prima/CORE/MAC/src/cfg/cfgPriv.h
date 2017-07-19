@@ -65,7 +65,7 @@
 #include <cfgApi.h>
 #include "cfgDef.h"
 
-    #include <wniCfgSta.h>
+#include <wniCfgSta.h>
 
 /*--------------------------------------------------------------------*/
 /* CFG miscellaneous definition                                       */
@@ -82,8 +82,7 @@
 /*--------------------------------------------------------------------*/
 /* Binary header structure                                            */
 /*--------------------------------------------------------------------*/
-typedef struct sCfgBinHdr
-{
+typedef struct sCfgBinHdr {
     tANI_U32   hdrInfo;
     tANI_U32   controlSize;
     tANI_U32   iBufSize;
@@ -94,8 +93,7 @@ typedef struct sCfgBinHdr
 /*--------------------------------------------------------------------*/
 /* Polaris HW counter access structure                                */
 /*--------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     tANI_U32    addr;
     tANI_U32    mask;
     tANI_U32    shift;

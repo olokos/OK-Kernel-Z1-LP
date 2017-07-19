@@ -48,19 +48,19 @@
 
 /// unsigned 8-bit types
 #define tANI_U8        v_U8_t
- 
+
 /// unsigned 16-bit types
-#define tANI_U16    v_U16_t    
+#define tANI_U16    v_U16_t
 
 /// unsigned 32-bit types
 #define tANI_U32    v_U32_t
- 
+
 /// signed 8-bit types
 #define    tANI_S8        v_S7_t
- 
+
 /// signed 16-bit types
 #define tANI_S16    v_S15_t
- 
+
 /// signed 32-bit types
 #define tANI_S32    v_S31_t
 
@@ -83,7 +83,7 @@ typedef struct sHalBdGeneric {
 
     /* 0x04 */
     // ENDIAN BEGIN
-    tANI_U32 reserved1:32;                      
+    tANI_U32 reserved1:32;
     // ENDIAN END
 
 
@@ -159,14 +159,14 @@ typedef struct sUapsdInfo {
 #define HAL_BDRATE_BCDATA_FRAME            1
 #define HAL_BDRATE_BCMGMT_FRAME            2
 #define HAL_BDRATE_CTRL_FRAME            3
-    
+
 /* Default values for FillTx BD */
 #define HAL_DEFAULT_UNICAST_ENABLED     1
 #define HAL_RMF_DISABLED                 0
 #define HAL_RMF_ENABLED                 1
 #define HAL_NO_ENCRYPTION_DISABLED        0
 #define HAL_NO_ENCRYPTION_ENABLED         1
-    
+
 #define WLANHAL_RX_BD_ADDR3_SELF_IDX      0
 
 // Should not use tHalTxBd nor tHalRxBd. UMAC doesn't know these HAL structure.
@@ -230,14 +230,14 @@ typedef struct sUapsdInfo {
 
 #define WLANHAL_RX_BD_GET_TIMESTAMP(_pvBDHeader)    (((tpHalRxBd)_pvBDHeader)->mclkRxTimestamp)
 
-#define tHalFcRxBd       halFcRxBd_type             
+#define tHalFcRxBd       halFcRxBd_type
 #define tpHalFcRxBd      phalFcRxBd_type
 #define tHalFcTxBd       halFcTxBd_type
-#define tpHalFcTxBd      pHalFcTxBd_type              
+#define tpHalFcTxBd      pHalFcTxBd_type
 #define tHalFcTxParams   tFcTxParams_type
-#define tHalFcRxParams   tFcRxParams_type               
-#define tpHalFcTxParams  pFcTxParams_type               
-#define tpHalFcRxParams  pFcRxParams_type             
+#define tHalFcRxParams   tFcRxParams_type
+#define tpHalFcTxParams  pFcTxParams_type
+#define tpHalFcRxParams  pFcRxParams_type
 
 /*------------ RSSI and SNR Information extraction -------------*/
 #define WLANHAL_RX_BD_GET_RSSI0( _pvBDHeader )  \
@@ -264,7 +264,7 @@ typedef struct sUapsdInfo {
 
 
 #define WLANHAL_TX_BD_SET_MPDU_DATA_OFFSET( _bd, _off )        (((tpHalTxBd)_bd)->mpduDataOffset = _off)
- 
+
 #define WLANHAL_TX_BD_SET_MPDU_HEADER_OFFSET( _bd, _off )    (((tpHalTxBd)_bd)->mpduHeaderOffset = _off)
 
 #define WLANHAL_TX_BD_SET_MPDU_HEADER_LEN( _bd, _len )        (((tpHalTxBd)_bd)->mpduHeaderLength = _len)
@@ -295,14 +295,14 @@ typedef struct sUapsdInfo {
 
 #define WLANHAL_RX_BD_AEF_SET               1
 
- 
+
 #define WLANHAL_RX_BD_LLC_PRESENT            0 /*The value of the field when LLC is present*/
 
 #define WLANHAL_RX_BD_FT_DONE                  1 /* The value of the field when frame xtl was done*/
 
 /*DPU_FEEDBACK_WPI_UNPROTECTED macro defined in volansdefs.h which is not available
   for UMAC in prima so declared it here */
-#define DPU_FEEDBACK_WPI_UNPROTECTED 0x20   
+#define DPU_FEEDBACK_WPI_UNPROTECTED 0x20
 #define WLANHAL_RX_IS_UNPROTECTED_WPI_FRAME(_pvBDHeader)  \
         (DPU_FEEDBACK_WPI_UNPROTECTED == ((WDI_RxBdType *)_pvBDHeader)->dpuFeedback)
 
@@ -310,24 +310,24 @@ typedef struct sUapsdInfo {
 
   FUNCTION    WLANHAL_RxBD_GetFrameTypeSubType
 
-  DESCRIPTION 
+  DESCRIPTION
     Called by TL to retrieve the type/subtype of the received frame.
 
-  DEPENDENCIES 
+  DEPENDENCIES
     TL should pass a valid RxBD buffer pointer.
-    
-  PARAMETERS 
+
+  PARAMETERS
 
     IN
     pvBDHeader:    Void pointer to the RxBD buffer.
-    usFrmCtrl:the frame ctrl of the 802.11 header 
-   
+    usFrmCtrl:the frame ctrl of the 802.11 header
+
   RETURN VALUE
     A byte which contains both type and subtype info. LSB four bytes (b0 to b3)
-    is subtype and b5-b6 is type info. 
+    is subtype and b5-b6 is type info.
 
-  SIDE EFFECTS 
-  
+  SIDE EFFECTS
+
 ============================================================================*/
 
 tANI_U8 WLANHAL_RxBD_GetFrameTypeSubType(v_PVOID_t _pvBDHeader, tANI_U16 usFrmCtrl);
@@ -353,45 +353,45 @@ tANI_U8 WLANHAL_RxBD_GetFrameTypeSubType(v_PVOID_t _pvBDHeader, tANI_U16 usFrmCt
 
   FUNCTION    WLANHAL_FillTxBd
 
-  DESCRIPTION 
-    Called by PE to register as a client for management frames delivery. 
+  DESCRIPTION
+    Called by PE to register as a client for management frames delivery.
 
-  DEPENDENCIES 
-    TL must be initialized before this API can be called. 
-    
-  PARAMETERS 
+  DEPENDENCIES
+    TL must be initialized before this API can be called.
+
+  PARAMETERS
 
     IN
-    pAdapter:       pointer to the global adapter context;a handle to TL's 
-                    control block can be extracted from its context 
-    vosFrmBuf:     pointer to a vOSS buffer containing the management  
+    pAdapter:       pointer to the global adapter context;a handle to TL's
+                    control block can be extracted from its context
+    vosFrmBuf:     pointer to a vOSS buffer containing the management
                     frame to be transmitted
-    usFrmLen:       the length of the frame to be transmitted; information 
+    usFrmLen:       the length of the frame to be transmitted; information
                     is already included in the vOSS buffer
     wFrmType:       the type of the frame being transmitted
     tid:            tid used to transmit this frame
     pfnCompTxFunc:  function pointer to the transmit complete routine
     voosBDHeader:   pointer to the BD header
     txFlag:  can have appropriate bit setting as required
-    
-                #define HAL_TXCOMP_REQUESTED_MASK           0x1  //bit 0 for TxComp intr requested. 
+
+                #define HAL_TXCOMP_REQUESTED_MASK           0x1  //bit 0 for TxComp intr requested.
                 #define HAL_USE_SELF_STA_REQUESTED_MASK    0x2  //bit 1 for STA overwrite with selfSta Requested.
                 #define HAL_TX_NO_ENCRYPTION_MASK           0x4  //bit 2. If set, the frame is not to be encrypted
 #if defined(FEATURE_WLAN_WAPI)
                 #define HAL_WAPI_STA_MASK            0x8  //bit 3. If set, this frame is for WAPI station
 #endif
-                
+
     uTimestamp:     pkt timestamp
 
-   
-  RETURN VALUE
-    The result code associated with performing the operation  
 
-  SIDE EFFECTS 
-  
+  RETURN VALUE
+    The result code associated with performing the operation
+
+  SIDE EFFECTS
+
 ============================================================================*/
 VOS_STATUS WLANHAL_FillTxBd(void *pAdapter, tANI_U8 typeSubtype, void *pDestMacAddr, void *pAddr2,
-        tANI_U8* ptid, tANI_U8 disableFrmXtl, void *pTxBd, tANI_U8 txFlag, tANI_U32 timeStamp);
+                            tANI_U8* ptid, tANI_U8 disableFrmXtl, void *pTxBd, tANI_U8 txFlag, tANI_U32 timeStamp);
 
 VOS_STATUS WLANHAL_FillFcTxBd(void *pVosGCtx, void *pFcParams, void *pFcTxBd);
 /** To swap the report part of FC RxBD */
@@ -440,22 +440,21 @@ v_BOOL_t WLANHAL_IsHwFrameTxTranslationCapable(v_PVOID_t pVosGCtx, tANI_U8 staId
 // A data structure identifying all of the variables
 // in a typical A-MPDU/BA setup
 //
-typedef struct sBAParams
-{
+typedef struct sBAParams {
 
-  // A unique BA Session ID that has been assigned by HAL
-  // for the curent BA Session
-  tANI_U16 baSessionID;
+    // A unique BA Session ID that has been assigned by HAL
+    // for the curent BA Session
+    tANI_U16 baSessionID;
 
-  // TID for which the BA session has been setup
-  tANI_U8 baTID;
+    // TID for which the BA session has been setup
+    tANI_U8 baTID;
 
-  // BA Buffer Size allocated for the current BA session   //Should be deleted. needs TL change. use winSize instead
-  tANI_U8 baBufferSize;
+    // BA Buffer Size allocated for the current BA session   //Should be deleted. needs TL change. use winSize instead
+    tANI_U8 baBufferSize;
 
-  tANI_U16 SSN;
-  tANI_U8 winSize;
-  tANI_U8 STAID;
+    tANI_U16 SSN;
+    tANI_U8 winSize;
+    tANI_U8 STAID;
 
 } tBAParams, *tpBAParams;
 
@@ -463,19 +462,18 @@ typedef struct sBAParams
 // TL -> HAL
 // tSirMsgQ.type = SIR_HAL_HDD_ADDBA_RSP
 //
-typedef struct sAddBARsp
-{
-  // Message Type
-  tANI_U16 mesgType;
+typedef struct sAddBARsp {
+    // Message Type
+    tANI_U16 mesgType;
 
-  // Message Length
-  tANI_U16 mesgLen;
+    // Message Length
+    tANI_U16 mesgLen;
 
-  //BA session ID
-  tANI_U16 baSessionID;
+    //BA session ID
+    tANI_U16 baSessionID;
 
-  tANI_U16 replyWinSize;
-}tAddBARsp, *tpAddBARsp;
+    tANI_U16 replyWinSize;
+} tAddBARsp, *tpAddBARsp;
 
 //
 // HAL -> TL
@@ -483,16 +481,15 @@ typedef struct sAddBARsp
 // tSirMsgQ.reserved = 0
 // tSirMsgQ.body = "allocated" instance of tpAddBAInd
 //
-typedef struct sAddBAInd
-{
+typedef struct sAddBAInd {
 
-  // Message Type
-  tANI_U16 mesgType;
+    // Message Type
+    tANI_U16 mesgType;
 
-  // Message Length
-  tANI_U16 mesgLen;
+    // Message Length
+    tANI_U16 mesgLen;
 
-  tBAParams baSession;
+    tBAParams baSession;
 
 } tAddBAInd, *tpAddBAInd;
 
@@ -507,32 +504,30 @@ typedef struct sAddBAInd
 // tSirMsgQ.reserved = 0
 // tSirMsgQ.body = "allocated" instance of tpDelBAInd
 //
-typedef struct sDelBAInd
-{
-  tANI_U8 staIdx;
+typedef struct sDelBAInd {
+    tANI_U8 staIdx;
 
-  tANI_U8 baTID;
-  // Message Type
-  tANI_U16 mesgType;
+    tANI_U8 baTID;
+    // Message Type
+    tANI_U16 mesgType;
 
-  // Message Length
-  tANI_U16 mesgLen;
+    // Message Length
+    tANI_U16 mesgLen;
 
 } tDelBAInd, *tpDelBAInd;
 #endif
 
 /*===============================================
  *
- *  TL <-> HAL structures 
+ *  TL <-> HAL structures
  *
  *===============================================
  */
 //
-// TL -> HAL 
+// TL -> HAL
 // tSirMsgQ.type = SIR_HAL_TL_FLUSH_AC_REQ
 //
-typedef struct sFlushACReq
-{
+typedef struct sFlushACReq {
     // Message Type
     tANI_U16 mesgType;
 
@@ -542,18 +537,17 @@ typedef struct sFlushACReq
     // Station Index. originates from HAL
     tANI_U8  ucSTAId;
 
-    // TID for which the transmit queue is being flushed 
+    // TID for which the transmit queue is being flushed
     tANI_U8   ucTid;
 
 } tFlushACReq, *tpFlushACReq;
 
 //
 //
-// HAL -> TL 
+// HAL -> TL
 // tSirMsgQ.type = SIR_HAL_TL_FLUSH_AC_RSP
 //
-typedef struct sFlushACRsp
-{
+typedef struct sFlushACRsp {
     // Message Type
     tANI_U16 mesgType;
 
@@ -563,10 +557,10 @@ typedef struct sFlushACRsp
     // Station Index. originates from HAL
     tANI_U8  ucSTAId;
 
-    // TID for which the transmit queue is being flushed 
+    // TID for which the transmit queue is being flushed
     tANI_U8   ucTid;
 
-    // status of the Flush operation 
+    // status of the Flush operation
     tANI_U8 status;
 } tFlushACRsp, *tpFlushACRsp;
 

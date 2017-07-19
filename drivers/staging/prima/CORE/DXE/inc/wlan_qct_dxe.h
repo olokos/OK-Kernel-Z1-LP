@@ -43,11 +43,11 @@
 #define WLAN_QCT_DXE_H
 
 /**=========================================================================
-  
+
   @file  wlan_qct_dxe.h
-  
-  @brief 
-               
+
+  @brief
+
    This file contains the external API exposed by the wlan data transfer abstraction layer module.
    Copyright (c) 2008 QUALCOMM Incorporated. All Rights Reserved.
    Qualcomm Confidential and Proprietary
@@ -99,11 +99,11 @@ when           who        what, where, why
  * Size must be same with Vos Packet Size */
 #define WLANDXE_DEFAULT_RX_OS_BUFFER_SIZE  (VPKT_SIZE_BUFFER)
 
-/*The maximum number of packets that can be chained in dxe for the Low 
+/*The maximum number of packets that can be chained in dxe for the Low
   priority channel
   Note: Increased it to 240 from 128 for Windows(EA) becase Windows is
   able to push 2~6 packet chain in one NET_BUFFER. It causes TX low
-  resource condition more easily than LA. It ends up to cause low 
+  resource condition more easily than LA. It ends up to cause low
   throughut number and spend more CPU time*/
 #ifdef WINDOWS_DT
 #define WLANDXE_LO_PRI_RES_NUM 240
@@ -112,34 +112,32 @@ when           who        what, where, why
 #endif
 
 
-/*The maximum number of packets that can be chained in dxe for the HI 
+/*The maximum number of packets that can be chained in dxe for the HI
   priority channel */
 #define WLANDXE_HI_PRI_RES_NUM 10
 
-typedef enum
-{
-   WLANDXE_POWER_STATE_FULL,
-   WLANDXE_POWER_STATE_IMPS,
-   WLANDXE_POWER_STATE_BMPS,
-   WLANDXE_POWER_STATE_BMPS_PENDING,
-   WLANDXE_POWER_STATE_DOWN,
-   WLANDXE_POWER_STATE_MAX
+typedef enum {
+    WLANDXE_POWER_STATE_FULL,
+    WLANDXE_POWER_STATE_IMPS,
+    WLANDXE_POWER_STATE_BMPS,
+    WLANDXE_POWER_STATE_BMPS_PENDING,
+    WLANDXE_POWER_STATE_DOWN,
+    WLANDXE_POWER_STATE_MAX
 } WLANDXE_PowerStateType;
 
-typedef enum
-{
-   WLANDXE_RIVA_POWER_STATE_ACTIVE,
-   WLANDXE_RIVA_POWER_STATE_IMPS_UNKNOWN,
-   WLANDXE_RIVA_POWER_STATE_BMPS_UNKNOWN,
-   WLANDXE_RIVA_POWER_STATE_DOWN_UNKNOWN,
-   WLANDXE_RIVA_POWER_STATE_MAX
+typedef enum {
+    WLANDXE_RIVA_POWER_STATE_ACTIVE,
+    WLANDXE_RIVA_POWER_STATE_IMPS_UNKNOWN,
+    WLANDXE_RIVA_POWER_STATE_BMPS_UNKNOWN,
+    WLANDXE_RIVA_POWER_STATE_DOWN_UNKNOWN,
+    WLANDXE_RIVA_POWER_STATE_MAX
 } WLANDXE_RivaPowerStateType;
 
 /*==========================================================================
   @  Type Name
-      WLANDXE_RxFrameReadyCbType 
+      WLANDXE_RxFrameReadyCbType
 
-  @  Description 
+  @  Description
        RX Frame Ready indication CB
 
   @  Parameters
@@ -154,9 +152,9 @@ typedef WDTS_RxFrameReadyCbType WLANDXE_RxFrameReadyCbType;
 
 /*==========================================================================
   @  Type Name
-       WLANDXE_TxCompleteCbType 
+       WLANDXE_TxCompleteCbType
 
-  @  Description 
+  @  Description
       TX complete indication CB
 
   @  Parameters
@@ -171,9 +169,9 @@ typedef WDTS_TxCompleteCbType WLANDXE_TxCompleteCbType;
 
 /*==========================================================================
   @  Type Name
-      WLANDXE_LowResourceCbType 
+      WLANDXE_LowResourceCbType
 
-  @  Description 
+  @  Description
        DXE Low resource indication CB
 
   @  Parameters
@@ -188,9 +186,9 @@ typedef WDTS_LowResourceCbType WLANDXE_LowResourceCbType;
 
 /*==========================================================================
   @  Type Name
-      WLANDXE_SetPowerStateCbType 
+      WLANDXE_SetPowerStateCbType
 
-  @  Description 
+  @  Description
        DXE Set power state ACK callback. This callback function should be
        invoked by the DXE to notify WDI that set power state request is complete
 
@@ -208,10 +206,10 @@ typedef WDTS_SetPSCbType  WLANDXE_SetPowerStateCbType;
  *Function declarations and documenation
  *-------------------------------------------------------------------------*/
 /*==========================================================================
-  @  Function Name 
+  @  Function Name
       WLANDXE_Open
 
-  @  Description 
+  @  Description
       Open host DXE driver, allocate DXE resources
       Allocate, DXE local control block, DXE descriptor pool, DXE descriptor control block pool
 
@@ -223,14 +221,14 @@ typedef WDTS_SetPSCbType  WLANDXE_SetPowerStateCbType;
 ===========================================================================*/
 void *WLANDXE_Open
 (
-   void
+    void
 );
 
 /*==========================================================================
-  @  Function Name 
+  @  Function Name
       WLANDXE_ClientRegistration
 
-  @  Description 
+  @  Description
       Make callback functions registration into DXE driver from DXE driver client
 
   @  Parameters
@@ -245,18 +243,18 @@ void *WLANDXE_Open
 ===========================================================================*/
 wpt_status WLANDXE_ClientRegistration
 (
-   void                       *pDXEContext,
-   WDTS_RxFrameReadyCbType     rxFrameReadyCB,
-   WDTS_TxCompleteCbType       txCompleteCB,
-   WDTS_LowResourceCbType      lowResourceCB,
-   void                       *userContext
+    void                       *pDXEContext,
+    WDTS_RxFrameReadyCbType     rxFrameReadyCB,
+    WDTS_TxCompleteCbType       txCompleteCB,
+    WDTS_LowResourceCbType      lowResourceCB,
+    void                       *userContext
 );
 
 /*==========================================================================
-  @  Function Name 
+  @  Function Name
       WLANDXE_Start
 
-  @  Description 
+  @  Description
       Start Host DXE driver
       Initialize DXE channels and start channel
 
@@ -268,14 +266,14 @@ wpt_status WLANDXE_ClientRegistration
 ===========================================================================*/
 wpt_status WLANDXE_Start
 (
-   void  *pDXEContext
+    void  *pDXEContext
 );
 
 /*==========================================================================
-  @  Function Name 
+  @  Function Name
       WLANDXE_TXFrame
 
-  @  Description 
+  @  Description
       Trigger frame transmit from host to RIVA
 
   @  Parameters
@@ -288,17 +286,17 @@ wpt_status WLANDXE_Start
 ===========================================================================*/
 wpt_status WLANDXE_TxFrame
 (
-   void                 *pDXEContext,
-   wpt_packet           *pPacket,
-   WDTS_ChannelType      channel
+    void                 *pDXEContext,
+    wpt_packet           *pPacket,
+    WDTS_ChannelType      channel
 );
 
 
 /*==========================================================================
-  @  Function Name 
+  @  Function Name
       WLANDXE_CompleteTX
 
-  @  Description 
+  @  Description
       Informs DXE that the current series of Tx packets is complete
 
   @  Parameters
@@ -311,15 +309,15 @@ wpt_status WLANDXE_TxFrame
 wpt_status
 WLANDXE_CompleteTX
 (
-  void* pDXEContext,
-  wpt_uint32 ucTxResReq
+    void* pDXEContext,
+    wpt_uint32 ucTxResReq
 );
 
 /*==========================================================================
-  @  Function Name 
+  @  Function Name
       WLANDXE_Stop
 
-  @  Description 
+  @  Description
       Stop DXE channels and DXE engine operations
 
   @  Parameters
@@ -330,14 +328,14 @@ WLANDXE_CompleteTX
 ===========================================================================*/
 wpt_status WLANDXE_Stop
 (
-   void *pDXEContext
+    void *pDXEContext
 );
 
 /*==========================================================================
-  @  Function Name 
+  @  Function Name
       WLANDXE_Close
 
-  @  Description 
+  @  Description
       Close DXE channels
       Free DXE related resources
       DXE descriptor free
@@ -352,14 +350,14 @@ wpt_status WLANDXE_Stop
 ===========================================================================*/
 wpt_status WLANDXE_Close
 (
-   void *pDXEContext
+    void *pDXEContext
 );
 
 /*==========================================================================
-  @  Function Name 
+  @  Function Name
       WLANDXE_TriggerTX
 
-  @  Description 
+  @  Description
       TBD
 
   @  Parameters
@@ -370,14 +368,14 @@ wpt_status WLANDXE_Close
 ===========================================================================*/
 wpt_status WLANDXE_TriggerTX
 (
-   void *pDXEContext
+    void *pDXEContext
 );
 
 /*==========================================================================
-  @  Function Name 
+  @  Function Name
       WLANDXE_SetPowerState
 
-  @  Description 
+  @  Description
       From Client let DXE knows what is the WLAN HW(RIVA) power state
 
   @  Parameters
@@ -389,16 +387,16 @@ wpt_status WLANDXE_TriggerTX
 ===========================================================================*/
 wpt_status WLANDXE_SetPowerState
 (
-   void                    *pDXEContext,
-   WDTS_PowerStateType      powerState,
-   WDTS_SetPSCbType         cBack
+    void                    *pDXEContext,
+    WDTS_PowerStateType      powerState,
+    WDTS_SetPSCbType         cBack
 );
 
 /*==========================================================================
-  @  Function Name 
+  @  Function Name
       WLANDXE_GetFreeTxDataResNumber
 
-  @  Description 
+  @  Description
       Returns free descriptor numbers for TX data channel (TX high priority)
 
   @  Parameters
@@ -409,7 +407,7 @@ wpt_status WLANDXE_SetPowerState
 ===========================================================================*/
 wpt_uint32 WLANDXE_GetFreeTxDataResNumber
 (
-   void *pDXEContext
+    void *pDXEContext
 );
 
 /*==========================================================================
@@ -433,16 +431,16 @@ wpt_uint32 WLANDXE_GetFreeTxDataResNumber
 ===========================================================================*/
 void WLANDXE_ChannelDebug
 (
-   wpt_boolean    displaySnapshot,
-   wpt_boolean    enableStallDetect   
+    wpt_boolean    displaySnapshot,
+    wpt_boolean    enableStallDetect
 );
 
 #ifdef WLANDXE_TEST_CHANNEL_ENABLE
 /*==========================================================================
-  @  Function Name 
+  @  Function Name
       WLANDXE_UnitTest
 
-  @  Description 
+  @  Description
       Temporary for the DXE module test
 
   @  Parameters
@@ -454,13 +452,13 @@ void WLANDXE_ChannelDebug
 ===========================================================================*/
 void WLANDXE_UnitTestStartDXE
 (
-   void
+    void
 );
 
 /*==========================================================================
-  @  Function Name 
+  @  Function Name
 
-  @  Description 
+  @  Description
 
   @  Parameters
 
@@ -469,13 +467,13 @@ void WLANDXE_UnitTestStartDXE
 ===========================================================================*/
 void WLANDXE_UnitTestDataTransfer
 (
-   void
+    void
 );
 
 /*==========================================================================
-  @  Function Name 
+  @  Function Name
 
-  @  Description 
+  @  Description
 
   @  Parameters
 
@@ -484,7 +482,7 @@ void WLANDXE_UnitTestDataTransfer
 ===========================================================================*/
 void WLANDXE_UnitTestEventHandle
 (
-   void     *dxeCB
+    void     *dxeCB
 );
 #endif /* WLANDXE_TEST_CHANNEL_ENABLE */
 #endif /* WLAN_QCT_DXE_H */

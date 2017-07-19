@@ -70,14 +70,13 @@
 #define MAC_TRACE_GET_MSG_ID(data)       (data & 0xffff)
 
 
-typedef struct  sTraceRecord
-{
+typedef struct  sTraceRecord {
     tANI_U32 time;
     tANI_U8 module;
     tANI_U8 code;
     tANI_U8 session;
     tANI_U32 data;
-}tTraceRecord, *tpTraceRecord;
+} tTraceRecord, *tpTraceRecord;
 
 #define eLOG_NODROP_MISSED_BEACON_SCENARIO 0
 #define eLOG_PROC_DEAUTH_FRAME_SCENARIO 1
@@ -93,8 +92,7 @@ typedef void (*tpTraceCb)(tpAniSirGlobal, tpTraceRecord, tANI_U16);
 
 
 
-typedef struct sTraceData
-{
+typedef struct sTraceData {
     tANI_U32 head;
     tANI_U32 tail;
     tANI_U32 num;
@@ -104,7 +102,7 @@ typedef struct sTraceData
     tANI_U8 enable;
     tANI_U16 dumpCount; //will dump after number of records reach this number.
 
-}tTraceData;
+} tTraceData;
 
 
 

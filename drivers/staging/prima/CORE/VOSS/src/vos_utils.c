@@ -93,15 +93,15 @@
  * Global Data Definitions
  * -------------------------------------------------------------------------*/
 extern struct crypto_ahash *wcnss_wlan_crypto_alloc_ahash(const char *alg_name,
-                                                          unsigned int type,
-                                                          unsigned int mask);
+        unsigned int type,
+        unsigned int mask);
 
 extern int wcnss_wlan_crypto_ahash_digest(struct ahash_request *req);
 extern void wcnss_wlan_crypto_free_ahash(struct crypto_ahash *tfm);
 extern int wcnss_wlan_crypto_ahash_setkey(struct crypto_ahash *tfm, const u8 *key,
-                                          unsigned int keylen);
+        unsigned int keylen);
 extern struct crypto_ablkcipher *wcnss_wlan_crypto_alloc_ablkcipher(const char *alg_name,
-                                                                    u32 type, u32 mask);
+        u32 type, u32 mask);
 extern void wcnss_wlan_ablkcipher_request_free(struct ablkcipher_request *req);
 extern void wcnss_wlan_crypto_free_ablkcipher(struct crypto_ablkcipher *tfm);
 
@@ -134,8 +134,7 @@ extern void wcnss_wlan_crypto_free_ablkcipher(struct crypto_ablkcipher *tfm);
 
     ( *** return value not considered yet )
   --------------------------------------------------------------------------*/
-VOS_STATUS vos_crypto_init( v_U32_t *phCryptProv )
-{
+VOS_STATUS vos_crypto_init( v_U32_t *phCryptProv ) {
     VOS_STATUS uResult = VOS_STATUS_E_FAILURE;
 
     // This implementation doesn't require a crypto context
@@ -144,8 +143,7 @@ VOS_STATUS vos_crypto_init( v_U32_t *phCryptProv )
     return ( uResult );
 }
 
-VOS_STATUS vos_crypto_deinit( v_U32_t hCryptProv )
-{
+VOS_STATUS vos_crypto_deinit( v_U32_t hCryptProv ) {
     VOS_STATUS uResult = VOS_STATUS_E_FAILURE;
 
     // CryptReleaseContext succeeded
@@ -180,27 +178,25 @@ VOS_STATUS vos_crypto_deinit( v_U32_t hCryptProv )
 
     ( *** return value not considered yet )
   --------------------------------------------------------------------------*/
-VOS_STATUS vos_rand_get_bytes( v_U32_t cryptHandle, v_U8_t *pbBuf, v_U32_t numBytes )
-{
-   VOS_STATUS uResult = VOS_STATUS_E_FAILURE;
-   //v_UINT_t uCode;
+VOS_STATUS vos_rand_get_bytes( v_U32_t cryptHandle, v_U8_t *pbBuf, v_U32_t numBytes ) {
+    VOS_STATUS uResult = VOS_STATUS_E_FAILURE;
+    //v_UINT_t uCode;
 //   HCRYPTPROV hCryptProv = (HCRYPTPROV) cryptHandle;
 
-   //check for invalid pointer
-   if ( NULL == pbBuf )
-   {
-      uResult = VOS_STATUS_E_FAULT;
-      return ( uResult );
-   }
+    //check for invalid pointer
+    if ( NULL == pbBuf ) {
+        uResult = VOS_STATUS_E_FAULT;
+        return ( uResult );
+    }
 
 //#if 0
-   // get_random_bytes() is a void procedure
-   get_random_bytes( pbBuf, numBytes);
-   // "Random sequence generated."
-   uResult = VOS_STATUS_SUCCESS;
+    // get_random_bytes() is a void procedure
+    get_random_bytes( pbBuf, numBytes);
+    // "Random sequence generated."
+    uResult = VOS_STATUS_SUCCESS;
 //#endif
 
-   return ( uResult );
+    return ( uResult );
 }
 
 
@@ -232,8 +228,7 @@ struct hmac_sha1_result {
     int err;
 };
 
-static void hmac_sha1_complete(struct crypto_async_request *req, int err)
-{
+static void hmac_sha1_complete(struct crypto_async_request *req, int err) {
     struct hmac_sha1_result *r = req->data;
     if (err == -EINPROGRESS)
         return;
@@ -242,8 +237,7 @@ static void hmac_sha1_complete(struct crypto_async_request *req, int err)
 }
 
 int hmac_sha1(v_U8_t *key, v_U8_t ksize, char *plaintext, v_U8_t psize,
-              v_U8_t *output, v_U8_t outlen)
-{
+              v_U8_t *output, v_U8_t outlen) {
     int ret = 0;
     struct crypto_ahash *tfm;
     struct scatterlist sg;
@@ -335,22 +329,21 @@ err_tfm:
 }
 
 VOS_STATUS vos_sha1_hmac_str(v_U32_t cryptHandle, /* Handle */
-           v_U8_t *pText, /* pointer to data stream */
-           v_U32_t textLen, /* length of data stream */
-           v_U8_t *pKey, /* pointer to authentication key */
-           v_U32_t keyLen, /* length of authentication key */
-           v_U8_t digest[VOS_DIGEST_SHA1_SIZE])/* caller digest to be filled in */
-{
+                             v_U8_t *pText, /* pointer to data stream */
+                             v_U32_t textLen, /* length of data stream */
+                             v_U8_t *pKey, /* pointer to authentication key */
+                             v_U32_t keyLen, /* length of authentication key */
+                             v_U8_t digest[VOS_DIGEST_SHA1_SIZE]) { /* caller digest to be filled in */
     int ret = 0;
 
     ret = hmac_sha1(
-            pKey,                   //v_U8_t *key,
-            (v_U8_t) keyLen,        //v_U8_t ksize,
-            (char *)pText,          //char *plaintext,
-            (v_U8_t) textLen,       //v_U8_t psize,
-            digest,                 //v_U8_t *output,
-            VOS_DIGEST_SHA1_SIZE    //v_U8_t outlen
-            );
+              pKey,                   //v_U8_t *key,
+              (v_U8_t) keyLen,        //v_U8_t ksize,
+              (char *)pText,          //char *plaintext,
+              (v_U8_t) textLen,       //v_U8_t psize,
+              digest,                 //v_U8_t *output,
+              VOS_DIGEST_SHA1_SIZE    //v_U8_t outlen
+          );
 
     if (ret != 0) {
         VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR,"hmac_sha1() call failed");
@@ -387,18 +380,16 @@ struct hmac_md5_result {
     int err;
 };
 
-static void hmac_md5_complete(struct crypto_async_request *req, int err)
-{
+static void hmac_md5_complete(struct crypto_async_request *req, int err) {
     struct hmac_md5_result *r = req->data;
     if (err == -EINPROGRESS)
-            return;
+        return;
     r->err = err;
     complete(&r->completion);
 }
 
 int hmac_md5(v_U8_t *key, v_U8_t ksize, char *plaintext, v_U8_t psize,
-                v_U8_t *output, v_U8_t outlen)
-{
+             v_U8_t *output, v_U8_t outlen) {
     int ret = 0;
     struct crypto_ahash *tfm;
     struct scatterlist sg;
@@ -417,8 +408,8 @@ int hmac_md5(v_U8_t *key, v_U8_t ksize, char *plaintext, v_U8_t psize,
                                         CRYPTO_ALG_TYPE_AHASH_MASK);
     if (IS_ERR(tfm)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR, "crypto_alloc_ahash failed");
-                ret = PTR_ERR(tfm);
-                goto err_tfm;
+        ret = PTR_ERR(tfm);
+        goto err_tfm;
     }
 
     req = ahash_request_alloc(tfm, GFP_KERNEL);
@@ -429,7 +420,7 @@ int hmac_md5(v_U8_t *key, v_U8_t ksize, char *plaintext, v_U8_t psize,
     }
 
     ahash_request_set_callback(req, CRYPTO_TFM_REQ_MAY_BACKLOG,
-                                        hmac_md5_complete, &tresult);
+                               hmac_md5_complete, &tresult);
 
     hash_buff = kzalloc(psize, GFP_KERNEL);
     if (!hash_buff) {
@@ -458,54 +449,53 @@ int hmac_md5(v_U8_t *key, v_U8_t ksize, char *plaintext, v_U8_t psize,
     VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR, "ret 0x%x", ret);
 
     switch (ret) {
-        case 0:
-            for (i=0; i< outlen; i++)
-                    output[i] = hash_result[i];
+    case 0:
+        for (i=0; i< outlen; i++)
+            output[i] = hash_result[i];
+        break;
+    case -EINPROGRESS:
+    case -EBUSY:
+        ret = wait_for_completion_interruptible(&tresult.completion);
+        if (!ret && !tresult.err) {
+            INIT_COMPLETION(tresult.completion);
             break;
-        case -EINPROGRESS:
-        case -EBUSY:
-             ret = wait_for_completion_interruptible(&tresult.completion);
-             if (!ret && !tresult.err) {
-                  INIT_COMPLETION(tresult.completion);
-                  break;
-             } else {
-                 VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR, "wait_for_completion_interruptible failed");
-                 if (!ret)
-                     ret = tresult.err;
-                 goto out;
-             }
-        default:
-              goto out;
+        } else {
+            VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR, "wait_for_completion_interruptible failed");
+            if (!ret)
+                ret = tresult.err;
+            goto out;
         }
+    default:
+        goto out;
+    }
 
 out:
 err_setkey:
-        kfree(hash_buff);
+    kfree(hash_buff);
 err_hash_buf:
-        ahash_request_free(req);
+    ahash_request_free(req);
 err_req:
-        wcnss_wlan_crypto_free_ahash(tfm);
+    wcnss_wlan_crypto_free_ahash(tfm);
 err_tfm:
-        return ret;
+    return ret;
 }
 
 VOS_STATUS vos_md5_hmac_str(v_U32_t cryptHandle, /* Handle */
-           v_U8_t *pText, /* pointer to data stream */
-           v_U32_t textLen, /* length of data stream */
-           v_U8_t *pKey, /* pointer to authentication key */
-           v_U32_t keyLen, /* length of authentication key */
-           v_U8_t digest[VOS_DIGEST_MD5_SIZE])/* caller digest to be filled in */
-{
+                            v_U8_t *pText, /* pointer to data stream */
+                            v_U32_t textLen, /* length of data stream */
+                            v_U8_t *pKey, /* pointer to authentication key */
+                            v_U32_t keyLen, /* length of authentication key */
+                            v_U8_t digest[VOS_DIGEST_MD5_SIZE]) { /* caller digest to be filled in */
     int ret = 0;
 
     ret = hmac_md5(
-            pKey,                   //v_U8_t *key,
-            (v_U8_t) keyLen,        //v_U8_t ksize,
-            (char *)pText,          //char *plaintext,
-            (v_U8_t) textLen,       //v_U8_t psize,
-            digest,                 //v_U8_t *output,
-            VOS_DIGEST_MD5_SIZE     //v_U8_t outlen
-            );
+              pKey,                   //v_U8_t *key,
+              (v_U8_t) keyLen,        //v_U8_t ksize,
+              (char *)pText,          //char *plaintext,
+              (v_U8_t) textLen,       //v_U8_t psize,
+              digest,                 //v_U8_t *output,
+              VOS_DIGEST_MD5_SIZE     //v_U8_t outlen
+          );
 
     if (ret != 0) {
         VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR,"hmac_md5() call failed");
@@ -521,8 +511,7 @@ struct ecb_aes_result {
     int err;
 };
 
-static void ecb_aes_complete(struct crypto_async_request *req, int err)
-{
+static void ecb_aes_complete(struct crypto_async_request *req, int err) {
     struct ecb_aes_result *r = req->data;
     if (err == -EINPROGRESS)
         return;
@@ -565,8 +554,7 @@ static void ecb_aes_complete(struct crypto_async_request *req, int err)
 VOS_STATUS vos_encrypt_AES(v_U32_t cryptHandle, /* Handle */
                            v_U8_t *pPlainText, /* pointer to data stream */
                            v_U8_t *pCiphertext,
-                           v_U8_t *pKey) /* pointer to authentication key */
-{
+                           v_U8_t *pKey) { /* pointer to authentication key */
 //    VOS_STATUS uResult = VOS_STATUS_E_FAILURE;
     struct ecb_aes_result result;
     struct ablkcipher_request *req;
@@ -626,7 +614,7 @@ err_tfm:
     if (ret != 0) {
         VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR,"%s() call failed", __func__);
         return VOS_STATUS_E_FAULT;
-   }
+    }
 
     return VOS_STATUS_SUCCESS;
 }
@@ -661,8 +649,7 @@ err_tfm:
 VOS_STATUS vos_decrypt_AES(v_U32_t cryptHandle, /* Handle */
                            v_U8_t *pText, /* pointer to data stream */
                            v_U8_t *pDecrypted,
-                           v_U8_t *pKey) /* pointer to authentication key */
-{
+                           v_U8_t *pKey) { /* pointer to authentication key */
 //    VOS_STATUS uResult = VOS_STATUS_E_FAILURE;
     struct ecb_aes_result result;
     struct ablkcipher_request *req;
@@ -698,7 +685,7 @@ VOS_STATUS vos_decrypt_AES(v_U32_t cryptHandle, /* Handle */
     if (ret) {
         VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR, "crypto_cipher_setkey failed");
         goto err_setkey;
-       }
+    }
 
     memset(iv, 0, IV_SIZE_AES_128);
 
@@ -722,7 +709,7 @@ err_tfm:
     if (ret != 0) {
         VOS_TRACE(VOS_MODULE_ID_VOSS,VOS_TRACE_LEVEL_ERROR,"%s() call failed", __func__);
         return VOS_STATUS_E_FAULT;
-      }
+    }
 
     return VOS_STATUS_SUCCESS;
 }

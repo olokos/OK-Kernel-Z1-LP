@@ -2602,27 +2602,33 @@ static struct pinmux_cfg_reg pinmux_config_regs[] = {
             FN_SEL_I2C1_0, FN_SEL_I2C1_1, FN_SEL_I2C1_2, FN_SEL_I2C1_3
         }
     },
-    { PINMUX_CFG_REG("INOUTSEL0", 0xffc40004, 32, 1) {
+    {
+        PINMUX_CFG_REG("INOUTSEL0", 0xffc40004, 32, 1) {
             GP_INOUTSEL(0)
         }
     },
-    { PINMUX_CFG_REG("INOUTSEL1", 0xffc41004, 32, 1) {
+    {
+        PINMUX_CFG_REG("INOUTSEL1", 0xffc41004, 32, 1) {
             GP_INOUTSEL(1)
         }
     },
-    { PINMUX_CFG_REG("INOUTSEL2", 0xffc42004, 32, 1) {
+    {
+        PINMUX_CFG_REG("INOUTSEL2", 0xffc42004, 32, 1) {
             GP_INOUTSEL(2)
         }
     },
-    { PINMUX_CFG_REG("INOUTSEL3", 0xffc43004, 32, 1) {
+    {
+        PINMUX_CFG_REG("INOUTSEL3", 0xffc43004, 32, 1) {
             GP_INOUTSEL(3)
         }
     },
-    { PINMUX_CFG_REG("INOUTSEL4", 0xffc44004, 32, 1) {
+    {
+        PINMUX_CFG_REG("INOUTSEL4", 0xffc44004, 32, 1) {
             GP_INOUTSEL(4)
         }
     },
-    { PINMUX_CFG_REG("INOUTSEL5", 0xffc45004, 32, 1) {
+    {
+        PINMUX_CFG_REG("INOUTSEL5", 0xffc45004, 32, 1) {
             GP_INOUTSEL(5)
         }
     },
@@ -2649,27 +2655,33 @@ static struct pinmux_cfg_reg pinmux_config_regs[] = {
 };
 
 static struct pinmux_data_reg pinmux_data_regs[] = {
-    { PINMUX_DATA_REG("INDT0", 0xffc40008, 32) {
+    {
+        PINMUX_DATA_REG("INDT0", 0xffc40008, 32) {
             GP_INDT(0)
         }
     },
-    { PINMUX_DATA_REG("INDT1", 0xffc41008, 32) {
+    {
+        PINMUX_DATA_REG("INDT1", 0xffc41008, 32) {
             GP_INDT(1)
         }
     },
-    { PINMUX_DATA_REG("INDT2", 0xffc42008, 32) {
+    {
+        PINMUX_DATA_REG("INDT2", 0xffc42008, 32) {
             GP_INDT(2)
         }
     },
-    { PINMUX_DATA_REG("INDT3", 0xffc43008, 32) {
+    {
+        PINMUX_DATA_REG("INDT3", 0xffc43008, 32) {
             GP_INDT(3)
         }
     },
-    { PINMUX_DATA_REG("INDT4", 0xffc44008, 32) {
+    {
+        PINMUX_DATA_REG("INDT4", 0xffc44008, 32) {
             GP_INDT(4)
         }
     },
-    { PINMUX_DATA_REG("INDT5", 0xffc45008, 32) {
+    {
+        PINMUX_DATA_REG("INDT5", 0xffc45008, 32) {
             GP_INDT(5)
         }
     },

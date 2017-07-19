@@ -71,8 +71,7 @@ void schLog(tpAniSirGlobal pMac, tANI_U32 loglevel, const char *pString,...) ;
  */
 
 #ifdef SCH_DEBUG_STATS
-inline void schClass::schTrace(tSchTrace event, tANI_U32 arg)
-{
+inline void schClass::schTrace(tSchTrace event, tANI_U32 arg) {
     if (gSchFreezeDump) return;
     if ((tANI_U32)event >= traceLevel) return;
 

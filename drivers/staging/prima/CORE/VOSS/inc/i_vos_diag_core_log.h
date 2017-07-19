@@ -43,15 +43,15 @@
 #define __I_VOS_DIAG_CORE_LOG_H
 
 /**=========================================================================
-  
+
   \file  i_vos_diag_core_event.h
-  
+
   \brief android-specific definitions for vOSS DIAG logs
-  
+
    Copyright 2008 (c) Qualcomm, Incorporated.  All Rights Reserved.
-   
+
    Qualcomm Confidential and Proprietary.
-  
+
   ========================================================================*/
 
 /* $Header$ */
@@ -66,25 +66,24 @@
 #include <log_codes.h>
 #endif
 
-/*-------------------------------------------------------------------------- 
+/*--------------------------------------------------------------------------
   Preprocessor definitions and constants
   ------------------------------------------------------------------------*/
 //FIXME To be removed when DIAG support is added. This definiton should be
-//picked from log.h file above. 
-typedef struct
-{
-  /* Specifies the length, in bytes of the entry, including this header. */
+//picked from log.h file above.
+typedef struct {
+    /* Specifies the length, in bytes of the entry, including this header. */
     v_U16_t len;
-  
-  /* Specifies the log code for the entry*/
-    v_U16_t code; 
 
-  /*Time Stamp lo*/
+    /* Specifies the log code for the entry*/
+    v_U16_t code;
+
+    /*Time Stamp lo*/
     v_U32_t ts_lo;
-  
-   /*Time Stamp hi*/
+
+    /*Time Stamp hi*/
     v_U32_t ts_hi;
-}__packed log_hdr_type;
+} __packed log_hdr_type;
 
 
 #ifdef __cplusplus
@@ -126,7 +125,7 @@ void vos_log_submit(v_VOID_t *plog_hdr_ptr);
           vos_mem_free(payload_ptr); \
        }                             \
     } while (0)
-    
+
 /*---------------------------------------------------------------------------
   Free the payload
 ---------------------------------------------------------------------------*/
@@ -138,18 +137,18 @@ void vos_log_submit(v_VOID_t *plog_hdr_ptr);
           vos_mem_free(payload_ptr); \
        }                             \
     } while (0)
-    
+
 
 #else /* FEATURE_WLAN_DIAG_SUPPORT */
 
-#define WLAN_VOS_DIAG_LOG_ALLOC( payload_ptr, payload_type, log_code ) 
-#define WLAN_VOS_DIAG_LOG_REPORT( payload_ptr ) 
+#define WLAN_VOS_DIAG_LOG_ALLOC( payload_ptr, payload_type, log_code )
+#define WLAN_VOS_DIAG_LOG_REPORT( payload_ptr )
 #define WLAN_VOS_DIAG_LOG_FREE( payload_ptr )
 
 #endif /* FEATURE_WLAN_DIAG_SUPPORT */
 
 
-/*------------------------------------------------------------------------- 
+/*-------------------------------------------------------------------------
   Function declarations and documenation
   ------------------------------------------------------------------------*/
 

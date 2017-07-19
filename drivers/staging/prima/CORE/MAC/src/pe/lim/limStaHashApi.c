@@ -54,12 +54,10 @@
  * @return success if GET operation is ok, else Failure.
  */
 
-tSirRetStatus limGetStaHashBssidx(tpAniSirGlobal pMac, tANI_U16 assocId, tANI_U8 *bssidx, tpPESession psessionEntry)
-{
+tSirRetStatus limGetStaHashBssidx(tpAniSirGlobal pMac, tANI_U16 assocId, tANI_U8 *bssidx, tpPESession psessionEntry) {
     tpDphHashNode pSta = dphGetHashEntry(pMac, assocId, &psessionEntry->dph.dphHashTable);
 
-    if (pSta == NULL)
-    {
+    if (pSta == NULL) {
         PELOGE(limLog(pMac, LOGE, FL("invalid STA %d"),  assocId);)
         return eSIR_LIM_INVALID_STA;
     }

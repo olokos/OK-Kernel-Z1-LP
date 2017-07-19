@@ -55,8 +55,7 @@
 
 #include "sirApi.h"
 
-typedef struct sPmmStaState
-{
+typedef struct sPmmStaState {
     /// Whether this STA is in powersave or not
     tANI_U8 powerSave : 1;
     /// Whether this STA is CF-pollable or not
@@ -74,8 +73,7 @@ typedef struct sPmmStaState
 
 #define NO_STATE_CHANGE 0xFF
 
-typedef enum ePmmState
-{
+typedef enum ePmmState {
     ePMM_STATE_INVALID,
     ePMM_STATE_READY,
     //BMPS
@@ -99,16 +97,14 @@ typedef enum ePmmState
 
     ePMM_STATE_ERROR,
     ePMM_STATE_LAST,
-}tPmmState;
+} tPmmState;
 
-typedef struct sPmmStaInfo
-{
+typedef struct sPmmStaInfo {
     tANI_U16 assocId;
     tANI_U32 staTxAckCnt;
-}tPmmStaInfo, *tpPmmStaInfo;
+} tPmmStaInfo, *tpPmmStaInfo;
 
-typedef struct sPmmTim
-{
+typedef struct sPmmTim {
     tANI_U8 *pTim;                    /** Tim Bit Array*/
     tANI_U8 minAssocId;
     tANI_U8 maxAssocId;
@@ -118,8 +114,7 @@ typedef struct sPmmTim
     tpPmmStaInfo    pStaInfo;   /** Points to 1st Instant of the Array of MaxSTA StaInfo */
 } tPmmTim, *tpPmmTim;
 
-typedef struct sAniSirPmm
-{
+typedef struct sAniSirPmm {
 
 
     //tANI_U32 disModeBeforeSleeping;
@@ -175,7 +170,7 @@ typedef struct sAniSirPmm
     tANI_U64 ImpsPktDrpInSleepMode;
 
 
-   /// Next STA to be serviced in PS state
+    /// Next STA to be serviced in PS state
     tANI_U16 gPmmNextSta;
 
     /// Next CF-pollable STA to be serviced in PS state
@@ -187,7 +182,7 @@ typedef struct sAniSirPmm
     tANI_U8  gPmmPsPollUpdate:1; // set when any sta state is update due to PS-Poll
     tANI_U8  rsvd: 7;
 
-   /// STA Power management state array
+    /// STA Power management state array
     /**
      * An entry in this array records the power save state for an STA
      * It also points to the next closest STA in power save state.

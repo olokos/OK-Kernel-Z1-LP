@@ -81,10 +81,10 @@
 #define     WPAL_SMSM_WLAN_TX_RINGS_EMPTY     0x00000200
 
 /* ====================================================================================================================
-  @  Function Name 
+  @  Function Name
       wpalIsrType
 
-  @  Description 
+  @  Description
       DXE ISR functio prototype
       DXE should register ISR function into platform
 
@@ -113,7 +113,7 @@ typedef void (* wpalIsrType)(void *usrCtxt);
  * ==================================================================================================================*/
 wpt_status wpalDeviceInit
 (
-   void                 *deviceCB
+    void                 *deviceCB
 );
 
 /* ====================================================================================================================
@@ -130,7 +130,7 @@ wpt_status wpalDeviceInit
  * ==================================================================================================================*/
 wpt_status wpalDeviceClose
 (
-   void                 *deviceC
+    void                 *deviceC
 );
 
 /* ==========================================================================
@@ -144,7 +144,7 @@ wpt_status wpalDeviceClose
   Available.  This interface provides the mechanism whereby a client
   can register to support one of these.  It is expected that the core
   DXE implementation will invoke this API twice, once for each interrupt.
-  
+
   @param  intType:          Enumeration of the interrupt type (TX or RX)
   @param  callbackFunction: ISR function pointer
   @param  usrCtxt:          User context passed back whenever the
@@ -154,9 +154,9 @@ wpt_status wpalDeviceClose
 */
 wpt_status wpalRegisterInterrupt
 (
-   wpt_uint32                           intType,
-   wpalIsrType                          callbackFunction,
-   void                                *usrCtxt
+    wpt_uint32                           intType,
+    wpalIsrType                          callbackFunction,
+    void                                *usrCtxt
 );
 
 /**
@@ -164,7 +164,7 @@ wpt_status wpalRegisterInterrupt
          to un-register for a given interrupt
 
   When DXE stop, remove registered information from PAL
-  
+
   @param  intType:          Enumeration of the interrupt type (TX or RX)
 
   @return NONE
@@ -172,7 +172,7 @@ wpt_status wpalRegisterInterrupt
 
 void wpalUnRegisterInterrupt
 (
-   wpt_uint32      intType
+    wpt_uint32      intType
 );
 
 /**
@@ -185,14 +185,14 @@ void wpalUnRegisterInterrupt
   given interrupt to occur.  The expectation is that if a given
   interrupt is not enabled, if the interrupt occurs then the APPS CPU
   will not be interrupted.
-  
+
   @param  intType:          Enumeration of the interrupt type (TX or RX)
 
   @return SUCCESS if the interrupt was enabled
 */
 wpt_status wpalEnableInterrupt
 (
-   wpt_uint32                          intType
+    wpt_uint32                          intType
 );
 
 /**
@@ -205,14 +205,14 @@ wpt_status wpalEnableInterrupt
   given interrupt to occur.  The expectation is that if a given
   interrupt is not enabled, if the interrupt occurs then the APPS CPU
   will not be interrupted.
-  
+
   @param  intType:          Enumeration of the interrupt type (TX or RX)
 
   @return SUCCESS if the interrupt was disabled
 */
 wpt_status wpalDisableInterrupt
 (
-   wpt_uint32                           intType
+    wpt_uint32                           intType
 );
 
 /**
@@ -226,8 +226,8 @@ wpt_status wpalDisableInterrupt
 */
 wpt_status wpalReadRegister
 (
-   wpt_uint32                           address,
-   wpt_uint32                          *data
+    wpt_uint32                           address,
+    wpt_uint32                          *data
 );
 
 /**
@@ -241,8 +241,8 @@ wpt_status wpalReadRegister
 */
 wpt_status wpalWriteRegister
 (
-   wpt_uint32                           address,
-   wpt_uint32                           data
+    wpt_uint32                           address,
+    wpt_uint32                           data
 );
 
 /**
@@ -258,9 +258,9 @@ wpt_status wpalWriteRegister
 */
 wpt_status wpalReadDeviceMemory
 (
-   wpt_uint32                            address,
-   wpt_uint8                            *DestBuffer,
-   wpt_uint32                            len
+    wpt_uint32                            address,
+    wpt_uint8                            *DestBuffer,
+    wpt_uint32                            len
 );
 
 /**
@@ -276,25 +276,25 @@ wpt_status wpalReadDeviceMemory
 */
 wpt_status wpalWriteDeviceMemory
 (
-   wpt_uint32                            address,
-   wpt_uint8                            *srcBuffer,
-   wpt_uint32                            len
+    wpt_uint32                            address,
+    wpt_uint8                            *srcBuffer,
+    wpt_uint32                            len
 );
 
 /**
-  @brief wpalNotifySmsm provides a mechansim for a client to 
+  @brief wpalNotifySmsm provides a mechansim for a client to
          notify SMSM to start DXE engine and/or condition of Tx
          ring buffer
 
-  @param  clrSt:   bit(s) to be cleared on the MASK 
+  @param  clrSt:   bit(s) to be cleared on the MASK
   @param  setSt:   bit(s) to be set on the MASK
 
   @return SUCCESS if the operation is successful
 */
 wpt_status wpalNotifySmsm
 (
-   wpt_uint32                            clrSt,
-   wpt_uint32                            setSt
+    wpt_uint32                            clrSt,
+    wpt_uint32                            setSt
 );
 
 /**

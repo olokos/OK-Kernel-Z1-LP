@@ -86,36 +86,32 @@
 
 
 void limRemainOnChnlSuspendLinkHdlr(tpAniSirGlobal pMac, eHalStatus status,
-                                       tANI_U32 *data);
+                                    tANI_U32 *data);
 void limRemainOnChnlSetLinkStat(tpAniSirGlobal pMac, eHalStatus status,
                                 tANI_U32 *data, tpPESession psessionEntry);
 void limExitRemainOnChannel(tpAniSirGlobal pMac, eHalStatus status,
-                         tANI_U32 *data, tpPESession psessionEntry);
+                            tANI_U32 *data, tpPESession psessionEntry);
 void limRemainOnChnRsp(tpAniSirGlobal pMac, eHalStatus status, tANI_U32 *data);
 extern tSirRetStatus limSetLinkState(
-                         tpAniSirGlobal pMac, tSirLinkState state,
-                         tSirMacAddr bssId, tSirMacAddr selfMacAddr, 
-                         tpSetLinkStateCallback callback, void *callbackArg);
+    tpAniSirGlobal pMac, tSirLinkState state,
+    tSirMacAddr bssId, tSirMacAddr selfMacAddr,
+    tpSetLinkStateCallback callback, void *callbackArg);
 
 static tSirRetStatus limCreateSessionForRemainOnChn(tpAniSirGlobal pMac, tPESession **ppP2pSession);
 eHalStatus limP2PActionCnf(tpAniSirGlobal pMac, tANI_U32 txCompleteSuccess);
 /*------------------------------------------------------------------
  *
- * Below function is callback function, it is called when 
+ * Below function is callback function, it is called when
  * WDA_SET_LINK_STATE_RSP is received from WDI. callback function for
  * P2P of limSetLinkState
  *
  *------------------------------------------------------------------*/
-void limSetLinkStateP2PCallback(tpAniSirGlobal pMac, void *callbackArg)
-{
+void limSetLinkStateP2PCallback(tpAniSirGlobal pMac, void *callbackArg) {
     //Send Ready on channel indication to SME
-    if(pMac->lim.gpLimRemainOnChanReq)
-    {
-        limSendSmeRsp(pMac, eWNI_SME_REMAIN_ON_CHN_RDY_IND, eHAL_STATUS_SUCCESS, 
-                     pMac->lim.gpLimRemainOnChanReq->sessionId, 0); 
-    }
-    else
-    {
+    if(pMac->lim.gpLimRemainOnChanReq) {
+        limSendSmeRsp(pMac, eWNI_SME_REMAIN_ON_CHN_RDY_IND, eHAL_STATUS_SUCCESS,
+                      pMac->lim.gpLimRemainOnChanReq->sessionId, 0);
+    } else {
         //This is possible in case remain on channel is aborted
         limLog( pMac, LOGE, FL(" NULL pointer of gpLimRemainOnChanReq") );
     }
@@ -129,8 +125,7 @@ void limSetLinkStateP2PCallback(tpAniSirGlobal pMac, void *callbackArg)
  *------------------------------------------------------------------*/
 
 
-int limProcessRemainOnChnlReq(tpAniSirGlobal pMac, tANI_U32 *pMsg)
-{
+int limProcessRemainOnChnlReq(tpAniSirGlobal pMac, tANI_U32 *pMsg) {
 
     /* CONC_OPER_AND_LISTEN_CHNL_SAME_OPTIMIZE - Currently removed the special optimization when a concurrent session
      * exists with operating channel same as P2P listen channel since it was causing issues in P2P search. The reason was
@@ -150,14 +145,11 @@ int limProcessRemainOnChnlReq(tpAniSirGlobal pMac, tANI_U32 *pMsg)
     pMac->lim.gpLimRemainOnChanReq = MsgBuff;
 
 #ifdef CONC_OPER_AND_LISTEN_CHNL_SAME_OPTIMIZE
-    for (i =0; i < pMac->lim.maxBssId;i++)
-    {
+    for (i =0; i < pMac->lim.maxBssId; i++) {
         psessionEntry = peFindSessionBySessionId(pMac,i);
 
-        if ( (psessionEntry != NULL) )
-        {
-            if (psessionEntry->currentOperChannel == MsgBuff->chnNum)
-            {
+        if ( (psessionEntry != NULL) ) {
+            if (psessionEntry->currentOperChannel == MsgBuff->chnNum) {
                 tANI_U32 val;
                 tSirMacAddr nullBssid = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
@@ -169,35 +161,30 @@ int limProcessRemainOnChnlReq(tpAniSirGlobal pMac, tANI_U32 *pMsg)
 
                 limLog( pMac, LOG2, "Start listen duration = %d", val);
                 if (tx_timer_change(
-                        &pMac->lim.limTimers.gLimRemainOnChannelTimer, val, 0)
-                                          != TX_SUCCESS)
-                {
+                            &pMac->lim.limTimers.gLimRemainOnChannelTimer, val, 0)
+                        != TX_SUCCESS) {
                     limLog(pMac, LOGP,
-                          FL("Unable to change remain on channel Timer val"));
+                           FL("Unable to change remain on channel Timer val"));
                     goto error;
-                }
-                else if(TX_SUCCESS != tx_timer_activate(
-                                &pMac->lim.limTimers.gLimRemainOnChannelTimer))
-                {
+                } else if(TX_SUCCESS != tx_timer_activate(
+                              &pMac->lim.limTimers.gLimRemainOnChannelTimer)) {
                     limLog(pMac, LOGP,
-                    FL("Unable to activate remain on channel Timer"));
+                           FL("Unable to activate remain on channel Timer"));
                     limDeactivateAndChangeTimer(pMac, eLIM_REMAIN_CHN_TIMER);
                     goto error;
                 }
 
 #ifdef WLAN_FEATURE_P2P_INTERNAL
                 //Session is needed to send probe rsp
-                if(eSIR_SUCCESS != limCreateSessionForRemainOnChn(pMac, &pP2pSession))
-                {
+                if(eSIR_SUCCESS != limCreateSessionForRemainOnChn(pMac, &pP2pSession)) {
                     limLog( pMac, LOGE, "Unable to create session");
                     goto error;
                 }
 #endif
 
                 if ((limSetLinkState(pMac, eSIR_LINK_LISTEN_STATE,
-                    nullBssid, pMac->lim.gSelfMacAddr, 
-                    limSetLinkStateP2PCallback, NULL)) != eSIR_SUCCESS)
-                {
+                                     nullBssid, pMac->lim.gSelfMacAddr,
+                                     limSetLinkStateP2PCallback, NULL)) != eSIR_SUCCESS) {
                     limLog( pMac, LOGE, "Unable to change link state");
                     goto error;
                 }
@@ -225,18 +212,15 @@ error:
 }
 
 
-tSirRetStatus limCreateSessionForRemainOnChn(tpAniSirGlobal pMac, tPESession **ppP2pSession)
-{
+tSirRetStatus limCreateSessionForRemainOnChn(tpAniSirGlobal pMac, tPESession **ppP2pSession) {
     tSirRetStatus nSirStatus = eSIR_FAILURE;
     tpPESession psessionEntry;
     tANI_U8 sessionId;
     tANI_U32 val;
 
-    if(pMac->lim.gpLimRemainOnChanReq && ppP2pSession)
-    {
+    if(pMac->lim.gpLimRemainOnChanReq && ppP2pSession) {
         if((psessionEntry = peCreateSession(pMac,
-           pMac->lim.gpLimRemainOnChanReq->selfMacAddr, &sessionId, 1)) == NULL)
-        {
+                                            pMac->lim.gpLimRemainOnChanReq->selfMacAddr, &sessionId, 1)) == NULL) {
             limLog(pMac, LOGE, FL("Session Can not be created "));
             /* send remain on chn failure */
             return nSirStatus;
@@ -246,7 +230,7 @@ tSirRetStatus limCreateSessionForRemainOnChn(tpAniSirGlobal pMac, tPESession **p
 
         psessionEntry->limSystemRole = eLIM_P2P_DEVICE_ROLE;
         CFG_GET_STR( nSirStatus, pMac,  WNI_CFG_SUPPORTED_RATES_11A,
-               psessionEntry->rateSet.rate, val , SIR_MAC_MAX_NUMBER_OF_RATES );
+                     psessionEntry->rateSet.rate, val , SIR_MAC_MAX_NUMBER_OF_RATES );
         psessionEntry->rateSet.numRates = val;
 
         CFG_GET_STR( nSirStatus, pMac, WNI_CFG_EXTENDED_OPERATIONAL_RATE_SET,
@@ -274,37 +258,30 @@ tSirRetStatus limCreateSessionForRemainOnChn(tpAniSirGlobal pMac, tPESession **p
  *------------------------------------------------------------------*/
 
 tSirRetStatus limRemainOnChnlChangeChnReq(tpAniSirGlobal pMac,
-                                          eHalStatus status, tANI_U32 *data)
-{
+        eHalStatus status, tANI_U32 *data) {
     tpPESession psessionEntry;
     tANI_U8 sessionId = 0;
     tSirRetStatus nSirStatus = eSIR_FAILURE;
 
-    if( NULL == pMac->lim.gpLimRemainOnChanReq )
-    {
+    if( NULL == pMac->lim.gpLimRemainOnChanReq ) {
         //RemainOnChannel may have aborted
         PELOGE(limLog( pMac, LOGE, FL(" gpLimRemainOnChanReq is NULL") );)
         return nSirStatus;
     }
 
-     /* The link is not suspended */
-    if (status != eHAL_STATUS_SUCCESS)
-    {
+    /* The link is not suspended */
+    if (status != eHAL_STATUS_SUCCESS) {
         PELOGE(limLog( pMac, LOGE, FL(" Suspend link Failure ") );)
         goto error;
     }
 
 
     if((psessionEntry = peFindSessionByBssid(
-        pMac,pMac->lim.gpLimRemainOnChanReq->selfMacAddr, &sessionId)) != NULL)
-    {
+                            pMac,pMac->lim.gpLimRemainOnChanReq->selfMacAddr, &sessionId)) != NULL) {
         goto change_channel;
-    }
-    else /* Session Entry does not exist for given BSSId */
-    {
+    } else { /* Session Entry does not exist for given BSSId */
         /* Try to Create a new session */
-        if(eSIR_SUCCESS != limCreateSessionForRemainOnChn(pMac, &psessionEntry))
-        {
+        if(eSIR_SUCCESS != limCreateSessionForRemainOnChn(pMac, &psessionEntry)) {
             limLog(pMac, LOGE, FL("Session Can not be created "));
             /* send remain on chn failure */
             goto error;
@@ -314,18 +291,17 @@ tSirRetStatus limRemainOnChnlChangeChnReq(tpAniSirGlobal pMac,
 change_channel:
     /* change channel to the requested by RemainOn Chn*/
     limChangeChannelWithCallback(pMac,
-                              pMac->lim.gpLimRemainOnChanReq->chnNum,
-                              limRemainOnChnlSetLinkStat, NULL, psessionEntry);
-     return eSIR_SUCCESS;
+                                 pMac->lim.gpLimRemainOnChanReq->chnNum,
+                                 limRemainOnChnlSetLinkStat, NULL, psessionEntry);
+    return eSIR_SUCCESS;
 
 error:
-     limRemainOnChnRsp(pMac,eHAL_STATUS_FAILURE, NULL);
-     return eSIR_FAILURE;
+    limRemainOnChnRsp(pMac,eHAL_STATUS_FAILURE, NULL);
+    return eSIR_FAILURE;
 }
 
 void limRemainOnChnlSuspendLinkHdlr(tpAniSirGlobal pMac, eHalStatus status,
-                                       tANI_U32 *data)
-{
+                                    tANI_U32 *data) {
     limRemainOnChnlChangeChnReq(pMac, status, data);
     return;
 }
@@ -336,51 +312,46 @@ void limRemainOnChnlSuspendLinkHdlr(tpAniSirGlobal pMac, eHalStatus status,
  *
  *------------------------------------------------------------------*/
 void limRemainOnChnlSetLinkStat(tpAniSirGlobal pMac, eHalStatus status,
-                                tANI_U32 *data, tpPESession psessionEntry)
-{
+                                tANI_U32 *data, tpPESession psessionEntry) {
     tANI_U32 val;
     tSirRemainOnChnReq *MsgRemainonChannel = pMac->lim.gpLimRemainOnChanReq;
     tSirMacAddr             nullBssid = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-    if (status != eHAL_STATUS_SUCCESS)
-    {
+    if (status != eHAL_STATUS_SUCCESS) {
         limLog( pMac, LOGE, "%s: Change channel not successful");
         goto error1;
     }
 
     // Start timer here to come back to operating channel.
     pMac->lim.limTimers.gLimRemainOnChannelTimer.sessionId =
-                                                psessionEntry->peSessionId;
+        psessionEntry->peSessionId;
     pMac->lim.p2pRemOnChanTimeStamp = vos_timer_get_system_time();
     pMac->lim.gTotalScanDuration = MsgRemainonChannel->duration;
 
-      /* get the duration from the request */
+    /* get the duration from the request */
     val = SYS_MS_TO_TICKS(MsgRemainonChannel->duration);
 
     limLog( pMac, LOG2, "Start listen duration = %d", val);
     if (tx_timer_change(&pMac->lim.limTimers.gLimRemainOnChannelTimer,
-                                                val, 0) != TX_SUCCESS)
-    {
-       /**
-        * Could not change Remain on channel Timer. Log error.
-        */
+                        val, 0) != TX_SUCCESS) {
+        /**
+         * Could not change Remain on channel Timer. Log error.
+         */
         limLog(pMac, LOGP,
                FL("Unable to change remain on channel Timer val"));
         goto error;
     }
 
     if(TX_SUCCESS !=
-       tx_timer_activate(&pMac->lim.limTimers.gLimRemainOnChannelTimer))
-    {
+            tx_timer_activate(&pMac->lim.limTimers.gLimRemainOnChannelTimer)) {
         limLog( pMac, LOGE,
-                  "%s: remain on channel Timer Start Failed", __func__);
+                "%s: remain on channel Timer Start Failed", __func__);
         goto error;
     }
 
     if ((limSetLinkState(pMac, eSIR_LINK_LISTEN_STATE,nullBssid,
-                         pMac->lim.gSelfMacAddr, limSetLinkStateP2PCallback, 
-                         NULL)) != eSIR_SUCCESS)
-    {
+                         pMac->lim.gSelfMacAddr, limSetLinkStateP2PCallback,
+                         NULL)) != eSIR_SUCCESS) {
         limLog( pMac, LOGE, "Unable to change link state");
         goto error;
     }
@@ -399,8 +370,7 @@ error1:
  * scan rsp to csr/hdd
  *
  *------------------------------------------------------------------*/
-void limProcessInsertSingleShotNOATimeout(tpAniSirGlobal pMac)
-{
+void limProcessInsertSingleShotNOATimeout(tpAniSirGlobal pMac) {
     /* timeout means start NOA did not arrive; we need to deactivate and change the timer for
      * future activations
      */
@@ -417,29 +387,22 @@ void limProcessInsertSingleShotNOATimeout(tpAniSirGlobal pMac)
  * and convert them to passive channels if there was no
  * beacon/proberesp for MAX_TIME_TO_BE_ACTIVE_CHANNEL time
  *------------------------------------------------------------------*/
-void limConvertActiveChannelToPassiveChannel(tpAniSirGlobal pMac )
-{
+void limConvertActiveChannelToPassiveChannel(tpAniSirGlobal pMac ) {
     tANI_U32 currentTime;
     tANI_U32 lastTime = 0;
     tANI_U32 timeDiff;
     tANI_U8 i;
     currentTime = vos_timer_get_system_time();
-    for (i = 1; i < SIR_MAX_24G_5G_CHANNEL_RANGE ; i++)
-    {
-        if ((pMac->lim.dfschannelList.timeStamp[i]) != 0)
-        {
+    for (i = 1; i < SIR_MAX_24G_5G_CHANNEL_RANGE ; i++) {
+        if ((pMac->lim.dfschannelList.timeStamp[i]) != 0) {
             lastTime = pMac->lim.dfschannelList.timeStamp[i];
-            if (currentTime >= lastTime)
-            {
+            if (currentTime >= lastTime) {
                 timeDiff = (currentTime - lastTime);
-            }
-            else
-            {
+            } else {
                 timeDiff = (0xFFFFFFFF - lastTime) + currentTime;
             }
 
-            if (timeDiff >= MAX_TIME_TO_BE_ACTIVE_CHANNEL)
-            {
+            if (timeDiff >= MAX_TIME_TO_BE_ACTIVE_CHANNEL) {
                 limCovertChannelScanType( pMac, i,FALSE);
                 pMac->lim.dfschannelList.timeStamp[i] = 0;
             }
@@ -448,12 +411,10 @@ void limConvertActiveChannelToPassiveChannel(tpAniSirGlobal pMac )
     /* lastTime is zero if there is no DFS active channels in the list.
      * If this is non zero then we have active DFS channels so restart the timer.
     */
-    if (lastTime != 0)
-    {
+    if (lastTime != 0) {
         if (tx_timer_activate(
-                         &pMac->lim.limTimers.gLimActiveToPassiveChannelTimer)
-                          != TX_SUCCESS)
-        {
+                    &pMac->lim.limTimers.gLimActiveToPassiveChannelTimer)
+                != TX_SUCCESS) {
             limLog(pMac, LOGE, FL("Could not activate Active to Passive Channel  timer"));
         }
     }
@@ -469,48 +430,40 @@ void limConvertActiveChannelToPassiveChannel(tpAniSirGlobal pMac )
  *
  *------------------------------------------------------------------*/
 
-void limProcessRemainOnChnTimeout(tpAniSirGlobal pMac)
-{
+void limProcessRemainOnChnTimeout(tpAniSirGlobal pMac) {
     tpPESession psessionEntry;
     tSirMacAddr             nullBssid = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     //Timer might get extended while Sending Action Frame
     //In that case don't process Channel Timeout
-    if (tx_timer_running(&pMac->lim.limTimers.gLimRemainOnChannelTimer))
-    {
-        limLog( pMac, LOGE, 
+    if (tx_timer_running(&pMac->lim.limTimers.gLimRemainOnChannelTimer)) {
+        limLog( pMac, LOGE,
                 "still timer is running already and not processing limProcessRemainOnChnTimeout");
         return;
     }
 
     limDeactivateAndChangeTimer(pMac, eLIM_REMAIN_CHN_TIMER);
 
-    if (NULL == pMac->lim.gpLimRemainOnChanReq)
-    {
+    if (NULL == pMac->lim.gpLimRemainOnChanReq) {
         limLog( pMac, LOGE, "No Remain on channel pending");
         return;
     }
 
     /* get the previous valid LINK state */
     if (limSetLinkState(pMac, eSIR_LINK_IDLE_STATE, nullBssid,
-        pMac->lim.gSelfMacAddr, NULL, NULL) != eSIR_SUCCESS)
-    {
+                        pMac->lim.gSelfMacAddr, NULL, NULL) != eSIR_SUCCESS) {
         limLog( pMac, LOGE, "Unable to change link state");
         return;
     }
 
-    if (pMac->lim.gLimMlmState  != eLIM_MLM_P2P_LISTEN_STATE )
-    {
+    if (pMac->lim.gLimMlmState  != eLIM_MLM_P2P_LISTEN_STATE ) {
         limRemainOnChnRsp(pMac,eHAL_STATUS_SUCCESS, NULL);
-    }
-    else
-    {
+    } else {
         /* get the session */
         if((psessionEntry = peFindSessionBySessionId(pMac,
-            pMac->lim.limTimers.gLimRemainOnChannelTimer.sessionId))== NULL)
-        {
+                            pMac->lim.limTimers.gLimRemainOnChannelTimer.sessionId))== NULL) {
             limLog(pMac, LOGE,
-                  FL("Session Does not exist for given sessionID"));
+                   FL("Session Does not exist for given sessionID"));
             goto error;
         }
 
@@ -531,15 +484,13 @@ error:
  *------------------------------------------------------------------*/
 
 void limExitRemainOnChannel(tpAniSirGlobal pMac, eHalStatus status,
-                         tANI_U32 *data, tpPESession psessionEntry)
-{
-    
-    if (status != eHAL_STATUS_SUCCESS)
-    {
+                            tANI_U32 *data, tpPESession psessionEntry) {
+
+    if (status != eHAL_STATUS_SUCCESS) {
         PELOGE(limLog( pMac, LOGE, "Remain on Channel Failed");)
         goto error;
     }
-    //Set the resume channel to Any valid channel (invalid). 
+    //Set the resume channel to Any valid channel (invalid).
     //This will instruct HAL to set it to any previous valid channel.
     peSetResumeChannel(pMac, 0, 0);
     limResumeLink(pMac, limRemainOnChnRsp, NULL);
@@ -554,51 +505,45 @@ error:
  * Send remain on channel respone: Success/ Failure
  *
  *------------------------------------------------------------------*/
-void limRemainOnChnRsp(tpAniSirGlobal pMac, eHalStatus status, tANI_U32 *data)
-{
+void limRemainOnChnRsp(tpAniSirGlobal pMac, eHalStatus status, tANI_U32 *data) {
     tpPESession psessionEntry;
     tANI_U8             sessionId;
     tSirRemainOnChnReq *MsgRemainonChannel = pMac->lim.gpLimRemainOnChanReq;
     tSirMacAddr             nullBssid = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-    if ( NULL == MsgRemainonChannel )
-    {
+    if ( NULL == MsgRemainonChannel ) {
         PELOGE(limLog( pMac, LOGP,
-             "%s: No Pointer for Remain on Channel Req", __func__);)
+                       "%s: No Pointer for Remain on Channel Req", __func__);)
         return;
     }
 
     //Incase of the Remain on Channel Failure Case
     //Cleanup Everything
-    if(eHAL_STATUS_FAILURE == status)
-    {
-       //Deactivate Remain on Channel Timer
-       limDeactivateAndChangeTimer(pMac, eLIM_REMAIN_CHN_TIMER);
+    if(eHAL_STATUS_FAILURE == status) {
+        //Deactivate Remain on Channel Timer
+        limDeactivateAndChangeTimer(pMac, eLIM_REMAIN_CHN_TIMER);
 
-       //Set the Link State to Idle
-       /* get the previous valid LINK state */
-       if (limSetLinkState(pMac, eSIR_LINK_IDLE_STATE, nullBssid,
-           pMac->lim.gSelfMacAddr, NULL, NULL) != eSIR_SUCCESS)
-       {
-           limLog( pMac, LOGE, "Unable to change link state");
-       }
+        //Set the Link State to Idle
+        /* get the previous valid LINK state */
+        if (limSetLinkState(pMac, eSIR_LINK_IDLE_STATE, nullBssid,
+                            pMac->lim.gSelfMacAddr, NULL, NULL) != eSIR_SUCCESS) {
+            limLog( pMac, LOGE, "Unable to change link state");
+        }
 
-       pMac->lim.gLimSystemInScanLearnMode = 0;
-       pMac->lim.gLimHalScanState = eLIM_HAL_IDLE_SCAN_STATE;
+        pMac->lim.gLimSystemInScanLearnMode = 0;
+        pMac->lim.gLimHalScanState = eLIM_HAL_IDLE_SCAN_STATE;
     }
 
     /* delete the session */
     if((psessionEntry = peFindSessionByBssid(pMac,
-                 MsgRemainonChannel->selfMacAddr,&sessionId)) != NULL)
-    {
-        if ( eLIM_P2P_DEVICE_ROLE == psessionEntry->limSystemRole )
-        {
-           peDeleteSession( pMac, psessionEntry);
+                        MsgRemainonChannel->selfMacAddr,&sessionId)) != NULL) {
+        if ( eLIM_P2P_DEVICE_ROLE == psessionEntry->limSystemRole ) {
+            peDeleteSession( pMac, psessionEntry);
         }
     }
 
     /* Post the meessage to Sme */
-    limSendSmeRsp(pMac, eWNI_SME_REMAIN_ON_CHN_RSP, status, 
+    limSendSmeRsp(pMac, eWNI_SME_REMAIN_ON_CHN_RSP, status,
                   MsgRemainonChannel->sessionId, 0);
 
     palFreeMemory( pMac->hHdd, pMac->lim.gpLimRemainOnChanReq );
@@ -606,11 +551,10 @@ void limRemainOnChnRsp(tpAniSirGlobal pMac, eHalStatus status, tANI_U32 *data)
 
     pMac->lim.gLimMlmState = pMac->lim.gLimPrevMlmState;
 
-    /* If remain on channel timer expired and action frame is pending then 
+    /* If remain on channel timer expired and action frame is pending then
      * indicaiton confirmation with status failure */
-    if (pMac->lim.mgmtFrameSessionId != 0xff)
-    {
-       limP2PActionCnf(pMac, 0);
+    if (pMac->lim.mgmtFrameSessionId != 0xff) {
+        limP2PActionCnf(pMac, 0);
     }
 
     return;
@@ -623,11 +567,10 @@ void limRemainOnChnRsp(tpAniSirGlobal pMac, eHalStatus status, tANI_U32 *data)
  *
  *------------------------------------------------------------------*/
 void limSendSmeMgmtFrameInd(
-                    tpAniSirGlobal pMac, tANI_U8 frameType,
-                    tANI_U8  *frame, tANI_U32 frameLen, tANI_U16 sessionId,
-                    tANI_U32 rxChannel, tpPESession psessionEntry,
-                    tANI_S8 rxRssi)
-{
+    tpAniSirGlobal pMac, tANI_U8 frameType,
+    tANI_U8  *frame, tANI_U32 frameLen, tANI_U16 sessionId,
+    tANI_U32 rxChannel, tpPESession psessionEntry,
+    tANI_S8 rxRssi) {
     tSirMsgQ              mmhMsg;
     tpSirSmeMgmtFrameInd pSirSmeMgmtFrame = NULL;
     tANI_U16              length;
@@ -635,8 +578,7 @@ void limSendSmeMgmtFrameInd(
     length = sizeof(tSirSmeMgmtFrameInd) + frameLen;
 
     if( eHAL_STATUS_SUCCESS !=
-         palAllocateMemory( pMac->hHdd, (void **)&pSirSmeMgmtFrame, length ))
-    {
+            palAllocateMemory( pMac->hHdd, (void **)&pSirSmeMgmtFrame, length )) {
         limLog(pMac, LOGP,
                FL("palAllocateMemory failed for eWNI_SME_LISTEN_RSP"));
         return;
@@ -662,13 +604,11 @@ void limSendSmeMgmtFrameInd(
      *  Need to revisit this path in case of GO+CLIENT concurrency.
      */
     if( VOS_FALSE ==
-        tx_timer_running(&pMac->lim.limTimers.gLimRemainOnChannelTimer) )
-    {
+            tx_timer_running(&pMac->lim.limTimers.gLimRemainOnChannelTimer) ) {
         tpPESession pTempSessionEntry = psessionEntry;
         if( ( (NULL != pTempSessionEntry) ||
-              (pTempSessionEntry = limIsApSessionActive(pMac)) ) &&
-            (SIR_BAND_5_GHZ == limGetRFBand(pTempSessionEntry->currentOperChannel)) )
-        {
+                (pTempSessionEntry = limIsApSessionActive(pMac)) ) &&
+                (SIR_BAND_5_GHZ == limGetRFBand(pTempSessionEntry->currentOperChannel)) ) {
             rxChannel = pTempSessionEntry->currentOperChannel;
         }
     }
@@ -682,34 +622,30 @@ void limSendSmeMgmtFrameInd(
     mmhMsg.bodyptr = pSirSmeMgmtFrame;
     mmhMsg.bodyval = 0;
 
-    if(VOS_TRUE == tx_timer_running(&pMac->lim.limTimers.gLimRemainOnChannelTimer) && 
+    if(VOS_TRUE == tx_timer_running(&pMac->lim.limTimers.gLimRemainOnChannelTimer) &&
             ( (psessionEntry != NULL) && (psessionEntry->pePersona != VOS_P2P_GO_MODE)) &&
-            (frameType == SIR_MAC_MGMT_ACTION))
-    {
-            unsigned int chanWaitTime, vStatus ;
+            (frameType == SIR_MAC_MGMT_ACTION)) {
+        unsigned int chanWaitTime, vStatus ;
 
-            limLog( pMac, LOG1, FL("Rx: Extend the gLimRemainOnChannelTimer = %d "),
-                                                              pMac->lim.gTotalScanDuration);
+        limLog( pMac, LOG1, FL("Rx: Extend the gLimRemainOnChannelTimer = %d "),
+                pMac->lim.gTotalScanDuration);
 
-            pMac->lim.p2pRemOnChanTimeStamp = vos_timer_get_system_time();
+        pMac->lim.p2pRemOnChanTimeStamp = vos_timer_get_system_time();
 
-            chanWaitTime = SYS_MS_TO_TICKS(pMac->lim.gTotalScanDuration);
-            vStatus = tx_timer_deactivate(&pMac->lim.limTimers.gLimRemainOnChannelTimer);
+        chanWaitTime = SYS_MS_TO_TICKS(pMac->lim.gTotalScanDuration);
+        vStatus = tx_timer_deactivate(&pMac->lim.limTimers.gLimRemainOnChannelTimer);
 
-            if (VOS_STATUS_SUCCESS != vStatus)
-            {     
-                limLog( pMac, LOGE, FL("Rx: Extend the gLimRemainOnChannelTimer"));
-            } 
+        if (VOS_STATUS_SUCCESS != vStatus) {
+            limLog( pMac, LOGE, FL("Rx: Extend the gLimRemainOnChannelTimer"));
+        }
 
-            if (tx_timer_change(&pMac->lim.limTimers.gLimRemainOnChannelTimer, chanWaitTime, 0) != TX_SUCCESS)
-            {
-                limLog( pMac, LOGE, FL("Unable to change the gLimRemainOnChannelTimer"));
-            }
+        if (tx_timer_change(&pMac->lim.limTimers.gLimRemainOnChannelTimer, chanWaitTime, 0) != TX_SUCCESS) {
+            limLog( pMac, LOGE, FL("Unable to change the gLimRemainOnChannelTimer"));
+        }
 
-            if (tx_timer_activate(&pMac->lim.limTimers.gLimRemainOnChannelTimer) != 0)
-            {
-                limLog( pMac, LOGE, FL("Unable to active the gLimRemainOnChannelTimer"));
-            } 
+        if (tx_timer_activate(&pMac->lim.limTimers.gLimRemainOnChannelTimer) != 0) {
+            limLog( pMac, LOGE, FL("Unable to active the gLimRemainOnChannelTimer"));
+        }
     }
 
     limSysProcessMmhMsgApi(pMac, &mmhMsg, ePROT);
@@ -717,15 +653,13 @@ void limSendSmeMgmtFrameInd(
 } /*** end limSendSmeListenRsp() ***/
 
 
-eHalStatus limP2PActionCnf(tpAniSirGlobal pMac, tANI_U32 txCompleteSuccess)
-{
-    if (pMac->lim.mgmtFrameSessionId != 0xff)
-    {
+eHalStatus limP2PActionCnf(tpAniSirGlobal pMac, tANI_U32 txCompleteSuccess) {
+    if (pMac->lim.mgmtFrameSessionId != 0xff) {
         /* The session entry might be invalid(0xff) action confirmation received after
          * remain on channel timer expired */
         limSendSmeRsp(pMac, eWNI_SME_ACTION_FRAME_SEND_CNF,
-                (txCompleteSuccess ? eSIR_SME_SUCCESS : eSIR_SME_SEND_ACTION_FAIL),
-                pMac->lim.mgmtFrameSessionId, 0);
+                      (txCompleteSuccess ? eSIR_SME_SUCCESS : eSIR_SME_SEND_ACTION_FAIL),
+                      pMac->lim.mgmtFrameSessionId, 0);
         pMac->lim.mgmtFrameSessionId = 0xff;
     }
 
@@ -733,18 +667,16 @@ eHalStatus limP2PActionCnf(tpAniSirGlobal pMac, tANI_U32 txCompleteSuccess)
 }
 
 
-void limSetHtCaps(tpAniSirGlobal pMac, tpPESession psessionEntry, tANI_U8 *pIeStartPtr,tANI_U32 nBytes)
-{
+void limSetHtCaps(tpAniSirGlobal pMac, tpPESession psessionEntry, tANI_U8 *pIeStartPtr,tANI_U32 nBytes) {
     v_U8_t              *pIe=NULL;
     tDot11fIEHTCaps     dot11HtCap;
 
     PopulateDot11fHTCaps(pMac, psessionEntry, &dot11HtCap);
     pIe = limGetIEPtr(pMac,pIeStartPtr, nBytes,
-                                       DOT11F_EID_HTCAPS,ONE_BYTE);
-   limLog( pMac, LOG2, FL("pIe 0x%x dot11HtCap.supportedMCSSet[0]=0x%x"),
-        (tANI_U32)pIe,dot11HtCap.supportedMCSSet[0]);
-    if(pIe)
-    {
+                      DOT11F_EID_HTCAPS,ONE_BYTE);
+    limLog( pMac, LOG2, FL("pIe 0x%x dot11HtCap.supportedMCSSet[0]=0x%x"),
+            (tANI_U32)pIe,dot11HtCap.supportedMCSSet[0]);
+    if(pIe) {
         tHtCaps *pHtcap = (tHtCaps *)&pIe[2]; //convert from unpacked to packed structure
         pHtcap->advCodingCap = dot11HtCap.advCodingCap;
         pHtcap->supportedChannelWidthSet = dot11HtCap.supportedChannelWidthSet;
@@ -764,7 +696,7 @@ void limSetHtCaps(tpAniSirGlobal pMac, tpPESession psessionEntry, tANI_U8 *pIeSt
         pHtcap->mpduDensity = dot11HtCap.mpduDensity;
         palCopyMemory( pMac->hHdd, (void *)pHtcap->supportedMCSSet,
                        (void *)(dot11HtCap.supportedMCSSet),
-                        sizeof(pHtcap->supportedMCSSet));
+                       sizeof(pHtcap->supportedMCSSet));
         pHtcap->pco = dot11HtCap.pco;
         pHtcap->transitionTime = dot11HtCap.transitionTime;
         pHtcap->mcsFeedback = dot11HtCap.mcsFeedback;
@@ -799,8 +731,7 @@ void limSetHtCaps(tpAniSirGlobal pMac, tpPESession psessionEntry, tANI_U8 *pIeSt
 }
 
 
-void limSendP2PActionFrame(tpAniSirGlobal pMac, tpSirMsgQ pMsg)
-{
+void limSendP2PActionFrame(tpAniSirGlobal pMac, tpSirMsgQ pMsg) {
     tSirMbMsgP2p *pMbMsg = (tSirMbMsgP2p *)pMsg->bodyptr;
     tANI_U32            nBytes;
     tANI_U8             *pFrame;
@@ -821,116 +752,97 @@ void limSendP2PActionFrame(tpAniSirGlobal pMac, tpSirMsgQ pMsg)
     nBytes = pMbMsg->msgLen - sizeof(tSirMbMsg);
 
     limLog( pMac, LOG1, FL("sending pFc->type=%d pFc->subType=%d"),
-                            pFc->type, pFc->subType);
+            pFc->type, pFc->subType);
 
     psessionEntry = peFindSessionByBssid(pMac,
-                   (tANI_U8*)pMbMsg->data + BSSID_OFFSET, &sessionId);
+                                         (tANI_U8*)pMbMsg->data + BSSID_OFFSET, &sessionId);
 
-    /* Check for session corresponding to ADDR2 As Supplicant is filling 
-       ADDR2  with BSSID */  
-    if( NULL == psessionEntry )
-    {
+    /* Check for session corresponding to ADDR2 As Supplicant is filling
+       ADDR2  with BSSID */
+    if( NULL == psessionEntry ) {
         psessionEntry = peFindSessionByBssid(pMac,
-                   (tANI_U8*)pMbMsg->data + ADDR2_OFFSET, &sessionId);
+                                             (tANI_U8*)pMbMsg->data + ADDR2_OFFSET, &sessionId);
     }
 
-    if( NULL == psessionEntry )
-    {
+    if( NULL == psessionEntry ) {
         tANI_U8             isSessionActive = 0;
         tANI_U8             i;
-        
-        /* If we are not able to find psessionEntry entry, then try to find 
+
+        /* If we are not able to find psessionEntry entry, then try to find
            active session, if found any active sessions then send the
-           action frame, If no active sessions found then drop the frame */ 
-        for (i =0; i < pMac->lim.maxBssId;i++)
-        {
+           action frame, If no active sessions found then drop the frame */
+        for (i =0; i < pMac->lim.maxBssId; i++) {
             psessionEntry = peFindSessionBySessionId(pMac,i);
-            if ( NULL != psessionEntry)
-            {
+            if ( NULL != psessionEntry) {
                 isSessionActive = 1;
                 break;
             }
         }
-        if( !isSessionActive )
-        {
-            limSendSmeRsp(pMac, eWNI_SME_ACTION_FRAME_SEND_CNF, 
+        if( !isSessionActive ) {
+            limSendSmeRsp(pMac, eWNI_SME_ACTION_FRAME_SEND_CNF,
                           eHAL_STATUS_FAILURE, pMbMsg->sessionId, 0);
             return;
         }
     }
 
     if ((SIR_MAC_MGMT_FRAME == pFc->type)&&
-        ((SIR_MAC_MGMT_PROBE_RSP == pFc->subType)||
-        (SIR_MAC_MGMT_ACTION == pFc->subType)))
-    {
+            ((SIR_MAC_MGMT_PROBE_RSP == pFc->subType)||
+             (SIR_MAC_MGMT_ACTION == pFc->subType))) {
         //if this is a probe RSP being sent from wpa_supplicant
-        if (SIR_MAC_MGMT_PROBE_RSP == pFc->subType)
-        {
+        if (SIR_MAC_MGMT_PROBE_RSP == pFc->subType) {
             //get proper offset for Probe RSP
             pP2PIe = limGetP2pIEPtr(pMac,
-                          (tANI_U8*)pMbMsg->data + PROBE_RSP_IE_OFFSET,
-                          nBytes - PROBE_RSP_IE_OFFSET);
-            while ((NULL != pP2PIe) && (SIR_MAC_MAX_IE_LENGTH == pP2PIe[1]))
-            {
+                                    (tANI_U8*)pMbMsg->data + PROBE_RSP_IE_OFFSET,
+                                    nBytes - PROBE_RSP_IE_OFFSET);
+            while ((NULL != pP2PIe) && (SIR_MAC_MAX_IE_LENGTH == pP2PIe[1])) {
                 remainLen = nBytes - (pP2PIe - (tANI_U8*)pMbMsg->data);
-                if (remainLen > 2)
-                {
-                     pNewP2PIe = limGetP2pIEPtr(pMac,
-                                pP2PIe+SIR_MAC_MAX_IE_LENGTH + 2, remainLen);
+                if (remainLen > 2) {
+                    pNewP2PIe = limGetP2pIEPtr(pMac,
+                                               pP2PIe+SIR_MAC_MAX_IE_LENGTH + 2, remainLen);
                 }
-                if (pNewP2PIe)
-                {
+                if (pNewP2PIe) {
                     pP2PIe = pNewP2PIe;
                     pNewP2PIe = NULL;
-                }
-                else
-                {
+                } else {
                     break;
                 }
             } //end of while
-        }
-        else
-        {
+        } else {
             if (SIR_MAC_ACTION_VENDOR_SPECIFIC_CATEGORY ==
-                *((v_U8_t *)pMbMsg->data+ACTION_OFFSET))
-            {
+                    *((v_U8_t *)pMbMsg->data+ACTION_OFFSET)) {
                 tpSirMacP2PActionFrameHdr pActionHdr =
                     (tpSirMacP2PActionFrameHdr)((v_U8_t *)pMbMsg->data +
-                                                        ACTION_OFFSET);
+                                                ACTION_OFFSET);
                 if ( palEqualMemory( pMac->hHdd, pActionHdr->Oui,
-                     SIR_MAC_P2P_OUI, SIR_MAC_P2P_OUI_SIZE ) &&
-                    (SIR_MAC_ACTION_P2P_SUBTYPE_PRESENCE_RSP ==
-                    pActionHdr->OuiSubType))
-                { //In case of Presence RSP response
+                                     SIR_MAC_P2P_OUI, SIR_MAC_P2P_OUI_SIZE ) &&
+                        (SIR_MAC_ACTION_P2P_SUBTYPE_PRESENCE_RSP ==
+                         pActionHdr->OuiSubType)) {
+                    //In case of Presence RSP response
                     pP2PIe = limGetP2pIEPtr(pMac,
-                                 (v_U8_t *)pMbMsg->data + ACTION_OFFSET +
-                                 sizeof(tSirMacP2PActionFrameHdr),
-                                 (nBytes - ACTION_OFFSET -
-                                 sizeof(tSirMacP2PActionFrameHdr)));
-                    if( NULL != pP2PIe )
-                    {
+                                            (v_U8_t *)pMbMsg->data + ACTION_OFFSET +
+                                            sizeof(tSirMacP2PActionFrameHdr),
+                                            (nBytes - ACTION_OFFSET -
+                                             sizeof(tSirMacP2PActionFrameHdr)));
+                    if( NULL != pP2PIe ) {
                         //extract the presence of NoA attribute inside P2P IE
                         pPresenceRspNoaAttr =
-                        limGetIEPtr(pMac,pP2PIe + SIR_P2P_IE_HEADER_LEN,
-                                    pP2PIe[1], SIR_P2P_NOA_ATTR,TWO_BYTE);
-                     }
+                            limGetIEPtr(pMac,pP2PIe + SIR_P2P_IE_HEADER_LEN,
+                                        pP2PIe[1], SIR_P2P_NOA_ATTR,TWO_BYTE);
+                    }
                 }
             }
         }
 
-        if (pP2PIe != NULL)
-        {
+        if (pP2PIe != NULL) {
             //get NoA attribute stream P2P IE
             noaLen = limGetNoaAttrStream(pMac, noaStream, psessionEntry);
             //need to append NoA attribute in P2P IE
-            if (noaLen > 0)
-            {
+            if (noaLen > 0) {
                 origLen = pP2PIe[1];
-               //if Presence Rsp has NoAttr
-                if (pPresenceRspNoaAttr)
-                {
+                //if Presence Rsp has NoAttr
+                if (pPresenceRspNoaAttr) {
                     v_U16_t noaAttrLen = pPresenceRspNoaAttr[1] |
-                                        (pPresenceRspNoaAttr[2]<<8);
+                                         (pPresenceRspNoaAttr[2]<<8);
                     /*One byte for attribute, 2bytes for length*/
                     origLen -= (noaAttrLen + 1 + 2);
                     //remove those bytes to copy
@@ -938,42 +850,36 @@ void limSendP2PActionFrame(tpAniSirGlobal pMac, tpSirMsgQ pMsg)
                     //remove NoA from original Len
                     pP2PIe[1] = origLen;
                 }
-                if ((pP2PIe[1] + (tANI_U16)noaLen)> SIR_MAC_MAX_IE_LENGTH)
-                {
+                if ((pP2PIe[1] + (tANI_U16)noaLen)> SIR_MAC_MAX_IE_LENGTH) {
                     //Form the new NoA Byte array in multiple P2P IEs
                     noaLen = limGetNoaAttrStreamInMultP2pIes(pMac, noaStream,
-                                 noaLen,((pP2PIe[1] + (tANI_U16)noaLen)-
-                                 SIR_MAC_MAX_IE_LENGTH));
+                             noaLen,((pP2PIe[1] + (tANI_U16)noaLen)-
+                                     SIR_MAC_MAX_IE_LENGTH));
                     pP2PIe[1] = SIR_MAC_MAX_IE_LENGTH;
-                }
-                else
-                {
+                } else {
                     pP2PIe[1] += noaLen; //increment the length of P2P IE
                 }
                 nBytes += noaLen;
                 limLog( pMac, LOGE,
                         FL("noaLen=%d origLen=%d pP2PIe=0x%x"
-                        " nBytes=%d nBytesToCopy=%d "),
-                                   noaLen,origLen,pP2PIe,nBytes,
-                   ((pP2PIe + origLen + 2) - (v_U8_t *)pMbMsg->data));
+                           " nBytes=%d nBytesToCopy=%d "),
+                        noaLen,origLen,pP2PIe,nBytes,
+                        ((pP2PIe + origLen + 2) - (v_U8_t *)pMbMsg->data));
             }
         }
 
-        if (SIR_MAC_MGMT_PROBE_RSP == pFc->subType)
-        {
+        if (SIR_MAC_MGMT_PROBE_RSP == pFc->subType) {
             limSetHtCaps( pMac, psessionEntry, (tANI_U8*)pMbMsg->data + PROBE_RSP_IE_OFFSET,
-                           nBytes - PROBE_RSP_IE_OFFSET);
+                          nBytes - PROBE_RSP_IE_OFFSET);
         }
-        
+
         /* The minimum wait for any action frame should be atleast 100 ms.
          * If supplicant sends action frame at the end of already running remain on channel time
          * Then there is a chance to miss the response of the frame. So increase the remain on channel
          * time for all action frame to make sure that we receive the response frame */
         if ((SIR_MAC_MGMT_ACTION == pFc->subType) &&
-                (0 != pMbMsg->wait))
-        {
-            if (tx_timer_running(&pMac->lim.limTimers.gLimRemainOnChannelTimer))
-            {
+                (0 != pMbMsg->wait)) {
+            if (tx_timer_running(&pMac->lim.limTimers.gLimRemainOnChannelTimer)) {
                 tANI_U32 val = 0;
                 tx_timer_deactivate(&pMac->lim.limTimers.gLimRemainOnChannelTimer);
                 /* get the duration from the request */
@@ -983,30 +889,25 @@ void limSendP2PActionFrame(tpAniSirGlobal pMac, tpSirMsgQ pMsg)
                 val = SYS_MS_TO_TICKS(pMbMsg->wait);
 
                 limLog(pMac, LOG1,
-                        FL("Tx: Extending the gLimRemainOnChannelTimer"));
+                       FL("Tx: Extending the gLimRemainOnChannelTimer"));
                 if (tx_timer_change(
                             &pMac->lim.limTimers.gLimRemainOnChannelTimer, val, 0)
-                        != TX_SUCCESS)
-                {
+                        != TX_SUCCESS) {
                     limLog(pMac, LOGP,
-                            FL("Unable to change remain on channel Timer val"));
+                           FL("Unable to change remain on channel Timer val"));
                     return;
-                }
-                else if(TX_SUCCESS != tx_timer_activate(
-                            &pMac->lim.limTimers.gLimRemainOnChannelTimer))
-                {
+                } else if(TX_SUCCESS != tx_timer_activate(
+                              &pMac->lim.limTimers.gLimRemainOnChannelTimer)) {
                     limLog(pMac, LOGP,
-                            FL("Unable to activate remain on channel Timer"));
+                           FL("Unable to activate remain on channel Timer"));
                     limDeactivateAndChangeTimer(pMac, eLIM_REMAIN_CHN_TIMER);
                     return;
                 }
-            }
-            else
-            {
+            } else {
                 limLog(pMac, LOGE,
-                            FL("Failed to Send Action frame \n"));
-                limSendSmeRsp(pMac, eWNI_SME_ACTION_FRAME_SEND_CNF, 
-                        eHAL_STATUS_FAILURE, pMbMsg->sessionId, 0);
+                       FL("Failed to Send Action frame \n"));
+                limSendSmeRsp(pMac, eWNI_SME_ACTION_FRAME_SEND_CNF,
+                              eHAL_STATUS_FAILURE, pMbMsg->sessionId, 0);
                 return;
             }
         }
@@ -1015,30 +916,26 @@ void limSendP2PActionFrame(tpAniSirGlobal pMac, tpSirMsgQ pMsg)
 
     // Ok-- try to allocate some memory:
     halstatus = palPktAlloc( pMac->hHdd, HAL_TXRX_FRM_802_11_MGMT,
-                      (tANI_U16)nBytes, ( void** ) &pFrame, (void**) &pPacket);
-    if ( ! HAL_STATUS_SUCCESS ( halstatus ) )
-    {
+                             (tANI_U16)nBytes, ( void** ) &pFrame, (void**) &pPacket);
+    if ( ! HAL_STATUS_SUCCESS ( halstatus ) ) {
         limLog( pMac, LOGE, FL("Failed to allocate %d bytes for a Probe"
-          " Request."), nBytes );
+                               " Request."), nBytes );
         return;
     }
 
     // Paranoia:
     palZeroMemory( pMac->hHdd, pFrame, nBytes );
 
-    if ((noaLen > 0) && (noaLen<(SIR_MAX_NOA_ATTR_LEN + SIR_P2P_IE_HEADER_LEN)))
-    {
+    if ((noaLen > 0) && (noaLen<(SIR_MAX_NOA_ATTR_LEN + SIR_P2P_IE_HEADER_LEN))) {
         // Add 2 bytes for length and Arribute field
         v_U32_t nBytesToCopy = ((pP2PIe + origLen + 2 ) -
                                 (v_U8_t *)pMbMsg->data);
         palCopyMemory( pMac->hHdd, pFrame, pMbMsg->data, nBytesToCopy);
         palCopyMemory( pMac->hHdd, (pFrame + nBytesToCopy), noaStream, noaLen);
         palCopyMemory( pMac->hHdd, (pFrame + nBytesToCopy + noaLen),
-            pMbMsg->data + nBytesToCopy, nBytes - nBytesToCopy - noaLen);
+                       pMbMsg->data + nBytesToCopy, nBytes - nBytesToCopy - noaLen);
 
-    }
-    else
-    {
+    } else {
         palCopyMemory(pMac->hHdd, pFrame, pMbMsg->data, nBytes);
     }
 
@@ -1048,41 +945,34 @@ void limSendP2PActionFrame(tpAniSirGlobal pMac, tpSirMsgQ pMsg)
     txFlag |= HAL_USE_BD_RATE2_FOR_MANAGEMENT_FRAME;
 
     if ( (SIR_MAC_MGMT_PROBE_RSP == pFc->subType) ||
-         (pMbMsg->noack)
-        )
-    {
+            (pMbMsg->noack)
+       ) {
         halstatus = halTxFrame( pMac, pPacket, (tANI_U16)nBytes,
-                        HAL_TXRX_FRM_802_11_MGMT, ANI_TXDIR_TODS,
-                        7,/*SMAC_SWBD_TX_TID_MGMT_HIGH */ limTxComplete, pFrame,
-                        txFlag );
+                                HAL_TXRX_FRM_802_11_MGMT, ANI_TXDIR_TODS,
+                                7,/*SMAC_SWBD_TX_TID_MGMT_HIGH */ limTxComplete, pFrame,
+                                txFlag );
 
-        if (!pMbMsg->noack)
-        {
-           limSendSmeRsp(pMac, eWNI_SME_ACTION_FRAME_SEND_CNF, 
-               halstatus, pMbMsg->sessionId, 0);
+        if (!pMbMsg->noack) {
+            limSendSmeRsp(pMac, eWNI_SME_ACTION_FRAME_SEND_CNF,
+                          halstatus, pMbMsg->sessionId, 0);
         }
         pMac->lim.mgmtFrameSessionId = 0xff;
-    }
-    else
-    {
+    } else {
         pMac->lim.mgmtFrameSessionId = 0xff;
         halstatus = halTxFrameWithTxComplete( pMac, pPacket, (tANI_U16)nBytes,
-                        HAL_TXRX_FRM_802_11_MGMT, ANI_TXDIR_TODS,
-                        7,/*SMAC_SWBD_TX_TID_MGMT_HIGH */ limTxComplete, pFrame,
-                        limP2PActionCnf, txFlag );
+                                              HAL_TXRX_FRM_802_11_MGMT, ANI_TXDIR_TODS,
+                                              7,/*SMAC_SWBD_TX_TID_MGMT_HIGH */ limTxComplete, pFrame,
+                                              limP2PActionCnf, txFlag );
 
-        if ( ! HAL_STATUS_SUCCESS ( halstatus ) )
-        {
-             limLog( pMac, LOGE, FL("could not send action frame!" ));
-             limSendSmeRsp(pMac, eWNI_SME_ACTION_FRAME_SEND_CNF, halstatus, 
-                pMbMsg->sessionId, 0);
-             pMac->lim.mgmtFrameSessionId = 0xff;
-        }
-        else
-        {
-             pMac->lim.mgmtFrameSessionId = pMbMsg->sessionId;
-             limLog( pMac, LOG2, FL("lim.actionFrameSessionId = %lu" ),
-                     pMac->lim.mgmtFrameSessionId);
+        if ( ! HAL_STATUS_SUCCESS ( halstatus ) ) {
+            limLog( pMac, LOGE, FL("could not send action frame!" ));
+            limSendSmeRsp(pMac, eWNI_SME_ACTION_FRAME_SEND_CNF, halstatus,
+                          pMbMsg->sessionId, 0);
+            pMac->lim.mgmtFrameSessionId = 0xff;
+        } else {
+            pMac->lim.mgmtFrameSessionId = pMbMsg->sessionId;
+            limLog( pMac, LOG2, FL("lim.actionFrameSessionId = %lu" ),
+                    pMac->lim.mgmtFrameSessionId);
 
         }
     }
@@ -1091,11 +981,9 @@ void limSendP2PActionFrame(tpAniSirGlobal pMac, tpSirMsgQ pMsg)
 }
 
 
-void limAbortRemainOnChan(tpAniSirGlobal pMac)
-{
+void limAbortRemainOnChan(tpAniSirGlobal pMac) {
     if(VOS_TRUE == tx_timer_running(
-                                &pMac->lim.limTimers.gLimRemainOnChannelTimer))
-    {
+                &pMac->lim.limTimers.gLimRemainOnChannelTimer)) {
         //TODO check for state and take appropriate actions
         limDeactivateAndChangeTimer(pMac, eLIM_REMAIN_CHN_TIMER);
         limProcessRemainOnChnTimeout(pMac);
@@ -1104,8 +992,7 @@ void limAbortRemainOnChan(tpAniSirGlobal pMac)
 }
 
 /* Power Save Related Functions */
-tSirRetStatus __limProcessSmeNoAUpdate(tpAniSirGlobal pMac, tANI_U32 *pMsgBuf)
-{
+tSirRetStatus __limProcessSmeNoAUpdate(tpAniSirGlobal pMac, tANI_U32 *pMsgBuf) {
     tpP2pPsConfig pNoA;
     tpP2pPsParams pMsgNoA;
     tSirMsgQ msg;
@@ -1113,10 +1000,9 @@ tSirRetStatus __limProcessSmeNoAUpdate(tpAniSirGlobal pMac, tANI_U32 *pMsgBuf)
     pNoA = (tpP2pPsConfig) pMsgBuf;
 
     if( eHAL_STATUS_SUCCESS != palAllocateMemory(
-                  pMac->hHdd, (void **) &pMsgNoA, sizeof( tP2pPsConfig )))
-    {
+                pMac->hHdd, (void **) &pMsgNoA, sizeof( tP2pPsConfig ))) {
         limLog( pMac, LOGE,
-                     FL( "Unable to allocate memory during NoA Update" ));
+                FL( "Unable to allocate memory during NoA Update" ));
         return eSIR_MEM_ALLOC_FAILED;
     }
 
@@ -1134,8 +1020,7 @@ tSirRetStatus __limProcessSmeNoAUpdate(tpAniSirGlobal pMac, tANI_U32 *pMsgBuf)
     msg.bodyptr = pMsgNoA;
     msg.bodyval = 0;
 
-    if(eSIR_SUCCESS != wdaPostCtrlMsg(pMac, &msg))
-    {
+    if(eSIR_SUCCESS != wdaPostCtrlMsg(pMac, &msg)) {
         limLog(pMac, LOGE, FL("halPostMsgApi failed"));
         return eSIR_FAILURE;
     }

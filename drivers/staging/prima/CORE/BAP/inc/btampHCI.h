@@ -56,7 +56,7 @@
   * Mon Mar 02 14:06:14 2009 from the following file(s):
   *
   * btampHCI.frms
-  * 
+  *
   * PLEASE DON'T EDIT THIS FILE BY HAND!
   *
   * Instead, please update the input files & re-run
@@ -78,28 +78,28 @@
 
   FUNCTION    Unpack_XxxMessage
 
-  DESCRIPTION 
-    Unpack from a Message buffer into a structured type. 
+  DESCRIPTION
+    Unpack from a Message buffer into a structured type.
 
 
-  DEPENDENCIES 
+  DEPENDENCIES
 
 
-  PARAMETERS 
- 
+  PARAMETERS
+
 
     IN
     void * :       halHandle (passed down to the MAC layer and below)
     v_U8_t* :      Pointer to the source message buffer
     v_U16_t :      Length in bytes of the contents of the message buffer.
     tXxxMessage* : Pointer to the structure in which to return the unpacked values.
-   
+
   RETURN VALUE
 
-    The result code associated with performing the operation  
- 
+    The result code associated with performing the operation
 
-  SIDE EFFECTS 
+
+  SIDE EFFECTS
 
 ============================================================================*/
 v_U32_t Unpack_XxxMessage(void *, v_U8_t*,v_U16_t, tXxxMessage*);
@@ -109,14 +109,14 @@ v_U32_t Unpack_XxxMessage(void *, v_U8_t*,v_U16_t, tXxxMessage*);
 
   FUNCTION    Pack_XxxMessage
 
-  DESCRIPTION 
-    Pack the data from a structure into a Message buffer. 
+  DESCRIPTION
+    Pack the data from a structure into a Message buffer.
 
 
-  DEPENDENCIES 
+  DEPENDENCIES
 
 
-  PARAMETERS 
+  PARAMETERS
 
 
     IN
@@ -129,16 +129,16 @@ v_U32_t Unpack_XxxMessage(void *, v_U8_t*,v_U16_t, tXxxMessage*);
 
   RETURN VALUE
 
-    The result code associated with performing the operation  
+    The result code associated with performing the operation
 
-  SIDE EFFECTS 
+  SIDE EFFECTS
 
 
 ============================================================================*/
 v_U32_t Pack_XxxMessage(void *, tXxxMessage*, v_U8_t*, v_U32_t, v_U32_t*);
 
 #endif
- 
+
 
 typedef v_U32_t tBTAMP_U64[2];
 
@@ -438,95 +438,75 @@ typedef struct sBtampTLVHCI_Command_Complete_Event {
     v_U8_t       present;
     v_U8_t       num_hci_command_packets;
     v_U16_t      command_opcode;
-    union
-    {
-        struct
-        {
+    union {
+        struct {
             v_U8_t status;
         } Reset; /* command_opcode = c03 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U16_t log_link_handle;
         } Flush; /* command_opcode = c08 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U8_t phy_link_handle;
             v_U8_t tx_flow_spec_id;
         } Logical_Link_Cancel; /* command_opcode = 43b */
-        struct
-        {
+        struct {
             v_U8_t status;
         } Set_Event_Mask; /* command_opcode = c05 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U16_t connection_accept_timeout;
         } Read_Connection_Accept_TO; /* command_opcode = c15 */
-        struct
-        {
+        struct {
             v_U8_t status;
         } Write_Connection_Accept_TO; /* command_opcode = c16 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U16_t log_link_handle;
             v_U16_t link_supervision_timeout;
         } Read_Link_Supervision_TO; /* command_opcode = c36 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U16_t log_link_handle;
         } Write_Link_Supervision_TO; /* command_opcode = c37 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U16_t logical_link_accept_timeout;
         } Read_Logical_Link_Accept_TO; /* command_opcode = c61 */
-        struct
-        {
+        struct {
             v_U8_t status;
         } Write_Logical_Link_Accept_TO; /* command_opcode = c62 */
-        struct
-        {
+        struct {
             v_U8_t status;
         } Set_Event_Mask_Page_2; /* command_opcode = c63 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U8_t loc_domain_aware;
             v_U8_t loc_domain[3];
             v_U8_t loc_options;
         } Read_Location_Data; /* command_opcode = 3172 */
-        struct
-        {
+        struct {
             v_U8_t status;
         } Write_Location_Data; /* command_opcode = 3173 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U8_t flow_control_mode;
         } Read_Flow_Control_Mode; /* command_opcode = 3174 */
-        struct
-        {
+        struct {
             v_U8_t status;
         } Write_Flow_Control_Mode; /* command_opcode = 3175 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U32_t best_effort_flush_timeout;
         } Read_BE_Flush_TO; /* command_opcode = 3177 */
-        struct
-        {
+        struct {
             v_U8_t status;
         } Write_BE_Flush_TO; /* command_opcode = 3178 */
-        struct
-        {
+        struct {
             v_U8_t status;
         } Set_Short_Range_Mode; /* command_opcode = 3179 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U8_t HC_HCI_Version;
             v_U16_t HC_HCI_Revision;
@@ -534,52 +514,44 @@ typedef struct sBtampTLVHCI_Command_Complete_Event {
             v_U16_t HC_Manufac_Name;
             v_U16_t HC_PAL_Sub_Version;
         } Read_Local_Version_Info; /* command_opcode = 4097 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U8_t HC_Support_Cmds[64];
         } Read_Local_Supported_Cmds; /* command_opcode = 4098 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U16_t HC_ACL_Data_Packet_Length;
             v_U8_t HC_SCO_Packet_Length;
             v_U16_t HC_Total_Num_ACL_Packets;
             v_U16_t HC_Total_Num_SCO_Packets;
         } Read_Buffer_Size; /* command_opcode = 4101 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U16_t HC_Max_ACL_Data_Packet_Length;
             v_U16_t HC_Data_Block_Length;
             v_U16_t HC_Total_Num_Data_Blocks;
         } Read_Data_Block_Size; /* command_opcode = 4106 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U16_t log_link_handle;
             v_U16_t failed_contact_counter;
         } Read_Failed_Contact_Counter; /* command_opcode = 5121 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U16_t log_link_handle;
         } Reset_Failed_Contact_Counter; /* command_opcode = 5122 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U16_t log_link_handle;
             v_U8_t link_quality;
         } Read_Link_Quality; /* command_opcode = 5123 */
-        struct
-        {
+        struct {
             v_U8_t status;
             /* 2 bytes handle to comply with spec, (lower byte valid) */
             v_U16_t phy_link_handle;
             v_S7_t rssi;
         } Read_RSSI; /* command_opcode = 5125 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U8_t HC_AMP_Status;
             v_U32_t HC_Total_BW;
@@ -592,33 +564,27 @@ typedef struct sBtampTLVHCI_Command_Complete_Event {
             v_U32_t HC_Max_Flush_Timeout;
             v_U32_t HC_BE_Flush_Timeout;
         } Read_Local_AMP_Info; /* command_opcode = 5129 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U8_t phy_link_handle;
             v_U16_t remaining_length;
             v_U8_t AMP_assoc_fragment[248];
         } Read_Read_Local_AMP_Assoc; /* command_opcode = 5130 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U8_t phy_link_handle;
         } Write_Remote_AMP_Assoc; /* command_opcode = 5131 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U8_t loopback_mode;
         } Read_Loopback_Mode; /* command_opcode = 6145 */
-        struct
-        {
+        struct {
             v_U8_t status;
         } Write_Loopback_Mode; /* command_opcode = 6146 */
-        struct
-        {
+        struct {
             v_U8_t status;
         } Vendor_Specific_Cmd_0; /* command_opcode = fc00 */
-        struct
-        {
+        struct {
             v_U8_t status;
         } Vendor_Specific_Cmd_1; /* command_opcode = fc01 */
     } cc_event;
@@ -2018,7 +1984,7 @@ typedef struct sBtampTLVHCI_Vendor_Specific_Cmd_1 {
  * Frames
  **********************************************************************/
 
-typedef struct sBtampAMP_ASSOC{
+typedef struct sBtampAMP_ASSOC {
     tBtampTLVAMP_Assoc_MAC_Addr AMP_Assoc_MAC_Addr;
     tBtampTLVAMP_Assoc_Preferred_Channel_List AMP_Assoc_Preferred_Channel_List;
     tBtampTLVAMP_Assoc_Connected_Channel AMP_Assoc_Connected_Channel;
@@ -2046,27 +2012,26 @@ extern "C" {
 #endif /* C++ */
 
 /* HCI Number of Completed Packets Event*/
-typedef struct sBtampTLVHCI_Num_Completed_Pkts_Event
-{
+typedef struct sBtampTLVHCI_Num_Completed_Pkts_Event {
     v_U8_t       present;
-    /* 
+    /*
       The number of Connection Handles and Num_Data_Packets
       parameters pairs contained in this event.Range: 0-255
     */
 
     v_U8_t   num_handles;
 
-    /* 
-      Size , Number of Handles * 2 Octets,Range: 0x0000-0x0EFF 
+    /*
+      Size , Number of Handles * 2 Octets,Range: 0x0000-0x0EFF
     */
-    v_U16_t  conn_handles[WLANBAP_MAX_LOG_LINKS];  
+    v_U16_t  conn_handles[WLANBAP_MAX_LOG_LINKS];
 
-    /* 
+    /*
       The number of HCI Data Packets that have been completed (transmitted
       or flushed) for the associated Connection Handle since the previous time
       the event was returned.Range for N: 0x0000-0xFFFF
     */
-    v_U16_t  num_completed_pkts[WLANBAP_MAX_LOG_LINKS]; 
+    v_U16_t  num_completed_pkts[WLANBAP_MAX_LOG_LINKS];
 } tBtampTLVHCI_Num_Completed_Pkts_Event;
 
 #define BTAMP_TLV_HCI_NUM_OF_COMPLETED_PKTS_EVENT ( 19 )
@@ -2087,10 +2052,9 @@ extern "C" {
 #endif /* C++ */
 
 /* HCI Number of Completed Data Blocks Event*/
-typedef struct sBtampTLVHCI_Num_Completed_Data_Blocks_Event
-{
+typedef struct sBtampTLVHCI_Num_Completed_Data_Blocks_Event {
     v_U8_t       present;
-    /* 
+    /*
       Total number of data block buffers available in the Controller for the
       storage of data packets scheduled for transmission. This indicates
       the existing value is unchanged, or increased, or reduced by up to
@@ -2099,32 +2063,32 @@ typedef struct sBtampTLVHCI_Num_Completed_Data_Blocks_Event
 
     v_U16_t   total_num_data_blocks;
 
-    /* 
+    /*
       The number of Connection Handles and Num_Data_Packets
       parameters pairs contained in this event.Range: 0-255
     */
 
     v_U8_t   num_handles;
 
-    /* 
-      Size , Number of Handles * 2 Octets,Range: 0x0000-0x0EFF 
+    /*
+      Size , Number of Handles * 2 Octets,Range: 0x0000-0x0EFF
     */
-    v_U16_t  conn_handles[WLANBAP_MAX_LOG_LINKS];  
+    v_U16_t  conn_handles[WLANBAP_MAX_LOG_LINKS];
 
-    /* 
+    /*
       The number of HCI Data Packets that have been completed (transmitted
       or flushed) for the associated Connection Handle since the previous time
       the event was returned.Range for N: 0x0000-0xFFFF
     */
-    v_U16_t  num_completed_pkts[WLANBAP_MAX_LOG_LINKS]; 
+    v_U16_t  num_completed_pkts[WLANBAP_MAX_LOG_LINKS];
 
-    /* 
+    /*
       The number of data blocks that have been freed for the associated
       Handle since the previous time that a Number Of Completed Data
       Blocks event provided information about this Handle.
       Range for N: 0x0000-0xFFFF
     */
-    v_U16_t  num_completed_blocks[WLANBAP_MAX_LOG_LINKS]; 
+    v_U16_t  num_completed_blocks[WLANBAP_MAX_LOG_LINKS];
 
 } tBtampTLVHCI_Num_Completed_Data_Blocks_Event;
 

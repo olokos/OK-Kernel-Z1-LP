@@ -64,7 +64,6 @@ extern tpAniSirTxWrapper sysGetTxWrapperContext(void *);
 
 
 tpAniSirTxWrapper
-sysGetTxWrapperContext(void *pMac)
-{
+sysGetTxWrapperContext(void *pMac) {
     return &((tpAniSirGlobal)(pMac))->txWrapper;
 }

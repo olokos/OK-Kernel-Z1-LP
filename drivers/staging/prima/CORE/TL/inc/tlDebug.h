@@ -46,19 +46,19 @@
 #ifdef TL_DEBUG_LOG2
 #define TLLOG2(x0)  x0
 #else
- #define TLLOG2(x0)
+#define TLLOG2(x0)
 #endif
 
 #ifdef TL_DEBUG_LOG3
 #define TLLOG3(x0)  x0
 #else
- #define TLLOG3(x0)
+#define TLLOG3(x0)
 #endif
 
 #ifdef TL_DEBUG_LOG4
 #define TLLOG4(x0)  x0
 #else
- #define TLLOG4(x0)
+#define TLLOG4(x0)
 #endif
 
 

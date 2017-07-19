@@ -629,9 +629,9 @@ static struct resource mtd_resources[] = {
         .flags	= IORESOURCE_MEM,
     },
     [2] = { /*
-	 * SRAM size is actually 256KB, 8bits, with a sparse mapping
-	 * (each byte is on a 16bit boundary).
-	 */
+ * SRAM size is actually 256KB, 8bits, with a sparse mapping
+ * (each byte is on a 16bit boundary).
+ */
         .start	= _VIPER_SRAM_BASE,
         .end	= _VIPER_SRAM_BASE + SZ_512K - 1,
         .flags	= IORESOURCE_MEM,

@@ -74,7 +74,7 @@
 #       define FRAMES_SEV_FOR_FRAME(ctx, sig) \
             ( DOT11F_ASSOCREQUEST == (sig) ? 3 : 5 )
 
-        #if defined( DOT11F_ENABLE_LOGGING )
+#if defined( DOT11F_ENABLE_LOGGING )
 
 #       define DOT11F_HAVE_LOG_MACROS
 
@@ -93,7 +93,7 @@
 #       define FRAMES_DUMP(ctx, sev, p, n) \
             sirDumpBuf((pCtx), SIR_DBG_MODULE_ID, (sev), (p), (n));
 
-        #endif //#if defined( DOT11F_ENABLE_LOGGING )
+#endif //#if defined( DOT11F_ENABLE_LOGGING )
 
 #   else
 

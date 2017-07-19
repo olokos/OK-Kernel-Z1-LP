@@ -112,7 +112,7 @@ void limUpdateProbeRspTemplateIeBitmapBeacon1(tpAniSirGlobal,tDot11fBeacon1*,tAN
 void limUpdateProbeRspTemplateIeBitmapBeacon2(tpAniSirGlobal,tDot11fBeacon2*,tANI_U32*,tDot11fProbeResponse*);
 void SetProbeRspIeBitmap(tANI_U32*,tANI_U32);
 tANI_U32 limSendProbeRspTemplateToHal(tpAniSirGlobal,tpPESession,
-                                    tANI_U32*);
+                                      tANI_U32*);
 
 
 #endif

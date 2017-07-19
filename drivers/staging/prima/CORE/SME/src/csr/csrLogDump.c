@@ -44,7 +44,7 @@ Copyright (c) 2007 QUALCOMM Incorporated.
 All Rights Reserved.
 Qualcomm Confidential and Proprietary
 csrLogDump.c
-Implements the dump commands specific to the csr module. 
+Implements the dump commands specific to the csr module.
 ============================================================================*/
 #include "aniGlobal.h"
 #include "csrApi.h"
@@ -55,34 +55,29 @@ Implements the dump commands specific to the csr module.
 #include "csrInsideApi.h"
 #if defined(ANI_LOGDUMP)
 static char *
-dump_csr( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p )
-{
+dump_csr( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p ) {
     static tCsrRoamProfile x;
     static tSirMacSSid ssid;   //To be allocated for array of SSIDs
     static tANI_U8 sessionId; // Defined for fixed session ID
-    palZeroMemory(pMac->hHdd, (void*)&x, sizeof(x)); 
+    palZeroMemory(pMac->hHdd, (void*)&x, sizeof(x));
     x.SSIDs.numOfSSIDs=1 ;
     x.SSIDs.SSIDList[0].SSID = ssid ;
     ssid.length=6 ;
     palCopyMemory(pMac->hHdd, ssid.ssId, "AniNet", 6);
-    if(HAL_STATUS_SUCCESS(sme_AcquireGlobalLock( &pMac->sme )))
-    {
+    if(HAL_STATUS_SUCCESS(sme_AcquireGlobalLock( &pMac->sme ))) {
         (void)csrRoamConnect(pMac, sessionId, &x, NULL, NULL);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
     return p;
 }
-static char *dump_btcSetEvent( tpAniSirGlobal pMac, tANI_U32 arg1, 
-                               tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p )
-{
+static char *dump_btcSetEvent( tpAniSirGlobal pMac, tANI_U32 arg1,
+                               tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p ) {
     tSmeBtEvent btEvent;
-    if( arg1 < BT_EVENT_TYPE_MAX )
-    {
+    if( arg1 < BT_EVENT_TYPE_MAX ) {
         smsLog(pMac, LOGE, FL(" signal BT event (%d) handle (%d) 3rd param(%d)"), arg1, arg2, arg3);
         vos_mem_zero(&btEvent, sizeof(tSmeBtEvent));
         btEvent.btEventType = arg1;
-        switch( arg1 )
-        {
+        switch( arg1 ) {
         case BT_EVENT_SYNC_CONNECTION_COMPLETE:
         case BT_EVENT_SYNC_CONNECTION_UPDATED:
             btEvent.uEventParam.btSyncConnection.connectionHandle = (v_U16_t)arg2;
@@ -103,37 +98,30 @@ static char *dump_btcSetEvent( tpAniSirGlobal pMac, tANI_U32 arg1,
             break;
         }
 #ifndef WLAN_MDM_CODE_REDUCTION_OPT
-        if(HAL_STATUS_SUCCESS(sme_AcquireGlobalLock( &pMac->sme )))
-        {
+        if(HAL_STATUS_SUCCESS(sme_AcquireGlobalLock( &pMac->sme ))) {
             btcSignalBTEvent(pMac, &btEvent);
             sme_ReleaseGlobalLock( &pMac->sme );
         }
 #endif
-    }
-    else
-    {
+    } else {
         smsLog(pMac, LOGE, FL(" invalid event (%d)"), arg1);
     }
     return p;
 }
-static char* dump_csrApConcScanParams( tpAniSirGlobal pMac, tANI_U32 arg1, 
-                               tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p )
-{
-    if( arg1 )
-    {
+static char* dump_csrApConcScanParams( tpAniSirGlobal pMac, tANI_U32 arg1,
+                                       tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p ) {
+    if( arg1 ) {
         pMac->roam.configParam.nRestTimeConc = arg1;
     }
-    if( arg2 )
-    {
+    if( arg2 ) {
         pMac->roam.configParam.nActiveMinChnTimeConc = arg2;
     }
-    if( arg3 )
-    {
+    if( arg3 ) {
         pMac->roam.configParam.nActiveMaxChnTimeConc = arg3;
     }
 
     smsLog(pMac, LOGE, FL(" Working %d %d %d"), (int) pMac->roam.configParam.nRestTimeConc,
-        (int)pMac->roam.configParam.nActiveMinChnTimeConc, (int) pMac->roam.configParam.nActiveMaxChnTimeConc);
+           (int)pMac->roam.configParam.nActiveMinChnTimeConc, (int) pMac->roam.configParam.nActiveMaxChnTimeConc);
     return p;
 }
 
@@ -144,9 +132,8 @@ static tDumpFuncEntry csrMenuDumpTable[] = {
     {853,   "CSR: Split Scan related params",                   dump_csrApConcScanParams},
 };
 
-void csrDumpInit(tHalHandle hHal)
-{
-    logDumpRegisterTable( (tpAniSirGlobal)hHal, &csrMenuDumpTable[0], 
+void csrDumpInit(tHalHandle hHal) {
+    logDumpRegisterTable( (tpAniSirGlobal)hHal, &csrMenuDumpTable[0],
                           sizeof(csrMenuDumpTable)/sizeof(csrMenuDumpTable[0]) );
 }
 

@@ -2267,8 +2267,8 @@ int aac_scsi_cmd(struct scsi_cmnd * scsicmd) {
         mode_buf[0] = 3;	/* Mode data length */
         mode_buf[1] = 0;	/* Medium type - default */
         mode_buf[2] = 0;	/* Device-specific param,
-	   bit 8: 0/1 = write enabled/protected
-	   bit 4: 0/1 = FUA enabled */
+bit 8: 0/1 = write enabled/protected
+bit 4: 0/1 = FUA enabled */
         if (dev->raw_io_interface && ((aac_cache & 5) != 1))
             mode_buf[2] = 0x10;
         mode_buf[3] = 0;	/* Block descriptor length */
@@ -2298,8 +2298,8 @@ int aac_scsi_cmd(struct scsi_cmnd * scsicmd) {
         mode_buf[1] = 6;	/* Mode data length (LSB) */
         mode_buf[2] = 0;	/* Medium type - default */
         mode_buf[3] = 0;	/* Device-specific param,
-	   bit 8: 0/1 = write enabled/protected
-	   bit 4: 0/1 = FUA enabled */
+bit 8: 0/1 = write enabled/protected
+bit 4: 0/1 = FUA enabled */
         if (dev->raw_io_interface && ((aac_cache & 5) != 1))
             mode_buf[3] = 0x10;
         mode_buf[4] = 0;	/* reserved */

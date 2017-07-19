@@ -145,62 +145,58 @@ static struct xor_block_template xor_block_arm4regs = {
 extern struct xor_block_template const xor_block_neon_inner;
 
 static void
-xor_neon_2(unsigned long bytes, unsigned long *p1, unsigned long *p2)
-{
-	if (in_interrupt()) {
-		xor_arm4regs_2(bytes, p1, p2);
-	} else {
-		kernel_neon_begin();
-		xor_block_neon_inner.do_2(bytes, p1, p2);
-		kernel_neon_end();
-	}
+xor_neon_2(unsigned long bytes, unsigned long *p1, unsigned long *p2) {
+    if (in_interrupt()) {
+        xor_arm4regs_2(bytes, p1, p2);
+    } else {
+        kernel_neon_begin();
+        xor_block_neon_inner.do_2(bytes, p1, p2);
+        kernel_neon_end();
+    }
 }
 
 static void
 xor_neon_3(unsigned long bytes, unsigned long *p1, unsigned long *p2,
-		unsigned long *p3)
-{
-	if (in_interrupt()) {
-		xor_arm4regs_3(bytes, p1, p2, p3);
-	} else {
-		kernel_neon_begin();
-		xor_block_neon_inner.do_3(bytes, p1, p2, p3);
-		kernel_neon_end();
-	}
+           unsigned long *p3) {
+    if (in_interrupt()) {
+        xor_arm4regs_3(bytes, p1, p2, p3);
+    } else {
+        kernel_neon_begin();
+        xor_block_neon_inner.do_3(bytes, p1, p2, p3);
+        kernel_neon_end();
+    }
 }
 
 static void
 xor_neon_4(unsigned long bytes, unsigned long *p1, unsigned long *p2,
-		unsigned long *p3, unsigned long *p4)
-{
-	if (in_interrupt()) {
-		xor_arm4regs_4(bytes, p1, p2, p3, p4);
-	} else {
-		kernel_neon_begin();
-		xor_block_neon_inner.do_4(bytes, p1, p2, p3, p4);
-		kernel_neon_end();
-	}
+           unsigned long *p3, unsigned long *p4) {
+    if (in_interrupt()) {
+        xor_arm4regs_4(bytes, p1, p2, p3, p4);
+    } else {
+        kernel_neon_begin();
+        xor_block_neon_inner.do_4(bytes, p1, p2, p3, p4);
+        kernel_neon_end();
+    }
 }
 
 static void
 xor_neon_5(unsigned long bytes, unsigned long *p1, unsigned long *p2,
-		unsigned long *p3, unsigned long *p4, unsigned long *p5)
-{
-	if (in_interrupt()) {
-		xor_arm4regs_5(bytes, p1, p2, p3, p4, p5);
-	} else {
-		kernel_neon_begin();
-		xor_block_neon_inner.do_5(bytes, p1, p2, p3, p4, p5);
-		kernel_neon_end();
-	}
+           unsigned long *p3, unsigned long *p4, unsigned long *p5) {
+    if (in_interrupt()) {
+        xor_arm4regs_5(bytes, p1, p2, p3, p4, p5);
+    } else {
+        kernel_neon_begin();
+        xor_block_neon_inner.do_5(bytes, p1, p2, p3, p4, p5);
+        kernel_neon_end();
+    }
 }
 
 static struct xor_block_template xor_block_neon = {
-	.name	= "neon",
-	.do_2	= xor_neon_2,
-	.do_3	= xor_neon_3,
-	.do_4	= xor_neon_4,
-	.do_5	= xor_neon_5
+    .name	= "neon",
+    .do_2	= xor_neon_2,
+    .do_3	= xor_neon_3,
+    .do_4	= xor_neon_4,
+    .do_5	= xor_neon_5
 };
 
 #define NEON_TEMPLATES	\

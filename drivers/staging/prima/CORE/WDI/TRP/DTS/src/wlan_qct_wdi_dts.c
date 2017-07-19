@@ -40,14 +40,14 @@
  */
 
 /**=========================================================================
- *     
+ *
  *       \file  wlan_qct_wdi_dts.c
- *          
- *       \brief  Data Transport Service API 
- *                               
+ *
+ *       \brief  Data Transport Service API
+ *
  * WLAN Device Abstraction layer External API for Dataservice
  * DESCRIPTION
- *  This file contains the external API implemntation exposed by the 
+ *  This file contains the external API implemntation exposed by the
  *   wlan device abstarction layer module.
  *
  *   Copyright (c) 2008 QUALCOMM Incorporated. All Rights Reserved.
@@ -64,27 +64,26 @@
 #include "wlan_qct_wdi_sta.h"
 
 static WDTS_TransportDriverTrype gTransportDriver = {
-  WLANDXE_Open, 
-  WLANDXE_Start, 
-  WLANDXE_ClientRegistration, 
-  WLANDXE_TxFrame,
-  WLANDXE_CompleteTX,
-  WLANDXE_SetPowerState,
-  WLANDXE_ChannelDebug,
-  WLANDXE_Stop,
-  WLANDXE_Close,
-  WLANDXE_GetFreeTxDataResNumber
+    WLANDXE_Open,
+    WLANDXE_Start,
+    WLANDXE_ClientRegistration,
+    WLANDXE_TxFrame,
+    WLANDXE_CompleteTX,
+    WLANDXE_SetPowerState,
+    WLANDXE_ChannelDebug,
+    WLANDXE_Stop,
+    WLANDXE_Close,
+    WLANDXE_GetFreeTxDataResNumber
 };
 
 static WDTS_SetPowerStateCbInfoType gSetPowerStateCbInfo;
 
-typedef struct 
-{
-   uint32 phyRate;   //unit in Mega bits per sec X 10
-   uint32 tputRate;  //unit in Mega bits per sec X 10
-   uint32 tputBpms;  //unit in Bytes per msec = (tputRateX1024x1024)/(8x10X1000) ~= (tputRate*13)
-   uint32 tputBpus;  //unit in Bytes per usec: round off to integral value
-}WDTS_RateInfo;
+typedef struct {
+    uint32 phyRate;   //unit in Mega bits per sec X 10
+    uint32 tputRate;  //unit in Mega bits per sec X 10
+    uint32 tputBpms;  //unit in Bytes per msec = (tputRateX1024x1024)/(8x10X1000) ~= (tputRate*13)
+    uint32 tputBpus;  //unit in Bytes per usec: round off to integral value
+} WDTS_RateInfo;
 
 #define WDTS_MAX_RATE_NUM  137
 #define WDTS_MAX_11B_RATE_NUM  8
@@ -156,7 +155,7 @@ WDTS_RateInfo gRateInfo[WDTS_MAX_RATE_NUM]  = {
     { 585, 492, 6396, 6}, //index 38
     { 650, 548, 7124, 7}, //index 39
 
-    //11n SIMO CB MCS 0 - 7 
+    //11n SIMO CB MCS 0 - 7
     { 135,   110,  1430,  1}, //index 40
     { 270,   223,  2899,  3}, //index 41
     { 405,   337,  4381,  4}, //index 42
@@ -176,7 +175,7 @@ WDTS_RateInfo gRateInfo[WDTS_MAX_RATE_NUM]  = {
     { 1350, 1137, 14781, 15}, //index 54
     { 1500, 1262, 16406, 16}, //index 55
 
-    //11n SIMO GF CB MCS 0 - 7 
+    //11n SIMO GF CB MCS 0 - 7
     { 135,   110,   1430,  1}, //index 56
     { 270,   223,   2899,  3}, //index 57
     { 405,   337,   4381,  4}, //index 58
@@ -186,7 +185,7 @@ WDTS_RateInfo gRateInfo[WDTS_MAX_RATE_NUM]  = {
     { 1215, 1022,  13286, 13}, //index 62
     { 1350, 1137,  14781, 15}, //index 63
 
-    //11AC  
+    //11AC
     { 1350, 1137, 14781, 15}, //reserved 64
     { 1350, 1137, 14781, 15}, //reserved 65
     { 65,     65,   845,  1}, //index 66
@@ -260,28 +259,26 @@ WDTS_RateInfo gRateInfo[WDTS_MAX_RATE_NUM]  = {
     { 1350, 1137, 14781, 15}, //index 134
     { 3900, 3900, 50700, 51}, //index 135
     { 4333, 4333, 56329, 56}  //index 136
- };
+};
 
 /* TX stats */
-typedef struct
-{
-  wpt_uint32 txBytesPushed;
-  wpt_uint32 txPacketsPushed; //Can be removed to optimize memory
-}WDI_DTS_TX_TrafficStatsType;
+typedef struct {
+    wpt_uint32 txBytesPushed;
+    wpt_uint32 txPacketsPushed; //Can be removed to optimize memory
+} WDI_DTS_TX_TrafficStatsType;
 
 /* RX stats */
-typedef struct
-{
-  wpt_uint32 rxBytesRcvd;
-  wpt_uint32 rxPacketsRcvd;  //Can be removed to optimize memory
-}WDI_DTS_RX_TrafficStatsType;
+typedef struct {
+    wpt_uint32 rxBytesRcvd;
+    wpt_uint32 rxPacketsRcvd;  //Can be removed to optimize memory
+} WDI_DTS_RX_TrafficStatsType;
 
 typedef struct {
-   wpt_uint8 running;
-   WDI_DTS_RX_TrafficStatsType rxStats[HAL_NUM_STA][WDTS_MAX_RATE_NUM];
-   WDI_DTS_TX_TrafficStatsType txStats[HAL_NUM_STA];
-   WDI_TrafficStatsType        netTxRxStats[HAL_NUM_STA];
-}WDI_DTS_TrafficStatsType;
+    wpt_uint8 running;
+    WDI_DTS_RX_TrafficStatsType rxStats[HAL_NUM_STA][WDTS_MAX_RATE_NUM];
+    WDI_DTS_TX_TrafficStatsType txStats[HAL_NUM_STA];
+    WDI_TrafficStatsType        netTxRxStats[HAL_NUM_STA];
+} WDI_DTS_TrafficStatsType;
 
 static WDI_DTS_TrafficStatsType gDsTrafficStats;
 
@@ -295,48 +292,41 @@ static WDI_DTS_TrafficStatsType gDsTrafficStats;
  *  len: length of buffer pointed to by pStats
  *  Return Status: None
  */
-void WDTS_GetTrafficStats(WDI_TrafficStatsType** pStats, wpt_uint32 *len)
-{
-   if(gDsTrafficStats.running)
-   {
-      uint8 staIdx, rate;
-      WDI_TrafficStatsType *pNetTxRxStats = gDsTrafficStats.netTxRxStats;
-      wpalMemoryZero(pNetTxRxStats, sizeof(gDsTrafficStats.netTxRxStats));
+void WDTS_GetTrafficStats(WDI_TrafficStatsType** pStats, wpt_uint32 *len) {
+    if(gDsTrafficStats.running) {
+        uint8 staIdx, rate;
+        WDI_TrafficStatsType *pNetTxRxStats = gDsTrafficStats.netTxRxStats;
+        wpalMemoryZero(pNetTxRxStats, sizeof(gDsTrafficStats.netTxRxStats));
 
-      for(staIdx = 0; staIdx < HAL_NUM_STA; staIdx++, pNetTxRxStats++)
-      {
-          pNetTxRxStats->txBytesPushed += gDsTrafficStats.txStats[staIdx].txBytesPushed;
-          pNetTxRxStats->txPacketsPushed+= gDsTrafficStats.txStats[staIdx].txPacketsPushed;
-          for(rate = 0; rate < WDTS_MAX_11B_RATE_NUM; rate++)
-          {
-             pNetTxRxStats->rxBytesRcvd +=
-               gDsTrafficStats.rxStats[staIdx][rate].rxBytesRcvd;
-             pNetTxRxStats->rxPacketsRcvd +=
-               gDsTrafficStats.rxStats[staIdx][rate].rxPacketsRcvd;
-             pNetTxRxStats->rxTimeTotal +=
-               gDsTrafficStats.rxStats[staIdx][rate].rxBytesRcvd*DTS_11BRATE_TPUT_MULTIPLIER(rate);
-          }
-          for(rate = WDTS_MAX_11B_RATE_NUM; rate < WDTS_MAX_RATE_NUM; rate++)
-          {
-             pNetTxRxStats->rxBytesRcvd += 
-               gDsTrafficStats.rxStats[staIdx][rate].rxBytesRcvd;
-             pNetTxRxStats->rxPacketsRcvd += 
-               gDsTrafficStats.rxStats[staIdx][rate].rxPacketsRcvd;
-             pNetTxRxStats->rxTimeTotal += 
-               gDsTrafficStats.rxStats[staIdx][rate].rxBytesRcvd/DTS_RATE_TPUT(rate);
-          }
+        for(staIdx = 0; staIdx < HAL_NUM_STA; staIdx++, pNetTxRxStats++) {
+            pNetTxRxStats->txBytesPushed += gDsTrafficStats.txStats[staIdx].txBytesPushed;
+            pNetTxRxStats->txPacketsPushed+= gDsTrafficStats.txStats[staIdx].txPacketsPushed;
+            for(rate = 0; rate < WDTS_MAX_11B_RATE_NUM; rate++) {
+                pNetTxRxStats->rxBytesRcvd +=
+                    gDsTrafficStats.rxStats[staIdx][rate].rxBytesRcvd;
+                pNetTxRxStats->rxPacketsRcvd +=
+                    gDsTrafficStats.rxStats[staIdx][rate].rxPacketsRcvd;
+                pNetTxRxStats->rxTimeTotal +=
+                    gDsTrafficStats.rxStats[staIdx][rate].rxBytesRcvd*DTS_11BRATE_TPUT_MULTIPLIER(rate);
+            }
+            for(rate = WDTS_MAX_11B_RATE_NUM; rate < WDTS_MAX_RATE_NUM; rate++) {
+                pNetTxRxStats->rxBytesRcvd +=
+                    gDsTrafficStats.rxStats[staIdx][rate].rxBytesRcvd;
+                pNetTxRxStats->rxPacketsRcvd +=
+                    gDsTrafficStats.rxStats[staIdx][rate].rxPacketsRcvd;
+                pNetTxRxStats->rxTimeTotal +=
+                    gDsTrafficStats.rxStats[staIdx][rate].rxBytesRcvd/DTS_RATE_TPUT(rate);
+            }
 
-          pNetTxRxStats->rxTimeTotal = pNetTxRxStats->rxTimeTotal/1000;
+            pNetTxRxStats->rxTimeTotal = pNetTxRxStats->rxTimeTotal/1000;
 
-      }
-      *pStats = gDsTrafficStats.netTxRxStats;
-      *len = sizeof(gDsTrafficStats.netTxRxStats);
-   }
-   else
-   {
-      *pStats = NULL;
-      *len = 0;
-   }
+        }
+        *pStats = gDsTrafficStats.netTxRxStats;
+        *len = sizeof(gDsTrafficStats.netTxRxStats);
+    } else {
+        *pStats = NULL;
+        *len = 0;
+    }
 }
 
 /* WDTS_DeactivateTrafficStats
@@ -344,9 +334,8 @@ void WDTS_GetTrafficStats(WDI_TrafficStatsType** pStats, wpt_uint32 *len)
   * Parameters: None
  *  Return Status: None
  */
-void WDTS_DeactivateTrafficStats(void)
-{
-   gDsTrafficStats.running = eWLAN_PAL_FALSE;
+void WDTS_DeactivateTrafficStats(void) {
+    gDsTrafficStats.running = eWLAN_PAL_FALSE;
 }
 
 /* WDTS_ActivateTrafficStats
@@ -354,100 +343,96 @@ void WDTS_DeactivateTrafficStats(void)
   * Parameters: None
  *  Return Status: None
  */
-void WDTS_ActivateTrafficStats(void)
-{
-   gDsTrafficStats.running = eWLAN_PAL_TRUE;
+void WDTS_ActivateTrafficStats(void) {
+    gDsTrafficStats.running = eWLAN_PAL_TRUE;
 }
 
 /* WDTS_ClearTrafficStats
- * This function should be invoked to clear traffic stats 
+ * This function should be invoked to clear traffic stats
   * Parameters: None
  *  Return Status: None
  */
-void WDTS_ClearTrafficStats(void)
-{
-   wpalMemoryZero(gDsTrafficStats.rxStats, sizeof(gDsTrafficStats.rxStats));
-   wpalMemoryZero(gDsTrafficStats.txStats, sizeof(gDsTrafficStats.txStats));
+void WDTS_ClearTrafficStats(void) {
+    wpalMemoryZero(gDsTrafficStats.rxStats, sizeof(gDsTrafficStats.rxStats));
+    wpalMemoryZero(gDsTrafficStats.txStats, sizeof(gDsTrafficStats.txStats));
 }
 
-/* DTS Tx packet complete function. 
- * This function should be invoked by the transport device to indicate 
+/* DTS Tx packet complete function.
+ * This function should be invoked by the transport device to indicate
  * transmit complete for a frame.
  * Parameters:
- * pContext:Cookie that should be passed back to the caller 
+ * pContext:Cookie that should be passed back to the caller
  * pFrame:Refernce to PAL frame.
  * Return Value: SUCCESS  Completed successfully.
  *     FAILURE_XXX  Request was rejected due XXX Reason.
  *
  */
-wpt_status WDTS_TxPacketComplete(void *pContext, wpt_packet *pFrame, wpt_status status)
-{
-  WDI_DS_ClientDataType *pClientData = (WDI_DS_ClientDataType*)(pContext);
-  WDI_DS_TxMetaInfoType     *pTxMetadata;
-  void *pvBDHeader, *physBDHeader;
-  wpt_uint8 staIndex;
+wpt_status WDTS_TxPacketComplete(void *pContext, wpt_packet *pFrame, wpt_status status) {
+    WDI_DS_ClientDataType *pClientData = (WDI_DS_ClientDataType*)(pContext);
+    WDI_DS_TxMetaInfoType     *pTxMetadata;
+    void *pvBDHeader, *physBDHeader;
+    wpt_uint8 staIndex;
 
-  // Do Sanity checks
-  if(NULL == pContext || NULL == pFrame){
-    return eWLAN_PAL_STATUS_E_FAILURE;
-  }
-
-
-  // extract metadata from PAL packet
-  pTxMetadata = WDI_DS_ExtractTxMetaData(pFrame);
-  pTxMetadata->txCompleteStatus = status;
-
-  // Free BD header from pool
-  WDI_GetBDPointers(pFrame, &pvBDHeader,  &physBDHeader);
-  switch(pTxMetadata->frmType) 
-  {
-    case WDI_MAC_DATA_FRAME:
-    /* note that EAPOL frame hasn't incremented ReserveCount. see
-       WDI_DS_TxPacket() in wlan_qct_wdi_ds.c
-    */
-#ifdef FEATURE_WLAN_TDLS
-    /* I utilizes TDLS mgmt frame always sent at BD_RATE2. (See limProcessTdls.c)
-       Assumption here is data frame sent by WDA_TxPacket() <- HalTxFrame/HalTxFrameWithComplete()
-       should take managment path. As of today, only TDLS feature has special data frame
-       which needs to be treated as mgmt.
-    */
-    if((!pTxMetadata->isEapol) &&
-       ((pTxMetadata->txFlags & WDI_USE_BD_RATE2_FOR_MANAGEMENT_FRAME) != WDI_USE_BD_RATE2_FOR_MANAGEMENT_FRAME))
-#else
-    if(!pTxMetadata->isEapol)
-#endif
-    {
-      /* SWAP BD header to get STA index for completed frame */
-      WDI_SwapTxBd(pvBDHeader);
-      staIndex = (wpt_uint8)WDI_TX_BD_GET_STA_ID(pvBDHeader);
-      WDI_DS_MemPoolFree(&(pClientData->dataMemPool), pvBDHeader, physBDHeader);
-      WDI_DS_MemPoolDecreaseReserveCount(&(pClientData->dataMemPool), staIndex);
-      break;
+    // Do Sanity checks
+    if(NULL == pContext || NULL == pFrame) {
+        return eWLAN_PAL_STATUS_E_FAILURE;
     }
+
+
+    // extract metadata from PAL packet
+    pTxMetadata = WDI_DS_ExtractTxMetaData(pFrame);
+    pTxMetadata->txCompleteStatus = status;
+
+    // Free BD header from pool
+    WDI_GetBDPointers(pFrame, &pvBDHeader,  &physBDHeader);
+    switch(pTxMetadata->frmType) {
+    case WDI_MAC_DATA_FRAME:
+        /* note that EAPOL frame hasn't incremented ReserveCount. see
+           WDI_DS_TxPacket() in wlan_qct_wdi_ds.c
+        */
+#ifdef FEATURE_WLAN_TDLS
+        /* I utilizes TDLS mgmt frame always sent at BD_RATE2. (See limProcessTdls.c)
+           Assumption here is data frame sent by WDA_TxPacket() <- HalTxFrame/HalTxFrameWithComplete()
+           should take managment path. As of today, only TDLS feature has special data frame
+           which needs to be treated as mgmt.
+        */
+        if((!pTxMetadata->isEapol) &&
+                ((pTxMetadata->txFlags & WDI_USE_BD_RATE2_FOR_MANAGEMENT_FRAME) != WDI_USE_BD_RATE2_FOR_MANAGEMENT_FRAME))
+#else
+        if(!pTxMetadata->isEapol)
+#endif
+        {
+            /* SWAP BD header to get STA index for completed frame */
+            WDI_SwapTxBd(pvBDHeader);
+            staIndex = (wpt_uint8)WDI_TX_BD_GET_STA_ID(pvBDHeader);
+            WDI_DS_MemPoolFree(&(pClientData->dataMemPool), pvBDHeader, physBDHeader);
+            WDI_DS_MemPoolDecreaseReserveCount(&(pClientData->dataMemPool), staIndex);
+            break;
+        }
     // intentional fall-through to handle eapol packet as mgmt
     case WDI_MAC_MGMT_FRAME:
-      WDI_DS_MemPoolFree(&(pClientData->mgmtMemPool), pvBDHeader, physBDHeader);
-      break;
-  }
-  WDI_SetBDPointers(pFrame, 0, 0);
+        WDI_DS_MemPoolFree(&(pClientData->mgmtMemPool), pvBDHeader, physBDHeader);
+        break;
+    }
+    WDI_SetBDPointers(pFrame, 0, 0);
 
-  // Invoke Tx complete callback
-  pClientData->txCompleteCB(pClientData->pCallbackContext, pFrame);  
-  return eWLAN_PAL_STATUS_SUCCESS;
+    // Invoke Tx complete callback
+    pClientData->txCompleteCB(pClientData->pCallbackContext, pFrame);
+    return eWLAN_PAL_STATUS_SUCCESS;
 
 }
 
 
 /*===============================================================================
   FUNCTION      WLANTL_GetReplayCounterFromRxBD
-     
-  DESCRIPTION   This function extracts 48-bit replay packet number from RX BD 
- 
-  DEPENDENCIES  Validity of replay check must be done before the function 
+
+  DESCRIPTION   This function extracts 48-bit replay packet number from RX BD
+
+  DEPENDENCIES  Validity of replay check must be done before the function
                 is called
-                          
+
   PARAMETERS    pucRxHeader pointer to RX BD header
-                                       
+
   RETRUN        v_U64_t    Packet number extarcted from RX BD
 
   SIDE EFFECTS   none
@@ -455,379 +440,364 @@ wpt_status WDTS_TxPacketComplete(void *pContext, wpt_packet *pFrame, wpt_status 
 v_U64_t
 WDTS_GetReplayCounterFromRxBD
 (
-   v_U8_t *pucRxBDHeader
-)
-{
-  v_U64_t ullcurrentReplayCounter = 0;
-  /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-/* 48-bit replay counter is created as follows
-   from RX BD 6 byte PMI command:
-   Addr : AES/TKIP
-   0x38 : pn3/tsc3
-   0x39 : pn2/tsc2
-   0x3a : pn1/tsc1
-   0x3b : pn0/tsc0
+    v_U8_t *pucRxBDHeader
+) {
+    v_U64_t ullcurrentReplayCounter = 0;
+    /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+    /* 48-bit replay counter is created as follows
+       from RX BD 6 byte PMI command:
+       Addr : AES/TKIP
+       0x38 : pn3/tsc3
+       0x39 : pn2/tsc2
+       0x3a : pn1/tsc1
+       0x3b : pn0/tsc0
 
-   0x3c : pn5/tsc5
-   0x3d : pn4/tsc4 */
-  
+       0x3c : pn5/tsc5
+       0x3d : pn4/tsc4 */
+
 #ifdef ANI_BIG_BYTE_ENDIAN
     /* Getting 48-bit replay counter from the RX BD */
-    ullcurrentReplayCounter = WDI_RX_BD_GET_PMICMD_20TO23(pucRxBDHeader); 
+    ullcurrentReplayCounter = WDI_RX_BD_GET_PMICMD_20TO23(pucRxBDHeader);
     ullcurrentReplayCounter <<= 16;
     ullcurrentReplayCounter |= (( WDI_RX_BD_GET_PMICMD_24TO25(pucRxBDHeader) & 0xFFFF0000) >> 16);
     return ullcurrentReplayCounter;
 #else
     /* Getting 48-bit replay counter from the RX BD */
-    ullcurrentReplayCounter = (WDI_RX_BD_GET_PMICMD_24TO25(pucRxBDHeader) & 0x0000FFFF); 
-    ullcurrentReplayCounter <<= 32; 
-    ullcurrentReplayCounter |= WDI_RX_BD_GET_PMICMD_20TO23(pucRxBDHeader); 
+    ullcurrentReplayCounter = (WDI_RX_BD_GET_PMICMD_24TO25(pucRxBDHeader) & 0x0000FFFF);
+    ullcurrentReplayCounter <<= 32;
+    ullcurrentReplayCounter |= WDI_RX_BD_GET_PMICMD_20TO23(pucRxBDHeader);
     return ullcurrentReplayCounter;
 #endif
 }
 
 
-/* DTS Rx packet function. 
- * This function should be invoked by the transport device to indicate 
+/* DTS Rx packet function.
+ * This function should be invoked by the transport device to indicate
  * reception of a frame.
  * Parameters:
- * pContext:Cookie that should be passed back to the caller 
+ * pContext:Cookie that should be passed back to the caller
  * pFrame:Refernce to PAL frame.
  * Return Value: SUCCESS  Completed successfully.
  *     FAILURE_XXX  Request was rejected due XXX Reason.
  *
  */
-wpt_status WDTS_RxPacket (void *pContext, wpt_packet *pFrame, WDTS_ChannelType channel)
-{
-  WDI_DS_ClientDataType *pClientData = 
-    (WDI_DS_ClientDataType*)(pContext);
-  wpt_boolean       bASF, bFSF, bLSF, bAEF;
-  wpt_uint8                   ucMPDUHOffset, ucMPDUHLen, ucTid;
-  wpt_uint8                   *pBDHeader;
-  wpt_uint16                  usMPDUDOffset, usMPDULen;
-  WDI_DS_RxMetaInfoType     *pRxMetadata;
-  wpt_uint8                  isFcBd = 0;
+wpt_status WDTS_RxPacket (void *pContext, wpt_packet *pFrame, WDTS_ChannelType channel) {
+    WDI_DS_ClientDataType *pClientData =
+        (WDI_DS_ClientDataType*)(pContext);
+    wpt_boolean       bASF, bFSF, bLSF, bAEF;
+    wpt_uint8                   ucMPDUHOffset, ucMPDUHLen, ucTid;
+    wpt_uint8                   *pBDHeader;
+    wpt_uint16                  usMPDUDOffset, usMPDULen;
+    WDI_DS_RxMetaInfoType     *pRxMetadata;
+    wpt_uint8                  isFcBd = 0;
 
-  tpSirMacFrameCtl  pMacFrameCtl;
-  // Do Sanity checks
-  if(NULL == pContext || NULL == pFrame){
-    return eWLAN_PAL_STATUS_E_FAILURE;
-  }
+    tpSirMacFrameCtl  pMacFrameCtl;
+    // Do Sanity checks
+    if(NULL == pContext || NULL == pFrame) {
+        return eWLAN_PAL_STATUS_E_FAILURE;
+    }
 
-  /*------------------------------------------------------------------------
-    Extract BD header and check if valid
-    ------------------------------------------------------------------------*/
-  pBDHeader = (wpt_uint8*)wpalPacketGetRawBuf(pFrame);
-  if(NULL == pBDHeader)
-  {
-    DTI_TRACE( DTI_TRACE_LEVEL_ERROR,
-       "WLAN TL:BD header received NULL - dropping packet");
-    wpalPacketFree(pFrame);
-    return eWLAN_PAL_STATUS_E_FAILURE;
-  }
-  WDI_SwapRxBd(pBDHeader);
-
-  ucMPDUHOffset = (wpt_uint8)WDI_RX_BD_GET_MPDU_H_OFFSET(pBDHeader);
-  usMPDUDOffset = (wpt_uint16)WDI_RX_BD_GET_MPDU_D_OFFSET(pBDHeader);
-  usMPDULen     = (wpt_uint16)WDI_RX_BD_GET_MPDU_LEN(pBDHeader);
-  ucMPDUHLen    = (wpt_uint8)WDI_RX_BD_GET_MPDU_H_LEN(pBDHeader);
-  ucTid         = (wpt_uint8)WDI_RX_BD_GET_TID(pBDHeader);
-
-  /*------------------------------------------------------------------------
-    Gather AMSDU information 
-    ------------------------------------------------------------------------*/
-  bASF = WDI_RX_BD_GET_ASF(pBDHeader);
-  bAEF = WDI_RX_BD_GET_AEF(pBDHeader);
-  bFSF = WDI_RX_BD_GET_ESF(pBDHeader);
-  bLSF = WDI_RX_BD_GET_LSF(pBDHeader);
-  isFcBd = WDI_RX_FC_BD_GET_FC(pBDHeader);
-
-  DTI_TRACE( DTI_TRACE_LEVEL_INFO,
-      "WLAN TL:BD header processing data: HO %d DO %d Len %d HLen %d"
-      " Tid %d BD %d",
-      ucMPDUHOffset, usMPDUDOffset, usMPDULen, ucMPDUHLen, ucTid,
-      WDI_RX_BD_HEADER_SIZE);
-
-  if(!isFcBd)
-  {
-      if(usMPDUDOffset <= ucMPDUHOffset || usMPDULen < ucMPDUHLen) {
+    /*------------------------------------------------------------------------
+      Extract BD header and check if valid
+      ------------------------------------------------------------------------*/
+    pBDHeader = (wpt_uint8*)wpalPacketGetRawBuf(pFrame);
+    if(NULL == pBDHeader) {
         DTI_TRACE( DTI_TRACE_LEVEL_ERROR,
-            "WLAN TL:BD header corrupted - dropping packet");
-        /* Drop packet ???? */ 
+                   "WLAN TL:BD header received NULL - dropping packet");
         wpalPacketFree(pFrame);
-        return eWLAN_PAL_STATUS_SUCCESS;
-      }
+        return eWLAN_PAL_STATUS_E_FAILURE;
+    }
+    WDI_SwapRxBd(pBDHeader);
 
-      if((ucMPDUHOffset < WDI_RX_BD_HEADER_SIZE) &&  (!(bASF && !bFSF))){
-        /* AMSDU case, ucMPDUHOffset = 0  it should be hancdled seperatly */
-        /* Drop packet ???? */ 
-        wpalPacketFree(pFrame);
-        return eWLAN_PAL_STATUS_SUCCESS;
-      }
+    ucMPDUHOffset = (wpt_uint8)WDI_RX_BD_GET_MPDU_H_OFFSET(pBDHeader);
+    usMPDUDOffset = (wpt_uint16)WDI_RX_BD_GET_MPDU_D_OFFSET(pBDHeader);
+    usMPDULen     = (wpt_uint16)WDI_RX_BD_GET_MPDU_LEN(pBDHeader);
+    ucMPDUHLen    = (wpt_uint8)WDI_RX_BD_GET_MPDU_H_LEN(pBDHeader);
+    ucTid         = (wpt_uint8)WDI_RX_BD_GET_TID(pBDHeader);
 
-      /* AMSDU frame, but not first sub-frame
-       * No MPDU header, MPDU header offset is 0
-       * Total frame size is actual frame size + MPDU data offset */
-      if((ucMPDUHOffset < WDI_RX_BD_HEADER_SIZE) && (bASF && !bFSF)){
-        ucMPDUHOffset = usMPDUDOffset;
-      }
+    /*------------------------------------------------------------------------
+      Gather AMSDU information
+      ------------------------------------------------------------------------*/
+    bASF = WDI_RX_BD_GET_ASF(pBDHeader);
+    bAEF = WDI_RX_BD_GET_AEF(pBDHeader);
+    bFSF = WDI_RX_BD_GET_ESF(pBDHeader);
+    bLSF = WDI_RX_BD_GET_LSF(pBDHeader);
+    isFcBd = WDI_RX_FC_BD_GET_FC(pBDHeader);
 
-      if(VPKT_SIZE_BUFFER < (usMPDULen+ucMPDUHOffset)){
-        DTI_TRACE( DTI_TRACE_LEVEL_FATAL,
-                   "Invalid Frame size, might memory corrupted");
-        wpalPacketFree(pFrame);
-        return eWLAN_PAL_STATUS_SUCCESS;
-      }
-      if(eWLAN_PAL_STATUS_SUCCESS != wpalPacketSetRxLength(pFrame, usMPDULen+ucMPDUHOffset))
-      {
-          DTI_TRACE( DTI_TRACE_LEVEL_ERROR, "Invalid Frame Length, Frame dropped..");
-          wpalPacketFree(pFrame);
-          return eWLAN_PAL_STATUS_SUCCESS;
-      }
-      if(eWLAN_PAL_STATUS_SUCCESS != wpalPacketRawTrimHead(pFrame, ucMPDUHOffset))
-      {
-          DTI_TRACE( DTI_TRACE_LEVEL_ERROR, "Failed to trim Raw Packet Head, Frame dropped..");
-          wpalPacketFree(pFrame);
-          return eWLAN_PAL_STATUS_SUCCESS;
-      }
-     
+    DTI_TRACE( DTI_TRACE_LEVEL_INFO,
+               "WLAN TL:BD header processing data: HO %d DO %d Len %d HLen %d"
+               " Tid %d BD %d",
+               ucMPDUHOffset, usMPDUDOffset, usMPDULen, ucMPDUHLen, ucTid,
+               WDI_RX_BD_HEADER_SIZE);
 
-      pRxMetadata = WDI_DS_ExtractRxMetaData(pFrame);
+    if(!isFcBd) {
+        if(usMPDUDOffset <= ucMPDUHOffset || usMPDULen < ucMPDUHLen) {
+            DTI_TRACE( DTI_TRACE_LEVEL_ERROR,
+                       "WLAN TL:BD header corrupted - dropping packet");
+            /* Drop packet ???? */
+            wpalPacketFree(pFrame);
+            return eWLAN_PAL_STATUS_SUCCESS;
+        }
 
-      pRxMetadata->fc = isFcBd;
-      pRxMetadata->staId = WDI_RX_BD_GET_STA_ID(pBDHeader);
-      pRxMetadata->addr3Idx = WDI_RX_BD_GET_ADDR3_IDX(pBDHeader);
-      pRxMetadata->rxChannel = WDI_RX_BD_GET_RX_CHANNEL(pBDHeader);
-      pRxMetadata->rtsf = WDI_RX_BD_GET_RTSF(pBDHeader);
-      pRxMetadata->bsf = WDI_RX_BD_GET_BSF(pBDHeader);
-      pRxMetadata->scan = WDI_RX_BD_GET_SCAN(pBDHeader);
-      pRxMetadata->dpuSig = WDI_RX_BD_GET_DPU_SIG(pBDHeader);
-      pRxMetadata->ft = WDI_RX_BD_GET_FT(pBDHeader);
-      pRxMetadata->ne = WDI_RX_BD_GET_NE(pBDHeader);
-      pRxMetadata->llcr = WDI_RX_BD_GET_LLCR(pBDHeader);
-      pRxMetadata->bcast = WDI_RX_BD_GET_UB(pBDHeader);
-      pRxMetadata->tid = ucTid;
-      pRxMetadata->dpuFeedback = WDI_RX_BD_GET_DPU_FEEDBACK(pBDHeader);
-      pRxMetadata->rateIndex = WDI_RX_BD_GET_RATEINDEX(pBDHeader);
-      pRxMetadata->rxpFlags = WDI_RX_BD_GET_RXPFLAGS(pBDHeader);
-      pRxMetadata->mclkRxTimestamp = WDI_RX_BD_GET_TIMESTAMP(pBDHeader);
+        if((ucMPDUHOffset < WDI_RX_BD_HEADER_SIZE) &&  (!(bASF && !bFSF))) {
+            /* AMSDU case, ucMPDUHOffset = 0  it should be hancdled seperatly */
+            /* Drop packet ???? */
+            wpalPacketFree(pFrame);
+            return eWLAN_PAL_STATUS_SUCCESS;
+        }
+
+        /* AMSDU frame, but not first sub-frame
+         * No MPDU header, MPDU header offset is 0
+         * Total frame size is actual frame size + MPDU data offset */
+        if((ucMPDUHOffset < WDI_RX_BD_HEADER_SIZE) && (bASF && !bFSF)) {
+            ucMPDUHOffset = usMPDUDOffset;
+        }
+
+        if(VPKT_SIZE_BUFFER < (usMPDULen+ucMPDUHOffset)) {
+            DTI_TRACE( DTI_TRACE_LEVEL_FATAL,
+                       "Invalid Frame size, might memory corrupted");
+            wpalPacketFree(pFrame);
+            return eWLAN_PAL_STATUS_SUCCESS;
+        }
+        if(eWLAN_PAL_STATUS_SUCCESS != wpalPacketSetRxLength(pFrame, usMPDULen+ucMPDUHOffset)) {
+            DTI_TRACE( DTI_TRACE_LEVEL_ERROR, "Invalid Frame Length, Frame dropped..");
+            wpalPacketFree(pFrame);
+            return eWLAN_PAL_STATUS_SUCCESS;
+        }
+        if(eWLAN_PAL_STATUS_SUCCESS != wpalPacketRawTrimHead(pFrame, ucMPDUHOffset)) {
+            DTI_TRACE( DTI_TRACE_LEVEL_ERROR, "Failed to trim Raw Packet Head, Frame dropped..");
+            wpalPacketFree(pFrame);
+            return eWLAN_PAL_STATUS_SUCCESS;
+        }
+
+
+        pRxMetadata = WDI_DS_ExtractRxMetaData(pFrame);
+
+        pRxMetadata->fc = isFcBd;
+        pRxMetadata->staId = WDI_RX_BD_GET_STA_ID(pBDHeader);
+        pRxMetadata->addr3Idx = WDI_RX_BD_GET_ADDR3_IDX(pBDHeader);
+        pRxMetadata->rxChannel = WDI_RX_BD_GET_RX_CHANNEL(pBDHeader);
+        pRxMetadata->rtsf = WDI_RX_BD_GET_RTSF(pBDHeader);
+        pRxMetadata->bsf = WDI_RX_BD_GET_BSF(pBDHeader);
+        pRxMetadata->scan = WDI_RX_BD_GET_SCAN(pBDHeader);
+        pRxMetadata->dpuSig = WDI_RX_BD_GET_DPU_SIG(pBDHeader);
+        pRxMetadata->ft = WDI_RX_BD_GET_FT(pBDHeader);
+        pRxMetadata->ne = WDI_RX_BD_GET_NE(pBDHeader);
+        pRxMetadata->llcr = WDI_RX_BD_GET_LLCR(pBDHeader);
+        pRxMetadata->bcast = WDI_RX_BD_GET_UB(pBDHeader);
+        pRxMetadata->tid = ucTid;
+        pRxMetadata->dpuFeedback = WDI_RX_BD_GET_DPU_FEEDBACK(pBDHeader);
+        pRxMetadata->rateIndex = WDI_RX_BD_GET_RATEINDEX(pBDHeader);
+        pRxMetadata->rxpFlags = WDI_RX_BD_GET_RXPFLAGS(pBDHeader);
+        pRxMetadata->mclkRxTimestamp = WDI_RX_BD_GET_TIMESTAMP(pBDHeader);
 #ifdef WLAN_FEATURE_11W
-      pRxMetadata->rmf = WDI_RX_BD_GET_RMF(pBDHeader);
+        pRxMetadata->rmf = WDI_RX_BD_GET_RMF(pBDHeader);
 #endif
 #ifdef WLAN_FEATURE_ROAM_SCAN_OFFLOAD
-      pRxMetadata->offloadScanLearn = WDI_RX_BD_GET_OFFLOADSCANLEARN(pBDHeader);
-      pRxMetadata->roamCandidateInd = WDI_RX_BD_GET_ROAMCANDIDATEIND(pBDHeader);
+        pRxMetadata->offloadScanLearn = WDI_RX_BD_GET_OFFLOADSCANLEARN(pBDHeader);
+        pRxMetadata->roamCandidateInd = WDI_RX_BD_GET_ROAMCANDIDATEIND(pBDHeader);
 #endif
 
-      /* typeSubtype in BD doesn't look like correct. Fill from frame ctrl
-         TL does it for Volans but TL does not know BD for Prima. WDI should do it */
-      if ( 0 == WDI_RX_BD_GET_FT(pBDHeader) ) {
-        if ( bASF ) {
-          pRxMetadata->subtype = WDI_MAC_DATA_QOS_DATA;
-          pRxMetadata->type    = WDI_MAC_DATA_FRAME;
+        /* typeSubtype in BD doesn't look like correct. Fill from frame ctrl
+           TL does it for Volans but TL does not know BD for Prima. WDI should do it */
+        if ( 0 == WDI_RX_BD_GET_FT(pBDHeader) ) {
+            if ( bASF ) {
+                pRxMetadata->subtype = WDI_MAC_DATA_QOS_DATA;
+                pRxMetadata->type    = WDI_MAC_DATA_FRAME;
+            } else {
+                pMacFrameCtl = (tpSirMacFrameCtl)(((wpt_uint8*)pBDHeader) + ucMPDUHOffset);
+                pRxMetadata->subtype = pMacFrameCtl->subType;
+                pRxMetadata->type    = pMacFrameCtl->type;
+            }
         } else {
-          pMacFrameCtl = (tpSirMacFrameCtl)(((wpt_uint8*)pBDHeader) + ucMPDUHOffset);
-          pRxMetadata->subtype = pMacFrameCtl->subType;
-          pRxMetadata->type    = pMacFrameCtl->type;
+            pMacFrameCtl = (tpSirMacFrameCtl)(((wpt_uint8*)pBDHeader) + WDI_RX_BD_HEADER_SIZE);
+            pRxMetadata->subtype = pMacFrameCtl->subType;
+            pRxMetadata->type    = pMacFrameCtl->type;
         }
-      } else {
-        pMacFrameCtl = (tpSirMacFrameCtl)(((wpt_uint8*)pBDHeader) + WDI_RX_BD_HEADER_SIZE);
-        pRxMetadata->subtype = pMacFrameCtl->subType;
-        pRxMetadata->type    = pMacFrameCtl->type;
-      }
 
-      pRxMetadata->mpduHeaderPtr = pBDHeader + ucMPDUHOffset;
-      pRxMetadata->mpduDataPtr = pBDHeader + usMPDUDOffset;
-      pRxMetadata->mpduLength = usMPDULen;
-      pRxMetadata->mpduHeaderLength = ucMPDUHLen;
+        pRxMetadata->mpduHeaderPtr = pBDHeader + ucMPDUHOffset;
+        pRxMetadata->mpduDataPtr = pBDHeader + usMPDUDOffset;
+        pRxMetadata->mpduLength = usMPDULen;
+        pRxMetadata->mpduHeaderLength = ucMPDUHLen;
 
-      /*------------------------------------------------------------------------
-        Gather AMPDU information 
-        ------------------------------------------------------------------------*/
-      pRxMetadata->ampdu_reorderOpcode  = (wpt_uint8)WDI_RX_BD_GET_BA_OPCODE(pBDHeader);
-      pRxMetadata->ampdu_reorderSlotIdx = (wpt_uint8)WDI_RX_BD_GET_BA_SI(pBDHeader);
-      pRxMetadata->ampdu_reorderFwdIdx  = (wpt_uint8)WDI_RX_BD_GET_BA_FI(pBDHeader);
-      pRxMetadata->currentPktSeqNo       = (wpt_uint8)WDI_RX_BD_GET_BA_CSN(pBDHeader);
+        /*------------------------------------------------------------------------
+          Gather AMPDU information
+          ------------------------------------------------------------------------*/
+        pRxMetadata->ampdu_reorderOpcode  = (wpt_uint8)WDI_RX_BD_GET_BA_OPCODE(pBDHeader);
+        pRxMetadata->ampdu_reorderSlotIdx = (wpt_uint8)WDI_RX_BD_GET_BA_SI(pBDHeader);
+        pRxMetadata->ampdu_reorderFwdIdx  = (wpt_uint8)WDI_RX_BD_GET_BA_FI(pBDHeader);
+        pRxMetadata->currentPktSeqNo       = (wpt_uint8)WDI_RX_BD_GET_BA_CSN(pBDHeader);
 
 
-      /*------------------------------------------------------------------------
-        Gather AMSDU information 
-        ------------------------------------------------------------------------*/
-      pRxMetadata->amsdu_asf  =  bASF;
-      pRxMetadata->amsdu_aef  =  bAEF;
-      pRxMetadata->amsdu_esf  =  bFSF;
-      pRxMetadata->amsdu_lsf  =  bLSF;
-      pRxMetadata->amsdu_size =  WDI_RX_BD_GET_AMSDU_SIZE(pBDHeader);
+        /*------------------------------------------------------------------------
+          Gather AMSDU information
+          ------------------------------------------------------------------------*/
+        pRxMetadata->amsdu_asf  =  bASF;
+        pRxMetadata->amsdu_aef  =  bAEF;
+        pRxMetadata->amsdu_esf  =  bFSF;
+        pRxMetadata->amsdu_lsf  =  bLSF;
+        pRxMetadata->amsdu_size =  WDI_RX_BD_GET_AMSDU_SIZE(pBDHeader);
 
-      pRxMetadata->rssi0 = WDI_RX_BD_GET_RSSI0(pBDHeader);
-      pRxMetadata->rssi1 = WDI_RX_BD_GET_RSSI1(pBDHeader);
+        pRxMetadata->rssi0 = WDI_RX_BD_GET_RSSI0(pBDHeader);
+        pRxMetadata->rssi1 = WDI_RX_BD_GET_RSSI1(pBDHeader);
 
 
-        /* Missing: 
-      wpt_uint32 fcSTATxQStatus:8;
-      wpt_uint32 fcSTAThreshIndMask:8;
-      wpt_uint32 fcSTAPwrSaveStateMask:8;
-      wpt_uint32 fcSTAValidMask:8;
+        /* Missing:
+        wpt_uint32 fcSTATxQStatus:8;
+        wpt_uint32 fcSTAThreshIndMask:8;
+        wpt_uint32 fcSTAPwrSaveStateMask:8;
+        wpt_uint32 fcSTAValidMask:8;
 
-      wpt_uint8 fcSTATxQLen[8]; // one byte per STA. 
-      wpt_uint8 fcSTACurTxRate[8]; // current Tx rate for each sta.   
-      unknownUcastPkt 
-      */
+        wpt_uint8 fcSTATxQLen[8]; // one byte per STA.
+        wpt_uint8 fcSTACurTxRate[8]; // current Tx rate for each sta.
+        unknownUcastPkt
+        */
 
-      pRxMetadata->replayCount = WDTS_GetReplayCounterFromRxBD(pBDHeader);
-      pRxMetadata->snr = WDI_RX_BD_GET_SNR(pBDHeader); 
+        pRxMetadata->replayCount = WDTS_GetReplayCounterFromRxBD(pBDHeader);
+        pRxMetadata->snr = WDI_RX_BD_GET_SNR(pBDHeader);
 
-      /* 
-       * PAL BD pointer information needs to be populated 
-       */ 
-      WPAL_PACKET_SET_BD_POINTER(pFrame, pBDHeader);
-      WPAL_PACKET_SET_BD_LENGTH(pFrame, sizeof(WDI_RxBdType));
+        /*
+         * PAL BD pointer information needs to be populated
+         */
+        WPAL_PACKET_SET_BD_POINTER(pFrame, pBDHeader);
+        WPAL_PACKET_SET_BD_LENGTH(pFrame, sizeof(WDI_RxBdType));
 
-      // Invoke Rx complete callback
-      pClientData->receiveFrameCB(pClientData->pCallbackContext, pFrame);  
-  }
-  else
-  {
-      wpalPacketSetRxLength(pFrame, usMPDULen+ucMPDUHOffset);
-      wpalPacketRawTrimHead(pFrame, ucMPDUHOffset);
+        // Invoke Rx complete callback
+        pClientData->receiveFrameCB(pClientData->pCallbackContext, pFrame);
+    } else {
+        wpalPacketSetRxLength(pFrame, usMPDULen+ucMPDUHOffset);
+        wpalPacketRawTrimHead(pFrame, ucMPDUHOffset);
 
-      pRxMetadata = WDI_DS_ExtractRxMetaData(pFrame);
-      //flow control related
-      pRxMetadata->fc = isFcBd;
-      pRxMetadata->mclkRxTimestamp = WDI_RX_BD_GET_TIMESTAMP(pBDHeader);
-      pRxMetadata->fcStaTxDisabledBitmap = WDI_RX_FC_BD_GET_STA_TX_DISABLED_BITMAP(pBDHeader);
-      pRxMetadata->fcSTAValidMask = WDI_RX_FC_BD_GET_STA_VALID_MASK(pBDHeader);
-      // Invoke Rx complete callback
-      pClientData->receiveFrameCB(pClientData->pCallbackContext, pFrame);  
-  }
+        pRxMetadata = WDI_DS_ExtractRxMetaData(pFrame);
+        //flow control related
+        pRxMetadata->fc = isFcBd;
+        pRxMetadata->mclkRxTimestamp = WDI_RX_BD_GET_TIMESTAMP(pBDHeader);
+        pRxMetadata->fcStaTxDisabledBitmap = WDI_RX_FC_BD_GET_STA_TX_DISABLED_BITMAP(pBDHeader);
+        pRxMetadata->fcSTAValidMask = WDI_RX_FC_BD_GET_STA_VALID_MASK(pBDHeader);
+        // Invoke Rx complete callback
+        pClientData->receiveFrameCB(pClientData->pCallbackContext, pFrame);
+    }
 
-  //Log the RX Stats
-  if(gDsTrafficStats.running && pRxMetadata->staId < HAL_NUM_STA)
-  {
-     if(pRxMetadata->rateIndex < WDTS_MAX_RATE_NUM)
-     {
-        if(pRxMetadata->type == WDI_MAC_DATA_FRAME)
-        {
-           gDsTrafficStats.rxStats[pRxMetadata->staId][pRxMetadata->rateIndex].rxBytesRcvd +=
-              pRxMetadata->mpduLength;
-           gDsTrafficStats.rxStats[pRxMetadata->staId][pRxMetadata->rateIndex].rxPacketsRcvd++;
+    //Log the RX Stats
+    if(gDsTrafficStats.running && pRxMetadata->staId < HAL_NUM_STA) {
+        if(pRxMetadata->rateIndex < WDTS_MAX_RATE_NUM) {
+            if(pRxMetadata->type == WDI_MAC_DATA_FRAME) {
+                gDsTrafficStats.rxStats[pRxMetadata->staId][pRxMetadata->rateIndex].rxBytesRcvd +=
+                    pRxMetadata->mpduLength;
+                gDsTrafficStats.rxStats[pRxMetadata->staId][pRxMetadata->rateIndex].rxPacketsRcvd++;
+            }
         }
-     }
-  }
-  return eWLAN_PAL_STATUS_SUCCESS;
+    }
+    return eWLAN_PAL_STATUS_SUCCESS;
 }
 
 
 
-/* DTS Out of Resource packet function. 
- * This function should be invoked by the transport device to indicate 
+/* DTS Out of Resource packet function.
+ * This function should be invoked by the transport device to indicate
  * the device is out of resources.
  * Parameters:
- * pContext:Cookie that should be passed back to the caller 
+ * pContext:Cookie that should be passed back to the caller
  * priority: indicates which channel is out of resource.
  * Return Value: SUCCESS  Completed successfully.
  *     FAILURE_XXX  Request was rejected due XXX Reason.
  */
-wpt_status WDTS_OOResourceNotification(void *pContext, WDTS_ChannelType channel, wpt_boolean on)
-{
-  WDI_DS_ClientDataType *pClientData =
-    (WDI_DS_ClientDataType *) pContext;
-  static wpt_uint8 ac_mask = 0x1f;
+wpt_status WDTS_OOResourceNotification(void *pContext, WDTS_ChannelType channel, wpt_boolean on) {
+    WDI_DS_ClientDataType *pClientData =
+        (WDI_DS_ClientDataType *) pContext;
+    static wpt_uint8 ac_mask = 0x1f;
 
-  // Do Sanity checks
-  if(NULL == pContext){
-    return eWLAN_PAL_STATUS_E_FAILURE;
-  }
-  
-  if(on){
-    ac_mask |=  channel == WDTS_CHANNEL_TX_LOW_PRI?  0x0f : 0x10;
-  } else {
-    ac_mask &=  channel == WDTS_CHANNEL_TX_LOW_PRI?  0x10 : 0x0f;
-  }
+    // Do Sanity checks
+    if(NULL == pContext) {
+        return eWLAN_PAL_STATUS_E_FAILURE;
+    }
+
+    if(on) {
+        ac_mask |=  channel == WDTS_CHANNEL_TX_LOW_PRI?  0x0f : 0x10;
+    } else {
+        ac_mask &=  channel == WDTS_CHANNEL_TX_LOW_PRI?  0x10 : 0x0f;
+    }
 
 
-  // Invoke OOR callback
-  pClientData->txResourceCB(pClientData->pCallbackContext, ac_mask); 
-  return eWLAN_PAL_STATUS_SUCCESS;
+    // Invoke OOR callback
+    pClientData->txResourceCB(pClientData->pCallbackContext, ac_mask);
+    return eWLAN_PAL_STATUS_SUCCESS;
 
 }
 
-/* DTS open  function. 
+/* DTS open  function.
  * On open the transport device should initialize itself.
  * Parameters:
- *  pContext:Cookie that should be passed back to the caller along 
+ *  pContext:Cookie that should be passed back to the caller along
  *  with the callback.
  *
  * Return Value: SUCCESS  Completed successfully.
  *     FAILURE_XXX  Request was rejected due XXX Reason.
  *
  */
-wpt_status WDTS_openTransport( void *pContext)
-{
-  void *pDTDriverContext; 
-  WDI_DS_ClientDataType *pClientData;
-  WDI_Status sWdiStatus = WDI_STATUS_SUCCESS;
+wpt_status WDTS_openTransport( void *pContext) {
+    void *pDTDriverContext;
+    WDI_DS_ClientDataType *pClientData;
+    WDI_Status sWdiStatus = WDI_STATUS_SUCCESS;
 
-  pClientData = (WDI_DS_ClientDataType*) wpalMemoryAllocate(sizeof(WDI_DS_ClientDataType));
-  if (!pClientData){
-    return eWLAN_PAL_STATUS_E_NOMEM;
-  }
+    pClientData = (WDI_DS_ClientDataType*) wpalMemoryAllocate(sizeof(WDI_DS_ClientDataType));
+    if (!pClientData) {
+        return eWLAN_PAL_STATUS_E_NOMEM;
+    }
 
-  pClientData->suspend = 0;
-  WDI_DS_AssignDatapathContext(pContext, (void*)pClientData);
+    pClientData->suspend = 0;
+    WDI_DS_AssignDatapathContext(pContext, (void*)pClientData);
 
-  pDTDriverContext = gTransportDriver.open(); 
-  if( NULL == pDTDriverContext )
-  {
-     DTI_TRACE( DTI_TRACE_LEVEL_ERROR, " %s fail from transport open", __func__);
-     return eWLAN_PAL_STATUS_E_FAILURE;
-  }
-  WDT_AssignTransportDriverContext(pContext, pDTDriverContext);
-  gTransportDriver.register_client(pDTDriverContext, WDTS_RxPacket, WDTS_TxPacketComplete, 
-    WDTS_OOResourceNotification, (void*)pClientData);
+    pDTDriverContext = gTransportDriver.open();
+    if( NULL == pDTDriverContext ) {
+        DTI_TRACE( DTI_TRACE_LEVEL_ERROR, " %s fail from transport open", __func__);
+        return eWLAN_PAL_STATUS_E_FAILURE;
+    }
+    WDT_AssignTransportDriverContext(pContext, pDTDriverContext);
+    gTransportDriver.register_client(pDTDriverContext, WDTS_RxPacket, WDTS_TxPacketComplete,
+                                     WDTS_OOResourceNotification, (void*)pClientData);
 
-  /* Create a memory pool for Mgmt BDheaders.*/
-  sWdiStatus = WDI_DS_MemPoolCreate(&pClientData->mgmtMemPool, WDI_DS_MAX_CHUNK_SIZE, 
-                                                     WDI_DS_HI_PRI_RES_NUM);
-  if (WDI_STATUS_SUCCESS != sWdiStatus){
-    return eWLAN_PAL_STATUS_E_NOMEM;
-  }
+    /* Create a memory pool for Mgmt BDheaders.*/
+    sWdiStatus = WDI_DS_MemPoolCreate(&pClientData->mgmtMemPool, WDI_DS_MAX_CHUNK_SIZE,
+                                      WDI_DS_HI_PRI_RES_NUM);
+    if (WDI_STATUS_SUCCESS != sWdiStatus) {
+        return eWLAN_PAL_STATUS_E_NOMEM;
+    }
 
-  /* Create a memory pool for Data BDheaders.*/
-  sWdiStatus = WDI_DS_MemPoolCreate(&pClientData->dataMemPool, WDI_DS_MAX_CHUNK_SIZE, 
-                                                      WDI_DS_LO_PRI_RES_NUM);
-  if (WDI_STATUS_SUCCESS != sWdiStatus){
-    return eWLAN_PAL_STATUS_E_NOMEM;
-  }
+    /* Create a memory pool for Data BDheaders.*/
+    sWdiStatus = WDI_DS_MemPoolCreate(&pClientData->dataMemPool, WDI_DS_MAX_CHUNK_SIZE,
+                                      WDI_DS_LO_PRI_RES_NUM);
+    if (WDI_STATUS_SUCCESS != sWdiStatus) {
+        return eWLAN_PAL_STATUS_E_NOMEM;
+    }
 
-  wpalMemoryZero(&gDsTrafficStats, sizeof(gDsTrafficStats));
+    wpalMemoryZero(&gDsTrafficStats, sizeof(gDsTrafficStats));
 
-  return eWLAN_PAL_STATUS_SUCCESS;
+    return eWLAN_PAL_STATUS_SUCCESS;
 
 }
 
 
 
-/* DTS start  function. 
+/* DTS start  function.
  * On start the transport device should start running.
  * Parameters:
- * pContext:Cookie that should be passed back to the caller along 
+ * pContext:Cookie that should be passed back to the caller along
  * with the callback.
  *
  * Return Value: SUCCESS  Completed successfully.
  *     FAILURE_XXX  Request was rejected due XXX Reason.
  *
  */
-wpt_status WDTS_startTransport( void *pContext)
-{
-  void *pDTDriverContext = WDT_GetTransportDriverContext(pContext);
-  gTransportDriver.start(pDTDriverContext); 
-  return eWLAN_PAL_STATUS_SUCCESS;
+wpt_status WDTS_startTransport( void *pContext) {
+    void *pDTDriverContext = WDT_GetTransportDriverContext(pContext);
+    gTransportDriver.start(pDTDriverContext);
+    return eWLAN_PAL_STATUS_SUCCESS;
 
 }
 
 
-/* DTS Tx packet function. 
+/* DTS Tx packet function.
  * This function should be invoked by the DAL Dataservice to schedule transmit frame through DXE/SDIO.
  * Parameters:
  * pContext:Cookie that should be passed back to the caller along with the callback.
@@ -836,50 +806,47 @@ wpt_status WDTS_startTransport( void *pContext)
  *     FAILURE_XXX  Request was rejected due XXX Reason.
  *
  */
-wpt_status WDTS_TxPacket(void *pContext, wpt_packet *pFrame)
-{
-  void *pDTDriverContext = WDT_GetTransportDriverContext(pContext);
-  WDI_DS_TxMetaInfoType     *pTxMetadata;
-  WDTS_ChannelType channel = WDTS_CHANNEL_TX_LOW_PRI;
-  wpt_status status = eWLAN_PAL_STATUS_SUCCESS;
+wpt_status WDTS_TxPacket(void *pContext, wpt_packet *pFrame) {
+    void *pDTDriverContext = WDT_GetTransportDriverContext(pContext);
+    WDI_DS_TxMetaInfoType     *pTxMetadata;
+    WDTS_ChannelType channel = WDTS_CHANNEL_TX_LOW_PRI;
+    wpt_status status = eWLAN_PAL_STATUS_SUCCESS;
 
-  // extract metadata from PAL packet
-  pTxMetadata = WDI_DS_ExtractTxMetaData(pFrame);
+    // extract metadata from PAL packet
+    pTxMetadata = WDI_DS_ExtractTxMetaData(pFrame);
 
-  //Log the TX Stats
-  if(gDsTrafficStats.running && pTxMetadata->staIdx < HAL_NUM_STA)
-  {
-     if(pTxMetadata->frmType & WDI_MAC_DATA_FRAME)
-     {
-        gDsTrafficStats.txStats[pTxMetadata->staIdx].txBytesPushed +=
-           pTxMetadata->fPktlen;
-        gDsTrafficStats.txStats[pTxMetadata->staIdx].txPacketsPushed += 1;
-      }
-  }
+    //Log the TX Stats
+    if(gDsTrafficStats.running && pTxMetadata->staIdx < HAL_NUM_STA) {
+        if(pTxMetadata->frmType & WDI_MAC_DATA_FRAME) {
+            gDsTrafficStats.txStats[pTxMetadata->staIdx].txBytesPushed +=
+                pTxMetadata->fPktlen;
+            gDsTrafficStats.txStats[pTxMetadata->staIdx].txPacketsPushed += 1;
+        }
+    }
 
-  // assign MDPU to correct channel??
-  channel =  (pTxMetadata->frmType & WDI_MAC_DATA_FRAME)? 
-    /* EAPOL frame uses TX_HIGH_PRIORITY DXE channel
-       To make sure EAPOL (for second session) is pushed even if TX_LO channel
-       already reached to low resource condition
-       This can happen especially in MCC, high data traffic TX in first session
-     */
+    // assign MDPU to correct channel??
+    channel =  (pTxMetadata->frmType & WDI_MAC_DATA_FRAME)?
+               /* EAPOL frame uses TX_HIGH_PRIORITY DXE channel
+                  To make sure EAPOL (for second session) is pushed even if TX_LO channel
+                  already reached to low resource condition
+                  This can happen especially in MCC, high data traffic TX in first session
+                */
 #ifdef FEATURE_WLAN_TDLS
-     /* I utilizes TDLS mgmt frame always sent at BD_RATE2. (See limProcessTdls.c)
-        Assumption here is data frame sent by WDA_TxPacket() <- HalTxFrame/HalTxFrameWithComplete()
-        should take managment path. As of today, only TDLS feature has special data frame
-        which needs to be treated as mgmt.
-      */
-      (((pTxMetadata->isEapol) || (pTxMetadata->txFlags & WDI_USE_BD_RATE2_FOR_MANAGEMENT_FRAME))? WDTS_CHANNEL_TX_HIGH_PRI : WDTS_CHANNEL_TX_LOW_PRI) : WDTS_CHANNEL_TX_HIGH_PRI;
+               /* I utilizes TDLS mgmt frame always sent at BD_RATE2. (See limProcessTdls.c)
+                  Assumption here is data frame sent by WDA_TxPacket() <- HalTxFrame/HalTxFrameWithComplete()
+                  should take managment path. As of today, only TDLS feature has special data frame
+                  which needs to be treated as mgmt.
+                */
+               (((pTxMetadata->isEapol) || (pTxMetadata->txFlags & WDI_USE_BD_RATE2_FOR_MANAGEMENT_FRAME))? WDTS_CHANNEL_TX_HIGH_PRI : WDTS_CHANNEL_TX_LOW_PRI) : WDTS_CHANNEL_TX_HIGH_PRI;
 #else
-      ((pTxMetadata->isEapol) ? WDTS_CHANNEL_TX_HIGH_PRI : WDTS_CHANNEL_TX_LOW_PRI) : WDTS_CHANNEL_TX_HIGH_PRI;
+               ((pTxMetadata->isEapol) ? WDTS_CHANNEL_TX_HIGH_PRI : WDTS_CHANNEL_TX_LOW_PRI) : WDTS_CHANNEL_TX_HIGH_PRI;
 #endif
-  // Send packet to  Transport Driver. 
-  status =  gTransportDriver.xmit(pDTDriverContext, pFrame, channel);
-  return status;
+    // Send packet to  Transport Driver.
+    status =  gTransportDriver.xmit(pDTDriverContext, pFrame, channel);
+    return status;
 }
 
-/* DTS Tx Complete function. 
+/* DTS Tx Complete function.
  * This function should be invoked by the DAL Dataservice to notify tx completion to DXE/SDIO.
  * Parameters:
  * pContext:Cookie that should be passed back to the caller along with the callback.
@@ -888,15 +855,14 @@ wpt_status WDTS_TxPacket(void *pContext, wpt_packet *pFrame)
  *     FAILURE_XXX  Request was rejected due XXX Reason.
  *
  */
-wpt_status WDTS_CompleteTx(void *pContext, wpt_uint32 ucTxResReq)
-{
-  void *pDTDriverContext = WDT_GetTransportDriverContext(pContext);
-  
-  // Notify completion to  Transport Driver. 
-  return gTransportDriver.txComplete(pDTDriverContext, ucTxResReq);
+wpt_status WDTS_CompleteTx(void *pContext, wpt_uint32 ucTxResReq) {
+    void *pDTDriverContext = WDT_GetTransportDriverContext(pContext);
+
+    // Notify completion to  Transport Driver.
+    return gTransportDriver.txComplete(pDTDriverContext, ucTxResReq);
 }
 
-/* DXE Set power state ACK callback. 
+/* DXE Set power state ACK callback.
  * This callback function should be invoked by the DXE to notify WDI that set
  * power state request is complete.
  * Parameters:
@@ -904,17 +870,15 @@ wpt_status WDTS_CompleteTx(void *pContext, wpt_uint32 ucTxResReq)
  * Return Value: None.
  *
  */
-void  WDTS_SetPowerStateCb(wpt_status   status, unsigned int dxePhyAddr)
-{
-   //print a msg
-   if(NULL != gSetPowerStateCbInfo.cback) 
-   {
-      gSetPowerStateCbInfo.cback(status, dxePhyAddr, gSetPowerStateCbInfo.pUserData);
-   }
+void  WDTS_SetPowerStateCb(wpt_status   status, unsigned int dxePhyAddr) {
+    //print a msg
+    if(NULL != gSetPowerStateCbInfo.cback) {
+        gSetPowerStateCbInfo.cback(status, dxePhyAddr, gSetPowerStateCbInfo.pUserData);
+    }
 }
 
 
-/* DTS Set power state function. 
+/* DTS Set power state function.
  * This function should be invoked by the DAL to notify the WLAN device power state.
  * Parameters:
  * pContext:Cookie that should be passed back to the caller along with the callback.
@@ -924,26 +888,22 @@ void  WDTS_SetPowerStateCb(wpt_status   status, unsigned int dxePhyAddr)
  *
  */
 wpt_status WDTS_SetPowerState(void *pContext, WDTS_PowerStateType  powerState,
-                              WDTS_SetPowerStateCbType cback)
-{
-   void *pDTDriverContext = WDT_GetTransportDriverContext(pContext);
-   wpt_status status = eWLAN_PAL_STATUS_SUCCESS;
+                              WDTS_SetPowerStateCbType cback) {
+    void *pDTDriverContext = WDT_GetTransportDriverContext(pContext);
+    wpt_status status = eWLAN_PAL_STATUS_SUCCESS;
 
-   if( cback )
-   {
-      //save the cback & cookie
-      gSetPowerStateCbInfo.pUserData = pContext;
-      gSetPowerStateCbInfo.cback = cback;
-      status = gTransportDriver.setPowerState(pDTDriverContext, powerState,
-                                            WDTS_SetPowerStateCb);
-   }
-   else
-   {
-      status = gTransportDriver.setPowerState(pDTDriverContext, powerState,
-                                               NULL);
-   }
+    if( cback ) {
+        //save the cback & cookie
+        gSetPowerStateCbInfo.pUserData = pContext;
+        gSetPowerStateCbInfo.cback = cback;
+        status = gTransportDriver.setPowerState(pDTDriverContext, powerState,
+                                                WDTS_SetPowerStateCb);
+    } else {
+        status = gTransportDriver.setPowerState(pDTDriverContext, powerState,
+                                                NULL);
+    }
 
-   return status;
+    return status;
 }
 
 /* DTS Transport Channel Debug
@@ -958,13 +918,12 @@ wpt_status WDTS_SetPowerState(void *pContext, WDTS_PowerStateType  powerState,
  * Return Value: NONE
  *
  */
-void WDTS_ChannelDebug(wpt_boolean displaySnapshot, wpt_boolean toggleStallDetect)
-{
-   gTransportDriver.channelDebug(displaySnapshot, toggleStallDetect);
-   return;
+void WDTS_ChannelDebug(wpt_boolean displaySnapshot, wpt_boolean toggleStallDetect) {
+    gTransportDriver.channelDebug(displaySnapshot, toggleStallDetect);
+    return;
 }
 
-/* DTS Stop function. 
+/* DTS Stop function.
  * Stop Transport driver, ie DXE, SDIO
  * Parameters:
  * pContext:Cookie that should be passed back to the caller along with the callback.
@@ -972,19 +931,18 @@ void WDTS_ChannelDebug(wpt_boolean displaySnapshot, wpt_boolean toggleStallDetec
  *     FAILURE_XXX  Request was rejected due XXX Reason.
  *
  */
-wpt_status WDTS_Stop(void *pContext)
-{
-  void *pDTDriverContext = WDT_GetTransportDriverContext(pContext);
-  wpt_status status = eWLAN_PAL_STATUS_SUCCESS;
+wpt_status WDTS_Stop(void *pContext) {
+    void *pDTDriverContext = WDT_GetTransportDriverContext(pContext);
+    wpt_status status = eWLAN_PAL_STATUS_SUCCESS;
 
-  status =  gTransportDriver.stop(pDTDriverContext);
+    status =  gTransportDriver.stop(pDTDriverContext);
 
-  wpalMemoryZero(&gDsTrafficStats, sizeof(gDsTrafficStats));
+    wpalMemoryZero(&gDsTrafficStats, sizeof(gDsTrafficStats));
 
-  return status;
+    return status;
 }
 
-/* DTS Stop function. 
+/* DTS Stop function.
  * Stop Transport driver, ie DXE, SDIO
  * Parameters:
  * pContext:Cookie that should be passed back to the caller along with the callback.
@@ -992,23 +950,22 @@ wpt_status WDTS_Stop(void *pContext)
  *     FAILURE_XXX  Request was rejected due XXX Reason.
  *
  */
-wpt_status WDTS_Close(void *pContext)
-{
-  void *pDTDriverContext = WDT_GetTransportDriverContext(pContext);
-  WDI_DS_ClientDataType *pClientData = WDI_DS_GetDatapathContext(pContext);
-  wpt_status status = eWLAN_PAL_STATUS_SUCCESS;
+wpt_status WDTS_Close(void *pContext) {
+    void *pDTDriverContext = WDT_GetTransportDriverContext(pContext);
+    WDI_DS_ClientDataType *pClientData = WDI_DS_GetDatapathContext(pContext);
+    wpt_status status = eWLAN_PAL_STATUS_SUCCESS;
 
-  /*Destroy the mem pool for mgmt BD headers*/
-  WDI_DS_MemPoolDestroy(&pClientData->mgmtMemPool);
-  
-  /*Destroy the mem pool for mgmt BD headers*/
-  WDI_DS_MemPoolDestroy(&pClientData->dataMemPool);
-  
-  status =  gTransportDriver.close(pDTDriverContext);
+    /*Destroy the mem pool for mgmt BD headers*/
+    WDI_DS_MemPoolDestroy(&pClientData->mgmtMemPool);
 
-  wpalMemoryFree(pClientData);
+    /*Destroy the mem pool for mgmt BD headers*/
+    WDI_DS_MemPoolDestroy(&pClientData->dataMemPool);
 
-  return status;
+    status =  gTransportDriver.close(pDTDriverContext);
+
+    wpalMemoryFree(pClientData);
+
+    return status;
 }
 
 /* Get free TX data descriptor number from DXE
@@ -1017,8 +974,7 @@ wpt_status WDTS_Close(void *pContext)
  * Return Value: number of free descriptors for TX data channel
  *
  */
-wpt_uint32 WDTS_GetFreeTxDataResNumber(void *pContext)
-{
-  return 
-     gTransportDriver.getFreeTxDataResNumber(WDT_GetTransportDriverContext(pContext));
+wpt_uint32 WDTS_GetFreeTxDataResNumber(void *pContext) {
+    return
+        gTransportDriver.getFreeTxDataResNumber(WDT_GetTransportDriverContext(pContext));
 }

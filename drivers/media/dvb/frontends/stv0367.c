@@ -1279,8 +1279,8 @@ stv0367_ter_signal_type stv0367ter_lock_algo(struct stv0367_state *state) {
         if (stv0367ter_check_syr(state) == FE_TER_NOSYMBOL)
             return FE_TER_NOSYMBOL;
         else { /*
-	if chip locked on wrong mode first try,
-	it must lock correctly second try */
+if chip locked on wrong mode first try,
+it must lock correctly second try */
             mode = stv0367_readbits(state, F367TER_SYR_MODE);
             if (stv0367ter_check_cpamp(state, mode) ==
             FE_TER_NOCPAMP) {

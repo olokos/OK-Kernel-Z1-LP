@@ -41,17 +41,17 @@
 
 #ifdef FEATURE_OEM_DATA_SUPPORT
 
-/** ------------------------------------------------------------------------- * 
-    ------------------------------------------------------------------------- *  
+/** ------------------------------------------------------------------------- *
+    ------------------------------------------------------------------------- *
 
-  
+
     \file oemDataApi.h
-  
+
     Exports and types for the Common OEM DATA REQ/RSP Module interfaces.
-  
+
     Copyright (C) 2010 Qualcomm Inc.
-  
- 
+
+
    ========================================================================== */
 
 #ifndef __OEM_DATA_API_H__
@@ -73,8 +73,7 @@
 *************************************************************************************************************/
 
 /* Structure for defining req sent to the PE */
-typedef struct tagOemDataReq
-{
+typedef struct tagOemDataReq {
     tANI_U8   sessionId;
     tANI_U8   oemDataReq[OEM_DATA_REQ_SIZE];
 } tOemDataReq, tOemDataReqConfig;
@@ -82,15 +81,13 @@ typedef struct tagOemDataReq
 /*************************************************************************************************************
   OEM DATA RESPONSE - DATA STRUCTURES
 *************************************************************************************************************/
-typedef struct tagOemDataRsp
-{
+typedef struct tagOemDataRsp {
     tANI_U8   oemDataRsp[OEM_DATA_RSP_SIZE];
 } tOemDataRsp;
 
 /*************************************************************************************************************/
 
-typedef enum
-{
+typedef enum {
     eOEM_DATA_REQ_SUCCESS=1,
     eOEM_DATA_REQ_FAILURE,
     eOEM_DATA_REQ_INVALID_MODE,
@@ -99,7 +96,7 @@ typedef enum
 /* ---------------------------------------------------------------------------
     \fn oemData_OemDataReqOpen
     \brief This function must be called before any API call to MEAS (OEM DATA REQ/RSP module)
-    \return eHalStatus     
+    \return eHalStatus
   -------------------------------------------------------------------------------*/
 
 eHalStatus oemData_OemDataReqOpen(tHalHandle hHal);
@@ -107,17 +104,17 @@ eHalStatus oemData_OemDataReqOpen(tHalHandle hHal);
 /* ---------------------------------------------------------------------------
     \fn oemData_OemDataReqClose
     \brief This function must be called before closing the csr module
-    \return eHalStatus     
+    \return eHalStatus
   -------------------------------------------------------------------------------*/
 
 eHalStatus oemData_OemDataReqClose(tHalHandle hHal);
 
 /* HDD Callback function for the sme to callback when the oem data rsp is available */
 typedef eHalStatus (*oemData_OemDataReqCompleteCallback)(
-                                           tHalHandle, 
-                                           void* p2, 
-                                           tANI_U32 oemDataReqID, 
-                                           eOemDataReqStatus status);
+    tHalHandle,
+    void* p2,
+    tANI_U32 oemDataReqID,
+    eOemDataReqStatus status);
 
 /* ---------------------------------------------------------------------------
     \fn oemData_OemDataReq
@@ -126,24 +123,24 @@ typedef eHalStatus (*oemData_OemDataReqCompleteCallback)(
     \param pOemDataReqID - pointer to an object to get back the request ID
     \param callback - a callback function that is called upon finish
     \param pContext - a pointer passed in for the callback
-    \return eHalStatus     
+    \return eHalStatus
   -------------------------------------------------------------------------------*/
-eHalStatus oemData_OemDataReq(tHalHandle, tANI_U8, tOemDataReqConfig *, tANI_U32 *pOemDataReqID, 
-                            oemData_OemDataReqCompleteCallback callback, void *pContext);
+eHalStatus oemData_OemDataReq(tHalHandle, tANI_U8, tOemDataReqConfig *, tANI_U32 *pOemDataReqID,
+                              oemData_OemDataReqCompleteCallback callback, void *pContext);
 
 /* ---------------------------------------------------------------------------
     \fn sme_HandleOemDataRsp
     \brief This function processes the oem data response obtained from the PE
     \param pMsg - Pointer to the pSirSmeOemDataRsp
-    \return eHalStatus     
+    \return eHalStatus
   -------------------------------------------------------------------------------*/
 eHalStatus sme_HandleOemDataRsp(tHalHandle hHal, tANI_U8*);
 
 /* ---------------------------------------------------------------------------
     \fn oemData_IsOemDataReqAllowed
-    \brief This function checks if oem data req/rsp can be performed in the 
+    \brief This function checks if oem data req/rsp can be performed in the
            current driver state
-    \return eHalStatus     
+    \return eHalStatus
   -------------------------------------------------------------------------------*/
 eHalStatus oemData_IsOemDataReqAllowed(tHalHandle hHal);
 

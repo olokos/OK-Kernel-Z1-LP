@@ -74,10 +74,9 @@ extern "C" {
   Type declarations
   ------------------------------------------------------------------------*/
 
-typedef struct evt
-{
-   struct completion complete;
-   v_U32_t  cookie;
+typedef struct evt {
+    struct completion complete;
+    v_U32_t  cookie;
 } vos_event_t;
 
 /*-------------------------------------------------------------------------

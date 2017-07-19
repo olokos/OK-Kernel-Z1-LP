@@ -64,8 +64,7 @@
 #define SIR_MAX_NUM_STA_IN_IBSS 16
 #define SIR_MAX_NUM_STA_IN_BSS  256
 
-typedef enum
-{
+typedef enum {
     PHY_SINGLE_CHANNEL_CENTERED     = 0,        // 20MHz IF bandwidth centered on IF carrier
     PHY_DOUBLE_CHANNEL_LOW_PRIMARY  = 1,        // 40MHz IF bandwidth with lower 20MHz supporting the primary channel
     PHY_DOUBLE_CHANNEL_HIGH_PRIMARY = 3,        // 40MHz IF bandwidth with higher 20MHz supporting the primary channel
@@ -79,26 +78,26 @@ typedef enum
     PHY_QUADRUPLE_CHANNEL_20MHZ_HIGH_40MHZ_HIGH = 10,//20/40MHZ offset-HIGH 40/80MHZ offset HIGH
 #endif
     PHY_CHANNEL_BONDING_STATE_MAX   = 11
-}ePhyChanBondState;
+} ePhyChanBondState;
 
 #define SIR_MIN(a,b)   (((a) < (b)) ? (a) : (b))
 #define SIR_MAX(a,b)   (((a) > (b)) ? (a) : (b))
 
 typedef enum {
-   MCC     = 0,
-   P2P     = 1,
-   DOT11AC = 2,
-   SLM_SESSIONIZATION = 3,
-   DOT11AC_OPMODE = 4,
-   SAP32STA = 5,
-   TDLS = 6,
-   P2P_GO_NOA_DECOUPLE_INIT_SCAN = 7,
-   WLANACTIVE_OFFLOAD = 8,
+    MCC     = 0,
+    P2P     = 1,
+    DOT11AC = 2,
+    SLM_SESSIONIZATION = 3,
+    DOT11AC_OPMODE = 4,
+    SAP32STA = 5,
+    TDLS = 6,
+    P2P_GO_NOA_DECOUPLE_INIT_SCAN = 7,
+    WLANACTIVE_OFFLOAD = 8,
 #ifdef WLAN_FEATURE_ROAM_SCAN_OFFLOAD
-   WLAN_ROAM_SCAN_OFFLOAD = 23,
+    WLAN_ROAM_SCAN_OFFLOAD = 23,
 #endif
-   EXTENDED_NSOFFLOAD_SLOT = 24,
-   //MAX_FEATURE_SUPPORTED = 128
+    EXTENDED_NSOFFLOAD_SLOT = 24,
+    //MAX_FEATURE_SUPPORTED = 128
 } placeHolderInCapBitmap;
 
 typedef enum eSriLinkState {
@@ -126,8 +125,7 @@ typedef enum eSriLinkState {
 /// Message queue structure used across Sirius project.
 /// NOTE: this structure should be multiples of a word size (4bytes)
 /// as this is used in tx_queue where it expects to be multiples of 4 bytes.
-typedef struct sSirMsgQ
-{
+typedef struct sSirMsgQ {
     tANI_U16 type;
     /*
      * This field can be used as sequence number/dialog token for matching
@@ -147,8 +145,7 @@ typedef struct sSirMsgQ
 } tSirMsgQ, *tpSirMsgQ;
 
 /// Mailbox Message Structure Define
-typedef struct sSirMbMsg
-{
+typedef struct sSirMbMsg {
     tANI_U16 type;
 
     /**
@@ -168,8 +165,7 @@ typedef struct sSirMbMsg
 } tSirMbMsg, *tpSirMbMsg;
 
 /// Mailbox Message Structure for P2P
-typedef struct sSirMbMsgP2p
-{
+typedef struct sSirMbMsgP2p {
     tANI_U16 type;
 
     /**
