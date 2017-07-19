@@ -441,6 +441,7 @@ obj-$(CONFIG_ARCH_RANDOM) += early_random.o
 obj-$(CONFIG_PERFMAP) += perfmap.o
 
 obj-$(CONFIG_FORCE_FAST_CHARGE) += fastchg.o
+obj-$(CONFIG_MSM_SLEEPER) += msm-sleeper.o
 
 obj-$(CONFIG_RAMDUMP_TAGS) += board-rdtags.o
 obj-$(CONFIG_MSM_LIMITER) += msm_limiter.o
