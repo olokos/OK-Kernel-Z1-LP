@@ -48,7 +48,7 @@ module_param_named(adreno_idler_idleworkload, idleworkload, ulong, 0664);
    Adreno idler will more actively try to ramp down the frequency
    if this is set to a lower value. */
 static unsigned int idlewait = 20;
- +module_param_named(adreno_idler_idlewait, idlewait, uint, 0664);
+module_param_named(adreno_idler_idlewait, idlewait, uint, 0664);
 
 /* Taken from ondemand */
 static unsigned int downdifferential = 20;
