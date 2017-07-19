@@ -52,10 +52,10 @@ module_param_named(adreno_idler_idlewait, idlewait, uint, 0664);
 
 /* Taken from ondemand */
 static unsigned int downdifferential = 20;
-module_param_named(adreno_idler_downdifferential, downdifferential, uint, 0664);;
+module_param_named(adreno_idler_downdifferential, downdifferential, uint, 0664);
 
 /* Master switch to activate the whole routine */
-static bool adreno_idler_active = 1;
+static bool adreno_idler_active = true;
 module_param_named(adreno_idler_active, adreno_idler_active, bool, 0664);
 
 static unsigned int idlecount = 0;
@@ -82,7 +82,6 @@ int adreno_idler(struct devfreq_dev_status stats, struct devfreq *devfreq,
 			return 1;
 		}
 	} else {
-
 		idlecount = 0;
 		/* Do not return 1 here and allow rest of the algorithm to
 		   figure out the appropriate frequency for current workload.
