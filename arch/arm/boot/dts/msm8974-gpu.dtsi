@@ -93,6 +93,12 @@
 				qcom,bus-freq = <0>;
 				qcom,io-fraction = <0>;
 			};
+            qcom,gpu-pwrlevel@4 {
+				reg = <3>;
+				qcom,gpu-freq = <27000000>;
+				qcom,bus-freq = <0>;
+				qcom,io-fraction = <0>;
+			};
 		};
 
 		qcom,dcvs-core-info {
