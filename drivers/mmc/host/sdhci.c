@@ -2605,6 +2605,17 @@ static void sdhci_data_irq(struct sdhci_host *host, u32 intmask) {
                 return;
         }
 
+		/*
+		 * The "data complete" interrupt is possible to happen a bit
+		 * later than CRC error and data end bit error interrupts
+		 * separately for single block transfer or the last block of
+		 * multiblock transfer. For this case, we DO NOT report the
+		 * weird data interrupt event.
+		 */
+		if ((intmask & SDHCI_INT_DATA_END) &&
+		    (host->mrq && host->mrq->data && host->mrq->data->error))
+			return;
+
         pr_err("%s: Got data interrupt 0x%08x even "
                "though no data operation was in progress.\n",
                mmc_hostname(host->mmc), (unsigned)intmask);
