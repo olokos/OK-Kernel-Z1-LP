@@ -14,12 +14,12 @@
 #define __MACH_QDSP6_V2_SNDDEV_HDMI_H
 
 struct snddev_hdmi_data {
-    u32 capability;		/* RX or TX */
-    const char *name;
-    u32 copp_id;		/* audpp routing */
-    u32 acdb_id;		/* Audio Cal purpose */
-    u8 channel_mode;
-    u32 default_sample_rate;
-    u32 on_apps;
+	u32 capability;		/* RX or TX */
+	const char *name;
+	u32 copp_id;		/* audpp routing */
+	u32 acdb_id;		/* Audio Cal purpose */
+	u8 channel_mode;
+	u32 default_sample_rate;
+	u32 on_apps;
 };
 #endif

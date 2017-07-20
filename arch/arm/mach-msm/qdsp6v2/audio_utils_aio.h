@@ -71,37 +71,37 @@
 })
 
 struct timestamp {
-    unsigned long lowpart;
-    unsigned long highpart;
+	unsigned long lowpart;
+	unsigned long highpart;
 } __packed;
 
 struct meta_out_dsp {
-    u32 offset_to_frame;
-    u32 frame_size;
-    u32 encoded_pcm_samples;
-    u32 msw_ts;
-    u32 lsw_ts;
-    u32 nflags;
+	u32 offset_to_frame;
+	u32 frame_size;
+	u32 encoded_pcm_samples;
+	u32 msw_ts;
+	u32 lsw_ts;
+	u32 nflags;
 } __packed;
 
 struct dec_meta_in {
-    unsigned char reserved[18];
-    unsigned short offset;
-    struct timestamp ntimestamp;
-    unsigned int nflags;
+	unsigned char reserved[18];
+	unsigned short offset;
+	struct timestamp ntimestamp;
+	unsigned int nflags;
 } __packed;
 
 struct dec_meta_out {
-    unsigned int reserved[7];
-    unsigned int num_of_frames;
-    struct meta_out_dsp meta_out_dsp[];
+	unsigned int reserved[7];
+	unsigned int num_of_frames;
+	struct meta_out_dsp meta_out_dsp[];
 } __packed;
 
 /* General meta field to store meta info
 locally */
 union  meta_data {
-    struct dec_meta_out meta_out;
-    struct dec_meta_in meta_in;
+	struct dec_meta_out meta_out;
+	struct dec_meta_in meta_in;
 } __packed;
 
 #define PCM_BUF_COUNT           (2)
@@ -113,100 +113,100 @@ union  meta_data {
 #define FRAME_SIZE	((4*1536) + sizeof(struct dec_meta_in))
 
 struct audio_aio_ion_region {
-    struct list_head list;
-    struct ion_handle *handle;
-    int fd;
-    void *vaddr;
-    unsigned long paddr;
-    unsigned long kvaddr;
-    unsigned long len;
-    unsigned ref_cnt;
+	struct list_head list;
+	struct ion_handle *handle;
+	int fd;
+	void *vaddr;
+	unsigned long paddr;
+	unsigned long kvaddr;
+	unsigned long len;
+	unsigned ref_cnt;
 };
 
 struct audio_aio_event {
-    struct list_head list;
-    int event_type;
-    union msm_audio_event_payload payload;
+	struct list_head list;
+	int event_type;
+	union msm_audio_event_payload payload;
 };
 
 struct audio_aio_buffer_node {
-    struct list_head list;
-    struct msm_audio_aio_buf buf;
-    unsigned long paddr;
-    unsigned long token;
-    void            *kvaddr;
-    union meta_data meta_info;
+	struct list_head list;
+	struct msm_audio_aio_buf buf;
+	unsigned long paddr;
+	unsigned long token;
+	void            *kvaddr;
+	union meta_data meta_info;
 };
 
 struct q6audio_aio;
 struct audio_aio_drv_operations {
-    void (*out_flush) (struct q6audio_aio *);
-    void (*in_flush) (struct q6audio_aio *);
+	void (*out_flush) (struct q6audio_aio *);
+	void (*in_flush) (struct q6audio_aio *);
 };
 
 struct q6audio_aio {
-    atomic_t in_bytes;
-    atomic_t in_samples;
+	atomic_t in_bytes;
+	atomic_t in_samples;
 
-    struct msm_audio_stream_config str_cfg;
-    struct msm_audio_buf_cfg        buf_cfg;
-    struct msm_audio_config pcm_cfg;
-    void *codec_cfg;
+	struct msm_audio_stream_config str_cfg;
+	struct msm_audio_buf_cfg        buf_cfg;
+	struct msm_audio_config pcm_cfg;
+	void *codec_cfg;
 
-    struct audio_client *ac;
+	struct audio_client *ac;
 
-    struct mutex lock;
-    struct mutex read_lock;
-    struct mutex write_lock;
-    struct mutex get_event_lock;
-    wait_queue_head_t cmd_wait;
-    wait_queue_head_t write_wait;
-    wait_queue_head_t event_wait;
-    spinlock_t dsp_lock;
-    spinlock_t event_queue_lock;
+	struct mutex lock;
+	struct mutex read_lock;
+	struct mutex write_lock;
+	struct mutex get_event_lock;
+	wait_queue_head_t cmd_wait;
+	wait_queue_head_t write_wait;
+	wait_queue_head_t event_wait;
+	spinlock_t dsp_lock;
+	spinlock_t event_queue_lock;
 
 #ifdef CONFIG_DEBUG_FS
-    struct dentry *dentry;
+	struct dentry *dentry;
 #endif
-    struct list_head out_queue;     /* queue to retain output buffers */
-    struct list_head in_queue;      /* queue to retain input buffers */
-    struct list_head free_event_queue;
-    struct list_head event_queue;
-    struct list_head ion_region_queue;     /* protected by lock */
-    struct ion_client *client;
-    struct audio_aio_drv_operations drv_ops;
-    union msm_audio_event_payload eos_write_payload;
-    uint32_t device_events;
-    uint16_t volume;
-    uint32_t drv_status;
-    int event_abort;
-    int eos_rsp;
-    int eos_flag;
-    int opened;
-    int enabled;
-    int stopped;
-    int feedback;
-    int rflush;             /* Read  flush */
-    int wflush;             /* Write flush */
-    long (*codec_ioctl)(struct file *, unsigned int, unsigned long);
+	struct list_head out_queue;     /* queue to retain output buffers */
+	struct list_head in_queue;      /* queue to retain input buffers */
+	struct list_head free_event_queue;
+	struct list_head event_queue;
+	struct list_head ion_region_queue;     /* protected by lock */
+	struct ion_client *client;
+	struct audio_aio_drv_operations drv_ops;
+	union msm_audio_event_payload eos_write_payload;
+	uint32_t device_events;
+	uint16_t volume;
+	uint32_t drv_status;
+	int event_abort;
+	int eos_rsp;
+	int eos_flag;
+	int opened;
+	int enabled;
+	int stopped;
+	int feedback;
+	int rflush;             /* Read  flush */
+	int wflush;             /* Write flush */
+	long (*codec_ioctl)(struct file *, unsigned int, unsigned long);
 };
 
 void audio_aio_async_write_ack(struct q6audio_aio *audio, uint32_t token,
-                               uint32_t *payload);
+				uint32_t *payload);
 
 void audio_aio_async_read_ack(struct q6audio_aio *audio, uint32_t token,
-                              uint32_t *payload);
+			uint32_t *payload);
 
 int insert_eos_buf(struct q6audio_aio *audio,
-                   struct audio_aio_buffer_node *buf_node);
+		struct audio_aio_buffer_node *buf_node);
 
 void extract_meta_out_info(struct q6audio_aio *audio,
-                           struct audio_aio_buffer_node *buf_node, int dir);
+		struct audio_aio_buffer_node *buf_node, int dir);
 
 int audio_aio_open(struct q6audio_aio *audio, struct file *file);
 int audio_aio_enable(struct q6audio_aio  *audio);
 void audio_aio_post_event(struct q6audio_aio *audio, int type,
-                          union msm_audio_event_payload payload);
+		union msm_audio_event_payload payload);
 int audio_aio_release(struct inode *inode, struct file *file);
 long audio_aio_ioctl(struct file *file, unsigned int cmd, unsigned long arg);
 int audio_aio_fsync(struct file *file, loff_t start, loff_t end, int datasync);
@@ -217,5 +217,5 @@ int enable_volume_ramp(struct q6audio_aio *audio);
 #ifdef CONFIG_DEBUG_FS
 ssize_t audio_aio_debug_open(struct inode *inode, struct file *file);
 ssize_t audio_aio_debug_read(struct file *file, char __user *buf,
-                             size_t count, loff_t *ppos);
+			size_t count, loff_t *ppos);
 #endif

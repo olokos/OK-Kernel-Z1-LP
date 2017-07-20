@@ -27,17 +27,17 @@
 #endif
 
 void q6_audio_cb(uint32_t opcode, uint32_t token,
-                 uint32_t *payload, void *priv);
+		uint32_t *payload, void *priv);
 
 void audio_aio_cb(uint32_t opcode, uint32_t token,
-                  uint32_t *payload,  void *audio);
+			uint32_t *payload,  void *audio);
 
 
 /* For Encoders */
 void q6asm_in_cb(uint32_t opcode, uint32_t token,
-                 uint32_t *payload, void *priv);
+		uint32_t *payload, void *priv);
 
 void  audio_in_get_dsp_frames(void *audio,
-                              uint32_t token,	uint32_t *payload);
+		uint32_t token,	uint32_t *payload);
 
 #endif /*__Q6_AUDIO_COMMON_H__*/

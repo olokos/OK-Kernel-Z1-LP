@@ -22,31 +22,31 @@
 #define AUDIO_FLAG_INCALL_MIXED	2
 
 struct audio_buffer {
-    dma_addr_t phys;
-    void *data;
-    uint32_t size;
-    uint32_t used;	/* 1 = CPU is waiting for DSP to consume this buf */
-    uint32_t actual_size; /* actual number of bytes read by DSP */
+	dma_addr_t phys;
+	void *data;
+	uint32_t size;
+	uint32_t used;	/* 1 = CPU is waiting for DSP to consume this buf */
+	uint32_t actual_size; /* actual number of bytes read by DSP */
 };
 
 struct audio_client {
-    struct audio_buffer buf[2];
-    int cpu_buf;	/* next buffer the CPU will touch */
-    int dsp_buf;	/* next buffer the DSP will touch */
-    int running;
-    int session;
+	struct audio_buffer buf[2];
+	int cpu_buf;	/* next buffer the CPU will touch */
+	int dsp_buf;	/* next buffer the DSP will touch */
+	int running;
+	int session;
 
-    int state;
+	int state;
 
-    wait_queue_head_t wait;
-    wait_queue_head_t cmd_wait;
+	wait_queue_head_t wait;
+	wait_queue_head_t cmd_wait;
 
-    struct dal_client *client;
+	struct dal_client *client;
 
-    int cb_status;
-    uint32_t flags;
-    void *apr;
-    int ref_count;
+	int cb_status;
+	uint32_t flags;
+	void *apr;
+	int ref_count;
 };
 
 #endif

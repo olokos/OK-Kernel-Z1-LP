@@ -21,8 +21,8 @@
 #define MAX_EVENT_TYPE_NUM 1
 
 bool usfcdev_register(
-    uint16_t event_type_ind,
-    bool (*match_cb)(uint16_t, struct input_dev *dev));
+	uint16_t event_type_ind,
+	bool (*match_cb)(uint16_t, struct input_dev *dev));
 void usfcdev_unregister(uint16_t event_type_ind);
 bool usfcdev_set_filter(uint16_t event_type_ind, bool filter);
 #endif /* __USFCDEV_H__ */
