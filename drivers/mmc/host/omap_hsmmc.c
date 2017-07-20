@@ -2030,6 +2030,7 @@ static int omap_hsmmc_suspend(struct device *dev) {
             if (ret)
                 dev_dbg(dev, "Unmask interrupt failed\n");
         }
+        ret = -EBUSY;
         goto err;
     }
 
