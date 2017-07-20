@@ -14,22 +14,24 @@
 
 /* per-MMC-reader structure */
 struct cb710_mmc_reader {
-    struct tasklet_struct finish_req_tasklet;
-    struct mmc_request *mrq;
-    spinlock_t irq_lock;
-    unsigned char last_power_mode;
+	struct tasklet_struct finish_req_tasklet;
+	struct mmc_request *mrq;
+	spinlock_t irq_lock;
+	unsigned char last_power_mode;
 };
 
 /* some device struct walking */
 
-static inline struct mmc_host *cb710_slot_to_mmc(struct cb710_slot *slot) {
-    return dev_get_drvdata(&slot->pdev.dev);
+static inline struct mmc_host *cb710_slot_to_mmc(struct cb710_slot *slot)
+{
+	return dev_get_drvdata(&slot->pdev.dev);
 }
 
-static inline struct cb710_slot *cb710_mmc_to_slot(struct mmc_host *mmc) {
-    struct platform_device *pdev = container_of(mmc_dev(mmc),
-                                   struct platform_device, dev);
-    return cb710_pdev_to_slot(pdev);
+static inline struct cb710_slot *cb710_mmc_to_slot(struct mmc_host *mmc)
+{
+	struct platform_device *pdev = container_of(mmc_dev(mmc),
+		struct platform_device, dev);
+	return cb710_pdev_to_slot(pdev);
 }
 
 /* registers (this might be all wrong ;) */

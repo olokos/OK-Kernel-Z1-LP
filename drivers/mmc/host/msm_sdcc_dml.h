@@ -93,17 +93,11 @@ void msmsdcc_dml_reset(struct msmsdcc_host *host);
  */
 void msmsdcc_dml_exit(struct msmsdcc_host *host);
 #else
-static inline int msmsdcc_dml_init(struct msmsdcc_host *host) {
-    return 0;
-}
+static inline int msmsdcc_dml_init(struct msmsdcc_host *host) { return 0; }
 static inline int msmsdcc_dml_start_xfer(struct msmsdcc_host *host,
-        struct mmc_data *data) {
-    return 0;
-}
+				struct mmc_data *data) { return 0; }
 static inline bool msmsdcc_is_dml_busy(
-    struct msmsdcc_host *host) {
-    return 0;
-}
+				struct msmsdcc_host *host) { return 0; }
 static inline void msmsdcc_dml_reset(struct msmsdcc_host *host) { }
 static inline void msmsdcc_dml_exit(struct msmsdcc_host *host) { }
 #endif /* CONFIG_MMC_MSM_SPS_SUPPORT */

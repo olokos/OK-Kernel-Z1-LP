@@ -236,6 +236,18 @@
 
 /* 60-FB reserved */
 
+#define SDHCI_PRESET_FOR_SDR12 0x66
+#define SDHCI_PRESET_FOR_SDR25 0x68
+#define SDHCI_PRESET_FOR_SDR50 0x6A
+#define SDHCI_PRESET_FOR_SDR104        0x6C
+#define SDHCI_PRESET_FOR_DDR50 0x6E
+#define SDHCI_PRESET_DRV_MASK  0xC000
+#define SDHCI_PRESET_DRV_SHIFT  14
+#define SDHCI_PRESET_CLKGEN_SEL_MASK   0x400
+#define SDHCI_PRESET_CLKGEN_SEL_SHIFT	10
+#define SDHCI_PRESET_SDCLK_FREQ_MASK   0x3FF
+#define SDHCI_PRESET_SDCLK_FREQ_SHIFT	0
+
 #define SDHCI_SLOT_INT_STATUS	0xFC
 
 #define SDHCI_HOST_VERSION	0xFE
@@ -262,122 +274,139 @@
 
 struct sdhci_ops {
 #ifdef CONFIG_MMC_SDHCI_IO_ACCESSORS
-    u32		(*read_l)(struct sdhci_host *host, int reg);
-    u16		(*read_w)(struct sdhci_host *host, int reg);
-    u8		(*read_b)(struct sdhci_host *host, int reg);
-    void		(*write_l)(struct sdhci_host *host, u32 val, int reg);
-    void		(*write_w)(struct sdhci_host *host, u16 val, int reg);
-    void		(*write_b)(struct sdhci_host *host, u8 val, int reg);
+	u32		(*read_l)(struct sdhci_host *host, int reg);
+	u16		(*read_w)(struct sdhci_host *host, int reg);
+	u8		(*read_b)(struct sdhci_host *host, int reg);
+	void		(*write_l)(struct sdhci_host *host, u32 val, int reg);
+	void		(*write_w)(struct sdhci_host *host, u16 val, int reg);
+	void		(*write_b)(struct sdhci_host *host, u8 val, int reg);
 #endif
 
-    void	(*set_clock)(struct sdhci_host *host, unsigned int clock);
+	void	(*set_clock)(struct sdhci_host *host, unsigned int clock);
 
-    int		(*enable_dma)(struct sdhci_host *host);
-    unsigned int	(*get_max_clock)(struct sdhci_host *host);
-    unsigned int	(*get_min_clock)(struct sdhci_host *host);
-    unsigned int	(*get_timeout_clock)(struct sdhci_host *host);
-    int		(*platform_8bit_width)(struct sdhci_host *host,
-                                   int width);
-    void (*platform_send_init_74_clocks)(struct sdhci_host *host,
-                                         u8 power_mode);
-    unsigned int    (*get_ro)(struct sdhci_host *host);
-    void	(*platform_reset_enter)(struct sdhci_host *host, u8 mask);
-    void	(*platform_reset_exit)(struct sdhci_host *host, u8 mask);
-    int	(*set_uhs_signaling)(struct sdhci_host *host, unsigned int uhs);
-    void	(*hw_reset)(struct sdhci_host *host);
-    void	(*platform_suspend)(struct sdhci_host *host);
-    void	(*platform_resume)(struct sdhci_host *host);
-    void	(*check_power_status)(struct sdhci_host *host, u32 req_type);
+	int		(*enable_dma)(struct sdhci_host *host);
+	unsigned int	(*get_max_clock)(struct sdhci_host *host);
+	unsigned int	(*get_min_clock)(struct sdhci_host *host);
+	unsigned int	(*get_timeout_clock)(struct sdhci_host *host);
+	int		(*platform_8bit_width)(struct sdhci_host *host,
+					       int width);
+	void (*platform_send_init_74_clocks)(struct sdhci_host *host,
+					     u8 power_mode);
+	unsigned int    (*get_ro)(struct sdhci_host *host);
+	void	(*platform_reset_enter)(struct sdhci_host *host, u8 mask);
+	void	(*platform_reset_exit)(struct sdhci_host *host, u8 mask);
+	int	(*set_uhs_signaling)(struct sdhci_host *host, unsigned int uhs);
+	void	(*hw_reset)(struct sdhci_host *host);
+	void	(*platform_suspend)(struct sdhci_host *host);
+	void	(*platform_resume)(struct sdhci_host *host);
+	void	(*check_power_status)(struct sdhci_host *host, u32 req_type);
 #define REQ_BUS_OFF	(1 << 0)
 #define REQ_BUS_ON	(1 << 1)
 #define REQ_IO_LOW	(1 << 2)
 #define REQ_IO_HIGH	(1 << 3)
-    int	(*execute_tuning)(struct sdhci_host *host, u32 opcode);
-    void	(*toggle_cdr)(struct sdhci_host *host, bool enable);
-    unsigned int	(*get_max_segments)(void);
-    void	(*platform_bus_voting)(struct sdhci_host *host, u32 enable);
-    void    (*disable_data_xfer)(struct sdhci_host *host);
-    int	(*enable_controller_clock)(struct sdhci_host *host);
+	int	(*execute_tuning)(struct sdhci_host *host, u32 opcode);
+	void	(*toggle_cdr)(struct sdhci_host *host, bool enable);
+	unsigned int	(*get_max_segments)(void);
+	void	(*platform_bus_voting)(struct sdhci_host *host, u32 enable);
+	void    (*disable_data_xfer)(struct sdhci_host *host);
+	void	(*dump_vendor_regs)(struct sdhci_host *host);
+	int	(*enable_controller_clock)(struct sdhci_host *host);
+	int	(*config_auto_tuning_cmd)(struct sdhci_host *host,
+					  bool enable,
+					  u32 type);
 };
 
 #ifdef CONFIG_MMC_SDHCI_IO_ACCESSORS
 
-static inline void sdhci_writel(struct sdhci_host *host, u32 val, int reg) {
-    if (unlikely(host->ops->write_l))
-        host->ops->write_l(host, val, reg);
-    else
-        writel(val, host->ioaddr + reg);
+static inline void sdhci_writel(struct sdhci_host *host, u32 val, int reg)
+{
+	if (unlikely(host->ops->write_l))
+		host->ops->write_l(host, val, reg);
+	else
+		writel(val, host->ioaddr + reg);
 }
 
-static inline void sdhci_writew(struct sdhci_host *host, u16 val, int reg) {
-    if (unlikely(host->ops->write_w))
-        host->ops->write_w(host, val, reg);
-    else
-        writew(val, host->ioaddr + reg);
+static inline void sdhci_writew(struct sdhci_host *host, u16 val, int reg)
+{
+	if (unlikely(host->ops->write_w))
+		host->ops->write_w(host, val, reg);
+	else
+		writew(val, host->ioaddr + reg);
 }
 
-static inline void sdhci_writeb(struct sdhci_host *host, u8 val, int reg) {
-    if (unlikely(host->ops->write_b))
-        host->ops->write_b(host, val, reg);
-    else
-        writeb(val, host->ioaddr + reg);
+static inline void sdhci_writeb(struct sdhci_host *host, u8 val, int reg)
+{
+	if (unlikely(host->ops->write_b))
+		host->ops->write_b(host, val, reg);
+	else
+		writeb(val, host->ioaddr + reg);
 }
 
-static inline u32 sdhci_readl(struct sdhci_host *host, int reg) {
-    if (unlikely(host->ops->read_l))
-        return host->ops->read_l(host, reg);
-    else
-        return readl(host->ioaddr + reg);
+static inline u32 sdhci_readl(struct sdhci_host *host, int reg)
+{
+	if (unlikely(host->ops->read_l))
+		return host->ops->read_l(host, reg);
+	else
+		return readl(host->ioaddr + reg);
 }
 
-static inline u16 sdhci_readw(struct sdhci_host *host, int reg) {
-    if (unlikely(host->ops->read_w))
-        return host->ops->read_w(host, reg);
-    else
-        return readw(host->ioaddr + reg);
+static inline u16 sdhci_readw(struct sdhci_host *host, int reg)
+{
+	if (unlikely(host->ops->read_w))
+		return host->ops->read_w(host, reg);
+	else
+		return readw(host->ioaddr + reg);
 }
 
-static inline u8 sdhci_readb(struct sdhci_host *host, int reg) {
-    if (unlikely(host->ops->read_b))
-        return host->ops->read_b(host, reg);
-    else
-        return readb(host->ioaddr + reg);
+static inline u8 sdhci_readb(struct sdhci_host *host, int reg)
+{
+	if (unlikely(host->ops->read_b))
+		return host->ops->read_b(host, reg);
+	else
+		return readb(host->ioaddr + reg);
 }
 
 #else
 
-static inline void sdhci_writel(struct sdhci_host *host, u32 val, int reg) {
-    writel(val, host->ioaddr + reg);
+static inline void sdhci_writel(struct sdhci_host *host, u32 val, int reg)
+{
+	writel(val, host->ioaddr + reg);
 }
 
-static inline void sdhci_writew(struct sdhci_host *host, u16 val, int reg) {
-    writew(val, host->ioaddr + reg);
+static inline void sdhci_writew(struct sdhci_host *host, u16 val, int reg)
+{
+	writew(val, host->ioaddr + reg);
 }
 
-static inline void sdhci_writeb(struct sdhci_host *host, u8 val, int reg) {
-    writeb(val, host->ioaddr + reg);
+static inline void sdhci_writeb(struct sdhci_host *host, u8 val, int reg)
+{
+	writeb(val, host->ioaddr + reg);
 }
 
-static inline u32 sdhci_readl(struct sdhci_host *host, int reg) {
-    return readl(host->ioaddr + reg);
+static inline u32 sdhci_readl(struct sdhci_host *host, int reg)
+{
+	return readl(host->ioaddr + reg);
 }
 
-static inline u16 sdhci_readw(struct sdhci_host *host, int reg) {
-    return readw(host->ioaddr + reg);
+static inline u16 sdhci_readw(struct sdhci_host *host, int reg)
+{
+	return readw(host->ioaddr + reg);
 }
 
-static inline u8 sdhci_readb(struct sdhci_host *host, int reg) {
-    return readb(host->ioaddr + reg);
+static inline u8 sdhci_readb(struct sdhci_host *host, int reg)
+{
+	return readb(host->ioaddr + reg);
 }
 
 #endif /* CONFIG_MMC_SDHCI_IO_ACCESSORS */
 
 extern struct sdhci_host *sdhci_alloc_host(struct device *dev,
-        size_t priv_size);
+	size_t priv_size);
 extern void sdhci_free_host(struct sdhci_host *host);
 
-static inline void *sdhci_priv(struct sdhci_host *host) {
-    return (void *)host->private;
+static inline void *sdhci_priv(struct sdhci_host *host)
+{
+	return (void *)host->private;
 }
 
 extern void sdhci_card_detect(struct sdhci_host *host);
@@ -395,4 +424,5 @@ extern int sdhci_runtime_suspend_host(struct sdhci_host *host);
 extern int sdhci_runtime_resume_host(struct sdhci_host *host);
 #endif
 
+void sdhci_cfg_irq(struct sdhci_host *host, bool enable, bool sync);
 #endif /* __SDHCI_HW_H */

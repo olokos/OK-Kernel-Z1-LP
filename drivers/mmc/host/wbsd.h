@@ -137,48 +137,49 @@
 
 #define WBSD_DMA_SIZE		65536
 
-struct wbsd_host {
-    struct mmc_host*	mmc;		/* MMC structure */
+struct wbsd_host
+{
+	struct mmc_host*	mmc;		/* MMC structure */
 
-    spinlock_t		lock;		/* Mutex */
+	spinlock_t		lock;		/* Mutex */
 
-    int			flags;		/* Driver states */
+	int			flags;		/* Driver states */
 
 #define WBSD_FCARD_PRESENT	(1<<0)		/* Card is present */
 #define WBSD_FIGNORE_DETECT	(1<<1)		/* Ignore card detection */
 
-    struct mmc_request*	mrq;		/* Current request */
+	struct mmc_request*	mrq;		/* Current request */
 
-    u8			isr;		/* Accumulated ISR */
+	u8			isr;		/* Accumulated ISR */
 
-    struct scatterlist*	cur_sg;		/* Current SG entry */
-    unsigned int		num_sg;		/* Number of entries left */
+	struct scatterlist*	cur_sg;		/* Current SG entry */
+	unsigned int		num_sg;		/* Number of entries left */
 
-    unsigned int		offset;		/* Offset into current entry */
-    unsigned int		remain;		/* Data left in curren entry */
+	unsigned int		offset;		/* Offset into current entry */
+	unsigned int		remain;		/* Data left in curren entry */
 
-    char*			dma_buffer;	/* ISA DMA buffer */
-    dma_addr_t		dma_addr;	/* Physical address for same */
+	char*			dma_buffer;	/* ISA DMA buffer */
+	dma_addr_t		dma_addr;	/* Physical address for same */
 
-    int			firsterr;	/* See fifo functions */
+	int			firsterr;	/* See fifo functions */
 
-    u8			clk;		/* Current clock speed */
-    unsigned char		bus_width;	/* Current bus width */
+	u8			clk;		/* Current clock speed */
+	unsigned char		bus_width;	/* Current bus width */
 
-    int			config;		/* Config port */
-    u8			unlock_code;	/* Code to unlock config */
+	int			config;		/* Config port */
+	u8			unlock_code;	/* Code to unlock config */
 
-    int			chip_id;	/* ID of controller */
+	int			chip_id;	/* ID of controller */
 
-    int			base;		/* I/O port base */
-    int			irq;		/* Interrupt */
-    int			dma;		/* DMA channel */
+	int			base;		/* I/O port base */
+	int			irq;		/* Interrupt */
+	int			dma;		/* DMA channel */
 
-    struct tasklet_struct	card_tasklet;	/* Tasklet structures */
-    struct tasklet_struct	fifo_tasklet;
-    struct tasklet_struct	crc_tasklet;
-    struct tasklet_struct	timeout_tasklet;
-    struct tasklet_struct	finish_tasklet;
+	struct tasklet_struct	card_tasklet;	/* Tasklet structures */
+	struct tasklet_struct	fifo_tasklet;
+	struct tasklet_struct	crc_tasklet;
+	struct tasklet_struct	timeout_tasklet;
+	struct tasklet_struct	finish_tasklet;
 
-    struct timer_list	ignore_timer;	/* Ignore detection timer */
+	struct timer_list	ignore_timer;	/* Ignore detection timer */
 };

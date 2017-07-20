@@ -157,51 +157,51 @@ struct variant_data;
 struct dma_chan;
 
 struct mmci_host_next {
-    struct dma_async_tx_descriptor	*dma_desc;
-    struct dma_chan			*dma_chan;
-    s32				cookie;
+	struct dma_async_tx_descriptor	*dma_desc;
+	struct dma_chan			*dma_chan;
+	s32				cookie;
 };
 
 struct mmci_host {
-    phys_addr_t		phybase;
-    void __iomem		*base;
-    struct mmc_request	*mrq;
-    struct mmc_command	*cmd;
-    struct mmc_data		*data;
-    struct mmc_host		*mmc;
-    struct clk		*clk;
-    int			gpio_cd;
-    int			gpio_wp;
-    int			gpio_cd_irq;
-    bool			singleirq;
+	phys_addr_t		phybase;
+	void __iomem		*base;
+	struct mmc_request	*mrq;
+	struct mmc_command	*cmd;
+	struct mmc_data		*data;
+	struct mmc_host		*mmc;
+	struct clk		*clk;
+	int			gpio_cd;
+	int			gpio_wp;
+	int			gpio_cd_irq;
+	bool			singleirq;
 
-    spinlock_t		lock;
+	spinlock_t		lock;
 
-    unsigned int		mclk;
-    unsigned int		cclk;
-    u32			pwr_reg;
-    u32			clk_reg;
-    struct mmci_platform_data *plat;
-    struct variant_data	*variant;
+	unsigned int		mclk;
+	unsigned int		cclk;
+	u32			pwr_reg;
+	u32			clk_reg;
+	struct mmci_platform_data *plat;
+	struct variant_data	*variant;
 
-    u8			hw_designer;
-    u8			hw_revision:4;
+	u8			hw_designer;
+	u8			hw_revision:4;
 
-    struct timer_list	timer;
-    unsigned int		oldstat;
+	struct timer_list	timer;
+	unsigned int		oldstat;
 
-    /* pio stuff */
-    struct sg_mapping_iter	sg_miter;
-    unsigned int		size;
-    struct regulator	*vcc;
+	/* pio stuff */
+	struct sg_mapping_iter	sg_miter;
+	unsigned int		size;
+	struct regulator	*vcc;
 
 #ifdef CONFIG_DMA_ENGINE
-    /* DMA stuff */
-    struct dma_chan		*dma_current;
-    struct dma_chan		*dma_rx_channel;
-    struct dma_chan		*dma_tx_channel;
-    struct dma_async_tx_descriptor	*dma_desc_current;
-    struct mmci_host_next	next_data;
+	/* DMA stuff */
+	struct dma_chan		*dma_current;
+	struct dma_chan		*dma_rx_channel;
+	struct dma_chan		*dma_tx_channel;
+	struct dma_async_tx_descriptor	*dma_desc_current;
+	struct mmci_host_next	next_data;
 
 #define dma_inprogress(host)	((host)->dma_current)
 #else

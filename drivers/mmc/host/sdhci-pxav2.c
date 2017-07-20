@@ -48,175 +48,180 @@
 #define MMC_CARD		0x1000
 #define MMC_WIDTH		0x0100
 
-static void pxav2_set_private_registers(struct sdhci_host *host, u8 mask) {
-    struct platform_device *pdev = to_platform_device(mmc_dev(host->mmc));
-    struct sdhci_pxa_platdata *pdata = pdev->dev.platform_data;
+static void pxav2_set_private_registers(struct sdhci_host *host, u8 mask)
+{
+	struct platform_device *pdev = to_platform_device(mmc_dev(host->mmc));
+	struct sdhci_pxa_platdata *pdata = pdev->dev.platform_data;
 
-    if (mask == SDHCI_RESET_ALL) {
-        u16 tmp = 0;
+	if (mask == SDHCI_RESET_ALL) {
+		u16 tmp = 0;
 
-        /*
-         * tune timing of read data/command when crc error happen
-         * no performance impact
-         */
-        if (pdata && pdata->clk_delay_sel == 1) {
-            tmp = readw(host->ioaddr + SD_CLOCK_BURST_SIZE_SETUP);
+		/*
+		 * tune timing of read data/command when crc error happen
+		 * no performance impact
+		 */
+		if (pdata && pdata->clk_delay_sel == 1) {
+			tmp = readw(host->ioaddr + SD_CLOCK_BURST_SIZE_SETUP);
 
-            tmp &= ~(SDCLK_DELAY_MASK << SDCLK_DELAY_SHIFT);
-            tmp |= (pdata->clk_delay_cycles & SDCLK_DELAY_MASK)
-                   << SDCLK_DELAY_SHIFT;
-            tmp &= ~(SDCLK_SEL_MASK << SDCLK_SEL_SHIFT);
-            tmp |= (1 & SDCLK_SEL_MASK) << SDCLK_SEL_SHIFT;
+			tmp &= ~(SDCLK_DELAY_MASK << SDCLK_DELAY_SHIFT);
+			tmp |= (pdata->clk_delay_cycles & SDCLK_DELAY_MASK)
+				<< SDCLK_DELAY_SHIFT;
+			tmp &= ~(SDCLK_SEL_MASK << SDCLK_SEL_SHIFT);
+			tmp |= (1 & SDCLK_SEL_MASK) << SDCLK_SEL_SHIFT;
 
-            writew(tmp, host->ioaddr + SD_CLOCK_BURST_SIZE_SETUP);
-        }
+			writew(tmp, host->ioaddr + SD_CLOCK_BURST_SIZE_SETUP);
+		}
 
-        if (pdata && (pdata->flags & PXA_FLAG_ENABLE_CLOCK_GATING)) {
-            tmp = readw(host->ioaddr + SD_FIFO_PARAM);
-            tmp &= ~CLK_GATE_SETTING_BITS;
-            writew(tmp, host->ioaddr + SD_FIFO_PARAM);
-        } else {
-            tmp = readw(host->ioaddr + SD_FIFO_PARAM);
-            tmp &= ~CLK_GATE_SETTING_BITS;
-            tmp |= CLK_GATE_SETTING_BITS;
-            writew(tmp, host->ioaddr + SD_FIFO_PARAM);
-        }
-    }
+		if (pdata && (pdata->flags & PXA_FLAG_ENABLE_CLOCK_GATING)) {
+			tmp = readw(host->ioaddr + SD_FIFO_PARAM);
+			tmp &= ~CLK_GATE_SETTING_BITS;
+			writew(tmp, host->ioaddr + SD_FIFO_PARAM);
+		} else {
+			tmp = readw(host->ioaddr + SD_FIFO_PARAM);
+			tmp &= ~CLK_GATE_SETTING_BITS;
+			tmp |= CLK_GATE_SETTING_BITS;
+			writew(tmp, host->ioaddr + SD_FIFO_PARAM);
+		}
+	}
 }
 
-static int pxav2_mmc_set_width(struct sdhci_host *host, int width) {
-    u8 ctrl;
-    u16 tmp;
+static int pxav2_mmc_set_width(struct sdhci_host *host, int width)
+{
+	u8 ctrl;
+	u16 tmp;
 
-    ctrl = readb(host->ioaddr + SDHCI_HOST_CONTROL);
-    tmp = readw(host->ioaddr + SD_CE_ATA_2);
-    if (width == MMC_BUS_WIDTH_8) {
-        ctrl &= ~SDHCI_CTRL_4BITBUS;
-        tmp |= MMC_CARD | MMC_WIDTH;
-    } else {
-        tmp &= ~(MMC_CARD | MMC_WIDTH);
-        if (width == MMC_BUS_WIDTH_4)
-            ctrl |= SDHCI_CTRL_4BITBUS;
-        else
-            ctrl &= ~SDHCI_CTRL_4BITBUS;
-    }
-    writew(tmp, host->ioaddr + SD_CE_ATA_2);
-    writeb(ctrl, host->ioaddr + SDHCI_HOST_CONTROL);
+	ctrl = readb(host->ioaddr + SDHCI_HOST_CONTROL);
+	tmp = readw(host->ioaddr + SD_CE_ATA_2);
+	if (width == MMC_BUS_WIDTH_8) {
+		ctrl &= ~SDHCI_CTRL_4BITBUS;
+		tmp |= MMC_CARD | MMC_WIDTH;
+	} else {
+		tmp &= ~(MMC_CARD | MMC_WIDTH);
+		if (width == MMC_BUS_WIDTH_4)
+			ctrl |= SDHCI_CTRL_4BITBUS;
+		else
+			ctrl &= ~SDHCI_CTRL_4BITBUS;
+	}
+	writew(tmp, host->ioaddr + SD_CE_ATA_2);
+	writeb(ctrl, host->ioaddr + SDHCI_HOST_CONTROL);
 
-    return 0;
+	return 0;
 }
 
-static u32 pxav2_get_max_clock(struct sdhci_host *host) {
-    struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+static u32 pxav2_get_max_clock(struct sdhci_host *host)
+{
+	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
 
-    return clk_get_rate(pltfm_host->clk);
+	return clk_get_rate(pltfm_host->clk);
 }
 
 static struct sdhci_ops pxav2_sdhci_ops = {
-    .get_max_clock = pxav2_get_max_clock,
-    .platform_reset_exit = pxav2_set_private_registers,
-    .platform_8bit_width = pxav2_mmc_set_width,
+	.get_max_clock = pxav2_get_max_clock,
+	.platform_reset_exit = pxav2_set_private_registers,
+	.platform_8bit_width = pxav2_mmc_set_width,
 };
 
-static int __devinit sdhci_pxav2_probe(struct platform_device *pdev) {
-    struct sdhci_pltfm_host *pltfm_host;
-    struct sdhci_pxa_platdata *pdata = pdev->dev.platform_data;
-    struct device *dev = &pdev->dev;
-    struct sdhci_host *host = NULL;
-    struct sdhci_pxa *pxa = NULL;
-    int ret;
-    struct clk *clk;
+static int __devinit sdhci_pxav2_probe(struct platform_device *pdev)
+{
+	struct sdhci_pltfm_host *pltfm_host;
+	struct sdhci_pxa_platdata *pdata = pdev->dev.platform_data;
+	struct device *dev = &pdev->dev;
+	struct sdhci_host *host = NULL;
+	struct sdhci_pxa *pxa = NULL;
+	int ret;
+	struct clk *clk;
 
-    pxa = kzalloc(sizeof(struct sdhci_pxa), GFP_KERNEL);
-    if (!pxa)
-        return -ENOMEM;
+	pxa = kzalloc(sizeof(struct sdhci_pxa), GFP_KERNEL);
+	if (!pxa)
+		return -ENOMEM;
 
-    host = sdhci_pltfm_init(pdev, NULL);
-    if (IS_ERR(host)) {
-        kfree(pxa);
-        return PTR_ERR(host);
-    }
-    pltfm_host = sdhci_priv(host);
-    pltfm_host->priv = pxa;
+	host = sdhci_pltfm_init(pdev, NULL);
+	if (IS_ERR(host)) {
+		kfree(pxa);
+		return PTR_ERR(host);
+	}
+	pltfm_host = sdhci_priv(host);
+	pltfm_host->priv = pxa;
 
-    clk = clk_get(dev, "PXA-SDHCLK");
-    if (IS_ERR(clk)) {
-        dev_err(dev, "failed to get io clock\n");
-        ret = PTR_ERR(clk);
-        goto err_clk_get;
-    }
-    pltfm_host->clk = clk;
-    clk_enable(clk);
+	clk = clk_get(dev, "PXA-SDHCLK");
+	if (IS_ERR(clk)) {
+		dev_err(dev, "failed to get io clock\n");
+		ret = PTR_ERR(clk);
+		goto err_clk_get;
+	}
+	pltfm_host->clk = clk;
+	clk_enable(clk);
 
-    host->quirks = SDHCI_QUIRK_BROKEN_ADMA
-                   | SDHCI_QUIRK_BROKEN_TIMEOUT_VAL
-                   | SDHCI_QUIRK_CAP_CLOCK_BASE_BROKEN;
+	host->quirks = SDHCI_QUIRK_BROKEN_ADMA
+		| SDHCI_QUIRK_BROKEN_TIMEOUT_VAL
+		| SDHCI_QUIRK_CAP_CLOCK_BASE_BROKEN;
 
-    if (pdata) {
-        if (pdata->flags & PXA_FLAG_CARD_PERMANENT) {
-            /* on-chip device */
-            host->quirks |= SDHCI_QUIRK_BROKEN_CARD_DETECTION;
-            host->mmc->caps |= MMC_CAP_NONREMOVABLE;
-        }
+	if (pdata) {
+		if (pdata->flags & PXA_FLAG_CARD_PERMANENT) {
+			/* on-chip device */
+			host->quirks |= SDHCI_QUIRK_BROKEN_CARD_DETECTION;
+			host->mmc->caps |= MMC_CAP_NONREMOVABLE;
+		}
 
-        /* If slot design supports 8 bit data, indicate this to MMC. */
-        if (pdata->flags & PXA_FLAG_SD_8_BIT_CAPABLE_SLOT)
-            host->mmc->caps |= MMC_CAP_8_BIT_DATA;
+		/* If slot design supports 8 bit data, indicate this to MMC. */
+		if (pdata->flags & PXA_FLAG_SD_8_BIT_CAPABLE_SLOT)
+			host->mmc->caps |= MMC_CAP_8_BIT_DATA;
 
-        if (pdata->quirks)
-            host->quirks |= pdata->quirks;
-        if (pdata->host_caps)
-            host->mmc->caps |= pdata->host_caps;
-        if (pdata->pm_caps)
-            host->mmc->pm_caps |= pdata->pm_caps;
-    }
+		if (pdata->quirks)
+			host->quirks |= pdata->quirks;
+		if (pdata->host_caps)
+			host->mmc->caps |= pdata->host_caps;
+		if (pdata->pm_caps)
+			host->mmc->pm_caps |= pdata->pm_caps;
+	}
 
-    host->ops = &pxav2_sdhci_ops;
+	host->ops = &pxav2_sdhci_ops;
 
-    ret = sdhci_add_host(host);
-    if (ret) {
-        dev_err(&pdev->dev, "failed to add host\n");
-        goto err_add_host;
-    }
+	ret = sdhci_add_host(host);
+	if (ret) {
+		dev_err(&pdev->dev, "failed to add host\n");
+		goto err_add_host;
+	}
 
-    platform_set_drvdata(pdev, host);
+	platform_set_drvdata(pdev, host);
 
-    return 0;
+	return 0;
 
 err_add_host:
-    clk_disable(clk);
-    clk_put(clk);
+	clk_disable(clk);
+	clk_put(clk);
 err_clk_get:
-    sdhci_pltfm_free(pdev);
-    kfree(pxa);
-    return ret;
+	sdhci_pltfm_free(pdev);
+	kfree(pxa);
+	return ret;
 }
 
-static int __devexit sdhci_pxav2_remove(struct platform_device *pdev) {
-    struct sdhci_host *host = platform_get_drvdata(pdev);
-    struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-    struct sdhci_pxa *pxa = pltfm_host->priv;
+static int __devexit sdhci_pxav2_remove(struct platform_device *pdev)
+{
+	struct sdhci_host *host = platform_get_drvdata(pdev);
+	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+	struct sdhci_pxa *pxa = pltfm_host->priv;
 
-    sdhci_remove_host(host, 1);
+	sdhci_remove_host(host, 1);
 
-    clk_disable(pltfm_host->clk);
-    clk_put(pltfm_host->clk);
-    sdhci_pltfm_free(pdev);
-    kfree(pxa);
+	clk_disable(pltfm_host->clk);
+	clk_put(pltfm_host->clk);
+	sdhci_pltfm_free(pdev);
+	kfree(pxa);
 
-    platform_set_drvdata(pdev, NULL);
+	platform_set_drvdata(pdev, NULL);
 
-    return 0;
+	return 0;
 }
 
 static struct platform_driver sdhci_pxav2_driver = {
-    .driver		= {
-        .name	= "sdhci-pxav2",
-        .owner	= THIS_MODULE,
-        .pm	= SDHCI_PLTFM_PMOPS,
-    },
-    .probe		= sdhci_pxav2_probe,
-    .remove		= __devexit_p(sdhci_pxav2_remove),
+	.driver		= {
+		.name	= "sdhci-pxav2",
+		.owner	= THIS_MODULE,
+		.pm	= SDHCI_PLTFM_PMOPS,
+	},
+	.probe		= sdhci_pxav2_probe,
+	.remove		= __devexit_p(sdhci_pxav2_remove),
 };
 
 module_platform_driver(sdhci_pxav2_driver);
