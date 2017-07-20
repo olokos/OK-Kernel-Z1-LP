@@ -77,6 +77,7 @@ struct msm_command_ack {
     struct list_head list;
     struct msm_queue_head command_q;
     struct completion wait_complete;
+    wait_queue_head_t wait;
     int stream_id;
 };
 
