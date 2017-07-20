@@ -9,7 +9,7 @@ name_of_your_kernel="OK-Kernel-V8.2"
 defconfig="rhine_lp_honami_moj_defconfig"
 cpu_jobs="12"
 kerneltype="zImage"
-cmdline="androidboot.hardware=qcom user_debug=31 maxcpus=4 msm_rtb.filter=0x3F ehci-hcd.park=3 msm_rtb.enable=0 lpj=192598 dwc3.maximum_speed=high dwc3_msm.prop_chg_detect=Y androidboot.selinux=permissive"
+cmdline="androidboot.hardware=qcom user_debug=31 maxcpus=4 msm_rtb.filter=0x3F ehci-hcd.park=3 msm_rtb.enable=0 lpj=192598 dwc3.maximum_speed=high dwc3_msm.prop_chg_detect=Y androidboot.selinux=permissive audit=0"
 ps=2048
 base=0x00000000
 ramdisk_offset=0x02000000
