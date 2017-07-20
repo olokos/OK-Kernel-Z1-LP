@@ -3776,7 +3776,7 @@ void mmc_init_context_info(struct mmc_host *host) {
 static int __init mmc_init(void) {
     int ret;
 
-    workqueue = alloc_ordered_workqueue("kmmcd", 0);
+    workqueue = alloc_ordered_workqueue("kmmcd", WQ_FREEZABLE);
     if (!workqueue)
         return -ENOMEM;
 
