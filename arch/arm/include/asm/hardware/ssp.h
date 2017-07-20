@@ -11,8 +11,8 @@
 #define SSP_H
 
 struct ssp_state {
-    unsigned int	cr0;
-    unsigned int	cr1;
+	unsigned int	cr0;
+	unsigned int	cr1;
 };
 
 int ssp_write_word(u16 data);

@@ -169,14 +169,14 @@ extern struct bus_type locomo_bus_type;
 #define LOCOMO_DEVID_SPI	6
 
 struct locomo_dev {
-    struct device	dev;
-    unsigned int	devid;
-    unsigned int	irq[1];
+	struct device	dev;
+	unsigned int	devid;
+	unsigned int	irq[1];
 
-    void		*mapbase;
-    unsigned long	length;
+	void		*mapbase;
+	unsigned long	length;
 
-    u64		dma_mask;
+	u64		dma_mask;
 };
 
 #define LOCOMO_DEV(_d)	container_of((_d), struct locomo_dev, dev)
@@ -185,12 +185,12 @@ struct locomo_dev {
 #define locomo_set_drvdata(d,p)	dev_set_drvdata(&(d)->dev, p)
 
 struct locomo_driver {
-    struct device_driver	drv;
-    unsigned int		devid;
-    int (*probe)(struct locomo_dev *);
-    int (*remove)(struct locomo_dev *);
-    int (*suspend)(struct locomo_dev *, pm_message_t);
-    int (*resume)(struct locomo_dev *);
+	struct device_driver	drv;
+	unsigned int		devid;
+	int (*probe)(struct locomo_dev *);
+	int (*remove)(struct locomo_dev *);
+	int (*suspend)(struct locomo_dev *, pm_message_t);
+	int (*resume)(struct locomo_dev *);
 };
 
 #define LOCOMO_DRV(_d)	container_of((_d), struct locomo_driver, drv)
@@ -215,7 +215,7 @@ void locomo_m62332_senddata(struct locomo_dev *ldev, unsigned int dac_data, int 
 void locomo_frontlight_set(struct locomo_dev *dev, int duty, int vr, int bpwf);
 
 struct locomo_platform_data {
-    int	irq_base;	/* IRQ base for cascaded on-chip IRQs */
+	int	irq_base;	/* IRQ base for cascaded on-chip IRQs */
 };
 
 #endif
