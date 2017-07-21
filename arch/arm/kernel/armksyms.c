@@ -35,6 +35,8 @@ extern void __ucmpdi2(void);
 extern void __udivsi3(void);
 extern void __umodsi3(void);
 extern void __do_div64(void);
+extern void __bswapsi2(void);
+extern void __bswapdi2(void);
 
 extern void __aeabi_idiv(void);
 extern void __aeabi_idivmod(void);
@@ -48,16 +50,19 @@ extern void __aeabi_ulcmp(void);
 
 extern void fpundefinstr(void);
 
-/* platform dependent support */
+void mmioset(void *, unsigned int, size_t);
+void mmiocpy(void *, const void *, size_t);
+
+	/* platform dependent support */
 EXPORT_SYMBOL(arm_delay_ops);
 
-/* networking */
+	/* networking */
 EXPORT_SYMBOL(csum_partial);
 EXPORT_SYMBOL(csum_partial_copy_from_user);
 EXPORT_SYMBOL(csum_partial_copy_nocheck);
 EXPORT_SYMBOL(__csum_ipv6_magic);
 
-/* io */
+	/* io */
 #ifndef __raw_readsb
 EXPORT_SYMBOL(__raw_readsb);
 #endif
@@ -77,7 +82,7 @@ EXPORT_SYMBOL(__raw_writesw);
 EXPORT_SYMBOL(__raw_writesl);
 #endif
 
-/* string / mem functions */
+	/* string / mem functions */
 EXPORT_SYMBOL(strchr);
 EXPORT_SYMBOL(strrchr);
 EXPORT_SYMBOL(memset);
@@ -86,20 +91,27 @@ EXPORT_SYMBOL(memmove);
 EXPORT_SYMBOL(memchr);
 EXPORT_SYMBOL(__memzero);
 
-/* user mem (segment) */
-EXPORT_SYMBOL(__strnlen_user);
-EXPORT_SYMBOL(__strncpy_from_user);
+EXPORT_SYMBOL(mmioset);
+EXPORT_SYMBOL(mmiocpy);
 
 #ifdef CONFIG_MMU
 EXPORT_SYMBOL(copy_page);
 
-EXPORT_SYMBOL(__copy_from_user);
-EXPORT_SYMBOL(__copy_to_user);
-EXPORT_SYMBOL(__clear_user);
+EXPORT_SYMBOL(arm_copy_from_user);
+EXPORT_SYMBOL(arm_copy_to_user);
+EXPORT_SYMBOL(arm_clear_user);
 
 EXPORT_SYMBOL(__get_user_1);
 EXPORT_SYMBOL(__get_user_2);
 EXPORT_SYMBOL(__get_user_4);
+EXPORT_SYMBOL(__get_user_8);
+
+#ifdef __ARMEB__
+EXPORT_SYMBOL(__get_user_64t_1);
+EXPORT_SYMBOL(__get_user_64t_2);
+EXPORT_SYMBOL(__get_user_64t_4);
+EXPORT_SYMBOL(__get_user_32t_8);
+#endif
 
 EXPORT_SYMBOL(__put_user_1);
 EXPORT_SYMBOL(__put_user_2);
@@ -107,7 +119,7 @@ EXPORT_SYMBOL(__put_user_4);
 EXPORT_SYMBOL(__put_user_8);
 #endif
 
-/* gcc lib functions */
+	/* gcc lib functions */
 EXPORT_SYMBOL(__ashldi3);
 EXPORT_SYMBOL(__ashrdi3);
 EXPORT_SYMBOL(__divsi3);
@@ -118,6 +130,8 @@ EXPORT_SYMBOL(__ucmpdi2);
 EXPORT_SYMBOL(__udivsi3);
 EXPORT_SYMBOL(__umodsi3);
 EXPORT_SYMBOL(__do_div64);
+EXPORT_SYMBOL(__bswapsi2);
+EXPORT_SYMBOL(__bswapdi2);
 
 #ifdef CONFIG_AEABI
 EXPORT_SYMBOL(__aeabi_idiv);
@@ -131,7 +145,7 @@ EXPORT_SYMBOL(__aeabi_uidivmod);
 EXPORT_SYMBOL(__aeabi_ulcmp);
 #endif
 
-/* bitops */
+	/* bitops */
 EXPORT_SYMBOL(_set_bit);
 EXPORT_SYMBOL(_test_and_set_bit);
 EXPORT_SYMBOL(_clear_bit);
@@ -158,5 +172,6 @@ EXPORT_SYMBOL(__gnu_mcount_nc);
 #endif
 
 #ifdef CONFIG_ARM_PATCH_PHYS_VIRT
-EXPORT_SYMBOL(__pv_phys_offset);
+EXPORT_SYMBOL(__pv_phys_pfn_offset);
+EXPORT_SYMBOL(__pv_offset);
 #endif

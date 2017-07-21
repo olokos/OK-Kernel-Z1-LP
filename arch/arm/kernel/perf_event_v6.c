@@ -31,32 +31,40 @@
  */
 
 #if defined(CONFIG_CPU_V6) || defined(CONFIG_CPU_V6K)
+
+#include <asm/cputype.h>
+#include <asm/irq_regs.h>
+
+#include <linux/of.h>
+#include <linux/perf/arm_pmu.h>
+#include <linux/platform_device.h>
+
 enum armv6_perf_types {
-    ARMV6_PERFCTR_ICACHE_MISS	    = 0x0,
-    ARMV6_PERFCTR_IBUF_STALL	    = 0x1,
-    ARMV6_PERFCTR_DDEP_STALL	    = 0x2,
-    ARMV6_PERFCTR_ITLB_MISS		    = 0x3,
-    ARMV6_PERFCTR_DTLB_MISS		    = 0x4,
-    ARMV6_PERFCTR_BR_EXEC		    = 0x5,
-    ARMV6_PERFCTR_BR_MISPREDICT	    = 0x6,
-    ARMV6_PERFCTR_INSTR_EXEC	    = 0x7,
-    ARMV6_PERFCTR_DCACHE_HIT	    = 0x9,
-    ARMV6_PERFCTR_DCACHE_ACCESS	    = 0xA,
-    ARMV6_PERFCTR_DCACHE_MISS	    = 0xB,
-    ARMV6_PERFCTR_DCACHE_WBACK	    = 0xC,
-    ARMV6_PERFCTR_SW_PC_CHANGE	    = 0xD,
-    ARMV6_PERFCTR_MAIN_TLB_MISS	    = 0xF,
-    ARMV6_PERFCTR_EXPL_D_ACCESS	    = 0x10,
-    ARMV6_PERFCTR_LSU_FULL_STALL	    = 0x11,
-    ARMV6_PERFCTR_WBUF_DRAINED	    = 0x12,
-    ARMV6_PERFCTR_CPU_CYCLES	    = 0xFF,
-    ARMV6_PERFCTR_NOP		    = 0x20,
+	ARMV6_PERFCTR_ICACHE_MISS	    = 0x0,
+	ARMV6_PERFCTR_IBUF_STALL	    = 0x1,
+	ARMV6_PERFCTR_DDEP_STALL	    = 0x2,
+	ARMV6_PERFCTR_ITLB_MISS		    = 0x3,
+	ARMV6_PERFCTR_DTLB_MISS		    = 0x4,
+	ARMV6_PERFCTR_BR_EXEC		    = 0x5,
+	ARMV6_PERFCTR_BR_MISPREDICT	    = 0x6,
+	ARMV6_PERFCTR_INSTR_EXEC	    = 0x7,
+	ARMV6_PERFCTR_DCACHE_HIT	    = 0x9,
+	ARMV6_PERFCTR_DCACHE_ACCESS	    = 0xA,
+	ARMV6_PERFCTR_DCACHE_MISS	    = 0xB,
+	ARMV6_PERFCTR_DCACHE_WBACK	    = 0xC,
+	ARMV6_PERFCTR_SW_PC_CHANGE	    = 0xD,
+	ARMV6_PERFCTR_MAIN_TLB_MISS	    = 0xF,
+	ARMV6_PERFCTR_EXPL_D_ACCESS	    = 0x10,
+	ARMV6_PERFCTR_LSU_FULL_STALL	    = 0x11,
+	ARMV6_PERFCTR_WBUF_DRAINED	    = 0x12,
+	ARMV6_PERFCTR_CPU_CYCLES	    = 0xFF,
+	ARMV6_PERFCTR_NOP		    = 0x20,
 };
 
 enum armv6_counters {
-    ARMV6_CYCLE_COUNTER = 0,
-    ARMV6_COUNTER0,
-    ARMV6_COUNTER1,
+	ARMV6_CYCLE_COUNTER = 0,
+	ARMV6_COUNTER0,
+	ARMV6_COUNTER1,
 };
 
 /*
@@ -65,153 +73,66 @@ enum armv6_counters {
  * accesses/misses in hardware.
  */
 static const unsigned armv6_perf_map[PERF_COUNT_HW_MAX] = {
-    [PERF_COUNT_HW_CPU_CYCLES]		= ARMV6_PERFCTR_CPU_CYCLES,
-    [PERF_COUNT_HW_INSTRUCTIONS]		= ARMV6_PERFCTR_INSTR_EXEC,
-    [PERF_COUNT_HW_CACHE_REFERENCES]	= HW_OP_UNSUPPORTED,
-    [PERF_COUNT_HW_CACHE_MISSES]		= HW_OP_UNSUPPORTED,
-    [PERF_COUNT_HW_BRANCH_INSTRUCTIONS]	= ARMV6_PERFCTR_BR_EXEC,
-    [PERF_COUNT_HW_BRANCH_MISSES]		= ARMV6_PERFCTR_BR_MISPREDICT,
-    [PERF_COUNT_HW_BUS_CYCLES]		= HW_OP_UNSUPPORTED,
-    [PERF_COUNT_HW_STALLED_CYCLES_FRONTEND]	= ARMV6_PERFCTR_IBUF_STALL,
-    [PERF_COUNT_HW_STALLED_CYCLES_BACKEND]	= ARMV6_PERFCTR_LSU_FULL_STALL,
+	PERF_MAP_ALL_UNSUPPORTED,
+	[PERF_COUNT_HW_CPU_CYCLES]		= ARMV6_PERFCTR_CPU_CYCLES,
+	[PERF_COUNT_HW_INSTRUCTIONS]		= ARMV6_PERFCTR_INSTR_EXEC,
+	[PERF_COUNT_HW_BRANCH_INSTRUCTIONS]	= ARMV6_PERFCTR_BR_EXEC,
+	[PERF_COUNT_HW_BRANCH_MISSES]		= ARMV6_PERFCTR_BR_MISPREDICT,
+	[PERF_COUNT_HW_STALLED_CYCLES_FRONTEND]	= ARMV6_PERFCTR_IBUF_STALL,
+	[PERF_COUNT_HW_STALLED_CYCLES_BACKEND]	= ARMV6_PERFCTR_LSU_FULL_STALL,
 };
 
-static unsigned armv6_perf_cache_map[PERF_COUNT_HW_CACHE_MAX]
-[PERF_COUNT_HW_CACHE_OP_MAX]
-[PERF_COUNT_HW_CACHE_RESULT_MAX] = {
-    [C(L1D)] = {
-        /*
-         * The performance counters don't differentiate between read
-         * and write accesses/misses so this isn't strictly correct,
-         * but it's the best we can do. Writes and reads get
-         * combined.
-         */
-        [C(OP_READ)] = {
-            [C(RESULT_ACCESS)]	= ARMV6_PERFCTR_DCACHE_ACCESS,
-            [C(RESULT_MISS)]	= ARMV6_PERFCTR_DCACHE_MISS,
-        },
-        [C(OP_WRITE)] = {
-            [C(RESULT_ACCESS)]	= ARMV6_PERFCTR_DCACHE_ACCESS,
-            [C(RESULT_MISS)]	= ARMV6_PERFCTR_DCACHE_MISS,
-        },
-        [C(OP_PREFETCH)] = {
-            [C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]	= CACHE_OP_UNSUPPORTED,
-        },
-    },
-    [C(L1I)] = {
-        [C(OP_READ)] = {
-            [C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]	= ARMV6_PERFCTR_ICACHE_MISS,
-        },
-        [C(OP_WRITE)] = {
-            [C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]	= ARMV6_PERFCTR_ICACHE_MISS,
-        },
-        [C(OP_PREFETCH)] = {
-            [C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]	= CACHE_OP_UNSUPPORTED,
-        },
-    },
-    [C(LL)] = {
-        [C(OP_READ)] = {
-            [C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]	= CACHE_OP_UNSUPPORTED,
-        },
-        [C(OP_WRITE)] = {
-            [C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]	= CACHE_OP_UNSUPPORTED,
-        },
-        [C(OP_PREFETCH)] = {
-            [C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]	= CACHE_OP_UNSUPPORTED,
-        },
-    },
-    [C(DTLB)] = {
-        /*
-         * The ARM performance counters can count micro DTLB misses,
-         * micro ITLB misses and main TLB misses. There isn't an event
-         * for TLB misses, so use the micro misses here and if users
-         * want the main TLB misses they can use a raw counter.
-         */
-        [C(OP_READ)] = {
-            [C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]	= ARMV6_PERFCTR_DTLB_MISS,
-        },
-        [C(OP_WRITE)] = {
-            [C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]	= ARMV6_PERFCTR_DTLB_MISS,
-        },
-        [C(OP_PREFETCH)] = {
-            [C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]	= CACHE_OP_UNSUPPORTED,
-        },
-    },
-    [C(ITLB)] = {
-        [C(OP_READ)] = {
-            [C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]	= ARMV6_PERFCTR_ITLB_MISS,
-        },
-        [C(OP_WRITE)] = {
-            [C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]	= ARMV6_PERFCTR_ITLB_MISS,
-        },
-        [C(OP_PREFETCH)] = {
-            [C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]	= CACHE_OP_UNSUPPORTED,
-        },
-    },
-    [C(BPU)] = {
-        [C(OP_READ)] = {
-            [C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]	= CACHE_OP_UNSUPPORTED,
-        },
-        [C(OP_WRITE)] = {
-            [C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]	= CACHE_OP_UNSUPPORTED,
-        },
-        [C(OP_PREFETCH)] = {
-            [C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]	= CACHE_OP_UNSUPPORTED,
-        },
-    },
-    [C(NODE)] = {
-        [C(OP_READ)] = {
-            [C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]	= CACHE_OP_UNSUPPORTED,
-        },
-        [C(OP_WRITE)] = {
-            [C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]	= CACHE_OP_UNSUPPORTED,
-        },
-        [C(OP_PREFETCH)] = {
-            [C(RESULT_ACCESS)]	= CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]	= CACHE_OP_UNSUPPORTED,
-        },
-    },
+static const unsigned armv6_perf_cache_map[PERF_COUNT_HW_CACHE_MAX]
+					  [PERF_COUNT_HW_CACHE_OP_MAX]
+					  [PERF_COUNT_HW_CACHE_RESULT_MAX] = {
+	PERF_CACHE_MAP_ALL_UNSUPPORTED,
+
+	/*
+	 * The performance counters don't differentiate between read and write
+	 * accesses/misses so this isn't strictly correct, but it's the best we
+	 * can do. Writes and reads get combined.
+	 */
+	[C(L1D)][C(OP_READ)][C(RESULT_ACCESS)]	= ARMV6_PERFCTR_DCACHE_ACCESS,
+	[C(L1D)][C(OP_READ)][C(RESULT_MISS)]	= ARMV6_PERFCTR_DCACHE_MISS,
+	[C(L1D)][C(OP_WRITE)][C(RESULT_ACCESS)]	= ARMV6_PERFCTR_DCACHE_ACCESS,
+	[C(L1D)][C(OP_WRITE)][C(RESULT_MISS)]	= ARMV6_PERFCTR_DCACHE_MISS,
+
+	[C(L1I)][C(OP_READ)][C(RESULT_MISS)]	= ARMV6_PERFCTR_ICACHE_MISS,
+
+	/*
+	 * The ARM performance counters can count micro DTLB misses, micro ITLB
+	 * misses and main TLB misses. There isn't an event for TLB misses, so
+	 * use the micro misses here and if users want the main TLB misses they
+	 * can use a raw counter.
+	 */
+	[C(DTLB)][C(OP_READ)][C(RESULT_MISS)]	= ARMV6_PERFCTR_DTLB_MISS,
+	[C(DTLB)][C(OP_WRITE)][C(RESULT_MISS)]	= ARMV6_PERFCTR_DTLB_MISS,
+
+	[C(ITLB)][C(OP_READ)][C(RESULT_MISS)]	= ARMV6_PERFCTR_ITLB_MISS,
+	[C(ITLB)][C(OP_WRITE)][C(RESULT_MISS)]	= ARMV6_PERFCTR_ITLB_MISS,
 };
 
 enum armv6mpcore_perf_types {
-    ARMV6MPCORE_PERFCTR_ICACHE_MISS	    = 0x0,
-    ARMV6MPCORE_PERFCTR_IBUF_STALL	    = 0x1,
-    ARMV6MPCORE_PERFCTR_DDEP_STALL	    = 0x2,
-    ARMV6MPCORE_PERFCTR_ITLB_MISS	    = 0x3,
-    ARMV6MPCORE_PERFCTR_DTLB_MISS	    = 0x4,
-    ARMV6MPCORE_PERFCTR_BR_EXEC	    = 0x5,
-    ARMV6MPCORE_PERFCTR_BR_NOTPREDICT   = 0x6,
-    ARMV6MPCORE_PERFCTR_BR_MISPREDICT   = 0x7,
-    ARMV6MPCORE_PERFCTR_INSTR_EXEC	    = 0x8,
-    ARMV6MPCORE_PERFCTR_DCACHE_RDACCESS = 0xA,
-    ARMV6MPCORE_PERFCTR_DCACHE_RDMISS   = 0xB,
-    ARMV6MPCORE_PERFCTR_DCACHE_WRACCESS = 0xC,
-    ARMV6MPCORE_PERFCTR_DCACHE_WRMISS   = 0xD,
-    ARMV6MPCORE_PERFCTR_DCACHE_EVICTION = 0xE,
-    ARMV6MPCORE_PERFCTR_SW_PC_CHANGE    = 0xF,
-    ARMV6MPCORE_PERFCTR_MAIN_TLB_MISS   = 0x10,
-    ARMV6MPCORE_PERFCTR_EXPL_MEM_ACCESS = 0x11,
-    ARMV6MPCORE_PERFCTR_LSU_FULL_STALL  = 0x12,
-    ARMV6MPCORE_PERFCTR_WBUF_DRAINED    = 0x13,
-    ARMV6MPCORE_PERFCTR_CPU_CYCLES	    = 0xFF,
+	ARMV6MPCORE_PERFCTR_ICACHE_MISS	    = 0x0,
+	ARMV6MPCORE_PERFCTR_IBUF_STALL	    = 0x1,
+	ARMV6MPCORE_PERFCTR_DDEP_STALL	    = 0x2,
+	ARMV6MPCORE_PERFCTR_ITLB_MISS	    = 0x3,
+	ARMV6MPCORE_PERFCTR_DTLB_MISS	    = 0x4,
+	ARMV6MPCORE_PERFCTR_BR_EXEC	    = 0x5,
+	ARMV6MPCORE_PERFCTR_BR_NOTPREDICT   = 0x6,
+	ARMV6MPCORE_PERFCTR_BR_MISPREDICT   = 0x7,
+	ARMV6MPCORE_PERFCTR_INSTR_EXEC	    = 0x8,
+	ARMV6MPCORE_PERFCTR_DCACHE_RDACCESS = 0xA,
+	ARMV6MPCORE_PERFCTR_DCACHE_RDMISS   = 0xB,
+	ARMV6MPCORE_PERFCTR_DCACHE_WRACCESS = 0xC,
+	ARMV6MPCORE_PERFCTR_DCACHE_WRMISS   = 0xD,
+	ARMV6MPCORE_PERFCTR_DCACHE_EVICTION = 0xE,
+	ARMV6MPCORE_PERFCTR_SW_PC_CHANGE    = 0xF,
+	ARMV6MPCORE_PERFCTR_MAIN_TLB_MISS   = 0x10,
+	ARMV6MPCORE_PERFCTR_EXPL_MEM_ACCESS = 0x11,
+	ARMV6MPCORE_PERFCTR_LSU_FULL_STALL  = 0x12,
+	ARMV6MPCORE_PERFCTR_WBUF_DRAINED    = 0x13,
+	ARMV6MPCORE_PERFCTR_CPU_CYCLES	    = 0xFF,
 };
 
 /*
@@ -220,140 +141,52 @@ enum armv6mpcore_perf_types {
  * accesses/misses in hardware.
  */
 static const unsigned armv6mpcore_perf_map[PERF_COUNT_HW_MAX] = {
-    [PERF_COUNT_HW_CPU_CYCLES]		= ARMV6MPCORE_PERFCTR_CPU_CYCLES,
-    [PERF_COUNT_HW_INSTRUCTIONS]		= ARMV6MPCORE_PERFCTR_INSTR_EXEC,
-    [PERF_COUNT_HW_CACHE_REFERENCES]	= HW_OP_UNSUPPORTED,
-    [PERF_COUNT_HW_CACHE_MISSES]		= HW_OP_UNSUPPORTED,
-    [PERF_COUNT_HW_BRANCH_INSTRUCTIONS]	= ARMV6MPCORE_PERFCTR_BR_EXEC,
-    [PERF_COUNT_HW_BRANCH_MISSES]		= ARMV6MPCORE_PERFCTR_BR_MISPREDICT,
-    [PERF_COUNT_HW_BUS_CYCLES]		= HW_OP_UNSUPPORTED,
-    [PERF_COUNT_HW_STALLED_CYCLES_FRONTEND]	= ARMV6MPCORE_PERFCTR_IBUF_STALL,
-    [PERF_COUNT_HW_STALLED_CYCLES_BACKEND]	= ARMV6MPCORE_PERFCTR_LSU_FULL_STALL,
+	PERF_MAP_ALL_UNSUPPORTED,
+	[PERF_COUNT_HW_CPU_CYCLES]		= ARMV6MPCORE_PERFCTR_CPU_CYCLES,
+	[PERF_COUNT_HW_INSTRUCTIONS]		= ARMV6MPCORE_PERFCTR_INSTR_EXEC,
+	[PERF_COUNT_HW_BRANCH_INSTRUCTIONS]	= ARMV6MPCORE_PERFCTR_BR_EXEC,
+	[PERF_COUNT_HW_BRANCH_MISSES]		= ARMV6MPCORE_PERFCTR_BR_MISPREDICT,
+	[PERF_COUNT_HW_STALLED_CYCLES_FRONTEND]	= ARMV6MPCORE_PERFCTR_IBUF_STALL,
+	[PERF_COUNT_HW_STALLED_CYCLES_BACKEND]	= ARMV6MPCORE_PERFCTR_LSU_FULL_STALL,
 };
 
-static unsigned armv6mpcore_perf_cache_map[PERF_COUNT_HW_CACHE_MAX]
-[PERF_COUNT_HW_CACHE_OP_MAX]
-[PERF_COUNT_HW_CACHE_RESULT_MAX] = {
-    [C(L1D)] = {
-        [C(OP_READ)] = {
-            [C(RESULT_ACCESS)]  =
-            ARMV6MPCORE_PERFCTR_DCACHE_RDACCESS,
-            [C(RESULT_MISS)]    =
-            ARMV6MPCORE_PERFCTR_DCACHE_RDMISS,
-        },
-        [C(OP_WRITE)] = {
-            [C(RESULT_ACCESS)]  =
-            ARMV6MPCORE_PERFCTR_DCACHE_WRACCESS,
-            [C(RESULT_MISS)]    =
-            ARMV6MPCORE_PERFCTR_DCACHE_WRMISS,
-        },
-        [C(OP_PREFETCH)] = {
-            [C(RESULT_ACCESS)]  = CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]    = CACHE_OP_UNSUPPORTED,
-        },
-    },
-    [C(L1I)] = {
-        [C(OP_READ)] = {
-            [C(RESULT_ACCESS)]  = CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]    = ARMV6MPCORE_PERFCTR_ICACHE_MISS,
-        },
-        [C(OP_WRITE)] = {
-            [C(RESULT_ACCESS)]  = CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]    = ARMV6MPCORE_PERFCTR_ICACHE_MISS,
-        },
-        [C(OP_PREFETCH)] = {
-            [C(RESULT_ACCESS)]  = CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]    = CACHE_OP_UNSUPPORTED,
-        },
-    },
-    [C(LL)] = {
-        [C(OP_READ)] = {
-            [C(RESULT_ACCESS)]  = CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]    = CACHE_OP_UNSUPPORTED,
-        },
-        [C(OP_WRITE)] = {
-            [C(RESULT_ACCESS)]  = CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]    = CACHE_OP_UNSUPPORTED,
-        },
-        [C(OP_PREFETCH)] = {
-            [C(RESULT_ACCESS)]  = CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]    = CACHE_OP_UNSUPPORTED,
-        },
-    },
-    [C(DTLB)] = {
-        /*
-         * The ARM performance counters can count micro DTLB misses,
-         * micro ITLB misses and main TLB misses. There isn't an event
-         * for TLB misses, so use the micro misses here and if users
-         * want the main TLB misses they can use a raw counter.
-         */
-        [C(OP_READ)] = {
-            [C(RESULT_ACCESS)]  = CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]    = ARMV6MPCORE_PERFCTR_DTLB_MISS,
-        },
-        [C(OP_WRITE)] = {
-            [C(RESULT_ACCESS)]  = CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]    = ARMV6MPCORE_PERFCTR_DTLB_MISS,
-        },
-        [C(OP_PREFETCH)] = {
-            [C(RESULT_ACCESS)]  = CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]    = CACHE_OP_UNSUPPORTED,
-        },
-    },
-    [C(ITLB)] = {
-        [C(OP_READ)] = {
-            [C(RESULT_ACCESS)]  = CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]    = ARMV6MPCORE_PERFCTR_ITLB_MISS,
-        },
-        [C(OP_WRITE)] = {
-            [C(RESULT_ACCESS)]  = CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]    = ARMV6MPCORE_PERFCTR_ITLB_MISS,
-        },
-        [C(OP_PREFETCH)] = {
-            [C(RESULT_ACCESS)]  = CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]    = CACHE_OP_UNSUPPORTED,
-        },
-    },
-    [C(BPU)] = {
-        [C(OP_READ)] = {
-            [C(RESULT_ACCESS)]  = CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]    = CACHE_OP_UNSUPPORTED,
-        },
-        [C(OP_WRITE)] = {
-            [C(RESULT_ACCESS)]  = CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]    = CACHE_OP_UNSUPPORTED,
-        },
-        [C(OP_PREFETCH)] = {
-            [C(RESULT_ACCESS)]  = CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]    = CACHE_OP_UNSUPPORTED,
-        },
-    },
-    [C(NODE)] = {
-        [C(OP_READ)] = {
-            [C(RESULT_ACCESS)]  = CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]    = CACHE_OP_UNSUPPORTED,
-        },
-        [C(OP_WRITE)] = {
-            [C(RESULT_ACCESS)]  = CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]    = CACHE_OP_UNSUPPORTED,
-        },
-        [C(OP_PREFETCH)] = {
-            [C(RESULT_ACCESS)]  = CACHE_OP_UNSUPPORTED,
-            [C(RESULT_MISS)]    = CACHE_OP_UNSUPPORTED,
-        },
-    },
+static const unsigned armv6mpcore_perf_cache_map[PERF_COUNT_HW_CACHE_MAX]
+					[PERF_COUNT_HW_CACHE_OP_MAX]
+					[PERF_COUNT_HW_CACHE_RESULT_MAX] = {
+	PERF_CACHE_MAP_ALL_UNSUPPORTED,
+
+	[C(L1D)][C(OP_READ)][C(RESULT_ACCESS)]	= ARMV6MPCORE_PERFCTR_DCACHE_RDACCESS,
+	[C(L1D)][C(OP_READ)][C(RESULT_MISS)]	= ARMV6MPCORE_PERFCTR_DCACHE_RDMISS,
+	[C(L1D)][C(OP_WRITE)][C(RESULT_ACCESS)]	= ARMV6MPCORE_PERFCTR_DCACHE_WRACCESS,
+	[C(L1D)][C(OP_WRITE)][C(RESULT_MISS)]	= ARMV6MPCORE_PERFCTR_DCACHE_WRMISS,
+
+	[C(L1I)][C(OP_READ)][C(RESULT_MISS)]	= ARMV6MPCORE_PERFCTR_ICACHE_MISS,
+
+	/*
+	 * The ARM performance counters can count micro DTLB misses, micro ITLB
+	 * misses and main TLB misses. There isn't an event for TLB misses, so
+	 * use the micro misses here and if users want the main TLB misses they
+	 * can use a raw counter.
+	 */
+	[C(DTLB)][C(OP_READ)][C(RESULT_MISS)]	= ARMV6MPCORE_PERFCTR_DTLB_MISS,
+	[C(DTLB)][C(OP_WRITE)][C(RESULT_MISS)]	= ARMV6MPCORE_PERFCTR_DTLB_MISS,
+
+	[C(ITLB)][C(OP_READ)][C(RESULT_MISS)]	= ARMV6MPCORE_PERFCTR_ITLB_MISS,
+	[C(ITLB)][C(OP_WRITE)][C(RESULT_MISS)]	= ARMV6MPCORE_PERFCTR_ITLB_MISS,
 };
 
 static inline unsigned long
-armv6_pmcr_read(void) {
-    u32 val;
-    asm volatile("mrc   p15, 0, %0, c15, c12, 0" : "=r"(val));
-    return val;
+armv6_pmcr_read(void)
+{
+	u32 val;
+	asm volatile("mrc   p15, 0, %0, c15, c12, 0" : "=r"(val));
+	return val;
 }
 
 static inline void
-armv6_pmcr_write(unsigned long val) {
-    asm volatile("mcr   p15, 0, %0, c15, c12, 0" : : "r"(val));
+armv6_pmcr_write(unsigned long val)
+{
+	asm volatile("mcr   p15, 0, %0, c15, c12, 0" : : "r"(val));
 }
 
 #define ARMV6_PMCR_ENABLE		(1 << 0)
@@ -376,287 +209,315 @@ armv6_pmcr_write(unsigned long val) {
 	 ARMV6_PMCR_CCOUNT_OVERFLOW)
 
 static inline int
-armv6_pmcr_has_overflowed(unsigned long pmcr) {
-    return pmcr & ARMV6_PMCR_OVERFLOWED_MASK;
+armv6_pmcr_has_overflowed(unsigned long pmcr)
+{
+	return pmcr & ARMV6_PMCR_OVERFLOWED_MASK;
 }
 
 static inline int
 armv6_pmcr_counter_has_overflowed(unsigned long pmcr,
-                                  enum armv6_counters counter) {
-    int ret = 0;
+				  enum armv6_counters counter)
+{
+	int ret = 0;
 
-    if (ARMV6_CYCLE_COUNTER == counter)
-        ret = pmcr & ARMV6_PMCR_CCOUNT_OVERFLOW;
-    else if (ARMV6_COUNTER0 == counter)
-        ret = pmcr & ARMV6_PMCR_COUNT0_OVERFLOW;
-    else if (ARMV6_COUNTER1 == counter)
-        ret = pmcr & ARMV6_PMCR_COUNT1_OVERFLOW;
-    else
-        WARN_ONCE(1, "invalid counter number (%d)\n", counter);
+	if (ARMV6_CYCLE_COUNTER == counter)
+		ret = pmcr & ARMV6_PMCR_CCOUNT_OVERFLOW;
+	else if (ARMV6_COUNTER0 == counter)
+		ret = pmcr & ARMV6_PMCR_COUNT0_OVERFLOW;
+	else if (ARMV6_COUNTER1 == counter)
+		ret = pmcr & ARMV6_PMCR_COUNT1_OVERFLOW;
+	else
+		WARN_ONCE(1, "invalid counter number (%d)\n", counter);
 
-    return ret;
+	return ret;
 }
 
-static inline u32
-armv6pmu_read_counter(int counter) {
-    unsigned long value = 0;
+static inline u32 armv6pmu_read_counter(struct perf_event *event)
+{
+	struct hw_perf_event *hwc = &event->hw;
+	int counter = hwc->idx;
+	unsigned long value = 0;
 
-    if (ARMV6_CYCLE_COUNTER == counter)
-        asm volatile("mrc   p15, 0, %0, c15, c12, 1" : "=r"(value));
-    else if (ARMV6_COUNTER0 == counter)
-        asm volatile("mrc   p15, 0, %0, c15, c12, 2" : "=r"(value));
-    else if (ARMV6_COUNTER1 == counter)
-        asm volatile("mrc   p15, 0, %0, c15, c12, 3" : "=r"(value));
-    else
-        WARN_ONCE(1, "invalid counter number (%d)\n", counter);
+	if (ARMV6_CYCLE_COUNTER == counter)
+		asm volatile("mrc   p15, 0, %0, c15, c12, 1" : "=r"(value));
+	else if (ARMV6_COUNTER0 == counter)
+		asm volatile("mrc   p15, 0, %0, c15, c12, 2" : "=r"(value));
+	else if (ARMV6_COUNTER1 == counter)
+		asm volatile("mrc   p15, 0, %0, c15, c12, 3" : "=r"(value));
+	else
+		WARN_ONCE(1, "invalid counter number (%d)\n", counter);
 
-    return value;
+	return value;
 }
 
-static inline void
-armv6pmu_write_counter(int counter,
-                       u32 value) {
-    if (ARMV6_CYCLE_COUNTER == counter)
-        asm volatile("mcr   p15, 0, %0, c15, c12, 1" : : "r"(value));
-    else if (ARMV6_COUNTER0 == counter)
-        asm volatile("mcr   p15, 0, %0, c15, c12, 2" : : "r"(value));
-    else if (ARMV6_COUNTER1 == counter)
-        asm volatile("mcr   p15, 0, %0, c15, c12, 3" : : "r"(value));
-    else
-        WARN_ONCE(1, "invalid counter number (%d)\n", counter);
+static inline void armv6pmu_write_counter(struct perf_event *event, u32 value)
+{
+	struct hw_perf_event *hwc = &event->hw;
+	int counter = hwc->idx;
+
+	if (ARMV6_CYCLE_COUNTER == counter)
+		asm volatile("mcr   p15, 0, %0, c15, c12, 1" : : "r"(value));
+	else if (ARMV6_COUNTER0 == counter)
+		asm volatile("mcr   p15, 0, %0, c15, c12, 2" : : "r"(value));
+	else if (ARMV6_COUNTER1 == counter)
+		asm volatile("mcr   p15, 0, %0, c15, c12, 3" : : "r"(value));
+	else
+		WARN_ONCE(1, "invalid counter number (%d)\n", counter);
 }
 
-static void
-armv6pmu_enable_event(struct hw_perf_event *hwc,
-                      int idx) {
-    unsigned long val, mask, evt, flags;
-    struct pmu_hw_events *events = cpu_pmu->get_hw_events();
+static void armv6pmu_enable_event(struct perf_event *event)
+{
+	unsigned long val, mask, evt, flags;
+	struct arm_pmu *cpu_pmu = to_arm_pmu(event->pmu);
+	struct hw_perf_event *hwc = &event->hw;
+	struct pmu_hw_events *events = this_cpu_ptr(cpu_pmu->hw_events);
+	int idx = hwc->idx;
 
-    if (ARMV6_CYCLE_COUNTER == idx) {
-        mask	= 0;
-        evt	= ARMV6_PMCR_CCOUNT_IEN;
-    } else if (ARMV6_COUNTER0 == idx) {
-        mask	= ARMV6_PMCR_EVT_COUNT0_MASK;
-        evt	= (hwc->config_base << ARMV6_PMCR_EVT_COUNT0_SHIFT) |
-              ARMV6_PMCR_COUNT0_IEN;
-    } else if (ARMV6_COUNTER1 == idx) {
-        mask	= ARMV6_PMCR_EVT_COUNT1_MASK;
-        evt	= (hwc->config_base << ARMV6_PMCR_EVT_COUNT1_SHIFT) |
-              ARMV6_PMCR_COUNT1_IEN;
-    } else {
-        WARN_ONCE(1, "invalid counter number (%d)\n", idx);
-        return;
-    }
+	if (ARMV6_CYCLE_COUNTER == idx) {
+		mask	= 0;
+		evt	= ARMV6_PMCR_CCOUNT_IEN;
+	} else if (ARMV6_COUNTER0 == idx) {
+		mask	= ARMV6_PMCR_EVT_COUNT0_MASK;
+		evt	= (hwc->config_base << ARMV6_PMCR_EVT_COUNT0_SHIFT) |
+			  ARMV6_PMCR_COUNT0_IEN;
+	} else if (ARMV6_COUNTER1 == idx) {
+		mask	= ARMV6_PMCR_EVT_COUNT1_MASK;
+		evt	= (hwc->config_base << ARMV6_PMCR_EVT_COUNT1_SHIFT) |
+			  ARMV6_PMCR_COUNT1_IEN;
+	} else {
+		WARN_ONCE(1, "invalid counter number (%d)\n", idx);
+		return;
+	}
 
-    /*
-     * Mask out the current event and set the counter to count the event
-     * that we're interested in.
-     */
-    raw_spin_lock_irqsave(&events->pmu_lock, flags);
-    val = armv6_pmcr_read();
-    val &= ~mask;
-    val |= evt;
-    armv6_pmcr_write(val);
-    raw_spin_unlock_irqrestore(&events->pmu_lock, flags);
+	/*
+	 * Mask out the current event and set the counter to count the event
+	 * that we're interested in.
+	 */
+	raw_spin_lock_irqsave(&events->pmu_lock, flags);
+	val = armv6_pmcr_read();
+	val &= ~mask;
+	val |= evt;
+	armv6_pmcr_write(val);
+	raw_spin_unlock_irqrestore(&events->pmu_lock, flags);
 }
 
 static irqreturn_t
 armv6pmu_handle_irq(int irq_num,
-                    void *dev) {
-    unsigned long pmcr = armv6_pmcr_read();
-    struct perf_sample_data data;
-    struct pmu_hw_events *cpuc;
-    struct pt_regs *regs;
-    int idx;
+		    void *dev)
+{
+	unsigned long pmcr = armv6_pmcr_read();
+	struct perf_sample_data data;
+	struct arm_pmu *cpu_pmu = (struct arm_pmu *)dev;
+	struct pmu_hw_events *cpuc = this_cpu_ptr(cpu_pmu->hw_events);
+	struct pt_regs *regs;
+	int idx;
 
-    if (!armv6_pmcr_has_overflowed(pmcr))
-        return IRQ_NONE;
+	if (!armv6_pmcr_has_overflowed(pmcr))
+		return IRQ_NONE;
 
-    regs = get_irq_regs();
+	regs = get_irq_regs();
 
-    /*
-     * The interrupts are cleared by writing the overflow flags back to
-     * the control register. All of the other bits don't have any effect
-     * if they are rewritten, so write the whole value back.
-     */
-    armv6_pmcr_write(pmcr);
+	/*
+	 * The interrupts are cleared by writing the overflow flags back to
+	 * the control register. All of the other bits don't have any effect
+	 * if they are rewritten, so write the whole value back.
+	 */
+	armv6_pmcr_write(pmcr);
 
-    perf_sample_data_init(&data, 0);
+	for (idx = 0; idx < cpu_pmu->num_events; ++idx) {
+		struct perf_event *event = cpuc->events[idx];
+		struct hw_perf_event *hwc;
 
-    cpuc = &__get_cpu_var(cpu_hw_events);
-    for (idx = 0; idx < cpu_pmu->num_events; ++idx) {
-        struct perf_event *event = cpuc->events[idx];
-        struct hw_perf_event *hwc;
+		/* Ignore if we don't have an event. */
+		if (!event)
+			continue;
 
-        /* Ignore if we don't have an event. */
-        if (!event)
-            continue;
+		/*
+		 * We have a single interrupt for all counters. Check that
+		 * each counter has overflowed before we process it.
+		 */
+		if (!armv6_pmcr_counter_has_overflowed(pmcr, idx))
+			continue;
 
-        /*
-         * We have a single interrupt for all counters. Check that
-         * each counter has overflowed before we process it.
-         */
-        if (!armv6_pmcr_counter_has_overflowed(pmcr, idx))
-            continue;
+		hwc = &event->hw;
+		armpmu_event_update(event);
+		perf_sample_data_init(&data, 0, hwc->last_period);
+		if (!armpmu_event_set_period(event))
+			continue;
 
-        hwc = &event->hw;
-        armpmu_event_update(event, hwc, idx);
-        data.period = event->hw.last_period;
-        if (!armpmu_event_set_period(event, hwc, idx))
-            continue;
+		if (perf_event_overflow(event, &data, regs))
+			cpu_pmu->disable(event);
+	}
 
-        if (perf_event_overflow(event, &data, regs))
-            cpu_pmu->disable(hwc, idx);
-    }
+	/*
+	 * Handle the pending perf events.
+	 *
+	 * Note: this call *must* be run with interrupts disabled. For
+	 * platforms that can have the PMU interrupts raised as an NMI, this
+	 * will not work.
+	 */
+	irq_work_run();
 
-    /*
-     * Handle the pending perf events.
-     *
-     * Note: this call *must* be run with interrupts disabled. For
-     * platforms that can have the PMU interrupts raised as an NMI, this
-     * will not work.
-     */
-    irq_work_run();
-
-    return IRQ_HANDLED;
+	return IRQ_HANDLED;
 }
 
-static void
-armv6pmu_start(void) {
-    unsigned long flags, val;
-    struct pmu_hw_events *events = cpu_pmu->get_hw_events();
+static void armv6pmu_start(struct arm_pmu *cpu_pmu)
+{
+	unsigned long flags, val;
+	struct pmu_hw_events *events = this_cpu_ptr(cpu_pmu->hw_events);
 
-    raw_spin_lock_irqsave(&events->pmu_lock, flags);
-    val = armv6_pmcr_read();
-    val |= ARMV6_PMCR_ENABLE;
-    armv6_pmcr_write(val);
-    raw_spin_unlock_irqrestore(&events->pmu_lock, flags);
+	raw_spin_lock_irqsave(&events->pmu_lock, flags);
+	val = armv6_pmcr_read();
+	val |= ARMV6_PMCR_ENABLE;
+	armv6_pmcr_write(val);
+	raw_spin_unlock_irqrestore(&events->pmu_lock, flags);
 }
 
-static void
-armv6pmu_stop(void) {
-    unsigned long flags, val;
-    struct pmu_hw_events *events = cpu_pmu->get_hw_events();
+static void armv6pmu_stop(struct arm_pmu *cpu_pmu)
+{
+	unsigned long flags, val;
+	struct pmu_hw_events *events = this_cpu_ptr(cpu_pmu->hw_events);
 
-    raw_spin_lock_irqsave(&events->pmu_lock, flags);
-    val = armv6_pmcr_read();
-    val &= ~ARMV6_PMCR_ENABLE;
-    armv6_pmcr_write(val);
-    raw_spin_unlock_irqrestore(&events->pmu_lock, flags);
+	raw_spin_lock_irqsave(&events->pmu_lock, flags);
+	val = armv6_pmcr_read();
+	val &= ~ARMV6_PMCR_ENABLE;
+	armv6_pmcr_write(val);
+	raw_spin_unlock_irqrestore(&events->pmu_lock, flags);
 }
 
 static int
 armv6pmu_get_event_idx(struct pmu_hw_events *cpuc,
-                       struct hw_perf_event *event) {
-    /* Always place a cycle counter into the cycle counter. */
-    if (ARMV6_PERFCTR_CPU_CYCLES == event->config_base) {
-        if (test_and_set_bit(ARMV6_CYCLE_COUNTER, cpuc->used_mask))
-            return -EAGAIN;
+				struct perf_event *event)
+{
+	struct hw_perf_event *hwc = &event->hw;
+	/* Always place a cycle counter into the cycle counter. */
+	if (ARMV6_PERFCTR_CPU_CYCLES == hwc->config_base) {
+		if (test_and_set_bit(ARMV6_CYCLE_COUNTER, cpuc->used_mask))
+			return -EAGAIN;
 
-        return ARMV6_CYCLE_COUNTER;
-    } else {
-        /*
-         * For anything other than a cycle counter, try and use
-         * counter0 and counter1.
-         */
-        if (!test_and_set_bit(ARMV6_COUNTER1, cpuc->used_mask))
-            return ARMV6_COUNTER1;
+		return ARMV6_CYCLE_COUNTER;
+	} else {
+		/*
+		 * For anything other than a cycle counter, try and use
+		 * counter0 and counter1.
+		 */
+		if (!test_and_set_bit(ARMV6_COUNTER1, cpuc->used_mask))
+			return ARMV6_COUNTER1;
 
-        if (!test_and_set_bit(ARMV6_COUNTER0, cpuc->used_mask))
-            return ARMV6_COUNTER0;
+		if (!test_and_set_bit(ARMV6_COUNTER0, cpuc->used_mask))
+			return ARMV6_COUNTER0;
 
-        /* The counters are all in use. */
-        return -EAGAIN;
-    }
+		/* The counters are all in use. */
+		return -EAGAIN;
+	}
 }
 
-static void
-armv6pmu_disable_event(struct hw_perf_event *hwc,
-                       int idx) {
-    unsigned long val, mask, evt, flags;
-    struct pmu_hw_events *events = cpu_pmu->get_hw_events();
+static void armv6pmu_disable_event(struct perf_event *event)
+{
+	unsigned long val, mask, evt, flags;
+	struct arm_pmu *cpu_pmu = to_arm_pmu(event->pmu);
+	struct hw_perf_event *hwc = &event->hw;
+	struct pmu_hw_events *events = this_cpu_ptr(cpu_pmu->hw_events);
+	int idx = hwc->idx;
 
-    if (ARMV6_CYCLE_COUNTER == idx) {
-        mask	= ARMV6_PMCR_CCOUNT_IEN;
-        evt	= 0;
-    } else if (ARMV6_COUNTER0 == idx) {
-        mask	= ARMV6_PMCR_COUNT0_IEN | ARMV6_PMCR_EVT_COUNT0_MASK;
-        evt	= ARMV6_PERFCTR_NOP << ARMV6_PMCR_EVT_COUNT0_SHIFT;
-    } else if (ARMV6_COUNTER1 == idx) {
-        mask	= ARMV6_PMCR_COUNT1_IEN | ARMV6_PMCR_EVT_COUNT1_MASK;
-        evt	= ARMV6_PERFCTR_NOP << ARMV6_PMCR_EVT_COUNT1_SHIFT;
-    } else {
-        WARN_ONCE(1, "invalid counter number (%d)\n", idx);
-        return;
-    }
+	if (ARMV6_CYCLE_COUNTER == idx) {
+		mask	= ARMV6_PMCR_CCOUNT_IEN;
+		evt	= 0;
+	} else if (ARMV6_COUNTER0 == idx) {
+		mask	= ARMV6_PMCR_COUNT0_IEN | ARMV6_PMCR_EVT_COUNT0_MASK;
+		evt	= ARMV6_PERFCTR_NOP << ARMV6_PMCR_EVT_COUNT0_SHIFT;
+	} else if (ARMV6_COUNTER1 == idx) {
+		mask	= ARMV6_PMCR_COUNT1_IEN | ARMV6_PMCR_EVT_COUNT1_MASK;
+		evt	= ARMV6_PERFCTR_NOP << ARMV6_PMCR_EVT_COUNT1_SHIFT;
+	} else {
+		WARN_ONCE(1, "invalid counter number (%d)\n", idx);
+		return;
+	}
 
-    /*
-     * Mask out the current event and set the counter to count the number
-     * of ETM bus signal assertion cycles. The external reporting should
-     * be disabled and so this should never increment.
-     */
-    raw_spin_lock_irqsave(&events->pmu_lock, flags);
-    val = armv6_pmcr_read();
-    val &= ~mask;
-    val |= evt;
-    armv6_pmcr_write(val);
-    raw_spin_unlock_irqrestore(&events->pmu_lock, flags);
+	/*
+	 * Mask out the current event and set the counter to count the number
+	 * of ETM bus signal assertion cycles. The external reporting should
+	 * be disabled and so this should never increment.
+	 */
+	raw_spin_lock_irqsave(&events->pmu_lock, flags);
+	val = armv6_pmcr_read();
+	val &= ~mask;
+	val |= evt;
+	armv6_pmcr_write(val);
+	raw_spin_unlock_irqrestore(&events->pmu_lock, flags);
 }
 
-static void
-armv6mpcore_pmu_disable_event(struct hw_perf_event *hwc,
-                              int idx) {
-    unsigned long val, mask, flags, evt = 0;
-    struct pmu_hw_events *events = cpu_pmu->get_hw_events();
+static void armv6mpcore_pmu_disable_event(struct perf_event *event)
+{
+	unsigned long val, mask, flags, evt = 0;
+	struct arm_pmu *cpu_pmu = to_arm_pmu(event->pmu);
+	struct hw_perf_event *hwc = &event->hw;
+	struct pmu_hw_events *events = this_cpu_ptr(cpu_pmu->hw_events);
+	int idx = hwc->idx;
 
-    if (ARMV6_CYCLE_COUNTER == idx) {
-        mask	= ARMV6_PMCR_CCOUNT_IEN;
-    } else if (ARMV6_COUNTER0 == idx) {
-        mask	= ARMV6_PMCR_COUNT0_IEN;
-    } else if (ARMV6_COUNTER1 == idx) {
-        mask	= ARMV6_PMCR_COUNT1_IEN;
-    } else {
-        WARN_ONCE(1, "invalid counter number (%d)\n", idx);
-        return;
-    }
+	if (ARMV6_CYCLE_COUNTER == idx) {
+		mask	= ARMV6_PMCR_CCOUNT_IEN;
+	} else if (ARMV6_COUNTER0 == idx) {
+		mask	= ARMV6_PMCR_COUNT0_IEN;
+	} else if (ARMV6_COUNTER1 == idx) {
+		mask	= ARMV6_PMCR_COUNT1_IEN;
+	} else {
+		WARN_ONCE(1, "invalid counter number (%d)\n", idx);
+		return;
+	}
 
-    /*
-     * Unlike UP ARMv6, we don't have a way of stopping the counters. We
-     * simply disable the interrupt reporting.
-     */
-    raw_spin_lock_irqsave(&events->pmu_lock, flags);
-    val = armv6_pmcr_read();
-    val &= ~mask;
-    val |= evt;
-    armv6_pmcr_write(val);
-    raw_spin_unlock_irqrestore(&events->pmu_lock, flags);
+	/*
+	 * Unlike UP ARMv6, we don't have a way of stopping the counters. We
+	 * simply disable the interrupt reporting.
+	 */
+	raw_spin_lock_irqsave(&events->pmu_lock, flags);
+	val = armv6_pmcr_read();
+	val &= ~mask;
+	val |= evt;
+	armv6_pmcr_write(val);
+	raw_spin_unlock_irqrestore(&events->pmu_lock, flags);
 }
 
-static int armv6_map_event(struct perf_event *event) {
-    return map_cpu_event(event, &armv6_perf_map,
-                         &armv6_perf_cache_map, 0xFF);
+static int armv6_map_event(struct perf_event *event)
+{
+	return armpmu_map_event(event, &armv6_perf_map,
+				&armv6_perf_cache_map, 0xFF);
 }
 
-static struct arm_pmu armv6pmu = {
-    .id			= ARM_PERF_PMU_ID_V6,
-    .name			= "v6",
-    .handle_irq		= armv6pmu_handle_irq,
-    .request_pmu_irq	= armpmu_generic_request_irq,
-    .free_pmu_irq		= armpmu_generic_free_irq,
-    .enable			= armv6pmu_enable_event,
-    .disable		= armv6pmu_disable_event,
-    .read_counter		= armv6pmu_read_counter,
-    .write_counter		= armv6pmu_write_counter,
-    .get_event_idx		= armv6pmu_get_event_idx,
-    .start			= armv6pmu_start,
-    .stop			= armv6pmu_stop,
-    .map_event		= armv6_map_event,
-    .num_events		= 3,
-    .max_period		= (1LLU << 32) - 1,
-};
+static void armv6pmu_init(struct arm_pmu *cpu_pmu)
+{
+	cpu_pmu->handle_irq	= armv6pmu_handle_irq;
+	cpu_pmu->enable		= armv6pmu_enable_event;
+	cpu_pmu->disable	= armv6pmu_disable_event;
+	cpu_pmu->read_counter	= armv6pmu_read_counter;
+	cpu_pmu->write_counter	= armv6pmu_write_counter;
+	cpu_pmu->get_event_idx	= armv6pmu_get_event_idx;
+	cpu_pmu->start		= armv6pmu_start;
+	cpu_pmu->stop		= armv6pmu_stop;
+	cpu_pmu->map_event	= armv6_map_event;
+	cpu_pmu->num_events	= 3;
+	cpu_pmu->max_period	= (1LLU << 32) - 1;
+}
 
-static struct arm_pmu *__init armv6pmu_init(void) {
-    return &armv6pmu;
+static int armv6_1136_pmu_init(struct arm_pmu *cpu_pmu)
+{
+	armv6pmu_init(cpu_pmu);
+	cpu_pmu->name		= "armv6_1136";
+	return 0;
+}
+
+static int armv6_1156_pmu_init(struct arm_pmu *cpu_pmu)
+{
+	armv6pmu_init(cpu_pmu);
+	cpu_pmu->name		= "armv6_1156";
+	return 0;
+}
+
+static int armv6_1176_pmu_init(struct arm_pmu *cpu_pmu)
+{
+	armv6pmu_init(cpu_pmu);
+	cpu_pmu->name		= "armv6_1176";
+	return 0;
 }
 
 /*
@@ -667,38 +528,62 @@ static struct arm_pmu *__init armv6pmu_init(void) {
  * reset the period and enable the interrupt reporting.
  */
 
-static int armv6mpcore_map_event(struct perf_event *event) {
-    return map_cpu_event(event, &armv6mpcore_perf_map,
-                         &armv6mpcore_perf_cache_map, 0xFF);
+static int armv6mpcore_map_event(struct perf_event *event)
+{
+	return armpmu_map_event(event, &armv6mpcore_perf_map,
+				&armv6mpcore_perf_cache_map, 0xFF);
 }
 
-static struct arm_pmu armv6mpcore_pmu = {
-    .id			= ARM_PERF_PMU_ID_V6MP,
-    .name			= "v6mpcore",
-    .handle_irq		= armv6pmu_handle_irq,
-    .request_pmu_irq	= armpmu_generic_request_irq,
-    .free_pmu_irq		= armpmu_generic_free_irq,
-    .enable			= armv6pmu_enable_event,
-    .disable		= armv6mpcore_pmu_disable_event,
-    .read_counter		= armv6pmu_read_counter,
-    .write_counter		= armv6pmu_write_counter,
-    .get_event_idx		= armv6pmu_get_event_idx,
-    .start			= armv6pmu_start,
-    .stop			= armv6pmu_stop,
-    .map_event		= armv6mpcore_map_event,
-    .num_events		= 3,
-    .max_period		= (1LLU << 32) - 1,
+static int armv6mpcore_pmu_init(struct arm_pmu *cpu_pmu)
+{
+	cpu_pmu->name		= "armv6_11mpcore";
+	cpu_pmu->handle_irq	= armv6pmu_handle_irq;
+	cpu_pmu->enable		= armv6pmu_enable_event;
+	cpu_pmu->disable	= armv6mpcore_pmu_disable_event;
+	cpu_pmu->read_counter	= armv6pmu_read_counter;
+	cpu_pmu->write_counter	= armv6pmu_write_counter;
+	cpu_pmu->get_event_idx	= armv6pmu_get_event_idx;
+	cpu_pmu->start		= armv6pmu_start;
+	cpu_pmu->stop		= armv6pmu_stop;
+	cpu_pmu->map_event	= armv6mpcore_map_event;
+	cpu_pmu->num_events	= 3;
+	cpu_pmu->max_period	= (1LLU << 32) - 1;
+
+	return 0;
+}
+
+static struct of_device_id armv6_pmu_of_device_ids[] = {
+	{.compatible = "arm,arm11mpcore-pmu",	.data = armv6mpcore_pmu_init},
+	{.compatible = "arm,arm1176-pmu",	.data = armv6_1176_pmu_init},
+	{.compatible = "arm,arm1136-pmu",	.data = armv6_1136_pmu_init},
+	{ /* sentinel value */ }
 };
 
-static struct arm_pmu *__init armv6mpcore_pmu_init(void) {
-    return &armv6mpcore_pmu;
-}
-#else
-static struct arm_pmu *__init armv6pmu_init(void) {
-    return NULL;
+static const struct pmu_probe_info armv6_pmu_probe_table[] = {
+	ARM_PMU_PROBE(ARM_CPU_PART_ARM1136, armv6_1136_pmu_init),
+	ARM_PMU_PROBE(ARM_CPU_PART_ARM1156, armv6_1156_pmu_init),
+	ARM_PMU_PROBE(ARM_CPU_PART_ARM1176, armv6_1176_pmu_init),
+	ARM_PMU_PROBE(ARM_CPU_PART_ARM11MPCORE, armv6mpcore_pmu_init),
+	{ /* sentinel value */ }
+};
+
+static int armv6_pmu_device_probe(struct platform_device *pdev)
+{
+	return arm_pmu_device_probe(pdev, armv6_pmu_of_device_ids,
+				    armv6_pmu_probe_table);
 }
 
-static struct arm_pmu *__init armv6mpcore_pmu_init(void) {
-    return NULL;
+static struct platform_driver armv6_pmu_driver = {
+	.driver		= {
+		.name	= "armv6-pmu",
+		.of_match_table = armv6_pmu_of_device_ids,
+	},
+	.probe		= armv6_pmu_device_probe,
+};
+
+static int __init register_armv6_pmu_driver(void)
+{
+	return platform_driver_register(&armv6_pmu_driver);
 }
+device_initcall(register_armv6_pmu_driver);
 #endif	/* CONFIG_CPU_V6 || CONFIG_CPU_V6K */
