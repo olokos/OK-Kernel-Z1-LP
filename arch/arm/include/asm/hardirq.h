@@ -5,12 +5,12 @@
 #include <linux/threads.h>
 #include <asm/irq.h>
 
-#define NR_IPI	7
+#define NR_IPI	8
 
 typedef struct {
-    unsigned int __softirq_pending;
+	unsigned int __softirq_pending;
 #ifdef CONFIG_SMP
-    unsigned int ipi_irqs[NR_IPI];
+	unsigned int ipi_irqs[NR_IPI];
 #endif
 } ____cacheline_aligned irq_cpustat_t;
 

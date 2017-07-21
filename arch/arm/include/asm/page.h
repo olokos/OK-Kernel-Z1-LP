@@ -13,13 +13,13 @@
 /* PAGE_SHIFT determines the page size */
 #define PAGE_SHIFT		12
 #define PAGE_SIZE		(_AC(1,UL) << PAGE_SHIFT)
-#define PAGE_MASK		(~(PAGE_SIZE-1))
+#define PAGE_MASK		(~((1 << PAGE_SHIFT) - 1))
 
 #ifndef __ASSEMBLY__
 
 #ifndef CONFIG_MMU
 
-#include "page-nommu.h"
+#include <asm/page-nommu.h>
 
 #else
 
@@ -34,7 +34,6 @@
  *	processor(s) we're building for.
  *
  *	We have the following to choose from:
- *	  v3		- ARMv3
  *	  v4wt		- ARMv4 with writethrough cache, without minicache
  *	  v4wb		- ARMv4 with writeback cache, without minicache
  *	  v4_mc		- ARMv4 with minicache
@@ -43,14 +42,6 @@
  */
 #undef _USER
 #undef MULTI_USER
-
-#ifdef CONFIG_CPU_COPY_V3
-# ifdef _USER
-#  define MULTI_USER 1
-# else
-#  define _USER v3
-# endif
-#endif
 
 #ifdef CONFIG_CPU_COPY_V4WT
 # ifdef _USER
@@ -120,9 +111,9 @@ struct page;
 struct vm_area_struct;
 
 struct cpu_user_fns {
-    void (*cpu_clear_user_highpage)(struct page *page, unsigned long vaddr);
-    void (*cpu_copy_user_highpage)(struct page *to, struct page *from,
-                                   unsigned long vaddr, struct vm_area_struct *vma);
+	void (*cpu_clear_user_highpage)(struct page *page, unsigned long vaddr);
+	void (*cpu_copy_user_highpage)(struct page *to, struct page *from,
+			unsigned long vaddr, struct vm_area_struct *vma);
 };
 
 #ifdef MULTI_USER
@@ -138,7 +129,7 @@ extern struct cpu_user_fns cpu_user;
 
 extern void __cpu_clear_user_highpage(struct page *page, unsigned long vaddr);
 extern void __cpu_copy_user_highpage(struct page *to, struct page *from,
-                                     unsigned long vaddr, struct vm_area_struct *vma);
+			unsigned long vaddr, struct vm_area_struct *vma);
 #endif
 
 #define clear_user_highpage(page,vaddr)		\
@@ -167,11 +158,6 @@ typedef struct page *pgtable_t;
 
 #ifdef CONFIG_HAVE_ARCH_PFN_VALID
 extern int pfn_valid(unsigned long);
-#endif
-
-#ifdef CONFIG_MEMORY_HOTPLUG_SPARSE
-extern int _early_pfn_valid(unsigned long);
-#define early_pfn_valid(pfn) (_early_pfn_valid(pfn))
 #endif
 
 #include <asm/memory.h>
