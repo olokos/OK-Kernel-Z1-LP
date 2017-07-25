@@ -66,16 +66,16 @@
 #define FRAG_PKT_WRITE_ENABLE 0x1
 
 enum {
-	CLIENT_PORT,
-	SERVER_PORT,
-	CONTROL_PORT,
-	IRSC_PORT,
+    CLIENT_PORT,
+    SERVER_PORT,
+    CONTROL_PORT,
+    IRSC_PORT,
 };
 
 enum {
-	NULL_MODE,
-	SINGLE_LINK_MODE,
-	MULTI_LINK_MODE,
+    NULL_MODE,
+    SINGLE_LINK_MODE,
+    MULTI_LINK_MODE,
 };
 
 /**
@@ -86,24 +86,24 @@ enum {
  * @cli: Message structure for REMOVE_CLIENT event.
  */
 union rr_control_msg {
-	uint32_t cmd;
-	struct {
-		uint32_t cmd;
-		uint32_t magic;
-		uint32_t capability;
-	} hello;
-	struct {
-		uint32_t cmd;
-		uint32_t service;
-		uint32_t instance;
-		uint32_t node_id;
-		uint32_t port_id;
-	} srv;
-	struct {
-		uint32_t cmd;
-		uint32_t node_id;
-		uint32_t port_id;
-	} cli;
+    uint32_t cmd;
+    struct {
+        uint32_t cmd;
+        uint32_t magic;
+        uint32_t capability;
+    } hello;
+    struct {
+        uint32_t cmd;
+        uint32_t service;
+        uint32_t instance;
+        uint32_t node_id;
+        uint32_t port_id;
+    } srv;
+    struct {
+        uint32_t cmd;
+        uint32_t node_id;
+        uint32_t port_id;
+    } cli;
 };
 
 /**
@@ -118,14 +118,14 @@ union rr_control_msg {
  * @dst_port_id: Destination Port ID of the message.
  */
 struct rr_header_v1 {
-	uint32_t version;
-	uint32_t type;
-	uint32_t src_node_id;
-	uint32_t src_port_id;
-	uint32_t control_flag;
-	uint32_t size;
-	uint32_t dst_node_id;
-	uint32_t dst_port_id;
+    uint32_t version;
+    uint32_t type;
+    uint32_t src_node_id;
+    uint32_t src_port_id;
+    uint32_t control_flag;
+    uint32_t size;
+    uint32_t dst_node_id;
+    uint32_t dst_port_id;
 };
 
 /**
@@ -140,19 +140,19 @@ struct rr_header_v1 {
  * @dst_port_id: Destination Port ID of the message.
  */
 struct rr_header_v2 {
-	uint8_t version;
-	uint8_t type;
-	uint16_t control_flag;
-	uint32_t size;
-	uint16_t src_node_id;
-	uint16_t src_port_id;
-	uint16_t dst_node_id;
-	uint16_t dst_port_id;
+    uint8_t version;
+    uint8_t type;
+    uint16_t control_flag;
+    uint32_t size;
+    uint16_t src_node_id;
+    uint16_t src_port_id;
+    uint16_t dst_node_id;
+    uint16_t dst_port_id;
 } __attribute__((__packed__));
 
 union rr_header {
-	struct rr_header_v1 hdr_v1;
-	struct rr_header_v2 hdr_v2;
+    struct rr_header_v1 hdr_v1;
+    struct rr_header_v2 hdr_v2;
 };
 
 #define IPC_ROUTER_HDR_SIZE sizeof(union rr_header)
@@ -165,16 +165,16 @@ union rr_header {
  * @length: Length of data in the chain of SKBs
  */
 struct rr_packet {
-	struct list_head list;
-	struct rr_header_v1 hdr;
-	struct sk_buff_head *pkt_fragment_q;
-	uint32_t length;
+    struct list_head list;
+    struct rr_header_v1 hdr;
+    struct sk_buff_head *pkt_fragment_q;
+    uint32_t length;
 };
 
 struct msm_ipc_sock {
-	struct sock sk;
-	struct msm_ipc_port *port;
-	void *default_pil;
+    struct sock sk;
+    struct msm_ipc_port *port;
+    void *default_pil;
 };
 
 /**
@@ -193,25 +193,25 @@ struct msm_ipc_sock {
  *                  event is complete.
  */
 struct msm_ipc_router_xprt {
-	char *name;
-	uint32_t link_id;
-	void *priv;
+    char *name;
+    uint32_t link_id;
+    void *priv;
 
-	int (*get_version)(struct msm_ipc_router_xprt *xprt);
-	int (*get_option)(struct msm_ipc_router_xprt *xprt);
-	int (*read_avail)(struct msm_ipc_router_xprt *xprt);
-	int (*read)(void *data, uint32_t len,
-		    struct msm_ipc_router_xprt *xprt);
-	int (*write_avail)(struct msm_ipc_router_xprt *xprt);
-	int (*write)(void *data, uint32_t len,
-		     struct msm_ipc_router_xprt *xprt);
-	int (*close)(struct msm_ipc_router_xprt *xprt);
-	void (*sft_close_done)(struct msm_ipc_router_xprt *xprt);
+    int (*get_version)(struct msm_ipc_router_xprt *xprt);
+    int (*get_option)(struct msm_ipc_router_xprt *xprt);
+    int (*read_avail)(struct msm_ipc_router_xprt *xprt);
+    int (*read)(void *data, uint32_t len,
+                struct msm_ipc_router_xprt *xprt);
+    int (*write_avail)(struct msm_ipc_router_xprt *xprt);
+    int (*write)(void *data, uint32_t len,
+                 struct msm_ipc_router_xprt *xprt);
+    int (*close)(struct msm_ipc_router_xprt *xprt);
+    void (*sft_close_done)(struct msm_ipc_router_xprt *xprt);
 };
 
 void msm_ipc_router_xprt_notify(struct msm_ipc_router_xprt *xprt,
-				unsigned event,
-				void *data);
+                                unsigned event,
+                                void *data);
 
 
 struct rr_packet *clone_pkt(struct rr_packet *pkt);
@@ -219,22 +219,22 @@ void release_pkt(struct rr_packet *pkt);
 
 
 struct msm_ipc_port *msm_ipc_router_create_raw_port(void *endpoint,
-		void (*notify)(unsigned event, void *priv),
-		void *priv);
+        void (*notify)(unsigned event, void *priv),
+        void *priv);
 int msm_ipc_router_send_to(struct msm_ipc_port *src,
-			   struct sk_buff_head *data,
-			   struct msm_ipc_addr *dest);
+                           struct sk_buff_head *data,
+                           struct msm_ipc_addr *dest);
 int msm_ipc_router_read(struct msm_ipc_port *port_ptr,
-			struct rr_packet **pkt,
-			size_t buf_len);
+                        struct rr_packet **pkt,
+                        size_t buf_len);
 int msm_ipc_router_bind_control_port(struct msm_ipc_port *port_ptr);
 
 int msm_ipc_router_recv_from(struct msm_ipc_port *port_ptr,
-		      struct rr_packet **pkt,
-		      struct msm_ipc_addr *src_addr,
-		      long timeout);
+                             struct rr_packet **pkt,
+                             struct msm_ipc_addr *src_addr,
+                             long timeout);
 int msm_ipc_router_register_server(struct msm_ipc_port *server_port,
-			    struct msm_ipc_addr *name);
+                                   struct msm_ipc_addr *name);
 int msm_ipc_router_unregister_server(struct msm_ipc_port *server_port);
 
 int msm_ipc_router_init_sockets(void);
@@ -251,8 +251,9 @@ extern void *msm_ipc_load_default_node(void);
 
 extern void msm_ipc_unload_default_node(void *pil);
 #else
-static inline void *msm_ipc_load_default_node(void)
-{ return NULL; }
+static inline void *msm_ipc_load_default_node(void) {
+    return NULL;
+}
 
 static inline void msm_ipc_unload_default_node(void *pil) { }
 #endif

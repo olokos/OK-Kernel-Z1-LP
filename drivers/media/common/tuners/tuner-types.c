@@ -1796,7 +1796,7 @@ struct tunertype tuners[] = {
         .count  = ARRAY_SIZE(tuner_samsung_tcpg_6121p30a_params),
     },
     [TUNER_TDA9887] = { /* Philips TDA 9887 IF PLL Demodulator.
-		This chip is part of some modern tuners */
+	This chip is part of some modern tuners */
         .name   = "Philips TDA988[5,6,7] IF PLL Demodulator",
         /* see tda9887.c for details */
     },

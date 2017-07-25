@@ -28,77 +28,77 @@
 #define ALIGN_BUF_SIZE(size) ((size + 4095) & (~4095))
 
 struct timestamp {
-	unsigned long lowpart;
-	unsigned long highpart;
+    unsigned long lowpart;
+    unsigned long highpart;
 } __packed;
 
 struct meta_in {
-	unsigned short offset;
-	struct timestamp ntimestamp;
-	unsigned int nflags;
+    unsigned short offset;
+    struct timestamp ntimestamp;
+    unsigned int nflags;
 } __packed;
 
 struct meta_out_dsp {
-	u32 offset_to_frame;
-	u32 frame_size;
-	u32 encoded_pcm_samples;
-	u32 msw_ts;
-	u32 lsw_ts;
-	u32 nflags;
+    u32 offset_to_frame;
+    u32 frame_size;
+    u32 encoded_pcm_samples;
+    u32 msw_ts;
+    u32 lsw_ts;
+    u32 nflags;
 } __packed;
 
 struct meta_out {
-	unsigned char num_of_frames;
-	struct meta_out_dsp meta_out_dsp[];
+    unsigned char num_of_frames;
+    struct meta_out_dsp meta_out_dsp[];
 } __packed;
 
 struct q6audio_in {
-	spinlock_t			dsp_lock;
-	atomic_t			in_bytes;
-	atomic_t			in_samples;
+    spinlock_t			dsp_lock;
+    atomic_t			in_bytes;
+    atomic_t			in_samples;
 
-	struct mutex			lock;
-	struct mutex			read_lock;
-	struct mutex			write_lock;
-	wait_queue_head_t		read_wait;
-	wait_queue_head_t		write_wait;
+    struct mutex			lock;
+    struct mutex			read_lock;
+    struct mutex			write_lock;
+    wait_queue_head_t		read_wait;
+    wait_queue_head_t		write_wait;
 
-	struct audio_client             *ac;
-	struct msm_audio_stream_config  str_cfg;
-	void				*enc_cfg;
-	struct msm_audio_buf_cfg        buf_cfg;
-	struct msm_audio_config		pcm_cfg;
-	void				*codec_cfg;
+    struct audio_client             *ac;
+    struct msm_audio_stream_config  str_cfg;
+    void				*enc_cfg;
+    struct msm_audio_buf_cfg        buf_cfg;
+    struct msm_audio_config		pcm_cfg;
+    void				*codec_cfg;
 
-	/* number of buffers available to read/write */
-	atomic_t			in_count;
-	atomic_t			out_count;
+    /* number of buffers available to read/write */
+    atomic_t			in_count;
+    atomic_t			out_count;
 
-	/* first idx: num of frames per buf, second idx: offset to frame */
-	uint32_t			out_frame_info[FRAME_NUM][2];
-	int				eos_rsp;
-	int				opened;
-	int				enabled;
-	int				stopped;
-	int				event_abort;
-	int				feedback; /* Flag indicates whether used
+    /* first idx: num of frames per buf, second idx: offset to frame */
+    uint32_t			out_frame_info[FRAME_NUM][2];
+    int				eos_rsp;
+    int				opened;
+    int				enabled;
+    int				stopped;
+    int				event_abort;
+    int				feedback; /* Flag indicates whether used
 							in Non Tunnel mode */
-	int				rflush;
-	int				wflush;
-	int				buf_alloc;
-	uint16_t			min_frame_size;
-	uint16_t			max_frames_per_buf;
-	long (*enc_ioctl)(struct file *, unsigned int, unsigned long);
+    int				rflush;
+    int				wflush;
+    int				buf_alloc;
+    uint16_t			min_frame_size;
+    uint16_t			max_frames_per_buf;
+    long (*enc_ioctl)(struct file *, unsigned int, unsigned long);
 };
 
 int audio_in_enable(struct q6audio_in  *audio);
 int audio_in_disable(struct q6audio_in  *audio);
 int audio_in_buf_alloc(struct q6audio_in *audio);
 long audio_in_ioctl(struct file *file,
-		unsigned int cmd, unsigned long arg);
+                    unsigned int cmd, unsigned long arg);
 ssize_t audio_in_read(struct file *file, char __user *buf,
-		size_t count, loff_t *pos);
+                      size_t count, loff_t *pos);
 ssize_t audio_in_write(struct file *file, const char __user *buf,
-		size_t count, loff_t *pos);
+                       size_t count, loff_t *pos);
 int audio_in_release(struct inode *inode, struct file *file);
 

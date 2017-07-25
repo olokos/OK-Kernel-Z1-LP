@@ -526,27 +526,27 @@ VOS_STATUS hdd_hostapd_SAPEventCB( tpSap_Event pSapEvent, v_PVOID_t usrDataForCa
         msg.src_addr.sa_family = ARPHRD_ETHER;
         memcpy(msg.src_addr.sa_data, &pSapEvent->sapevt.sapStationMICFailureEvent.staMac, sizeof(v_MACADDR_t));
         hddLog(LOG1, "MIC MAC "MAC_ADDRESS_STR"\n", MAC_ADDR_ARRAY(msg.src_addr.sa_data));
-        if(pSapEvent->sapevt.sapStationMICFailureEvent.multicast == eSAP_TRUE)
-         msg.flags = IW_MICFAILURE_GROUP;
-        else 
-         msg.flags = IW_MICFAILURE_PAIRWISE;
-        memset(&wrqu, 0, sizeof(wrqu));
-        wrqu.data.length = sizeof(msg);
-        we_event = IWEVMICHAELMICFAILURE;
-        we_custom_event_generic = (v_BYTE_t *)&msg;
-    }
+    if(pSapEvent->sapevt.sapStationMICFailureEvent.multicast == eSAP_TRUE)
+     msg.flags = IW_MICFAILURE_GROUP;
+    else 
+     msg.flags = IW_MICFAILURE_PAIRWISE;
+    memset(&wrqu, 0, sizeof(wrqu));
+    wrqu.data.length = sizeof(msg);
+    we_event = IWEVMICHAELMICFAILURE;
+    we_custom_event_generic = (v_BYTE_t *)&msg;
+}
       /* inform mic failure to nl80211 */
-    cfg80211_michael_mic_failure(dev, 
-                                 pSapEvent->sapevt.
-                                 sapStationMICFailureEvent.staMac.bytes,
-                                 ((pSapEvent->sapevt.sapStationMICFailureEvent.multicast == eSAP_TRUE) ? 
-                                  NL80211_KEYTYPE_GROUP :
-                                  NL80211_KEYTYPE_PAIRWISE),
-                                 pSapEvent->sapevt.sapStationMICFailureEvent.keyId, 
-                                 pSapEvent->sapevt.sapStationMICFailureEvent.TSC, 
-                                 GFP_KERNEL);
-        break;
-    
+cfg80211_michael_mic_failure(dev, 
+                             pSapEvent->sapevt.
+                             sapStationMICFailureEvent.staMac.bytes,
+                             ((pSapEvent->sapevt.sapStationMICFailureEvent.multicast == eSAP_TRUE) ? 
+                              NL80211_KEYTYPE_GROUP :
+                              NL80211_KEYTYPE_PAIRWISE),
+                             pSapEvent->sapevt.sapStationMICFailureEvent.keyId, 
+                             pSapEvent->sapevt.sapStationMICFailureEvent.TSC, 
+                             GFP_KERNEL);
+    break;
+
         case eSAP_STA_ASSOC_EVENT:
         case eSAP_STA_REASSOC_EVENT:
             wrqu.addr.sa_family = ARPHRD_ETHER;
@@ -685,24 +685,24 @@ VOS_STATUS hdd_hostapd_SAPEventCB( tpSap_Event pSapEvent, v_PVOID_t usrDataForCa
             hdd_change_mcc_go_beacon_interval(pHostapdAdapter);
             break;
         case eSAP_WPS_PBC_PROBE_REQ_EVENT:
-    {
-            static const char * message ="MLMEWPSPBCPROBEREQ.indication";
-            union iwreq_data wreq;
-           
-            down(&pHddApCtx->semWpsPBCOverlapInd);
-            pHddApCtx->WPSPBCProbeReq.probeReqIELen = pSapEvent->sapevt.sapPBCProbeReqEvent.WPSPBCProbeReq.probeReqIELen;
-            
-            vos_mem_copy(pHddApCtx->WPSPBCProbeReq.probeReqIE, pSapEvent->sapevt.sapPBCProbeReqEvent.WPSPBCProbeReq.probeReqIE, 
-                pHddApCtx->WPSPBCProbeReq.probeReqIELen);
-                 
-            vos_mem_copy(pHddApCtx->WPSPBCProbeReq.peerMacAddr, pSapEvent->sapevt.sapPBCProbeReqEvent.WPSPBCProbeReq.peerMacAddr, sizeof(v_MACADDR_t));
-            hddLog(LOG1, "WPS PBC probe req "MAC_ADDRESS_STR"\n", MAC_ADDR_ARRAY(pHddApCtx->WPSPBCProbeReq.peerMacAddr));
-            memset(&wreq, 0, sizeof(wreq));
-            wreq.data.length = strlen(message); // This is length of message
-            wireless_send_event(dev, IWEVCUSTOM, &wreq, (char *)message); 
-            
-            return VOS_STATUS_SUCCESS;
-    }
+{
+        static const char * message ="MLMEWPSPBCPROBEREQ.indication";
+        union iwreq_data wreq;
+       
+        down(&pHddApCtx->semWpsPBCOverlapInd);
+        pHddApCtx->WPSPBCProbeReq.probeReqIELen = pSapEvent->sapevt.sapPBCProbeReqEvent.WPSPBCProbeReq.probeReqIELen;
+        
+        vos_mem_copy(pHddApCtx->WPSPBCProbeReq.probeReqIE, pSapEvent->sapevt.sapPBCProbeReqEvent.WPSPBCProbeReq.probeReqIE, 
+            pHddApCtx->WPSPBCProbeReq.probeReqIELen);
+             
+        vos_mem_copy(pHddApCtx->WPSPBCProbeReq.peerMacAddr, pSapEvent->sapevt.sapPBCProbeReqEvent.WPSPBCProbeReq.peerMacAddr, sizeof(v_MACADDR_t));
+        hddLog(LOG1, "WPS PBC probe req "MAC_ADDRESS_STR"\n", MAC_ADDR_ARRAY(pHddApCtx->WPSPBCProbeReq.peerMacAddr));
+        memset(&wreq, 0, sizeof(wreq));
+        wreq.data.length = strlen(message); // This is length of message
+        wireless_send_event(dev, IWEVCUSTOM, &wreq, (char *)message); 
+        
+        return VOS_STATUS_SUCCESS;
+}
         case eSAP_ASSOC_STA_CALLBACK_EVENT:
             pAssocStasArray = pSapEvent->sapevt.sapAssocStaListEvent.pAssocStas;
             if (pSapEvent->sapevt.sapAssocStaListEvent.noOfAssocSta != 0)
@@ -999,18 +999,18 @@ static iw_softap_setparam(struct net_device *dev,
             break;
 
         case QCSAP_PARAM_HIDE_SSID:
+    {
+        eHalStatus status = eHAL_STATUS_SUCCESS;
+        status = sme_HideSSID(hHal, pHostapdAdapter->sessionId, set_value);
+        if(eHAL_STATUS_SUCCESS != status)
         {
-            eHalStatus status = eHAL_STATUS_SUCCESS;
-            status = sme_HideSSID(hHal, pHostapdAdapter->sessionId, set_value);
-            if(eHAL_STATUS_SUCCESS != status)
-            {
-                hddLog(VOS_TRACE_LEVEL_ERROR,
-                        "%s: QCSAP_PARAM_HIDE_SSID failed",
-                        __func__);
-                return status;
-            }
-            break;
+            hddLog(VOS_TRACE_LEVEL_ERROR,
+                    "%s: QCSAP_PARAM_HIDE_SSID failed",
+                    __func__);
+            return status;
         }
+        break;
+    }
 
         default:
             hddLog(LOGE, FL("Invalid setparam command %d value %d"),
@@ -1055,31 +1055,31 @@ static iw_softap_getparam(struct net_device *dev,
         break;
         
     case QCSAP_PARAM_MODULE_DOWN_IND:
-    {
-        VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO,
-            "%s: sending WLAN_MODULE_DOWN_IND", __func__);
-        send_btc_nlink_msg(WLAN_MODULE_DOWN_IND, 0);
+{
+    VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO,
+        "%s: sending WLAN_MODULE_DOWN_IND", __func__);
+    send_btc_nlink_msg(WLAN_MODULE_DOWN_IND, 0);
 #ifdef WLAN_BTAMP_FEATURE 
-        VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO,
-            "%s: Take down AMP PAL", __func__);
-        BSL_Deinit(vos_get_global_context(VOS_MODULE_ID_HDD, NULL));
+    VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO,
+        "%s: Take down AMP PAL", __func__);
+    BSL_Deinit(vos_get_global_context(VOS_MODULE_ID_HDD, NULL));
 #endif            
-        *value = 0;
-        break;
-    }
+    *value = 0;
+    break;
+}
 
     case QCSAP_PARAM_GET_WLAN_DBG:
-    {
-        vos_trace_display();
-        *value = 0;
-        break;
-    }
+{
+    vos_trace_display();
+    *value = 0;
+    break;
+}
 
     case QCSAP_PARAM_AUTO_CHANNEL:
-    {
-        *value = (WLAN_HDD_GET_CTX(pHostapdAdapter))->cfg_ini->apAutoChannelSelection;
-         break;
-    }
+{
+    *value = (WLAN_HDD_GET_CTX(pHostapdAdapter))->cfg_ini->apAutoChannelSelection;
+     break;
+}
 
     default:
         hddLog(LOGE, FL("Invalid getparam command %d"), sub_cmd);
@@ -1751,22 +1751,22 @@ int iw_set_auth_hostap(struct net_device *dev,struct iw_request_info *info,
    {
       case IW_AUTH_TKIP_COUNTERMEASURES:
   {
-     if(wrqu->param.value) {
-        hddLog(VOS_TRACE_LEVEL_INFO_HIGH,
-               "Counter Measure started %d", wrqu->param.value);
-        pWextState->mTKIPCounterMeasures = TKIP_COUNTER_MEASURE_STARTED;
-     }  
-     else {   
-        hddLog(VOS_TRACE_LEVEL_INFO_HIGH,
-               "Counter Measure stopped=%d", wrqu->param.value);
-        pWextState->mTKIPCounterMeasures = TKIP_COUNTER_MEASURE_STOPED;
-     }
+ if(wrqu->param.value) {
+    hddLog(VOS_TRACE_LEVEL_INFO_HIGH,
+           "Counter Measure started %d", wrqu->param.value);
+    pWextState->mTKIPCounterMeasures = TKIP_COUNTER_MEASURE_STARTED;
+ }  
+ else {   
+    hddLog(VOS_TRACE_LEVEL_INFO_HIGH,
+           "Counter Measure stopped=%d", wrqu->param.value);
+    pWextState->mTKIPCounterMeasures = TKIP_COUNTER_MEASURE_STOPED;
+ }
 
-     hdd_softap_tkip_mic_fail_counter_measure(pAdapter,
-                                              wrqu->param.value);
+ hdd_softap_tkip_mic_fail_counter_measure(pAdapter,
+                                          wrqu->param.value);
   }   
   break;
-     
+ 
       default:
          
          hddLog(LOGW, "%s called with unsupported auth type %d", __func__, 
@@ -1896,35 +1896,35 @@ static int iw_set_ap_encodeext(struct net_device *dev,
       
        case IW_ENCODE_ALG_TKIP:
    {
-      v_U8_t *pKey = &setKey.Key[0];
+  v_U8_t *pKey = &setKey.Key[0];
   
-      setKey.encType = eCSR_ENCRYPT_TYPE_TKIP;
+  setKey.encType = eCSR_ENCRYPT_TYPE_TKIP;
   
-      vos_mem_zero(pKey, CSR_MAX_KEY_LEN);
+  vos_mem_zero(pKey, CSR_MAX_KEY_LEN);
   
-      /*Supplicant sends the 32bytes key in this order 
-      
-            |--------------|----------|----------|
-            |   Tk1        |TX-MIC    |  RX Mic  | 
-            |--------------|----------|----------|
-            <---16bytes---><--8bytes--><--8bytes-->
-            
-            */
-      /*Sme expects the 32 bytes key to be in the below order
+  /*Supplicant sends the 32bytes key in this order 
   
-            |--------------|----------|----------|
-            |   Tk1        |RX-MIC    |  TX Mic  | 
-            |--------------|----------|----------|
-            <---16bytes---><--8bytes--><--8bytes-->
-           */
-      /* Copy the Temporal Key 1 (TK1) */
-      vos_mem_copy(pKey,ext->key,16);
-       
-     /*Copy the rx mic first*/
-      vos_mem_copy(&pKey[16],&ext->key[24],8); 
-      
-     /*Copy the tx mic */
-      vos_mem_copy(&pKey[24],&ext->key[16],8); 
+        |--------------|----------|----------|
+        |   Tk1        |TX-MIC    |  RX Mic  | 
+        |--------------|----------|----------|
+        <---16bytes---><--8bytes--><--8bytes-->
+        
+        */
+  /*Sme expects the 32 bytes key to be in the below order
+  
+        |--------------|----------|----------|
+        |   Tk1        |RX-MIC    |  TX Mic  | 
+        |--------------|----------|----------|
+        <---16bytes---><--8bytes--><--8bytes-->
+       */
+  /* Copy the Temporal Key 1 (TK1) */
+  vos_mem_copy(pKey,ext->key,16);
+   
+ /*Copy the rx mic first*/
+  vos_mem_copy(&pKey[16],&ext->key[24],8); 
+  
+ /*Copy the tx mic */
+  vos_mem_copy(&pKey[24],&ext->key[16],8); 
   
    }     
    break;

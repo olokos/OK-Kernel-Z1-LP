@@ -965,7 +965,7 @@ eHalStatus tdlsMsgProcessor(tpAniSirGlobal pMac,  v_U16_t msgType,
             }
             if(0 == i) {
                 smsLog( pMac, LOGW, "there is no tdls client \
-                                                  discovered .." ) ;
+                                              discovered .." ) ;
             }
         } else {
             smsLog( pMac, LOGW, "there is no tdls client discovered .." );

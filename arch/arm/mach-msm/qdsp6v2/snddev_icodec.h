@@ -17,19 +17,19 @@
 #include <mach/pmic.h>
 
 struct snddev_icodec_data {
-	u32 capability; /* RX or TX */
-	const char *name;
-	u32 copp_id; /* audpp routing */
-	/* Adie profile */
-	struct adie_codec_dev_profile *profile;
-	/* Afe setting */
-	u8 channel_mode;
-	u32 default_sample_rate;
-	int (*pamp_on) (void);
-	void (*pamp_off) (void);
-	int (*voltage_on) (void);
-	void (*voltage_off) (void);
-	u32 dev_vol_type;
+    u32 capability; /* RX or TX */
+    const char *name;
+    u32 copp_id; /* audpp routing */
+    /* Adie profile */
+    struct adie_codec_dev_profile *profile;
+    /* Afe setting */
+    u8 channel_mode;
+    u32 default_sample_rate;
+    int (*pamp_on) (void);
+    void (*pamp_off) (void);
+    int (*voltage_on) (void);
+    void (*voltage_off) (void);
+    u32 dev_vol_type;
 };
 
 #endif

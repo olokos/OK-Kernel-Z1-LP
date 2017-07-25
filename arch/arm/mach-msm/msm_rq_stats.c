@@ -102,12 +102,12 @@ static int update_average_load(unsigned int freq, unsigned int cpu) {
     unsigned int idle_time, wall_time, iowait_time;
     unsigned int cur_load, load_at_max_freq;
     cputime64_t cur_wall_time, cur_idle_time, cur_iowait_time;
-	struct cpu_load_data *pcpu = &per_cpu(cpuload, cpu);
-	struct cpufreq_policy policy;
+    struct cpu_load_data *pcpu = &per_cpu(cpuload, cpu);
+    struct cpufreq_policy policy;
 
-        ret = cpufreq_get_policy(&policy, cpu);
-        if (ret)
-                return -EINVAL;
+    ret = cpufreq_get_policy(&policy, cpu);
+    if (ret)
+        return -EINVAL;
 
 
     cur_idle_time = get_cpu_idle_time(cpu, &cur_wall_time);

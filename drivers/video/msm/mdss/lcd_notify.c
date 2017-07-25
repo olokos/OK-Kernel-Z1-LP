@@ -23,9 +23,8 @@ static BLOCKING_NOTIFIER_HEAD(lcd_notifier_list);
  *	lcd_register_client - register a client notifier
  *	@nb: notifier block to callback on events
  */
-int lcd_register_client(struct notifier_block *nb)
-{
-	return blocking_notifier_chain_register(&lcd_notifier_list, nb);
+int lcd_register_client(struct notifier_block *nb) {
+    return blocking_notifier_chain_register(&lcd_notifier_list, nb);
 }
 EXPORT_SYMBOL(lcd_register_client);
 
@@ -33,9 +32,8 @@ EXPORT_SYMBOL(lcd_register_client);
  *	lcd_unregister_client - unregister a client notifier
  *	@nb: notifier block to callback on events
  */
-int lcd_unregister_client(struct notifier_block *nb)
-{
-	return blocking_notifier_chain_unregister(&lcd_notifier_list, nb);
+int lcd_unregister_client(struct notifier_block *nb) {
+    return blocking_notifier_chain_unregister(&lcd_notifier_list, nb);
 }
 EXPORT_SYMBOL(lcd_unregister_client);
 
@@ -45,8 +43,7 @@ EXPORT_SYMBOL(lcd_unregister_client);
  *	@v: pointer passed unmodified to notifier function
  *
  */
-int lcd_notifier_call_chain(unsigned long val, void *v)
-{
-	return blocking_notifier_call_chain(&lcd_notifier_list, val, v);
+int lcd_notifier_call_chain(unsigned long val, void *v) {
+    return blocking_notifier_call_chain(&lcd_notifier_list, val, v);
 }
 EXPORT_SYMBOL_GPL(lcd_notifier_call_chain);
