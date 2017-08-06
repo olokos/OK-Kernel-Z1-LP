@@ -418,6 +418,7 @@ void wpalWcnssResetIntr(void)
 /*---------------------------------------------------------------------------
     wpalWcnssIsProntoHwVer3 -  Check if Pronto Hw ver3
 
+missing commit here
     Param:
        None
     Return:
