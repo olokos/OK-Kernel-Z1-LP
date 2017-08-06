@@ -119,6 +119,13 @@ static inline struct proc_dir_entry *pde_get(struct proc_dir_entry *pde)
 	atomic_inc(&pde->count);
 	return pde;
 }
+
+static inline void *__PDE_DATA(const struct inode *inode)
+{
+	return PDE(inode)->data;
+}
+
+
 void pde_put(struct proc_dir_entry *pde);
 
 int proc_fill_super(struct super_block *);

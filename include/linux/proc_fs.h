@@ -106,6 +106,8 @@ extern void proc_root_init(void);
 
 void proc_flush_task(struct task_struct *task);
 
+extern void *PDE_DATA(const struct inode *);
+
 extern struct proc_dir_entry *create_proc_entry(const char *name, umode_t mode,
 						struct proc_dir_entry *parent);
 struct proc_dir_entry *proc_create_data(const char *name, umode_t mode,
@@ -198,6 +200,8 @@ static inline struct proc_dir_entry *proc_create_data(const char *name,
 {
 	return NULL;
 }
+static inline void *PDE_DATA(const struct inode *inode) {BUG(); return NULL;}
+
 #define remove_proc_entry(name, parent) do {} while (0)
 
 static inline struct proc_dir_entry *proc_symlink(const char *name,
