@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2011-2013, 2016 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +18,13 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+ */
+
 /** ------------------------------------------------------------------------- *
     ------------------------------------------------------------------------- *
 
@@ -27,8 +34,6 @@
     \brief Exports and types for the Platform Abstraction Layer interfaces.
 
     $Id$
-
-    Copyright (C) 2006 Airgo Networks, Incorporated
     This file contains all the interfaces for thge Platform Abstration Layer
     functions.  It is intended to be included in all modules that are using
     the PAL interfaces.
@@ -205,6 +210,8 @@ eHalStatus palWriteDeviceMemory( tHddHandle hHdd, tANI_U32 memOffset, tANI_U8 *p
     try to use it unless the status returns success).
 
   -------------------------------------------------------------------------------*/
+#ifndef FEATURE_WLAN_PAL_MEM_DISABLE
+
 #ifdef MEMORY_DEBUG
 #define palAllocateMemory(hHdd, ppMemory, numBytes) palAllocateMemory_debug(hHdd, ppMemory, numBytes, __FILE__, __LINE__)
 eHalStatus palAllocateMemory_debug( tHddHandle hHdd, void **ppMemory, tANI_U32 numBytes, char* fileName, tANI_U32 lineNum );
@@ -300,7 +307,8 @@ eHalStatus palCopyMemory( tHddHandle hHdd, void *pDst, const void *pSrc, tANI_U3
 
   -------------------------------------------------------------------------------*/
 ANI_INLINE_FUNCTION
-eHalStatus palZeroMemory( tHddHandle hHdd, void *pMemory, tANI_U32 numBytes ) {
+eHalStatus palZeroMemory( tHddHandle hHdd, void *pMemory, tANI_U32 numBytes )
+{
     return( palFillMemory( hHdd, pMemory, numBytes, 0 ) );
 }
 
@@ -325,7 +333,7 @@ eHalStatus palZeroMemory( tHddHandle hHdd, void *pMemory, tANI_U32 numBytes ) {
 
   -------------------------------------------------------------------------------*/
 tANI_BOOLEAN palEqualMemory( tHddHandle hHdd, void *pMemory1, void *pMemory2, tANI_U32 numBytes );
-
+#endif
 /** ---------------------------------------------------------------------------
 
     \fn palFillDeviceMemory
@@ -385,7 +393,8 @@ eHalStatus palFillDeviceMemory( tHddHandle hHdd, tANI_U32 memOffset, tANI_U32 nu
 
   -------------------------------------------------------------------------------*/
 ANI_INLINE_FUNCTION
-eHalStatus palZeroDeviceMemory( tHddHandle hHdd, tANI_U32 memOffset, tANI_U32 numBytes ) {
+eHalStatus palZeroDeviceMemory( tHddHandle hHdd, tANI_U32 memOffset, tANI_U32 numBytes )
+{
     return( palFillDeviceMemory( hHdd, memOffset, numBytes, 0 ) );
 }
 
@@ -442,7 +451,7 @@ extern void palGetUnicastStats(tHddHandle hHdd, tANI_U32 *tx, tANI_U32 *rx);
 
     \return tick count.
 ----------------------------------------------------------------------------------*/
-tANI_U32 palGetTickCount(tHddHandle hHdd);
+tANI_TIMESTAMP palGetTickCount(tHddHandle hHdd);
 
 /** ---------------------------------------------------------------------------
 
@@ -546,8 +555,8 @@ eHalStatus palWriteRegMemory( tHddHandle hHdd, tANI_U32 memOffset, tANI_U8 *pBuf
 
   -------------------------------------------------------------------------------*/
 eHalStatus palWaitRegVal( tHddHandle hHdd, tANI_U32 reg, tANI_U32 mask,
-                          tANI_U32 waitRegVal, tANI_U32 perIterWaitInNanoSec,
-                          tANI_U32 numIter, tANI_U32 *pReadRegVal );
+                             tANI_U32 waitRegVal, tANI_U32 perIterWaitInNanoSec,
+                             tANI_U32 numIter, tANI_U32 *pReadRegVal );
 
 /** ---------------------------------------------------------------------------
 
@@ -594,23 +603,27 @@ tANI_U16 pal_cpu_to_be16(tANI_U16 x) ;
 #if defined( ANI_LITTLE_BYTE_ENDIAN )
 
 // Need to eliminate these and use the ani_cpu_to_le, etc. macros....
-ANI_INLINE_FUNCTION unsigned long i_htonl( unsigned long ul ) {
-    return( ( ( ul & 0x000000ff ) << 24 ) |
-            ( ( ul & 0x0000ff00 ) <<  8 ) |
-            ( ( ul & 0x00ff0000 ) >>  8 ) |
-            ( ( ul & 0xff000000 ) >> 24 )   );
+ANI_INLINE_FUNCTION unsigned long i_htonl( unsigned long ul )
+{
+  return( ( ( ul & 0x000000ff ) << 24 ) |
+          ( ( ul & 0x0000ff00 ) <<  8 ) |
+          ( ( ul & 0x00ff0000 ) >>  8 ) |
+          ( ( ul & 0xff000000 ) >> 24 )   );
 }
 
-ANI_INLINE_FUNCTION unsigned short i_htons( unsigned short us ) {
-    return( ( ( us >> 8 ) & 0x00ff ) + ( ( us << 8 ) & 0xff00 ) );
+ANI_INLINE_FUNCTION unsigned short i_htons( unsigned short us )
+{
+  return( ( ( us >> 8 ) & 0x00ff ) + ( ( us << 8 ) & 0xff00 ) );
 }
 
-ANI_INLINE_FUNCTION unsigned short i_ntohs( unsigned short us ) {
-    return( i_htons( us ) );
+ANI_INLINE_FUNCTION unsigned short i_ntohs( unsigned short us )
+{
+  return( i_htons( us ) );
 }
 
-ANI_INLINE_FUNCTION unsigned long i_ntohl( unsigned long ul ) {
-    return( i_htonl( ul ) );
+ANI_INLINE_FUNCTION unsigned long i_ntohl( unsigned long ul )
+{
+  return( i_htonl( ul ) );
 }
 
 #endif //#if defined( ANI_LITTLE_BYTE_ENDIAN )
@@ -632,12 +645,13 @@ ANI_INLINE_FUNCTION unsigned long i_ntohl( unsigned long ul ) {
     be valid. Caller to verify.
 
   -------------------------------------------------------------------------------*/
-ANI_INLINE_FUNCTION tANI_U8 * pal_set_U32(tANI_U8 *ptr, tANI_U32 value) {
+ANI_INLINE_FUNCTION tANI_U8 * pal_set_U32(tANI_U8 *ptr, tANI_U32 value)
+{
 #if defined( ANI_BIG_BYTE_ENDIAN )
-    *(ptr) = ( tANI_U8 )( value >> 24 );
-    *(ptr + 1) = ( tANI_U8 )( value >> 16 );
-    *(ptr + 2) = ( tANI_U8 )( value >> 8 );
-    *(ptr + 3) = ( tANI_U8 )( value );
+     *(ptr) = ( tANI_U8 )( value >> 24 );
+     *(ptr + 1) = ( tANI_U8 )( value >> 16 );
+     *(ptr + 2) = ( tANI_U8 )( value >> 8 );
+     *(ptr + 3) = ( tANI_U8 )( value );
 #else
     *(ptr + 3) = ( tANI_U8 )( value >> 24 );
     *(ptr + 2) = ( tANI_U8 )( value >> 16 );
@@ -665,10 +679,11 @@ ANI_INLINE_FUNCTION tANI_U8 * pal_set_U32(tANI_U8 *ptr, tANI_U32 value) {
     be valid. Caller to verify.
 
   -------------------------------------------------------------------------------*/
-ANI_INLINE_FUNCTION tANI_U8 * pal_set_U16(tANI_U8 *ptr, tANI_U16 value) {
+ANI_INLINE_FUNCTION tANI_U8 * pal_set_U16(tANI_U8 *ptr, tANI_U16 value)
+{
 #if defined( ANI_BIG_BYTE_ENDIAN )
-    *(ptr) = ( tANI_U8 )( value >> 8 );
-    *(ptr + 1) = ( tANI_U8 )( value );
+     *(ptr) = ( tANI_U8 )( value >> 8 );
+     *(ptr + 1) = ( tANI_U8 )( value );
 #else
     *(ptr + 1) = ( tANI_U8 )( value >> 8 );
     *(ptr) = ( tANI_U8 )( value );
@@ -695,13 +710,14 @@ ANI_INLINE_FUNCTION tANI_U8 * pal_set_U16(tANI_U8 *ptr, tANI_U16 value) {
     be valid. Caller to verify.
 
   -------------------------------------------------------------------------------*/
-ANI_INLINE_FUNCTION tANI_U8 * pal_get_U16(tANI_U8 *ptr, tANI_U16 *pValue) {
+ANI_INLINE_FUNCTION tANI_U8 * pal_get_U16(tANI_U8 *ptr, tANI_U16 *pValue)
+{
 #if defined( ANI_BIG_BYTE_ENDIAN )
     *pValue = (((tANI_U16) (*ptr << 8)) |
-               ((tANI_U16) (*(ptr+1))));
+            ((tANI_U16) (*(ptr+1))));
 #else
     *pValue = (((tANI_U16) (*(ptr+1) << 8)) |
-               ((tANI_U16) (*ptr)));
+            ((tANI_U16) (*ptr)));
 #endif
 
     return (ptr + 2);
@@ -725,17 +741,18 @@ ANI_INLINE_FUNCTION tANI_U8 * pal_get_U16(tANI_U8 *ptr, tANI_U16 *pValue) {
     be valid. Caller to verify.
 
   -------------------------------------------------------------------------------*/
-ANI_INLINE_FUNCTION tANI_U8 * pal_get_U32(tANI_U8 *ptr, tANI_U32 *pValue) {
+ANI_INLINE_FUNCTION tANI_U8 * pal_get_U32(tANI_U8 *ptr, tANI_U32 *pValue)
+{
 #if defined( ANI_BIG_BYTE_ENDIAN )
     *pValue = ( (tANI_U32)(*(ptr) << 24) |
-                (tANI_U32)(*(ptr+1) << 16) |
-                (tANI_U32)(*(ptr+2) << 8) |
-                (tANI_U32)(*(ptr+3)) );
+             (tANI_U32)(*(ptr+1) << 16) |
+             (tANI_U32)(*(ptr+2) << 8) |
+             (tANI_U32)(*(ptr+3)) );
 #else
     *pValue = ( (tANI_U32)(*(ptr+3) << 24) |
-                (tANI_U32)(*(ptr+2) << 16) |
-                (tANI_U32)(*(ptr+1) << 8) |
-                (tANI_U32)(*(ptr)) );
+             (tANI_U32)(*(ptr+2) << 16) |
+             (tANI_U32)(*(ptr+1) << 8) |
+             (tANI_U32)(*(ptr)) );
 #endif
 
     return (ptr + 4);

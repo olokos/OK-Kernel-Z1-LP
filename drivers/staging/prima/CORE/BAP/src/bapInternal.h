@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,25 +18,11 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+
 /*
- * Copyright (c) 2012, The Linux Foundation. All rights reserved.
- *
- * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
- *
- *
- * Permission to use, copy, modify, and/or distribute this software for
- * any purpose with or without fee is hereby granted, provided that the
- * above copyright notice and this permission notice appear in all
- * copies.
- *
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
- * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
- * AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
- * DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
- * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
- * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
- * PERFORMANCE OF THIS SOFTWARE.
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
  */
 
 #ifndef WLAN_QCT_WLANBAP_INTERNAL_H
@@ -44,17 +30,15 @@
 
 /*===========================================================================
 
-               W L A N   B T - A M P  P A L   L A Y E R
+               W L A N   B T - A M P  P A L   L A Y E R 
                        I N T E R N A L  A P I
-
-
+                
+                   
 DESCRIPTION
-  This file contains the internal API exposed by the wlan BT-AMP PAL layer
+  This file contains the internal API exposed by the wlan BT-AMP PAL layer 
   module.
-
-
-  Copyright (c) 2008 QUALCOMM Incorporated. All Rights Reserved.
-  Qualcomm Confidential and Proprietary
+  
+      
 ===========================================================================*/
 
 
@@ -87,15 +71,15 @@ when        who    what, where, why
 /*----------------------------------------------------------------------------
  * Include Files
  * -------------------------------------------------------------------------*/
-#include "vos_api.h"
-#include "vos_packet.h"
+#include "vos_api.h" 
+#include "vos_packet.h" 
 
 // Pick up the CSR API definitions
 #include "csrApi.h"
 
-/* BT-AMP PAL API structure types  - FramesC generated */
-#include "btampHCI.h"
-#include "bapApi.h"
+/* BT-AMP PAL API structure types  - FramesC generated */ 
+#include "btampHCI.h" 
+#include "bapApi.h" 
 
 // Pick up the BTAMP FSM definitions
 #include "fsmDefs.h"
@@ -111,26 +95,26 @@ when        who    what, where, why
 /*----------------------------------------------------------------------------
  * Preprocessor Definitions and Constants
  * -------------------------------------------------------------------------*/
-#ifdef __cplusplus
-extern "C" {
-#endif
-
+ #ifdef __cplusplus
+ extern "C" {
+ #endif 
+ 
 
 /*----------------------------------------------------------------------------
  *  Defines
  * -------------------------------------------------------------------------*/
 // Temporary so that I can compile
 //#define VOS_MODULE_ID_BAP 9
-// Temporary
+// Temporary 
 //#define BAP_DEBUG
 
-// Used to enable or disable security on the BT-AMP link
+// Used to enable or disable security on the BT-AMP link 
 #define WLANBAP_SECURITY_ENABLED_STATE VOS_TRUE
 
-// How do I get BAP context from voss context?
-#define VOS_GET_BAP_CB(ctx) vos_get_context( VOS_MODULE_ID_BAP, ctx)
-// How do I get halHandle from voss context?
-#define VOS_GET_HAL_CB(ctx) vos_get_context( VOS_MODULE_ID_SME, ctx)
+// How do I get BAP context from voss context? 
+#define VOS_GET_BAP_CB(ctx) vos_get_context( VOS_MODULE_ID_BAP, ctx) 
+// How do I get halHandle from voss context? 
+#define VOS_GET_HAL_CB(ctx) vos_get_context( VOS_MODULE_ID_SME, ctx) 
 
 // Default timeout values (in BR/EDR baseband slots)
 // Physical Link Connection Accept Timer interval (0x1FA0 * 0.625 = 5.06 sec)
@@ -163,7 +147,7 @@ extern "C" {
 #define WLANBAP_BE_FLUSH_TIMEOUT 10
 
 /* Length of the LLC header*/
-#define WLANBAP_LLC_HEADER_LEN   8
+#define WLANBAP_LLC_HEADER_LEN   8 
 
 /*Size of the protocol type field inside the LLC/SNAP header*/
 #define WLANBAP_LLC_PROTO_TYPE_SIZE            2
@@ -189,7 +173,7 @@ extern "C" {
 typedef struct sBtampHCI_Buffer_Size {
 //    v_U8_t       present;
     /* D9r14 says Max80211PALPDUSize 1492 */
-    v_U16_t      HC_ACL_Data_Packet_Length;
+    v_U16_t      HC_ACL_Data_Packet_Length;  
     v_U8_t       HC_SCO_Packet_Length;
     v_U16_t      HC_Total_Num_ACL_Packets;
     v_U16_t      HC_Total_Num_SCO_Packets;
@@ -199,7 +183,7 @@ typedef struct sBtampHCI_Data_Block_Size {
 //    v_U8_t       present;
     v_U8_t       status;
     /* D9r14 says Max80211PALPDUSize 1492 */
-    v_U16_t      HC_Max_ACL_Data_Packet_Length;
+    v_U16_t      HC_Max_ACL_Data_Packet_Length;  
     v_U16_t      HC_Data_Block_Length;
     v_U16_t      HC_Total_Num_Data_Blocks;
 } tBtampHCI_Data_Block_Size;
@@ -207,10 +191,10 @@ typedef struct sBtampHCI_Data_Block_Size {
 typedef struct sBtampHCI_Version_Info {
 //    v_U8_t       present;
     v_U8_t       HC_HCI_Version;
-    v_U16_t      HC_HCI_Revision;
+    v_U16_t      HC_HCI_Revision;  
     v_U8_t       HC_PAL_Version;  /* for 802.11 AMP: 0x01 */
-    v_U16_t      HC_PAL_Sub_Version; /* for 802.11 AMP: Vendor specific */
-    v_U16_t      HC_Manufac_Name; /* See BT assigned numbers */
+    v_U16_t      HC_PAL_Sub_Version; /* for 802.11 AMP: Vendor specific */ 
+    v_U16_t      HC_Manufac_Name; /* See BT assigned numbers */  
 } tBtampHCI_Version_Info;
 
 typedef struct sBtampHCI_Supported_Cmds {
@@ -220,7 +204,7 @@ typedef struct sBtampHCI_Supported_Cmds {
 
 typedef struct sBtampHCI_AMP_Info {
 //    v_U8_t       present;
-    v_U8_t       HC_AMP_Status; /* */
+    v_U8_t       HC_AMP_Status;
     v_U32_t      HC_Total_BW; /* combined uplink and downlink */
     v_U32_t      HC_Max_Guaranteed_BW; /* upper bound */
     v_U32_t      HC_Min_Latency; /* AMP HCI latency + DIFS + CWMin */
@@ -228,7 +212,7 @@ typedef struct sBtampHCI_AMP_Info {
     v_U8_t       HC_Controller_Type; /* 0x01 for 802.11 BT-AMP PAL  */
     v_U16_t      HC_PAL_Capabilities;  /* Bit 0: 0 = No Guarantee; 1 = Guarantee */
     v_U16_t      HC_AMP_Assoc_Length;  /* Length of AMP Assoc Info */
-    /* Equal to Max80211AMPASSOCLen (672) */
+                                       /* Equal to Max80211AMPASSOCLen (672) */
     v_U16_t      HC_Max_Flush_Timeout;  /* Maximum time Tx attempted. 0 is inf retry */
     v_U16_t      HC_BE_Flush_Timeout;  /* Maximum time BE Tx attempted. 0 is inf retry */
 } tBtampHCI_AMP_Info;
@@ -264,10 +248,10 @@ typedef struct sBtampLogLinkCtx {
     v_U16_t      log_link_handle;  /* 8 bits of phy_link_handle and our index */
 
     /* The flow spec (From section 5.6 of Generic AMP spec)  */
-    tBtampTLVFlow_Spec btampFlowSpec;
+    tBtampTLVFlow_Spec btampFlowSpec;   
 
     /* The Access category  */
-    WLANTL_ACEnumType btampAC;
+    WLANTL_ACEnumType btampAC;   
 
     /* The TID  */
     v_U8_t    ucTID;
@@ -275,9 +259,9 @@ typedef struct sBtampLogLinkCtx {
     /* UP of the packet being sent */
     v_U8_t    ucUP;
 
-    /*Number of packets completed since the last time num pkt complete event
+    /*Number of packets completed since the last time num pkt complete event 
       was issued*/
-    v_U32_t   uTxPktCompleted;
+    v_U32_t   uTxPktCompleted;    
 
 }  tBtampLogLinkCtx, *tpBtampLogLinkCtx ;
 
@@ -292,36 +276,36 @@ typedef struct sBtampQosCfg {
 /*----------------------------------------------------------------------------
  *  Opaque BAP context Type Declaration
  * -------------------------------------------------------------------------*/
-// We were only using this syntax, when this was truly opaque.
+// We were only using this syntax, when this was truly opaque. 
 // (I.E., it was defined in a different file.)
 //typedef struct sBtampContext tBtampContext, *ptBtampContext;
 
 
-// Validity check the logical link value
-#define BTAMP_VALID_LOG_LINK(a) ( a > 0 && a < WLANBAP_MAX_LOG_LINKS ? 1 : 0)
+// Validity check the logical link value 
+#define BTAMP_VALID_LOG_LINK(a) ( a > 0 && a < WLANBAP_MAX_LOG_LINKS ? 1 : 0)  
 
 /* Instance data definition of state machine */
 // Moved here from the BTAMP FSM definitions in btampFsm.h
-typedef struct {
-    BTAMPFSM_ENTRY_FLAG_T disconnectedEntry;
-    BTAMPFSM_STATEVAR_T stateVar;
-    BTAMPFSM_INST_ID_T inst_id;
+typedef struct{
+  BTAMPFSM_ENTRY_FLAG_T disconnectedEntry;
+  BTAMPFSM_STATEVAR_T stateVar;
+  BTAMPFSM_INST_ID_T inst_id;
 } BTAMPFSM_INSTANCEDATA_T;
 
 /* BT-AMP device role */
-typedef enum {
+typedef enum{
     BT_RESPONDER,
     BT_INITIATOR
 } tWLAN_BAPRole;
 
 /* BT-AMP device role */
-typedef enum {
+typedef enum{
     WLAN_BAPLogLinkClosed,
     WLAN_BAPLogLinkOpen,
     WLAN_BAPLogLinkInProgress,
 } tWLAN_BAPLogLinkState;
 
-typedef struct {
+typedef struct{
     v_U8_t       phyLinkHandle;
     v_U8_t       txFlowSpec[18];
     v_U8_t       rxFlowSpec[18];
@@ -335,7 +319,7 @@ typedef struct sBtampContext {
 #ifndef BTAMP_MULTIPLE_PHY_LINKS
 
     // Include the enclosing VOSS context here
-    v_PVOID_t                 pvosGCtx;
+    v_PVOID_t                 pvosGCtx; 
 
     //  include the phy link state machine structure here
     tWLAN_BAPbapPhysLinkMachine   bapPhysLinkMachine;
@@ -345,13 +329,13 @@ typedef struct sBtampContext {
     // Include the SME(CSR) sessionId here
     v_U8_t                    sessionId;
 
-    // Actual storage for AP and self (STA) SSID
+    // Actual storage for AP and self (STA) SSID 
     //tSirMacSSid               SSID[2];
     tCsrSSIDInfo              SSIDList[2];
-    // Actual storage for AP bssid
+    // Actual storage for AP bssid 
     tCsrBssid                 bssid;
     // Include the SME(CSR) context here
-    tCsrRoamProfile           csrRoamProfile;
+    tCsrRoamProfile           csrRoamProfile; 
     tANI_U32                  csrRoamId;
 
     // QOS config
@@ -362,26 +346,26 @@ typedef struct sBtampContext {
 
     // associated boolean flag
     v_U8_t                    mAssociated;
-    // associated status
+    // associated status 
     v_U8_t                    mAssociatedStatus;
-    tCsrBssid                 assocBssid;
-    tBssSystemRole            systemRole;
+    tCsrBssid                 assocBssid;  
+    tBssSystemRole            systemRole; 
 
-    // own SSID
+    // own SSID  
     v_U8_t                    ownSsid[32];
     v_U32_t                   ownSsidLen;
 
-    // incoming Assoc SSID
+    // incoming Assoc SSID  
     v_U8_t                    assocSsid[32];
     v_U32_t                   assocSsidLen;
 
     // gNeedPhysLinkCompEvent
     v_U8_t                    gNeedPhysLinkCompEvent;
-    // gPhysLinkStatus
+    // gPhysLinkStatus 
     v_U8_t                    gPhysLinkStatus;
     // gDiscRequested
     v_U8_t                    gDiscRequested;
-    // gDiscReason
+    // gDiscReason 
     v_U8_t                    gDiscReason;
 
     // Include the BSL per-application context here
@@ -390,7 +374,7 @@ typedef struct sBtampContext {
     // (Right now, there is only one)
     v_PVOID_t                 pHddHdl;
     /* 8 bits of phy_link_handle identifies this association */
-    v_U8_t                    phy_link_handle;
+    v_U8_t                    phy_link_handle;  
     // Short Range Mode setting for this physical link
     v_U8_t                    phy_link_srm;
 
@@ -398,38 +382,38 @@ typedef struct sBtampContext {
     v_U8_t                    key_type;
     v_U8_t                    key_length;
     v_U8_t                    key_material[32];
-
+    
     /* Physical link quality status
        After the physical link is up, SME indicates the link quality through
        callback. This value is returned to upper layer on request.
        */
     v_U8_t                    link_quality;
-
+    
     /* Connection Accept timer*/
-    vos_timer_t               bapConnectionAcceptTimer;
+    vos_timer_t               bapConnectionAcceptTimer; 
     /* Link Supervision timer*/
-    vos_timer_t               bapLinkSupervisionTimer;
+    vos_timer_t               bapLinkSupervisionTimer; 
     /* Logical Link Accept timer*/
-    vos_timer_t               bapLogicalLinkAcceptTimer;
+    vos_timer_t               bapLogicalLinkAcceptTimer; 
     /* Best Effort Flush timer*/
-    vos_timer_t               bapBEFlushTimer;
+    vos_timer_t               bapBEFlushTimer; 
 
     /* TX Packet Monitoring timer*/
-    vos_timer_t               bapTxPktMonitorTimer;
+    vos_timer_t               bapTxPktMonitorTimer; 
 
     /* Connection Accept Timer interval (in BR/EDR baseband slots)
      * Interval length = N * 0.625 msec (1 BR/EDR baseband slot)
      */
-    v_U16_t                   bapConnectionAcceptTimerInterval;
+    v_U16_t                   bapConnectionAcceptTimerInterval; 
 
     /* Link Supervision Timer interval (in BR/EDR baseband slots) */
-    v_U16_t                   bapLinkSupervisionTimerInterval;
+    v_U16_t                   bapLinkSupervisionTimerInterval; 
 
     /* Logical Link Accept Timer interval (in BR/EDR baseband slots) */
-    v_U16_t                   bapLogicalLinkAcceptTimerInterval;
+    v_U16_t                   bapLogicalLinkAcceptTimerInterval; 
 
     /* Best Effort Flush timer interval*/
-    v_U32_t                   bapBEFlushTimerInterval;
+    v_U32_t                   bapBEFlushTimerInterval; 
 
     // Include the current channel here
     v_U32_t                   channel;
@@ -443,25 +427,25 @@ typedef struct sBtampContext {
 
     // The array of logical links
     /* the last small integer (<16) value assigned by us */
-    v_U8_t                    current_log_link_index; /* assigned mod 16 */
-    v_U8_t                    total_log_link_index; /* should never be >16 */
+    v_U8_t                    current_log_link_index; /* assigned mod 16 */  
+    v_U8_t                    total_log_link_index; /* should never be >16 */  
     /* The actual array */
-    tBtampLogLinkCtx          btampLogLinkCtx[WLANBAP_MAX_LOG_LINKS];
-
+    tBtampLogLinkCtx          btampLogLinkCtx[WLANBAP_MAX_LOG_LINKS];  
+    
     // Include the HDD BAP Shim Layer callbacks for Fetch, TxComp, and RxPkt
     WLANBAP_STAFetchPktCBType pfnBtampFetchPktCB;
     WLANBAP_STARxCBType       pfnBtamp_STARxCB;
     WLANBAP_TxCompCBType      pfnBtampTxCompCB;
 
-    /* Implements the callback for ALL asynchronous events. */
+    /* Implements the callback for ALL asynchronous events. */ 
     tpWLAN_BAPEventCB         pBapHCIEventCB;
 
-    // Save Page2 of the event mask.
+    // Save Page2 of the event mask.  
     v_U8_t                    event_mask_page_2[8];
 
     // Include the Local Assoc structure.
-    // (This gets filled during initialization. It is used, for example, to
-    // obtain the local MAC address for forming the 802.3 frame.)
+    // (This gets filled during initialization. It is used, for example, to 
+    // obtain the local MAC address for forming the 802.3 frame.) 
     // <<Why don't I just pull out the individ fields I need?  Like MAC addr.>>
     tBtampHCI_AMP_Assoc       btamp_AMP_Assoc;
 
@@ -470,10 +454,11 @@ typedef struct sBtampContext {
 
     tBtampTLVHCI_Location_Data_Info  btamp_Location_Data_Info;
 
-    union {
+    union
+    {
         tAuthRsnFsm authFsm;
         tSuppRsnFsm suppFsm;
-    } uFsm;
+    }uFsm;
     //LinkSupervision packet
     tANI_BOOLEAN lsReqPktPending;
     tANI_BOOLEAN dataPktPending;
@@ -483,7 +468,7 @@ typedef struct sBtampContext {
     vos_pkt_t *lsRepPacket;
     v_U16_t    lsPktln;
     v_U16_t    lsPending;
-    WLANTL_MetaInfoType  metaInfo;
+    WLANTL_MetaInfoType  metaInfo;   
     tANI_BOOLEAN isBapSessionOpen;
 
     tWLAN_BAPLogLinkState  btamp_logical_link_state;
@@ -499,7 +484,7 @@ typedef struct sBtampContext {
 #else // defined(BTAMP_MULTIPLE_PHY_LINKS)
 
     // Include the enclosing VOSS context here
-    v_PVOID_t                 pvosGCtx;
+    v_PVOID_t                 pvosGCtx; 
 
     //    include the state machine structure here
 
@@ -509,7 +494,7 @@ typedef struct sBtampContext {
     // (Right now, there is only one)
     v_PVOID_t                 pHddHdl;
     /* 8 bits of phy_link_handle identifies this association */
-    v_U8_t                    phy_link_handle;
+    v_U8_t                    phy_link_handle;  
     // Short Range Mode setting for this physical link
     v_U8_t                    phy_link_srm;
 
@@ -522,32 +507,32 @@ typedef struct sBtampContext {
 
     // The array of logical links
     /* the last small integer (<16) value assigned by us */
-    v_U8_t                    current_log_link_index; /* assigned mod 16 */
-    v_U8_t                    total_log_link_index; /* should never be >16 */
+    v_U8_t                    current_log_link_index; /* assigned mod 16 */  
+    v_U8_t                    total_log_link_index; /* should never be >16 */  
     /* The actual array */
-    tBtampLogLinkCtx          btampLogLinkCtx[WLANBAP_MAX_LOG_LINKS];
-
+    tBtampLogLinkCtx          btampLogLinkCtx[WLANBAP_MAX_LOG_LINKS];  
+    
     // Include the HDD BAP Shim Layer callbacks for Fetch, TxComp, and RxPkt
     WLANBAP_STAFetchPktCBType pfnBtampFetchPktCB;
     WLANBAP_STARxCBType       pfnBtamp_STARxCB;
     WLANBAP_TxCompCBType      pfnBtampTxCompCB;
 
-    /* Implements the callback for ALL asynchronous events. */
+    /* Implements the callback for ALL asynchronous events. */ 
     tpWLAN_BAPEventCB         pBapHCIEventCB;
 
     // Include the Local Assoc structure.
-    // (This gets filled during initialization. It is used, for example, to
-    // obtain the local MAC address for forming the 802.3 frame.)
+    // (This gets filled during initialization. It is used, for example, to 
+    // obtain the local MAC address for forming the 802.3 frame.) 
     // <<Why don't I just pull out the individ fields I need?  Like MAC addr.>>
     tBtampHCI_AMP_Assoc       btamp_AMP_Assoc;
-    //LinkSupervision packet
-    tANI_BOOLEAN lsReqPktPending;
+    //LinkSupervision packet 
+    tANI_BOOLEAN lsReqPktPending;   
     tANI_U8 retries;
     vos_pkt_t *pPacket;
     vos_pkt_t *lsReqPacket;
     vos_pkt_t *lsRepPacket;
     v_U16_t    lsPktln;
-    WLANTL_MetaInfoType*  metaInfo;
+    WLANTL_MetaInfoType*  metaInfo; 
     tANI_BOOLEAN isBapSessionOpen;
     //End of LinkSupervision packet
 #endif //BTAMP_MULTIPLE_PHY_LINKS
@@ -557,7 +542,7 @@ typedef struct sBtampContext {
     vos_lock_t           bapLock;
     // Either Block mode or Pkt mode
     v_U8_t               ucDataTrafficMode;
-}*ptBtampContext;
+}*ptBtampContext; 
 //tBtampContext, *ptBtampContext;
 
 /*----------------------------------------------------------------------------
@@ -567,7 +552,7 @@ typedef struct sBtampContext {
 typedef struct sBtampLsPktData {
     v_U32_t    BufLen;
     v_U8_t     pBuf[1]; // ptr to Data Buffer
-} tBtampLsPktData, *ptBtampLsPktData;
+}tBtampLsPktData, *ptBtampLsPktData;
 
 typedef struct sBtampLsPkt {
     v_U8_t     SrcMac[6];
@@ -584,20 +569,20 @@ typedef struct sBtampContext tBtampSessCtx;
 /*----------------------------------------------------------------------------
  *  BAP state machine event definition
  * -------------------------------------------------------------------------*/
-/* The event structure */
+/* The event structure */ 
 typedef struct sWLAN_BAPEvent {
     v_U32_t   event;  /* State machine input event message */
     v_PVOID_t params;  /* A VOID pointer type for all possible inputs */
     v_U32_t   u1;  /* introduced to handle csrRoamCompleteCallback roamStatus */
     v_U32_t   u2;  /* introduced to handle csrRoamCompleteCallback roamResult */
-} tWLAN_BAPEvent, *ptWLAN_BAPEvent;
-
+} tWLAN_BAPEvent, *ptWLAN_BAPEvent; 
+ 
 // Pick up the BTAMP FSM definitions
 #include "btampFsm.h"
 
 
 /*----------------------------------------------------------------------------
- *  External declarations for global context
+ *  External declarations for global context 
  * -------------------------------------------------------------------------*/
 //  The main per-Physical Link (per WLAN association) context.
 //extern tBtampContext btampCtx;
@@ -614,7 +599,7 @@ extern tBtampHCI_Supported_Cmds  btampHCI_Supported_Cmds;
 
 
 /*----------------------------------------------------------------------------
- *  Function prototypes
+ *  Function prototypes 
  * -------------------------------------------------------------------------*/
 
 /* I don't think any of this is needed */
@@ -623,116 +608,116 @@ extern tBtampHCI_Supported_Cmds  btampHCI_Supported_Cmds;
 
 /*----------------------------------------------------------------------------
 
-  FUNCTION    WLANBAP_STAFetchPktCB
+  FUNCTION    WLANBAP_STAFetchPktCB 
 
-  DESCRIPTION
-    The fetch packet callback registered with TL.
+  DESCRIPTION   
+    The fetch packet callback registered with TL. 
+    
+    It is called by the TL when the scheduling algorithms allows for 
+    transmission of another packet to the module. 
+    It will be called in the context of the BAL fetch transmit packet 
+    function, initiated by the bus lower layer. 
 
-    It is called by the TL when the scheduling algorithms allows for
-    transmission of another packet to the module.
-    It will be called in the context of the BAL fetch transmit packet
-    function, initiated by the bus lower layer.
 
-
-  PARAMETERS
+  PARAMETERS 
 
     IN
-    pvosGCtx:       pointer to the global vos context; a handle
-                    to TL's or HDD's control block can be extracted
-                    from its context
+    pvosGCtx:       pointer to the global vos context; a handle 
+                    to TL's or HDD's control block can be extracted 
+                    from its context 
 
     IN/OUT
-    pucSTAId:       the Id of the station for which TL is requesting a
-                    packet, in case HDD does not maintain per station
-                    queues it can give the next packet in its queue
-                    and put in the right value for the
-    pucAC:          access category requested by TL, if HDD does not have
-                    packets on this AC it can choose to service another AC
+    pucSTAId:       the Id of the station for which TL is requesting a 
+                    packet, in case HDD does not maintain per station 
+                    queues it can give the next packet in its queue 
+                    and put in the right value for the 
+    pucAC:          access category requested by TL, if HDD does not have 
+                    packets on this AC it can choose to service another AC 
                     queue in the order of priority
 
     OUT
-    vosDataBuff:   pointer to the VOSS data buffer that was transmitted
+    vosDataBuff:   pointer to the VOSS data buffer that was transmitted 
     tlMetaInfo:    meta info related to the data frame
 
 
-
-  RETURN VALUE
+  
+  RETURN VALUE 
     The result code associated with performing the operation
 
 ----------------------------------------------------------------------------*/
-VOS_STATUS
-WLANBAP_STAFetchPktCB
-(
-    v_PVOID_t             pvosGCtx,
-    v_U8_t*               pucSTAId,
-    v_U8_t                ucAC,
-    vos_pkt_t**           vosDataBuff,
-    WLANTL_MetaInfoType*  tlMetaInfo
+VOS_STATUS 
+WLANBAP_STAFetchPktCB 
+( 
+  v_PVOID_t             pvosGCtx,
+  v_U8_t*               pucSTAId,
+  v_U8_t                ucAC,
+  vos_pkt_t**           vosDataBuff,
+  WLANTL_MetaInfoType*  tlMetaInfo
 );
 
 /*----------------------------------------------------------------------------
 
   FUNCTION    WLANBAP_STARxCB
 
-  DESCRIPTION
-    The receive callback registered with TL.
-
-    TL will call this to notify the client when a packet was received
+  DESCRIPTION   
+    The receive callback registered with TL. 
+    
+    TL will call this to notify the client when a packet was received 
     for a registered STA.
 
-  PARAMETERS
+  PARAMETERS 
 
     IN
-    pvosGCtx:       pointer to the global vos context; a handle to
-                    TL's or HDD's control block can be extracted from
-                    its context
+    pvosGCtx:       pointer to the global vos context; a handle to 
+                    TL's or HDD's control block can be extracted from 
+                    its context 
     vosDataBuff:   pointer to the VOSS data buffer that was received
-                    (it may be a linked list)
+                    (it may be a linked list) 
     ucSTAId:        station id
-
-  RETURN VALUE
+  
+  RETURN VALUE 
     The result code associated with performing the operation
 
 ----------------------------------------------------------------------------*/
-VOS_STATUS
+VOS_STATUS 
 WLANBAP_STARxCB
 (
-    v_PVOID_t              pvosGCtx,
-    vos_pkt_t*             vosDataBuff,
-    v_U8_t                 ucSTAId,
-    WLANTL_RxMetaInfoType* pRxMetaInfo
+  v_PVOID_t              pvosGCtx, 
+  vos_pkt_t*             vosDataBuff,
+  v_U8_t                 ucSTAId, 
+  WLANTL_RxMetaInfoType* pRxMetaInfo
 );
 
 /*----------------------------------------------------------------------------
 
   FUNCTION    WLANBAP_TxCompCB
 
-  DESCRIPTION
-    The tx complete callback registered with TL.
+  DESCRIPTION   
+    The tx complete callback registered with TL. 
+    
+    TL will call this to notify the client when a transmission for a 
+    packet  has ended. 
 
-    TL will call this to notify the client when a transmission for a
-    packet  has ended.
-
-  PARAMETERS
+  PARAMETERS 
 
     IN
-    pvosGCtx:       pointer to the global vos context; a handle to
-                    TL/HAL/PE/BAP/HDD control block can be extracted from
-                    its context
-    vosDataBuff:   pointer to the VOSS data buffer that was transmitted
-    wTxSTAtus:      status of the transmission
+    pvosGCtx:       pointer to the global vos context; a handle to 
+                    TL/HAL/PE/BAP/HDD control block can be extracted from 
+                    its context 
+    vosDataBuff:   pointer to the VOSS data buffer that was transmitted 
+    wTxSTAtus:      status of the transmission 
 
-
-  RETURN VALUE
+  
+  RETURN VALUE 
     The result code associated with performing the operation
 
 ----------------------------------------------------------------------------*/
-VOS_STATUS
+VOS_STATUS 
 WLANBAP_TxCompCB
-(
-    v_PVOID_t      pvosGCtx,
-    vos_pkt_t*     vosDataBuff,
-    VOS_STATUS     wTxSTAtus
+( 
+  v_PVOID_t      pvosGCtx,
+  vos_pkt_t*     vosDataBuff,
+  VOS_STATUS     wTxSTAtus 
 );
 
 /* Callbacks Registered with TL by WLANTL_RegisterBAPClient */
@@ -741,76 +726,76 @@ WLANBAP_TxCompCB
 
 /*----------------------------------------------------------------------------
 
-  DESCRIPTION
-    The receive callback registered with TL for BAP.
+  DESCRIPTION   
+    The receive callback registered with TL for BAP. 
+    
+    The registered reception callback is being triggered by TL whenever a 
+    frame was received and it was filtered as a non-data BT AMP packet. 
 
-    The registered reception callback is being triggered by TL whenever a
-    frame was received and it was filtered as a non-data BT AMP packet.
-
-  PARAMETERS
+  PARAMETERS 
 
     IN
-    pvosGCtx:       pointer to the global vos context; a handle to TL's
-                    or SME's control block can be extracted from its context
-    vosDataBuff:   pointer to the vOSS buffer containing the received packet;
-                    no chaining will be done on this path
-
-  RETURN VALUE
+    pvosGCtx:       pointer to the global vos context; a handle to TL's 
+                    or SME's control block can be extracted from its context 
+    vosDataBuff:   pointer to the vOSS buffer containing the received packet; 
+                    no chaining will be done on this path 
+  
+  RETURN VALUE 
     The result code associated with performing the operation
 
 ----------------------------------------------------------------------------*/
 WLANTL_BAPRxCBType WLANBAP_TLRsnRxCallback
 (
-    v_PVOID_t         pvosGCtx,
-    vos_pkt_t*        vosDataBuff
-);
+ v_PVOID_t         pvosGCtx,
+ vos_pkt_t*        vosDataBuff
+); 
 
 /* Flush complete Callback */
 
 /*----------------------------------------------------------------------------
 
-  DESCRIPTION
+  DESCRIPTION   
     Callback registered with TL for BAP, this is required inorder for
-    TL to inform BAP, that the flush operation requested has been completed.
-
-    The registered reception callback is being triggered by TL whenever a
+    TL to inform BAP, that the flush operation requested has been completed. 
+    
+    The registered reception callback is being triggered by TL whenever a 
     frame SIR_TL_HAL_FLUSH_AC_RSP is received by TL from HAL.
 
-  PARAMETERS
+  PARAMETERS 
 
     IN
-    pvosGCtx:       pointer to the global vos context; a handle to TL's
-                    or SME's control block can be extracted from its context
+    pvosGCtx:       pointer to the global vos context; a handle to TL's 
+                    or SME's control block can be extracted from its context 
     ucStaId:        station identifier for the requested value
-    ucTid:          identifier of the tspec
+    ucTid:          identifier of the tspec 
     status:         status of the Flush operation
-
-  RETURN VALUE
+  
+  RETURN VALUE 
     The result code associated with performing the operation
 
 ----------------------------------------------------------------------------*/
 VOS_STATUS WLANBAP_TLFlushCompCallback
-(
-    v_PVOID_t     pvosGCtx,
-    v_U8_t        ucStaId,
-    v_U8_t        ucTID,
-    v_U8_t        status
+( 
+  v_PVOID_t     pvosGCtx,
+  v_U8_t        ucStaId, 
+  v_U8_t        ucTID, 
+  v_U8_t        status
 );
 
 /*----------------------------------------------------------------------------
- *  CSR Roam (Connection Status) callback
+ *  CSR Roam (Connection Status) callback 
  * -------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------
 
   FUNCTION    WLANBAP_RoamCallback()
 
-  DESCRIPTION
-    Callback for Roam (connection status) Events
+  DESCRIPTION 
+    Callback for Roam (connection status) Events  
 
-  DEPENDENCIES
-    NA.
+  DEPENDENCIES 
+    NA. 
 
-  PARAMETERS
+  PARAMETERS 
 
     IN
       pContext:  is the pContext passed in with the roam request
@@ -819,315 +804,315 @@ VOS_STATUS WLANBAP_TLFlushCompCallback
       roamId: is to identify the callback related roam request. 0 means unsolicited
       roamStatus: is a flag indicating the status of the callback
       roamResult: is the result
-
+   
   RETURN VALUE
-    The result code associated with performing the operation
+    The result code associated with performing the operation  
 
     eHAL_STATUS_SUCCESS:  Success
-
-  SIDE EFFECTS
-
+  
+  SIDE EFFECTS 
+  
 ----------------------------------------------------------------------------*/
 eHalStatus
 WLANBAP_RoamCallback
 (
-    void *pContext,
-    tCsrRoamInfo *pCsrRoamInfo,
-    tANI_U32 roamId,
-    eRoamCmdStatus roamStatus,
-    eCsrRoamResult roamResult
+  void *pContext, 
+  tCsrRoamInfo *pCsrRoamInfo,
+  tANI_U32 roamId, 
+  eRoamCmdStatus roamStatus, 
+  eCsrRoamResult roamResult
 );
 
 /*----------------------------------------------------------------------------
- *  Utility Function prototypes
+ *  Utility Function prototypes 
  * -------------------------------------------------------------------------*/
 
 /*==========================================================================
 
   FUNCTION    WLANBAP_CleanCB
 
-  DESCRIPTION
+  DESCRIPTION 
     Clear out all fields in the BAP context.
-
-  DEPENDENCIES
-
-  PARAMETERS
+    
+  DEPENDENCIES 
+    
+  PARAMETERS 
 
     IN
     pBtampCtx:  pointer to the BAP control block
     freeFlag:   flag indicating whether to free any allocations.
-
+   
   RETURN VALUE
-    The result code associated with performing the operation
+    The result code associated with performing the operation  
 
-    VOS_STATUS_E_FAULT:  pointer to BAP cb is NULL ; access would cause a page
-                         fault
-    VOS_STATUS_SUCCESS:  Everything is good :)
+    VOS_STATUS_E_FAULT:  pointer to BAP cb is NULL ; access would cause a page 
+                         fault  
+    VOS_STATUS_SUCCESS:  Everything is good :) 
 
-  SIDE EFFECTS
-
+  SIDE EFFECTS 
+  
 ============================================================================*/
-VOS_STATUS
+VOS_STATUS 
 WLANBAP_CleanCB
-(
-    ptBtampContext  pBtampCtx,
-    v_U32_t freeFlag // 0 /*do not empty*/);
+( 
+  ptBtampContext  pBtampCtx,
+  v_U32_t freeFlag // 0 /*do not empty*/);
 );
 
 /*==========================================================================
 
   FUNCTION    WLANBAP_GetCtxFromStaId
 
-  DESCRIPTION
+  DESCRIPTION 
     Called inside the BT-AMP PAL (BAP) layer whenever we need either the
     BSL context or the BTAMP context from the StaId.
-
-
-  DEPENDENCIES
-
-  PARAMETERS
+    
+    
+  DEPENDENCIES 
+    
+  PARAMETERS 
 
     IN
-    ucSTAId:   The StaId (used by TL, PE, and HAL)
-
+    ucSTAId:   The StaId (used by TL, PE, and HAL) 
+   
     OUT
-    hBtampHandle: Handle (pointer to a pointer) to return the
+    hBtampHandle: Handle (pointer to a pointer) to return the 
                   btampHandle value in.
     hHddHdl:      Handle to return the BSL context pointer in.
-
+   
   RETURN VALUE
-    The result code associated with performing the operation
+    The result code associated with performing the operation  
 
-    VOS_STATUS_E_FAULT:  NULL pointer; access would cause a page fault
-    VOS_STATUS_SUCCESS:  Everything is good :)
+    VOS_STATUS_E_FAULT:  NULL pointer; access would cause a page fault  
+    VOS_STATUS_SUCCESS:  Everything is good :) 
 
-  SIDE EFFECTS
-
+  SIDE EFFECTS 
+  
 ============================================================================*/
-VOS_STATUS
+VOS_STATUS 
 WLANBAP_GetCtxFromStaId
-(
-    v_U8_t         ucSTAId,  /* The StaId (used by TL, PE, and HAL) */
-    ptBtampHandle *hBtampHandle,  /* Handle to return per app btampHandle value in  */
-    ptBtampContext *hBtampContext, /* Handle to return per assoc btampContext value in  */
-    v_PVOID_t     *hHddHdl /* Handle to return BSL context in */
+( 
+  v_U8_t         ucSTAId,  /* The StaId (used by TL, PE, and HAL) */
+  ptBtampHandle *hBtampHandle,  /* Handle to return per app btampHandle value in  */ 
+  ptBtampContext *hBtampContext, /* Handle to return per assoc btampContext value in  */ 
+  v_PVOID_t     *hHddHdl /* Handle to return BSL context in */
 );
 
 /*==========================================================================
 
   FUNCTION    WLANBAP_GetStaIdFromLinkCtx
 
-  DESCRIPTION
+  DESCRIPTION 
     Called inside the BT-AMP PAL (BAP) layer whenever we need the
     StaId (or hHddHdl) from the BTAMP context and phy_link_handle.
-
-
-  DEPENDENCIES
-
-  PARAMETERS
+    
+    
+  DEPENDENCIES 
+    
+  PARAMETERS 
 
     IN
-    hBtampHandle: Handle (pointer to a pointer) to return the
+    hBtampHandle: Handle (pointer to a pointer) to return the 
                   btampHandle value in.
-    phy_link_handle: physical link handle value. Unique per assoc.
-
+    phy_link_handle: physical link handle value. Unique per assoc. 
+    
     OUT
-    pucSTAId:   The StaId (used by TL, PE, and HAL)
+    pucSTAId:   The StaId (used by TL, PE, and HAL) 
     hHddHdl:   Handle to return the BSL context pointer in.
-
+   
   RETURN VALUE
-    The result code associated with performing the operation
+    The result code associated with performing the operation  
 
-    VOS_STATUS_E_FAULT:  NULL pointer; access would cause a page fault
-    VOS_STATUS_SUCCESS:  Everything is good :)
+    VOS_STATUS_E_FAULT:  NULL pointer; access would cause a page fault  
+    VOS_STATUS_SUCCESS:  Everything is good :) 
 
-  SIDE EFFECTS
-
+  SIDE EFFECTS 
+  
 ============================================================================*/
-VOS_STATUS
+VOS_STATUS 
 WLANBAP_GetStaIdFromLinkCtx
-(
-    ptBtampHandle  btampHandle,  /* btampHandle value in  */
-    v_U8_t         phy_link_handle,  /* phy_link_handle value in */
-    v_U8_t        *pucSTAId,  /* The StaId (used by TL, PE, and HAL) */
-    v_PVOID_t     *hHddHdl /* Handle to return BSL context */
+( 
+  ptBtampHandle  btampHandle,  /* btampHandle value in  */ 
+  v_U8_t         phy_link_handle,  /* phy_link_handle value in */
+  v_U8_t        *pucSTAId,  /* The StaId (used by TL, PE, and HAL) */
+  v_PVOID_t     *hHddHdl /* Handle to return BSL context */
 );
 
 /*==========================================================================
 
   FUNCTION    WLANBAP_CreateNewPhyLinkCtx
 
-  DESCRIPTION
+  DESCRIPTION 
     Called in order to create (or update) a BAP Physical Link "context"
-
-
-  DEPENDENCIES
-
-  PARAMETERS
+    
+    
+  DEPENDENCIES 
+    
+  PARAMETERS 
 
     IN
     btampHandle:     BAP app context handle
-    phy_link_handle: phy_link_handle from the Command
+    phy_link_handle: phy_link_handle from the Command 
     pHddHdl:         BSL passes in its specific context
-
+    
     OUT
-    hBtampContext:  Handle (pointer to a pointer) to return the
+    hBtampContext:  Handle (pointer to a pointer) to return the 
                     per "Phy Link" ptBtampContext value in.
-
+   
   RETURN VALUE
-    The result code associated with performing the operation
+    The result code associated with performing the operation  
 
-    VOS_STATUS_E_FAULT:  NULL pointer; access would cause a page fault
-    VOS_STATUS_SUCCESS:  Everything is good :)
+    VOS_STATUS_E_FAULT:  NULL pointer; access would cause a page fault  
+    VOS_STATUS_SUCCESS:  Everything is good :) 
 
-  SIDE EFFECTS
-
+  SIDE EFFECTS 
+  
 ============================================================================*/
-VOS_STATUS
+VOS_STATUS 
 WLANBAP_CreateNewPhyLinkCtx
-(
-    ptBtampHandle  btampHandle,
-    v_U8_t         phy_link_handle, /*  I get phy_link_handle from the Command */
-    v_PVOID_t      pHddHdl,   /* BSL passes in its specific context */
-    ptBtampContext *hBtampContext, /* Handle to return per assoc btampContext value in  */
-    tWLAN_BAPRole  BAPDeviceRole  /* Needed to determine which MAC address to use for self MAC  */
+( 
+  ptBtampHandle  btampHandle,
+  v_U8_t         phy_link_handle, /*  I get phy_link_handle from the Command */
+  v_PVOID_t      pHddHdl,   /* BSL passes in its specific context */
+  ptBtampContext *hBtampContext, /* Handle to return per assoc btampContext value in  */ 
+  tWLAN_BAPRole  BAPDeviceRole  /* Needed to determine which MAC address to use for self MAC  */
 );
 
 /*==========================================================================
 
   FUNCTION    WLANBAP_UpdatePhyLinkCtxStaId
 
-  DESCRIPTION
+  DESCRIPTION 
     Called to update the STAId value associated with Physical Link "context"
-
-
-  DEPENDENCIES
-
-  PARAMETERS
+    
+    
+  DEPENDENCIES 
+    
+  PARAMETERS 
 
     IN
     pBtampContext:   ptBtampContext to update.
-    ucSTAId:         The StaId (used by TL, PE, and HAL)
-
-
+    ucSTAId:         The StaId (used by TL, PE, and HAL) 
+    
+   
   RETURN VALUE
-    The result code associated with performing the operation
+    The result code associated with performing the operation  
 
-    VOS_STATUS_E_FAULT:  NULL pointer; access would cause a page fault
-    VOS_STATUS_SUCCESS:  Everything is good :)
+    VOS_STATUS_E_FAULT:  NULL pointer; access would cause a page fault  
+    VOS_STATUS_SUCCESS:  Everything is good :) 
 
-  SIDE EFFECTS
-
+  SIDE EFFECTS 
+  
 ============================================================================*/
-VOS_STATUS
+VOS_STATUS 
 WLANBAP_UpdatePhyLinkCtxStaId
-(
-    ptBtampContext pBtampContext, /* btampContext value in  */
-    v_U8_t         ucSTAId
+( 
+  ptBtampContext pBtampContext, /* btampContext value in  */ 
+  v_U8_t         ucSTAId
 );
 
 /*==========================================================================
 
   FUNCTION    WLANBAP_CreateNewLogLinkCtx
 
-  DESCRIPTION
+  DESCRIPTION 
     Called in order to allocate a BAP Logical Link "context" and "index"
-
-
-  DEPENDENCIES
-
-  PARAMETERS
+    
+    
+  DEPENDENCIES 
+    
+  PARAMETERS 
 
     IN
     pBtampContext:  Pointer to the ptBtampContext value in.
-    phy_link_handle: phy_link_handle involved
-
+    phy_link_handle: phy_link_handle involved 
+    
     OUT
-    pLog_link_handle: return the log_link_handle here
-
+    pLog_link_handle: return the log_link_handle here 
+   
   RETURN VALUE
-    The result code associated with performing the operation
+    The result code associated with performing the operation  
 
-    VOS_STATUS_E_FAULT:  NULL pointer; access would cause a page fault
-    VOS_STATUS_SUCCESS:  Everything is good :)
+    VOS_STATUS_E_FAULT:  NULL pointer; access would cause a page fault  
+    VOS_STATUS_SUCCESS:  Everything is good :) 
 
-  SIDE EFFECTS
-
+  SIDE EFFECTS 
+  
 ============================================================================*/
-VOS_STATUS
+VOS_STATUS 
 WLANBAP_CreateNewLogLinkCtx
-(
-    ptBtampContext pBtampContext, /* pointer to the per assoc btampContext value */
-    v_U8_t         phy_link_handle, /*  I get phy_link_handle from the Command */
-    v_U8_t         tx_flow_spec[18],
-    v_U8_t         rx_flow_spec[18],
-    v_U16_t         *pLog_link_handle /*  Return the logical link index here */
+( 
+  ptBtampContext pBtampContext, /* pointer to the per assoc btampContext value */ 
+  v_U8_t         phy_link_handle, /*  I get phy_link_handle from the Command */
+  v_U8_t         tx_flow_spec[18],
+  v_U8_t         rx_flow_spec[18],
+  v_U16_t         *pLog_link_handle /*  Return the logical link index here */
 );
 
-/*==========================================================================
+ /*==========================================================================
 
- FUNCTION    WLANBAP_pmcFullPwrReqCB
+  FUNCTION    WLANBAP_pmcFullPwrReqCB
 
- DESCRIPTION
-   Callback provide to PMC in the pmcRequestFullPower API.
+  DESCRIPTION 
+    Callback provide to PMC in the pmcRequestFullPower API. 
+    
+    
+  DEPENDENCIES 
+    
+  PARAMETERS 
 
+    IN
+    callbackContext:  The user passed in a context to identify 
+    status:           The halStatus 
+    
+   
+  RETURN VALUE
+    None
 
- DEPENDENCIES
-
- PARAMETERS
-
-   IN
-   callbackContext:  The user passed in a context to identify
-   status:           The halStatus
-
-
- RETURN VALUE
-   None
-
- SIDE EFFECTS
-
+  SIDE EFFECTS 
+  
 ============================================================================*/
-void
+void 
 WLANBAP_pmcFullPwrReqCB
-(
-    void *callbackContext,
-    eHalStatus status
+( 
+  void *callbackContext, 
+  eHalStatus status
 );
-
+  
 /*===========================================================================
 
   FUNCTION    WLANBAP_RxProcLsPkt
 
-  DESCRIPTION
+  DESCRIPTION 
 
     This API will be called when Link Supervision frames are received at BAP
 
-  PARAMETERS
+  PARAMETERS 
 
     btampHandle: The BT-AMP PAL handle returned in WLANBAP_GetNewHndl.
-    pucAC:       Pointer to return the access category
+    pucAC:       Pointer to return the access category 
     RxProtoType: Protocol type of Received Packet
-    vosDataBuff: The data buffer containing the 802.3 frame to be
+    vosDataBuff: The data buffer containing the 802.3 frame to be 
                  translated to BT HCI Data Packet
-
+   
   RETURN VALUE
 
-    The result code associated with performing the operation
+    The result code associated with performing the operation  
 
-    VOS_STATUS_E_INVAL:  Input parameters are invalid
-    VOS_STATUS_E_FAULT:  BAP handle is NULL
-    VOS_STATUS_SUCCESS:  Everything is good :)
+    VOS_STATUS_E_INVAL:  Input parameters are invalid 
+    VOS_STATUS_E_FAULT:  BAP handle is NULL  
+    VOS_STATUS_SUCCESS:  Everything is good :) 
 
-  SIDE EFFECTS
-
+  SIDE EFFECTS 
+  
 ============================================================================*/
 VOS_STATUS
 WLANBAP_RxProcLsPkt
-(
-    ptBtampHandle     btampHandle,
-    v_U8_t            phy_link_handle,  /* Used by BAP to indentify the WLAN assoc. (StaId) */
-    v_U16_t            RxProtoType,     /* Protocol Type from the frame received */
-    vos_pkt_t         *vosRxLsBuff
+( 
+  ptBtampHandle     btampHandle, 
+  v_U8_t            phy_link_handle,  /* Used by BAP to indentify the WLAN assoc. (StaId) */
+  v_U16_t            RxProtoType,     /* Protocol Type from the frame received */
+  vos_pkt_t         *vosRxLsBuff
 );
 
 
@@ -1135,93 +1120,93 @@ WLANBAP_RxProcLsPkt
 
   FUNCTION    WLANBAP_TxLinkSupervisionReq()
 
-  DESCRIPTION
+  DESCRIPTION 
     Implements the LinkSupervision Tx Request procedure.This will be called by APIs that want
-    to transmit LinkSupervision Packets
+    to transmit LinkSupervision Packets  
     Calls PktPending CB to indicate a packet is pending for transmission
+    
 
+  DEPENDENCIES 
+    NA. 
 
-  DEPENDENCIES
-    NA.
-
-  PARAMETERS
+  PARAMETERS 
 
     IN
     btampHandle: pointer to the BAP handle.  Returned from WLANBAP_GetNewHndl.
     phy_link_handle: Used by BAP to indentify the WLAN assoc. (StaId)
     vosDataBuff:The actual packet being sent in Tx request
-    protoType : specifies if it is a LS REQ or LS REP packet
-
+    protoType : specifies if it is a LS REQ or LS REP packet 
+    
      RETURN VALUE
-    The result code associated with performing the operation
+    The result code associated with performing the operation  
 
-    VOS_STATUS_E_FAULT:  Failure of Transmit procedure
+    VOS_STATUS_E_FAULT:  Failure of Transmit procedure 
     VOS_STATUS_SUCCESS:  Success
-
-  SIDE EFFECTS
-
+  
+  SIDE EFFECTS 
+  
 ----------------------------------------------------------------------------*/
 VOS_STATUS
 WLANBAP_TxLinkSupervision
-(
-    ptBtampHandle     btampHandle,
-    v_U8_t            phy_link_handle,  /* Used by BAP to indentify the WLAN assoc. (StaId) */
-    vos_pkt_t         *vosDataBuff,
-    v_U16_t           protoType
+( 
+  ptBtampHandle     btampHandle, 
+  v_U8_t            phy_link_handle,  /* Used by BAP to indentify the WLAN assoc. (StaId) */
+  vos_pkt_t         *vosDataBuff,
+  v_U16_t           protoType
 );
 
 /*==========================================================================
 
   FUNCTION    WLANBAP_ReadMacConfig
 
-  DESCRIPTION
+  DESCRIPTION 
     This function sets the MAC config (Address and SSID to BT-AMP context
+        
+  DEPENDENCIES 
+    
+  PARAMETERS 
 
-  DEPENDENCIES
-
-  PARAMETERS
-
-    pvosGCtx:       pointer to the global vos context; a handle to BAP's
-                    control block can be extracted from its context
-
+    pvosGCtx:       pointer to the global vos context; a handle to BAP's 
+                    control block can be extracted from its context 
+   
   RETURN VALUE
     None
 
-  SIDE EFFECTS
-
+  SIDE EFFECTS 
+  
 ============================================================================*/
 void
 WLANBAP_ReadMacConfig
-(
-    ptBtampContext  pBtampCtx
+( 
+  ptBtampContext  pBtampCtx 
 );
 
 /*==========================================================================
 
   FUNCTION    WLANBAP_NeedBTCoexPriority
 
-  DESCRIPTION
+  DESCRIPTION 
     This function will cause a message to be sent to BTC firmware
     if a change in priority has occurred.  (From AMP's point-of-view.)
+        
+  DEPENDENCIES 
+    
+  PARAMETERS 
 
-  DEPENDENCIES
-
-  PARAMETERS
-
-    pvosGCtx:       pointer to the global vos context; a handle to HAL's
-                    control block can be extracted from its context
-
+    pvosGCtx:       pointer to the global vos context; a handle to HAL's 
+                    control block can be extracted from its context 
+   
   RETURN VALUE
     None
 
-  SIDE EFFECTS
-
+  SIDE EFFECTS 
+  
 ============================================================================*/
 void
 WLANBAP_NeedBTCoexPriority
-(
-    ptBtampContext  pBtampCtx,
-    v_U32_t         needCoexPriority
+( 
+  ptBtampContext  pBtampCtx, 
+  v_U32_t         needCoexPriority
 );
 
 
@@ -1229,27 +1214,27 @@ WLANBAP_NeedBTCoexPriority
 
   FUNCTION    WLANBAP_RxCallback
 
-  DESCRIPTION
+  DESCRIPTION 
     This function is called by TL call this function for all frames except for Data frames
+        
+  DEPENDENCIES 
+    
+  PARAMETERS 
 
-  DEPENDENCIES
-
-  PARAMETERS
-
-    pvosGCtx:       pointer to the global vos context; a handle to BAP's
+    pvosGCtx:       pointer to the global vos context; a handle to BAP's 
                     control block can be extracted from its context
     pPacket         Vos packet
     frameType       Frame type
-
+   
   RETURN VALUE
     None
 
-  SIDE EFFECTS
-
+  SIDE EFFECTS 
+  
 ============================================================================*/
 VOS_STATUS WLANBAP_RxCallback
 (
-    v_PVOID_t               pvosGCtx,
+    v_PVOID_t               pvosGCtx, 
     vos_pkt_t              *pPacket,
     WLANTL_BAPFrameEnumType frameType
 );
@@ -1259,31 +1244,31 @@ VOS_STATUS WLANBAP_RxCallback
 
   FUNCTION    WLANBAP_InitLinkSupervision
 
-  DESCRIPTION
+  DESCRIPTION 
 
     This API will be called when Link Supervision module is to be initialized when connected at BAP
 
-  PARAMETERS
+  PARAMETERS 
 
     btampHandle: The BT-AMP PAL handle returned in WLANBAP_GetNewHndl.
-
+   
   RETURN VALUE
 
-    The result code associated with performing the operation
+    The result code associated with performing the operation  
 
-    VOS_STATUS_E_INVAL:  Input parameters are invalid
-    VOS_STATUS_E_FAULT:  BAP handle is NULL
-    VOS_STATUS_SUCCESS:  Everything is good :)
+    VOS_STATUS_E_INVAL:  Input parameters are invalid 
+    VOS_STATUS_E_FAULT:  BAP handle is NULL  
+    VOS_STATUS_SUCCESS:  Everything is good :) 
 
-  SIDE EFFECTS
-
+  SIDE EFFECTS 
+  
 ============================================================================*/
 #define TX_LS_DATALEN   32
 
 VOS_STATUS
 WLANBAP_InitLinkSupervision
-(
-    ptBtampHandle     btampHandle
+( 
+  ptBtampHandle     btampHandle
 );
 
 
@@ -1291,38 +1276,38 @@ WLANBAP_InitLinkSupervision
 
   FUNCTION    WLANBAP_DeInitLinkSupervision
 
-  DESCRIPTION
+  DESCRIPTION 
 
-    This API will be called when Link Supervision module is to be stopped after disconnected at BAP
+    This API will be called when Link Supervision module is to be stopped after disconnected at BAP 
 
-  PARAMETERS
+  PARAMETERS 
 
     btampHandle: The BT-AMP PAL handle returned in WLANBAP_GetNewHndl.
-
+   
   RETURN VALUE
 
-    The result code associated with performing the operation
+    The result code associated with performing the operation  
 
-    VOS_STATUS_E_INVAL:  Input parameters are invalid
-    VOS_STATUS_E_FAULT:  BAP handle is NULL
-    VOS_STATUS_SUCCESS:  Everything is good :)
+    VOS_STATUS_E_INVAL:  Input parameters are invalid 
+    VOS_STATUS_E_FAULT:  BAP handle is NULL  
+    VOS_STATUS_SUCCESS:  Everything is good :) 
 
-  SIDE EFFECTS
-
+  SIDE EFFECTS 
+  
 ============================================================================*/
 VOS_STATUS
 WLANBAP_DeInitLinkSupervision
-(
-    ptBtampHandle     btampHandle
+( 
+  ptBtampHandle     btampHandle 
 );
 
 void WLAN_BAPEstablishLogicalLink(ptBtampContext btampContext);
 
-#ifdef __cplusplus
-}
+ #ifdef __cplusplus
+ }
 
 
-#endif
+#endif 
 
 
 #endif /* #ifndef WLAN_QCT_WLANBAP_INTERNAL_H */

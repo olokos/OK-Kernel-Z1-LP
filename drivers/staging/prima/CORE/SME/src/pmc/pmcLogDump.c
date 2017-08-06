@@ -1,25 +1,5 @@
 /*
- * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
- *
- * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
- *
- *
- * Permission to use, copy, modify, and/or distribute this software for
- * any purpose with or without fee is hereby granted, provided that the
- * above copyright notice and this permission notice appear in all
- * copies.
- *
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
- * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
- * AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
- * DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
- * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
- * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
- * PERFORMANCE OF THIS SOFTWARE.
- */
-/*
- * Copyright (c) 2012, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -39,15 +19,18 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+ */
+
 /******************************************************************************
 *
 * Name:  pmcLogDump.c
 *
 * Description: Implements the dump commands specific to PMC module
 *
-* Copyright 2008 (c) Qualcomm, Incorporated.
-* All Rights Reserved.
-* Qualcomm Confidential and Proprietary.
 *
 ******************************************************************************/
 
@@ -62,31 +45,32 @@
 
 #if defined(ANI_LOGDUMP)
 
-void dump_pmc_callbackRoutine (void *callbackContext, eHalStatus status) {
+void dump_pmc_callbackRoutine (void *callbackContext, eHalStatus status)
+{
     tpAniSirGlobal pMac = (tpAniSirGlobal)callbackContext;
-    smsLog(pMac, LOGW, "*********Received callback from PMC with status = %d\n*********",status);
+    pmcLog(pMac, LOGW, "*********Received callback from PMC with status = %d\n*********",status);
 }
 
 #ifdef WLAN_WAKEUP_EVENTS
-void dump_pmc_callbackRoutine2 (void *callbackContext, tpSirWakeReasonInd pWakeReasonInd) {
+void dump_pmc_callbackRoutine2 (void *callbackContext, tpSirWakeReasonInd pWakeReasonInd)
+{
     tpAniSirGlobal pMac = (tpAniSirGlobal)callbackContext;
-    smsLog(pMac, LOGW, "*********Received callback from PMC with reason = %d\n*********",pWakeReasonInd->ulReason);
+    pmcLog(pMac, LOGW, "*********Received callback from PMC with reason = %d\n*********",pWakeReasonInd->ulReason);
 }
 #endif // WLAN_WAKEUP_EVENTS
 
-void dump_pmc_deviceUpdateRoutine (void *callbackContext, tPmcState pmcState) {
+void dump_pmc_deviceUpdateRoutine (void *callbackContext, tPmcState pmcState)
+{
     tpAniSirGlobal pMac = (tpAniSirGlobal)callbackContext;
-    smsLog(pMac, LOGW, "*********Received msg from PMC: Device is in %s state\n*********", pmcGetPmcStateStr(pmcState));
+    pmcLog(pMac, LOGW, "*********Received msg from PMC: Device is in %s state\n*********", pmcGetPmcStateStr(pmcState));
 }
 
 static char *
-dump_pmc_state( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
+dump_pmc_state( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
+{
     char *ptr = p;
 
-    (void) arg1;
-    (void) arg2;
-    (void) arg3;
-    (void) arg4;
+    (void) arg1; (void) arg2; (void) arg3; (void) arg4;
 
     p += log_sprintf( pMac,p, "********  PMC State & Configuration ******** \n");
     p += log_sprintf( pMac,p, " PMC: IMPS Enabled? %d\n", pMac->pmc.impsEnabled);
@@ -102,119 +86,98 @@ dump_pmc_state( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3
     p += log_sprintf( pMac,p, " PMC: UapsdSessionRequired = %d\n", pMac->pmc.uapsdSessionRequired);
     p += log_sprintf( pMac,p, " PMC: wowlModeRequired = %d\n\n", pMac->pmc.wowlModeRequired);
 
-    smsLog(pMac, LOGW, "\n%s", ptr);
+    pmcLog(pMac, LOGW, "\n%s", ptr);
 
     return p;
 }
 
 static char *
-dump_pmc_enable_imps( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
-    (void) arg1;
-    (void) arg2;
-    (void) arg3;
-    (void) arg4;
+dump_pmc_enable_imps( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
+{
+    (void) arg1; (void) arg2; (void) arg3; (void) arg4;
     (void)pmcEnablePowerSave(pMac, ePMC_IDLE_MODE_POWER_SAVE);
     return p;
 }
 
 static char *
-dump_pmc_disable_imps( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
-    (void) arg1;
-    (void) arg2;
-    (void) arg3;
-    (void) arg4;
+dump_pmc_disable_imps( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
+{
+    (void) arg1; (void) arg2; (void) arg3; (void) arg4;
     (void)pmcDisablePowerSave(pMac, ePMC_IDLE_MODE_POWER_SAVE);
     return p;
 }
 
 static char *
-dump_pmc_request_imps( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
-    (void) arg2;
-    (void) arg3;
-    (void) arg4;
+dump_pmc_request_imps( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
+{
+    (void) arg2; (void) arg3; (void) arg4;
     pMac->pmc.impsEnabled = TRUE;
     (void)pmcRequestImps(pMac, arg1, dump_pmc_callbackRoutine, pMac);
     return p;
 }
 
 static char *
-dump_pmc_start_auto_bmps_timer( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
-    (void) arg1;
-    (void) arg2;
-    (void) arg3;
-    (void) arg4;
+dump_pmc_start_auto_bmps_timer( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
+{
+    (void) arg1; (void) arg2; (void) arg3; (void) arg4;
     pMac->pmc.bmpsEnabled = TRUE;
     (void)pmcStartAutoBmpsTimer(pMac);
     return p;
 }
 
 static char *
-dump_pmc_stop_auto_bmps_timer( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
-    (void) arg1;
-    (void) arg2;
-    (void) arg3;
-    (void) arg4;
+dump_pmc_stop_auto_bmps_timer( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
+{
+    (void) arg1; (void) arg2; (void) arg3; (void) arg4;
     (void)pmcStopAutoBmpsTimer(pMac);
     return p;
 }
 
 static char *
-dump_pmc_enable_bmps( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
-    (void) arg1;
-    (void) arg2;
-    (void) arg3;
-    (void) arg4;
+dump_pmc_enable_bmps( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
+{
+    (void) arg1; (void) arg2; (void) arg3; (void) arg4;
     (void)pmcEnablePowerSave(pMac, ePMC_BEACON_MODE_POWER_SAVE);
     return p;
 }
 
 static char *
-dump_pmc_disable_bmps( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
-    (void) arg1;
-    (void) arg2;
-    (void) arg3;
-    (void) arg4;
+dump_pmc_disable_bmps( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
+{
+    (void) arg1; (void) arg2; (void) arg3; (void) arg4;
     (void)pmcDisablePowerSave(pMac, ePMC_BEACON_MODE_POWER_SAVE);
     return p;
 }
 
 static char *
-dump_pmc_request_bmps( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
-    (void) arg1;
-    (void) arg2;
-    (void) arg3;
-    (void) arg4;
+dump_pmc_request_bmps( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
+{
+    (void) arg1; (void) arg2; (void) arg3; (void) arg4;
     pMac->pmc.bmpsEnabled = TRUE;
     (void)sme_RequestBmps(pMac, dump_pmc_callbackRoutine, pMac);
     return p;
 }
 
 static char *
-dump_pmc_enable_uapsd( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
-    (void) arg1;
-    (void) arg2;
-    (void) arg3;
-    (void) arg4;
+dump_pmc_enable_uapsd( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
+{
+    (void) arg1; (void) arg2; (void) arg3; (void) arg4;
     (void)pmcEnablePowerSave(pMac, ePMC_UAPSD_MODE_POWER_SAVE);
     return p;
 }
 
 static char *
-dump_pmc_disable_uapsd( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
-    (void) arg1;
-    (void) arg2;
-    (void) arg3;
-    (void) arg4;
+dump_pmc_disable_uapsd( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
+{
+    (void) arg1; (void) arg2; (void) arg3; (void) arg4;
     (void)pmcDisablePowerSave(pMac, ePMC_UAPSD_MODE_POWER_SAVE);
     return p;
 }
 
 static char *
-dump_pmc_start_uapsd( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
-    (void) arg1;
-    (void) arg2;
-    (void) arg3;
-    (void) arg4;
+dump_pmc_start_uapsd( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
+{
+    (void) arg1; (void) arg2; (void) arg3; (void) arg4;
     pMac->pmc.bmpsEnabled = TRUE;
     pMac->pmc.uapsdEnabled = TRUE;
     (void)pmcStartUapsd(pMac, dump_pmc_callbackRoutine, pMac);
@@ -222,38 +185,33 @@ dump_pmc_start_uapsd( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U3
 }
 
 static char *
-dump_pmc_stop_uapsd( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
-    (void) arg1;
-    (void) arg2;
-    (void) arg3;
-    (void) arg4;
+dump_pmc_stop_uapsd( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
+{
+    (void) arg1; (void) arg2; (void) arg3; (void) arg4;
     (void)pmcStopUapsd(pMac);
     return p;
 }
 
 static char *
-dump_pmc_request_standby( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
-    (void) arg1;
-    (void) arg2;
-    (void) arg3;
-    (void) arg4;
+dump_pmc_request_standby( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
+{
+    (void) arg1; (void) arg2; (void) arg3; (void) arg4;
     pMac->pmc.standbyEnabled = TRUE;
     (void)pmcRequestStandby(pMac, dump_pmc_callbackRoutine, pMac);
     return p;
 }
 
 static char *
-dump_pmc_request_full_power( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
-    (void) arg1;
-    (void) arg2;
-    (void) arg3;
-    (void) arg4;
+dump_pmc_request_full_power( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
+{
+    (void) arg1; (void) arg2; (void) arg3; (void) arg4;
     (void)sme_RequestFullPower(pMac, dump_pmc_callbackRoutine, pMac, eSME_FULL_PWR_NEEDED_BY_HDD);
     return p;
 }
 
 static char *
-dump_pmc_enter_wowl( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
+dump_pmc_enter_wowl( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
+{
     tSirSmeWowlEnterParams wowlEnterParams;
     tSirRetStatus status;
     tANI_U32 length;
@@ -261,19 +219,24 @@ dump_pmc_enter_wowl( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32
 
     (void) arg4;
 
-    palZeroMemory(pMac->hHdd, &wowlEnterParams, sizeof(tSirSmeWowlEnterParams));
+    vos_mem_set(&wowlEnterParams, sizeof(tSirSmeWowlEnterParams), 0);
 
-    if (arg1 == 0 && arg2 == 0) {
-        smsLog(pMac, LOGE, "Requesting WoWL but neither magic pkt and ptrn byte matching is being enabled\n");
+    if (arg1 == 0 && arg2 == 0)
+    {
+        pmcLog(pMac, LOGE,
+               "Requesting WoWL but neither magic pkt and ptrn byte matching is being enabled\n");
         return p;
     }
-    if(arg1 == 1) {
+    if(arg1 == 1)
+    {
         wowlEnterParams.ucMagicPktEnable = 1;
         /* magic packet */
         length = SIR_MAC_ADDR_LENGTH;
-        status = wlan_cfgGetStr(pMac, WNI_CFG_STA_ID, (tANI_U8 *)wowlEnterParams.magicPtrn, &length);
-        if (eSIR_SUCCESS != status) {
-            smsLog(pMac, LOGE, "Reading of WNI_CFG_STA_ID from CFG failed. Using hardcoded STA MAC Addr\n");
+        status = wlan_cfgGetStr(pMac, WNI_CFG_STA_ID, (tANI_U8 *)wowlEnterParams.magicPtrn, &length); 
+        if (eSIR_SUCCESS != status)
+        {
+            pmcLog(pMac, LOGE,
+                   "Reading of WNI_CFG_STA_ID from CFG failed. Using hardcoded STA MAC Addr\n");
             wowlEnterParams.magicPtrn[0] = 0x00;
             wowlEnterParams.magicPtrn[1] = 0x0a;
             wowlEnterParams.magicPtrn[2] = 0xf5;
@@ -282,12 +245,14 @@ dump_pmc_enter_wowl( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32
             wowlEnterParams.magicPtrn[5] = 0x06;
         }
     }
-    if(arg2 == 1) {
-        wowlEnterParams.ucPatternFilteringEnable = 1;
+    if(arg2 == 1)
+    {
+      wowlEnterParams.ucPatternFilteringEnable = 1;
     }
 
-    if(arg3 == CSR_ROAM_SESSION_MAX ) {
-        smsLog(pMac, LOGE, "Enter valid sessionId\n");
+    if(arg3 == CSR_ROAM_SESSION_MAX )
+    {
+        pmcLog(pMac, LOGE, "Enter valid sessionId\n");
         return p;
     }
     pMac->pmc.bmpsEnabled = TRUE;
@@ -295,7 +260,7 @@ dump_pmc_enter_wowl( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32
 
     sessionId = (tANI_U8 ) arg3;
 #ifdef WLAN_WAKEUP_EVENTS
-    (void)sme_EnterWowl(pMac, dump_pmc_callbackRoutine, pMac, dump_pmc_callbackRoutine2, pMac,
+    (void)sme_EnterWowl(pMac, dump_pmc_callbackRoutine, pMac, dump_pmc_callbackRoutine2, pMac, 
                         &wowlEnterParams, sessionId);
 #else // WLAN_WAKEUP_EVENTS
     (void)sme_EnterWowl(pMac, dump_pmc_callbackRoutine, pMac, &wowlEnterParams, sessionId);
@@ -304,28 +269,29 @@ dump_pmc_enter_wowl( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32
 }
 
 static char *
-dump_pmc_exit_wowl( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
-    (void) arg1;
-    (void) arg2;
-    (void) arg3;
-    (void) arg4;
-    (void)sme_ExitWowl(pMac);
+dump_pmc_exit_wowl( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
+{
+    (void) arg1; (void) arg2; (void) arg3; (void) arg4;
+    (void)sme_ExitWowl(pMac, eWOWL_EXIT_USER);
     return p;
 }
 
 static char *
-dump_pmc_remove_ptrn( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
+dump_pmc_remove_ptrn( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
+{
     tSirWowlDelBcastPtrn delPattern;
     tANI_U8  sessionId = 0;
-    (void) arg3;
-    (void) arg4;
+    (void) arg3; (void) arg4;
+ 
+    vos_mem_set(&delPattern, sizeof(tSirWowlDelBcastPtrn), 0);
 
-    palZeroMemory(pMac->hHdd, &delPattern, sizeof(tSirWowlDelBcastPtrn));
-
-    if((arg1 <= 7) || (arg2 == CSR_ROAM_SESSION_MAX)) {
+    if((arg1 <= 7) || (arg2 == CSR_ROAM_SESSION_MAX))
+    {
         delPattern.ucPatternId = (tANI_U8)arg1;
-    } else {
-        smsLog(pMac, LOGE, "dump_pmc_remove_ptrn: Invalid pattern Id %d\n",arg1);
+    }
+    else
+    {
+        pmcLog(pMac, LOGE, "dump_pmc_remove_ptrn: Invalid pattern Id %d\n",arg1);
         return p;
     }
 
@@ -335,14 +301,12 @@ dump_pmc_remove_ptrn( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U3
 }
 
 static char *
-dump_pmc_test_uapsd( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
+dump_pmc_test_uapsd( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
+{
     tSirSmeRsp smeRsp;
     smeRsp.statusCode = eSIR_SME_SUCCESS;
 
-    (void) arg1;
-    (void) arg2;
-    (void) arg3;
-    (void) arg4;
+    (void) arg1; (void) arg2; (void) arg3; (void) arg4;
 
     pMac->pmc.uapsdEnabled = TRUE;
     pMac->pmc.pmcState = BMPS;
@@ -360,7 +324,8 @@ dump_pmc_test_uapsd( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32
 }
 
 static char *
-dump_pmc_test_Wowl( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
+dump_pmc_test_Wowl( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
+{
     tSirSmeRsp smeRsp;
     tSirWowlAddBcastPtrn addPattern;
     tSirWowlDelBcastPtrn delPattern;
@@ -368,16 +333,15 @@ dump_pmc_test_Wowl( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 
     tANI_U8            sessionId = 0;
 
     smeRsp.statusCode = eSIR_SME_SUCCESS;
-    palZeroMemory(pMac->hHdd, &addPattern, sizeof(tSirWowlAddBcastPtrn));
-    palZeroMemory(pMac->hHdd, &delPattern, sizeof(tSirWowlDelBcastPtrn));
-    palZeroMemory(pMac->hHdd, &wowlEnterParams, sizeof(tSirSmeWowlEnterParams));
+    vos_mem_set(&addPattern, sizeof(tSirWowlAddBcastPtrn), 0);
+    vos_mem_set(&delPattern, sizeof(tSirWowlDelBcastPtrn), 0);
+    vos_mem_set(&wowlEnterParams, sizeof(tSirSmeWowlEnterParams), 0);
 
-    (void) arg2;
-    (void) arg3;
-    (void) arg4;
+    (void) arg2; (void) arg3; (void) arg4;
 
-    if(arg1 == CSR_ROAM_SESSION_MAX) {
-        smsLog(pMac, LOGE, "dump_pmc_test_Wowl: Invalid sessionId\n");
+    if(arg1 == CSR_ROAM_SESSION_MAX)
+    {
+        pmcLog(pMac, LOGE, "dump_pmc_test_Wowl: Invalid sessionId\n");
         return p;
     }
 
@@ -393,8 +357,8 @@ dump_pmc_test_Wowl( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 
 
     //Enter Wowl
 #ifdef WLAN_WAKEUP_EVENTS
-    sme_EnterWowl(pMac, dump_pmc_callbackRoutine, pMac, dump_pmc_callbackRoutine2, pMac,
-                  &wowlEnterParams, sessionId);
+    sme_EnterWowl(pMac, dump_pmc_callbackRoutine, pMac, dump_pmc_callbackRoutine2, pMac, 
+                   &wowlEnterParams, sessionId);
 #else // WLAN_WAKEUP_EVENTS
     sme_EnterWowl(pMac, dump_pmc_callbackRoutine, pMac, &wowlEnterParams, sessionId);
 #endif // WLAN_WAKEUP_EVENTS
@@ -402,7 +366,7 @@ dump_pmc_test_Wowl( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 
     pmcMessageProcessor(pMac, &smeRsp);
 
     //Exit Wowl
-    sme_ExitWowl(pMac);
+    sme_ExitWowl(pMac, eWOWL_EXIT_USER);
     smeRsp.messageType = eWNI_PMC_EXIT_WOWL_RSP;
     pmcMessageProcessor(pMac, &smeRsp);
     return p;
@@ -440,7 +404,8 @@ static tDumpFuncEntry pmcMenuDumpTable[] = {
     {919,   "PMC: Disable BMPS",        dump_pmc_disable_bmps}
 };
 
-void pmcDumpInit(tHalHandle hHal) {
+void pmcDumpInit(tHalHandle hHal)
+{
     logDumpRegisterTable( (tpAniSirGlobal)hHal, &pmcMenuDumpTable[0],
                           sizeof(pmcMenuDumpTable)/sizeof(pmcMenuDumpTable[0]) );
 }
