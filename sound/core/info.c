@@ -310,10 +310,12 @@ static int snd_info_entry_open(struct inode *inode, struct file *file)
 	struct snd_info_entry *entry;
 	struct snd_info_private_data *data;
 	struct snd_info_buffer *buffer;
+	struct proc_dir_entry *p;
 	int mode, err;
 
 	mutex_lock(&info_mutex);
-	entry = PDE_DATA(inode);
+	p = PDE(inode);
+	entry = p == NULL ? NULL : (struct snd_info_entry *)p->data;
 	if (entry == NULL || ! entry->p) {
 		mutex_unlock(&info_mutex);
 		return -ENODEV;

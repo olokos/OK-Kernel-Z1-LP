@@ -52,11 +52,12 @@ static loff_t isapnp_proc_bus_lseek(struct file *file, loff_t off, int whence) {
 }
 
 static ssize_t isapnp_proc_bus_read(struct file *file, char __user * buf,
-				    size_t nbytes, loff_t * ppos)
-{
-	struct pnp_dev *dev = PDE_DATA(file_inode(file));
-	int pos = *ppos;
-	int cnt, size = 256;
+                                    size_t nbytes, loff_t * ppos) {
+    struct inode *ino = file->f_path.dentry->d_inode;
+    struct proc_dir_entry *dp = PDE(ino);
+    struct pnp_dev *dev = dp->data;
+    int pos = *ppos;
+    int cnt, size = 256;
 
     if (pos >= size)
         return 0;

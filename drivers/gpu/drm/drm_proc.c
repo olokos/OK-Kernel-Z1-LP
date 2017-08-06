@@ -62,9 +62,9 @@ static struct drm_info_list drm_proc_list[] = {
 };
 #define DRM_PROC_ENTRIES ARRAY_SIZE(drm_proc_list)
 
-static int drm_proc_open(struct inode *inode, struct file *file)
-{
-	struct drm_info_node* node = PDE_DATA(inode);
+static int drm_proc_open(struct inode *inode, struct file *file) {
+    struct drm_info_node* node = PDE(inode)->data;
+
     return single_open(file, node->info_ent->show, node);
 }
 

@@ -1871,9 +1871,8 @@ static int smi_ipmb_proc_show(struct seq_file *m, void *v) {
     return seq_putc(m, '\n');
 }
 
-static int smi_ipmb_proc_open(struct inode *inode, struct file *file)
-{
-	return single_open(file, smi_ipmb_proc_show, PDE_DATA(inode));
+static int smi_ipmb_proc_open(struct inode *inode, struct file *file) {
+    return single_open(file, smi_ipmb_proc_show, PDE(inode)->data);
 }
 
 static const struct file_operations smi_ipmb_proc_ops = {
@@ -1891,9 +1890,8 @@ static int smi_version_proc_show(struct seq_file *m, void *v) {
                       ipmi_version_minor(&intf->bmc->id));
 }
 
-static int smi_version_proc_open(struct inode *inode, struct file *file)
-{
-	return single_open(file, smi_version_proc_show, PDE_DATA(inode));
+static int smi_version_proc_open(struct inode *inode, struct file *file) {
+    return single_open(file, smi_version_proc_show, PDE(inode)->data);
 }
 
 static const struct file_operations smi_version_proc_ops = {
@@ -1965,9 +1963,8 @@ static int smi_stats_proc_show(struct seq_file *m, void *v) {
     return 0;
 }
 
-static int smi_stats_proc_open(struct inode *inode, struct file *file)
-{
-	return single_open(file, smi_stats_proc_show, PDE_DATA(inode));
+static int smi_stats_proc_open(struct inode *inode, struct file *file) {
+    return single_open(file, smi_stats_proc_show, PDE(inode)->data);
 }
 
 static const struct file_operations smi_stats_proc_ops = {

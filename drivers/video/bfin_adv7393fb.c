@@ -340,11 +340,11 @@ adv7393_read_proc(char *page, char **start, off_t off,
 
 static int
 adv7393_write_proc(struct file *file, const char __user * buffer,
-		   size_t count, loff_t *ppos)
-{
-	struct adv7393fb_device *fbdev = PDE_DATA(file_inode(file));
-	unsigned int val;
-	int ret;
+                   unsigned long count, void *data) {
+    struct adv7393fb_device *fbdev = data;
+    char line[8];
+    unsigned int val;
+    int ret;
 
     ret = copy_from_user(line, buffer, count);
     if (ret)

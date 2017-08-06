@@ -173,63 +173,86 @@ hysdn_log_write(struct file *file, const char __user *buf, size_t count, loff_t 
 /* read log file */
 /******************/
 static ssize_t
-hysdn_log_read(struct file *file, char __user *buf, size_t count, loff_t *off)
-{
-	struct log_data *inf;
-	int len;
-	hysdn_card *card = PDE_DATA(file_inode(file));
+hysdn_log_read(struct file *file, char __user *buf, size_t count, loff_t *off) {
+    struct log_data *inf;
+    int len;
+    struct proc_dir_entry *pde = PDE(file->f_path.dentry->d_inode);
+    struct procdata *pd = NULL;
+    hysdn_card *card;
 
-	if (!*((struct log_data **) file->private_data)) {
-		struct procdata *pd = card->proclog;
-		if (file->f_flags & O_NONBLOCK)
-			return (-EAGAIN);
+    if (!*((struct log_data **) file->private_data)) {
+        if (file->f_flags & O_NONBLOCK)
+            return (-EAGAIN);
 
-		interruptible_sleep_on(&(pd->rd_queue));
-	}
-	if (!(inf = *((struct log_data **) file->private_data)))
-		return (0);
+        /* sorry, but we need to search the card */
+        card = card_root;
+        while (card) {
+            pd = card->proclog;
+            if (pd->log == pde)
+                break;
+            card = card->next;	/* search next entry */
+        }
+        if (card)
+            interruptible_sleep_on(&(pd->rd_queue));
+        else
+            return (-EAGAIN);
 
-	inf->usage_cnt--;	/* new usage count */
-	file->private_data = &inf->next;	/* next structure */
-	if ((len = strlen(inf->log_start)) <= count) {
-		if (copy_to_user(buf, inf->log_start, len))
-			return -EFAULT;
-		*off += len;
-		return (len);
-	}
-	return (0);
+    }
+    if (!(inf = *((struct log_data **) file->private_data)))
+        return (0);
+
+    inf->usage_cnt--;	/* new usage count */
+    file->private_data = &inf->next;	/* next structure */
+    if ((len = strlen(inf->log_start)) <= count) {
+        if (copy_to_user(buf, inf->log_start, len))
+            return -EFAULT;
+        *off += len;
+        return (len);
+    }
+    return (0);
 }				/* hysdn_log_read */
 
 /******************/
 /* open log file */
 /******************/
 static int
-hysdn_log_open(struct inode *ino, struct file *filep)
-{
-	hysdn_card *card = PDE_DATA(ino);
+hysdn_log_open(struct inode *ino, struct file *filep) {
+    hysdn_card *card;
+    struct procdata *pd = NULL;
+    unsigned long flags;
 
-	mutex_lock(&hysdn_log_mutex);
-	if ((filep->f_mode & (FMODE_READ | FMODE_WRITE)) == FMODE_WRITE) {
-		/* write only access -> write log level only */
-		filep->private_data = card;	/* remember our own card */
-	} else if ((filep->f_mode & (FMODE_READ | FMODE_WRITE)) == FMODE_READ) {
-		struct procdata *pd = card->proclog;
-		unsigned long flags;
+    mutex_lock(&hysdn_log_mutex);
+    card = card_root;
+    while (card) {
+        pd = card->proclog;
+        if (pd->log == PDE(ino))
+            break;
+        card = card->next;	/* search next entry */
+    }
+    if (!card) {
+        mutex_unlock(&hysdn_log_mutex);
+        return (-ENODEV);	/* device is unknown/invalid */
+    }
+    filep->private_data = card;	/* remember our own card */
 
-		/* read access -> log/debug read */
-		spin_lock_irqsave(&card->hysdn_lock, flags);
-		pd->if_used++;
-		if (pd->log_head)
-			filep->private_data = &pd->log_tail->next;
-		else
-			filep->private_data = &pd->log_head;
-		spin_unlock_irqrestore(&card->hysdn_lock, flags);
-	} else {		/* simultaneous read/write access forbidden ! */
-		mutex_unlock(&hysdn_log_mutex);
-		return (-EPERM);	/* no permission this time */
-	}
-	mutex_unlock(&hysdn_log_mutex);
-	return nonseekable_open(ino, filep);
+    if ((filep->f_mode & (FMODE_READ | FMODE_WRITE)) == FMODE_WRITE) {
+        /* write only access -> write log level only */
+    } else if ((filep->f_mode & (FMODE_READ | FMODE_WRITE)) == FMODE_READ) {
+
+        /* read access -> log/debug read */
+        spin_lock_irqsave(&card->hysdn_lock, flags);
+        pd->if_used++;
+        if (pd->log_head)
+            filep->private_data = &pd->log_tail->next;
+        else
+            filep->private_data = &pd->log_head;
+        spin_unlock_irqrestore(&card->hysdn_lock, flags);
+    } else {		/* simultaneous read/write access forbidden ! */
+        mutex_unlock(&hysdn_log_mutex);
+        return (-EPERM);	/* no permission this time */
+    }
+    mutex_unlock(&hysdn_log_mutex);
+    return nonseekable_open(ino, filep);
 }				/* hysdn_log_open */
 
 /*******************************************************************************/
@@ -240,68 +263,86 @@ hysdn_log_open(struct inode *ino, struct file *filep)
 /* was the last one to be closed, all buffers are freed.                       */
 /*******************************************************************************/
 static int
-hysdn_log_close(struct inode *ino, struct file *filep)
-{
-	struct log_data *inf;
-	struct procdata *pd;
-	hysdn_card *card;
-	int retval = 0;
+hysdn_log_close(struct inode *ino, struct file *filep) {
+    struct log_data *inf;
+    struct procdata *pd;
+    hysdn_card *card;
+    int retval = 0;
 
-	mutex_lock(&hysdn_log_mutex);
-	if ((filep->f_mode & (FMODE_READ | FMODE_WRITE)) == FMODE_WRITE) {
-		/* write only access -> write debug level written */
-		retval = 0;	/* success */
-	} else {
-		/* read access -> log/debug read, mark one further file as closed */
+    mutex_lock(&hysdn_log_mutex);
+    if ((filep->f_mode & (FMODE_READ | FMODE_WRITE)) == FMODE_WRITE) {
+        /* write only access -> write debug level written */
+        retval = 0;	/* success */
+    } else {
+        /* read access -> log/debug read, mark one further file as closed */
 
-		inf = *((struct log_data **) filep->private_data);	/* get first log entry */
-		if (inf)
-			pd = (struct procdata *) inf->proc_ctrl;	/* still entries there */
-		else {
-			/* no info available -> search card */
-			card = PDE_DATA(file_inode(filep));
-			pd = card->proclog;	/* pointer to procfs log */
-		}
-		if (pd)
-			pd->if_used--;	/* decrement interface usage count by one */
+        pd = NULL;
+        inf = *((struct log_data **) filep->private_data);	/* get first log entry */
+        if (inf)
+            pd = (struct procdata *) inf->proc_ctrl;	/* still entries there */
+        else {
+            /* no info available -> search card */
+            card = card_root;
+            while (card) {
+                pd = card->proclog;
+                if (pd->log == PDE(ino))
+                    break;
+                card = card->next;	/* search next entry */
+            }
+            if (card)
+                pd = card->proclog;	/* pointer to procfs log */
+        }
+        if (pd)
+            pd->if_used--;	/* decrement interface usage count by one */
 
-		while (inf) {
-			inf->usage_cnt--;	/* decrement usage count for buffers */
-			inf = inf->next;
-		}
+        while (inf) {
+            inf->usage_cnt--;	/* decrement usage count for buffers */
+            inf = inf->next;
+        }
 
-		if (pd)
-			if (pd->if_used <= 0)	/* delete buffers if last file closed */
-				while (pd->log_head) {
-					inf = pd->log_head;
-					pd->log_head = pd->log_head->next;
-					kfree(inf);
-				}
-	}			/* read access */
-	mutex_unlock(&hysdn_log_mutex);
+        if (pd)
+            if (pd->if_used <= 0)	/* delete buffers if last file closed */
+                while (pd->log_head) {
+                    inf = pd->log_head;
+                    pd->log_head = pd->log_head->next;
+                    kfree(inf);
+                }
+    }			/* read access */
+    mutex_unlock(&hysdn_log_mutex);
 
-	return (retval);
+    return (retval);
 }				/* hysdn_log_close */
 
 /*************************************************/
 /* select/poll routine to be able using select() */
 /*************************************************/
 static unsigned int
-hysdn_log_poll(struct file *file, poll_table *wait)
-{
-	unsigned int mask = 0;
-	hysdn_card *card = PDE_DATA(file_inode(file));
-	struct procdata *pd = card->proclog;
+hysdn_log_poll(struct file *file, poll_table *wait) {
+    unsigned int mask = 0;
+    struct proc_dir_entry *pde = PDE(file->f_path.dentry->d_inode);
+    hysdn_card *card;
+    struct procdata *pd = NULL;
 
-	if ((file->f_mode & (FMODE_READ | FMODE_WRITE)) == FMODE_WRITE)
-		return (mask);	/* no polling for write supported */
+    if ((file->f_mode & (FMODE_READ | FMODE_WRITE)) == FMODE_WRITE)
+        return (mask);	/* no polling for write supported */
 
-	poll_wait(file, &(pd->rd_queue), wait);
+    /* we need to search the card */
+    card = card_root;
+    while (card) {
+        pd = card->proclog;
+        if (pd->log == pde)
+            break;
+        card = card->next;	/* search next entry */
+    }
+    if (!card)
+        return (mask);	/* card not found */
 
-	if (*((struct log_data **) file->private_data))
-		mask |= POLLIN | POLLRDNORM;
+    poll_wait(file, &(pd->rd_queue), wait);
 
-	return mask;
+    if (*((struct log_data **) file->private_data))
+        mask |= POLLIN | POLLRDNORM;
+
+    return mask;
 }				/* hysdn_log_poll */
 
 /**************************************************/

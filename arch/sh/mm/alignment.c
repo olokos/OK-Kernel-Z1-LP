@@ -126,18 +126,17 @@ static int alignment_proc_open(struct inode *inode, struct file *file) {
 }
 
 static ssize_t alignment_proc_write(struct file *file,
-		const char __user *buffer, size_t count, loff_t *pos)
-{
-	int *data = PDE_DATA(file_inode(file));
-	char mode;
+                                    const char __user *buffer, size_t count, loff_t *pos) {
+    int *data = PDE(file->f_path.dentry->d_inode)->data;
+    char mode;
 
-	if (count > 0) {
-		if (get_user(mode, buffer))
-			return -EFAULT;
-		if (mode >= '0' && mode <= '5')
-			*data = mode - '0';
-	}
-	return count;
+    if (count > 0) {
+        if (get_user(mode, buffer))
+            return -EFAULT;
+        if (mode >= '0' && mode <= '5')
+            *data = mode - '0';
+    }
+    return count;
 }
 
 static const struct file_operations alignment_proc_fops = {

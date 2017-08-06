@@ -4578,89 +4578,88 @@ static ssize_t proc_read( struct file *file,
  *  to supply the data.
  */
 static ssize_t proc_write( struct file *file,
-			   const char __user *buffer,
-			   size_t len,
-			   loff_t *offset )
-{
-	ssize_t ret;
-	struct proc_data *priv = file->private_data;
+                           const char __user *buffer,
+                           size_t len,
+                           loff_t *offset ) {
+    ssize_t ret;
+    struct proc_data *priv = file->private_data;
 
-	if (!priv->wbuffer)
-		return -EINVAL;
+    if (!priv->wbuffer)
+        return -EINVAL;
 
-	ret = simple_write_to_buffer(priv->wbuffer, priv->maxwritelen, offset,
-					buffer, len);
-	if (ret > 0)
-		priv->writelen = max_t(int, priv->writelen, *offset);
+    ret = simple_write_to_buffer(priv->wbuffer, priv->maxwritelen, offset,
+                                 buffer, len);
+    if (ret > 0)
+        priv->writelen = max_t(int, priv->writelen, *offset);
 
-	return ret;
+    return ret;
 }
 
-static int proc_status_open(struct inode *inode, struct file *file)
-{
-	struct proc_data *data;
-	struct net_device *dev = PDE_DATA(inode);
-	struct airo_info *apriv = dev->ml_priv;
-	CapabilityRid cap_rid;
-	StatusRid status_rid;
-	u16 mode;
-	int i;
+static int proc_status_open(struct inode *inode, struct file *file) {
+    struct proc_data *data;
+    struct proc_dir_entry *dp = PDE(inode);
+    struct net_device *dev = dp->data;
+    struct airo_info *apriv = dev->ml_priv;
+    CapabilityRid cap_rid;
+    StatusRid status_rid;
+    u16 mode;
+    int i;
 
-	if ((file->private_data = kzalloc(sizeof(struct proc_data ), GFP_KERNEL)) == NULL)
-		return -ENOMEM;
-	data = file->private_data;
-	if ((data->rbuffer = kmalloc( 2048, GFP_KERNEL )) == NULL) {
-		kfree (file->private_data);
-		return -ENOMEM;
-	}
+    if ((file->private_data = kzalloc(sizeof(struct proc_data ), GFP_KERNEL)) == NULL)
+        return -ENOMEM;
+    data = file->private_data;
+    if ((data->rbuffer = kmalloc( 2048, GFP_KERNEL )) == NULL) {
+        kfree (file->private_data);
+        return -ENOMEM;
+    }
 
-	readStatusRid(apriv, &status_rid, 1);
-	readCapabilityRid(apriv, &cap_rid, 1);
+    readStatusRid(apriv, &status_rid, 1);
+    readCapabilityRid(apriv, &cap_rid, 1);
 
-	mode = le16_to_cpu(status_rid.mode);
+    mode = le16_to_cpu(status_rid.mode);
 
-        i = sprintf(data->rbuffer, "Status: %s%s%s%s%s%s%s%s%s\n",
-                    mode & 1 ? "CFG ": "",
-                    mode & 2 ? "ACT ": "",
-                    mode & 0x10 ? "SYN ": "",
-                    mode & 0x20 ? "LNK ": "",
-                    mode & 0x40 ? "LEAP ": "",
-                    mode & 0x80 ? "PRIV ": "",
-                    mode & 0x100 ? "KEY ": "",
-                    mode & 0x200 ? "WEP ": "",
-                    mode & 0x8000 ? "ERR ": "");
-	sprintf( data->rbuffer+i, "Mode: %x\n"
-		 "Signal Strength: %d\n"
-		 "Signal Quality: %d\n"
-		 "SSID: %-.*s\n"
-		 "AP: %-.16s\n"
-		 "Freq: %d\n"
-		 "BitRate: %dmbs\n"
-		 "Driver Version: %s\n"
-		 "Device: %s\nManufacturer: %s\nFirmware Version: %s\n"
-		 "Radio type: %x\nCountry: %x\nHardware Version: %x\n"
-		 "Software Version: %x\nSoftware Subversion: %x\n"
-		 "Boot block version: %x\n",
-		 le16_to_cpu(status_rid.mode),
-		 le16_to_cpu(status_rid.normalizedSignalStrength),
-		 le16_to_cpu(status_rid.signalQuality),
-		 le16_to_cpu(status_rid.SSIDlen),
-		 status_rid.SSID,
-		 status_rid.apName,
-		 le16_to_cpu(status_rid.channel),
-		 le16_to_cpu(status_rid.currentXmitRate) / 2,
-		 version,
-		 cap_rid.prodName,
-		 cap_rid.manName,
-		 cap_rid.prodVer,
-		 le16_to_cpu(cap_rid.radioType),
-		 le16_to_cpu(cap_rid.country),
-		 le16_to_cpu(cap_rid.hardVer),
-		 le16_to_cpu(cap_rid.softVer),
-		 le16_to_cpu(cap_rid.softSubVer),
-		 le16_to_cpu(cap_rid.bootBlockVer));
-	data->readlen = strlen( data->rbuffer );
-	return 0;
+    i = sprintf(data->rbuffer, "Status: %s%s%s%s%s%s%s%s%s\n",
+                mode & 1 ? "CFG ": "",
+                mode & 2 ? "ACT ": "",
+                mode & 0x10 ? "SYN ": "",
+                mode & 0x20 ? "LNK ": "",
+                mode & 0x40 ? "LEAP ": "",
+                mode & 0x80 ? "PRIV ": "",
+                mode & 0x100 ? "KEY ": "",
+                mode & 0x200 ? "WEP ": "",
+                mode & 0x8000 ? "ERR ": "");
+    sprintf( data->rbuffer+i, "Mode: %x\n"
+             "Signal Strength: %d\n"
+             "Signal Quality: %d\n"
+             "SSID: %-.*s\n"
+             "AP: %-.16s\n"
+             "Freq: %d\n"
+             "BitRate: %dmbs\n"
+             "Driver Version: %s\n"
+             "Device: %s\nManufacturer: %s\nFirmware Version: %s\n"
+             "Radio type: %x\nCountry: %x\nHardware Version: %x\n"
+             "Software Version: %x\nSoftware Subversion: %x\n"
+             "Boot block version: %x\n",
+             le16_to_cpu(status_rid.mode),
+             le16_to_cpu(status_rid.normalizedSignalStrength),
+             le16_to_cpu(status_rid.signalQuality),
+             le16_to_cpu(status_rid.SSIDlen),
+             status_rid.SSID,
+             status_rid.apName,
+             le16_to_cpu(status_rid.channel),
+             le16_to_cpu(status_rid.currentXmitRate) / 2,
+             version,
+             cap_rid.prodName,
+             cap_rid.manName,
+             cap_rid.prodVer,
+             le16_to_cpu(cap_rid.radioType),
+             le16_to_cpu(cap_rid.country),
+             le16_to_cpu(cap_rid.hardVer),
+             le16_to_cpu(cap_rid.softVer),
+             le16_to_cpu(cap_rid.softSubVer),
+             le16_to_cpu(cap_rid.bootBlockVer));
+    data->readlen = strlen( data->rbuffer );
+    return 0;
 }
 
 static int proc_stats_rid_open(struct inode*, struct file*, u16);
@@ -4677,44 +4676,44 @@ static int proc_stats_open( struct inode *inode, struct file *file ) {
 }
 
 static int proc_stats_rid_open( struct inode *inode,
-				struct file *file,
-				u16 rid )
-{
-	struct proc_data *data;
-	struct net_device *dev = PDE_DATA(inode);
-	struct airo_info *apriv = dev->ml_priv;
-	StatsRid stats;
-	int i, j;
-	__le32 *vals = stats.vals;
-	int len;
+                                struct file *file,
+                                u16 rid ) {
+    struct proc_data *data;
+    struct proc_dir_entry *dp = PDE(inode);
+    struct net_device *dev = dp->data;
+    struct airo_info *apriv = dev->ml_priv;
+    StatsRid stats;
+    int i, j;
+    __le32 *vals = stats.vals;
+    int len;
 
-	if ((file->private_data = kzalloc(sizeof(struct proc_data ), GFP_KERNEL)) == NULL)
-		return -ENOMEM;
-	data = file->private_data;
-	if ((data->rbuffer = kmalloc( 4096, GFP_KERNEL )) == NULL) {
-		kfree (file->private_data);
-		return -ENOMEM;
-	}
+    if ((file->private_data = kzalloc(sizeof(struct proc_data ), GFP_KERNEL)) == NULL)
+        return -ENOMEM;
+    data = file->private_data;
+    if ((data->rbuffer = kmalloc( 4096, GFP_KERNEL )) == NULL) {
+        kfree (file->private_data);
+        return -ENOMEM;
+    }
 
-	readStatsRid(apriv, &stats, rid, 1);
-	len = le16_to_cpu(stats.len);
+    readStatsRid(apriv, &stats, rid, 1);
+    len = le16_to_cpu(stats.len);
 
-        j = 0;
-	for(i=0; statsLabels[i]!=(char *)-1 && i*4<len; i++) {
-		if (!statsLabels[i]) continue;
-		if (j+strlen(statsLabels[i])+16>4096) {
-			airo_print_warn(apriv->dev->name,
-			       "Potentially disastrous buffer overflow averted!");
-			break;
-		}
-		j+=sprintf(data->rbuffer+j, "%s: %u\n", statsLabels[i],
-				le32_to_cpu(vals[i]));
-	}
-	if (i*4 >= len) {
-		airo_print_warn(apriv->dev->name, "Got a short rid");
-	}
-	data->readlen = j;
-	return 0;
+    j = 0;
+    for(i=0; statsLabels[i]!=(char *)-1 && i*4<len; i++) {
+        if (!statsLabels[i]) continue;
+        if (j+strlen(statsLabels[i])+16>4096) {
+            airo_print_warn(apriv->dev->name,
+                            "Potentially disastrous buffer overflow averted!");
+            break;
+        }
+        j+=sprintf(data->rbuffer+j, "%s: %u\n", statsLabels[i],
+                   le32_to_cpu(vals[i]));
+    }
+    if (i*4 >= len) {
+        airo_print_warn(apriv->dev->name, "Got a short rid");
+    }
+    data->readlen = j;
+    return 0;
 }
 
 static int get_dec_u16( char *buffer, int *start, int limit ) {
@@ -4731,93 +4730,92 @@ static int get_dec_u16( char *buffer, int *start, int limit ) {
 }
 
 static int airo_config_commit(struct net_device *dev,
-			      struct iw_request_info *info, void *zwrq,
-			      char *extra);
+                              struct iw_request_info *info, void *zwrq,
+                              char *extra);
 
-static inline int sniffing_mode(struct airo_info *ai)
-{
-	return (le16_to_cpu(ai->config.rmode) & le16_to_cpu(RXMODE_MASK)) >=
-		le16_to_cpu(RXMODE_RFMON);
+static inline int sniffing_mode(struct airo_info *ai) {
+    return (le16_to_cpu(ai->config.rmode) & le16_to_cpu(RXMODE_MASK)) >=
+           le16_to_cpu(RXMODE_RFMON);
 }
 
-static void proc_config_on_close(struct inode *inode, struct file *file)
-{
-	struct proc_data *data = file->private_data;
-	struct net_device *dev = PDE_DATA(inode);
-	struct airo_info *ai = dev->ml_priv;
-	char *line;
+static void proc_config_on_close(struct inode *inode, struct file *file) {
+    struct proc_data *data = file->private_data;
+    struct proc_dir_entry *dp = PDE(inode);
+    struct net_device *dev = dp->data;
+    struct airo_info *ai = dev->ml_priv;
+    char *line;
 
-	if ( !data->writelen ) return;
+    if ( !data->writelen ) return;
 
-	readConfigRid(ai, 1);
-	set_bit (FLAG_COMMIT, &ai->flags);
+    readConfigRid(ai, 1);
+    set_bit (FLAG_COMMIT, &ai->flags);
 
-	line = data->wbuffer;
-	while( line[0] ) {
-/*** Mode processing */
-		if ( !strncmp( line, "Mode: ", 6 ) ) {
-			line += 6;
-			if (sniffing_mode(ai))
-				set_bit (FLAG_RESET, &ai->flags);
-			ai->config.rmode &= ~RXMODE_FULL_MASK;
-			clear_bit (FLAG_802_11, &ai->flags);
-			ai->config.opmode &= ~MODE_CFG_MASK;
-			ai->config.scanMode = SCANMODE_ACTIVE;
-			if ( line[0] == 'a' ) {
-				ai->config.opmode |= MODE_STA_IBSS;
-			} else {
-				ai->config.opmode |= MODE_STA_ESS;
-				if ( line[0] == 'r' ) {
-					ai->config.rmode |= RXMODE_RFMON | RXMODE_DISABLE_802_3_HEADER;
-					ai->config.scanMode = SCANMODE_PASSIVE;
-					set_bit (FLAG_802_11, &ai->flags);
-				} else if ( line[0] == 'y' ) {
-					ai->config.rmode |= RXMODE_RFMON_ANYBSS | RXMODE_DISABLE_802_3_HEADER;
-					ai->config.scanMode = SCANMODE_PASSIVE;
-					set_bit (FLAG_802_11, &ai->flags);
-				} else if ( line[0] == 'l' )
-					ai->config.rmode |= RXMODE_LANMON;
-			}
-			set_bit (FLAG_COMMIT, &ai->flags);
-		}
+    line = data->wbuffer;
+    while( line[0] ) {
+        /*** Mode processing */
+        if ( !strncmp( line, "Mode: ", 6 ) ) {
+            line += 6;
+            if (sniffing_mode(ai))
+                set_bit (FLAG_RESET, &ai->flags);
+            ai->config.rmode &= ~RXMODE_FULL_MASK;
+            clear_bit (FLAG_802_11, &ai->flags);
+            ai->config.opmode &= ~MODE_CFG_MASK;
+            ai->config.scanMode = SCANMODE_ACTIVE;
+            if ( line[0] == 'a' ) {
+                ai->config.opmode |= MODE_STA_IBSS;
+            } else {
+                ai->config.opmode |= MODE_STA_ESS;
+                if ( line[0] == 'r' ) {
+                    ai->config.rmode |= RXMODE_RFMON | RXMODE_DISABLE_802_3_HEADER;
+                    ai->config.scanMode = SCANMODE_PASSIVE;
+                    set_bit (FLAG_802_11, &ai->flags);
+                } else if ( line[0] == 'y' ) {
+                    ai->config.rmode |= RXMODE_RFMON_ANYBSS | RXMODE_DISABLE_802_3_HEADER;
+                    ai->config.scanMode = SCANMODE_PASSIVE;
+                    set_bit (FLAG_802_11, &ai->flags);
+                } else if ( line[0] == 'l' )
+                    ai->config.rmode |= RXMODE_LANMON;
+            }
+            set_bit (FLAG_COMMIT, &ai->flags);
+        }
 
-/*** Radio status */
-		else if (!strncmp(line,"Radio: ", 7)) {
-			line += 7;
-			if (!strncmp(line,"off",3)) {
-				set_bit (FLAG_RADIO_OFF, &ai->flags);
-			} else {
-				clear_bit (FLAG_RADIO_OFF, &ai->flags);
-			}
-		}
-/*** NodeName processing */
-		else if ( !strncmp( line, "NodeName: ", 10 ) ) {
-			int j;
+        /*** Radio status */
+        else if (!strncmp(line,"Radio: ", 7)) {
+            line += 7;
+            if (!strncmp(line,"off",3)) {
+                set_bit (FLAG_RADIO_OFF, &ai->flags);
+            } else {
+                clear_bit (FLAG_RADIO_OFF, &ai->flags);
+            }
+        }
+        /*** NodeName processing */
+        else if ( !strncmp( line, "NodeName: ", 10 ) ) {
+            int j;
 
-			line += 10;
-			memset( ai->config.nodeName, 0, 16 );
-/* Do the name, assume a space between the mode and node name */
-			for( j = 0; j < 16 && line[j] != '\n'; j++ ) {
-				ai->config.nodeName[j] = line[j];
-			}
-			set_bit (FLAG_COMMIT, &ai->flags);
-		}
+            line += 10;
+            memset( ai->config.nodeName, 0, 16 );
+            /* Do the name, assume a space between the mode and node name */
+            for( j = 0; j < 16 && line[j] != '\n'; j++ ) {
+                ai->config.nodeName[j] = line[j];
+            }
+            set_bit (FLAG_COMMIT, &ai->flags);
+        }
 
-/*** PowerMode processing */
-		else if ( !strncmp( line, "PowerMode: ", 11 ) ) {
-			line += 11;
-			if ( !strncmp( line, "PSPCAM", 6 ) ) {
-				ai->config.powerSaveMode = POWERSAVE_PSPCAM;
-				set_bit (FLAG_COMMIT, &ai->flags);
-			} else if ( !strncmp( line, "PSP", 3 ) ) {
-				ai->config.powerSaveMode = POWERSAVE_PSP;
-				set_bit (FLAG_COMMIT, &ai->flags);
-			} else {
-				ai->config.powerSaveMode = POWERSAVE_CAM;
-				set_bit (FLAG_COMMIT, &ai->flags);
-			}
-		} else if ( !strncmp( line, "DataRates: ", 11 ) ) {
-			int v, i = 0, k = 0; /* i is index into line,
+        /*** PowerMode processing */
+        else if ( !strncmp( line, "PowerMode: ", 11 ) ) {
+            line += 11;
+            if ( !strncmp( line, "PSPCAM", 6 ) ) {
+                ai->config.powerSaveMode = POWERSAVE_PSPCAM;
+                set_bit (FLAG_COMMIT, &ai->flags);
+            } else if ( !strncmp( line, "PSP", 3 ) ) {
+                ai->config.powerSaveMode = POWERSAVE_PSP;
+                set_bit (FLAG_COMMIT, &ai->flags);
+            } else {
+                ai->config.powerSaveMode = POWERSAVE_CAM;
+                set_bit (FLAG_COMMIT, &ai->flags);
+            }
+        } else if ( !strncmp( line, "DataRates: ", 11 ) ) {
+            int v, i = 0, k = 0; /* i is index into line,
 						k is index to rates */
 
             line += 11;
@@ -4955,166 +4953,181 @@ static void proc_config_on_close(struct inode *inode, struct file *file)
         } else {
             airo_print_warn(ai->dev->name, "Couldn't figure out %s", line);
         }
-
-        return "ESS";
+        while( line[0] && line[0] != '\n' ) line++;
+        if ( line[0] ) line++;
+    }
+    airo_config_commit(dev, NULL, NULL, NULL);
 }
 
-static int proc_config_open(struct inode *inode, struct file *file)
-{
-	struct proc_data *data;
-	struct net_device *dev = PDE_DATA(inode);
-	struct airo_info *ai = dev->ml_priv;
-	int i;
-	__le16 mode;
-
-	if ((file->private_data = kzalloc(sizeof(struct proc_data ), GFP_KERNEL)) == NULL)
-		return -ENOMEM;
-	data = file->private_data;
-	if ((data->rbuffer = kmalloc( 2048, GFP_KERNEL )) == NULL) {
-		kfree (file->private_data);
-		return -ENOMEM;
-	}
-	if ((data->wbuffer = kzalloc( 2048, GFP_KERNEL )) == NULL) {
-		kfree (data->rbuffer);
-		kfree (file->private_data);
-		return -ENOMEM;
-	}
-	data->maxwritelen = 2048;
-	data->on_close = proc_config_on_close;
-
-	readConfigRid(ai, 1);
-
-	mode = ai->config.opmode & MODE_CFG_MASK;
-	i = sprintf( data->rbuffer,
-		     "Mode: %s\n"
-		     "Radio: %s\n"
-		     "NodeName: %-16s\n"
-		     "PowerMode: %s\n"
-		     "DataRates: %d %d %d %d %d %d %d %d\n"
-		     "Channel: %d\n"
-		     "XmitPower: %d\n",
-		     mode == MODE_STA_IBSS ? "adhoc" :
-		     mode == MODE_STA_ESS ? get_rmode(ai->config.rmode):
-		     mode == MODE_AP ? "AP" :
-		     mode == MODE_AP_RPTR ? "AP RPTR" : "Error",
-		     test_bit(FLAG_RADIO_OFF, &ai->flags) ? "off" : "on",
-		     ai->config.nodeName,
-		     ai->config.powerSaveMode == POWERSAVE_CAM ? "CAM" :
-		     ai->config.powerSaveMode == POWERSAVE_PSP ? "PSP" :
-		     ai->config.powerSaveMode == POWERSAVE_PSPCAM ? "PSPCAM" :
-		     "Error",
-		     (int)ai->config.rates[0],
-		     (int)ai->config.rates[1],
-		     (int)ai->config.rates[2],
-		     (int)ai->config.rates[3],
-		     (int)ai->config.rates[4],
-		     (int)ai->config.rates[5],
-		     (int)ai->config.rates[6],
-		     (int)ai->config.rates[7],
-		     le16_to_cpu(ai->config.channelSet),
-		     le16_to_cpu(ai->config.txPower)
-		);
-	sprintf( data->rbuffer + i,
-		 "LongRetryLimit: %d\n"
-		 "ShortRetryLimit: %d\n"
-		 "RTSThreshold: %d\n"
-		 "TXMSDULifetime: %d\n"
-		 "RXMSDULifetime: %d\n"
-		 "TXDiversity: %s\n"
-		 "RXDiversity: %s\n"
-		 "FragThreshold: %d\n"
-		 "WEP: %s\n"
-		 "Modulation: %s\n"
-		 "Preamble: %s\n",
-		 le16_to_cpu(ai->config.longRetryLimit),
-		 le16_to_cpu(ai->config.shortRetryLimit),
-		 le16_to_cpu(ai->config.rtsThres),
-		 le16_to_cpu(ai->config.txLifetime),
-		 le16_to_cpu(ai->config.rxLifetime),
-		 ai->config.txDiversity == 1 ? "left" :
-		 ai->config.txDiversity == 2 ? "right" : "both",
-		 ai->config.rxDiversity == 1 ? "left" :
-		 ai->config.rxDiversity == 2 ? "right" : "both",
-		 le16_to_cpu(ai->config.fragThresh),
-		 ai->config.authType == AUTH_ENCRYPT ? "encrypt" :
-		 ai->config.authType == AUTH_SHAREDKEY ? "shared" : "open",
-		 ai->config.modulation == MOD_DEFAULT ? "default" :
-		 ai->config.modulation == MOD_CCK ? "cck" :
-		 ai->config.modulation == MOD_MOK ? "mok" : "error",
-		 ai->config.preamble == PREAMBLE_AUTO ? "auto" :
-		 ai->config.preamble == PREAMBLE_LONG ? "long" :
-		 ai->config.preamble == PREAMBLE_SHORT ? "short" : "error"
-		);
-	data->readlen = strlen( data->rbuffer );
-	return 0;
+static const char *get_rmode(__le16 mode) {
+    switch(mode & RXMODE_MASK) {
+    case RXMODE_RFMON:
+        return "rfmon";
+    case RXMODE_RFMON_ANYBSS:
+        return "yna (any) bss rfmon";
+    case RXMODE_LANMON:
+        return "lanmon";
+    }
+    return "ESS";
 }
 
-static void proc_SSID_on_close(struct inode *inode, struct file *file)
-{
-	struct proc_data *data = file->private_data;
-	struct net_device *dev = PDE_DATA(inode);
-	struct airo_info *ai = dev->ml_priv;
-	SsidRid SSID_rid;
-	int i;
-	char *p = data->wbuffer;
-	char *end = p + data->writelen;
+static int proc_config_open(struct inode *inode, struct file *file) {
+    struct proc_data *data;
+    struct proc_dir_entry *dp = PDE(inode);
+    struct net_device *dev = dp->data;
+    struct airo_info *ai = dev->ml_priv;
+    int i;
+    __le16 mode;
 
-	if (!data->writelen)
-		return;
+    if ((file->private_data = kzalloc(sizeof(struct proc_data ), GFP_KERNEL)) == NULL)
+        return -ENOMEM;
+    data = file->private_data;
+    if ((data->rbuffer = kmalloc( 2048, GFP_KERNEL )) == NULL) {
+        kfree (file->private_data);
+        return -ENOMEM;
+    }
+    if ((data->wbuffer = kzalloc( 2048, GFP_KERNEL )) == NULL) {
+        kfree (data->rbuffer);
+        kfree (file->private_data);
+        return -ENOMEM;
+    }
+    data->maxwritelen = 2048;
+    data->on_close = proc_config_on_close;
 
-	*end = '\n'; /* sentinel; we have space for it */
+    readConfigRid(ai, 1);
 
-	memset(&SSID_rid, 0, sizeof(SSID_rid));
+    mode = ai->config.opmode & MODE_CFG_MASK;
+    i = sprintf( data->rbuffer,
+                 "Mode: %s\n"
+                 "Radio: %s\n"
+                 "NodeName: %-16s\n"
+                 "PowerMode: %s\n"
+                 "DataRates: %d %d %d %d %d %d %d %d\n"
+                 "Channel: %d\n"
+                 "XmitPower: %d\n",
+                 mode == MODE_STA_IBSS ? "adhoc" :
+                 mode == MODE_STA_ESS ? get_rmode(ai->config.rmode):
+                 mode == MODE_AP ? "AP" :
+                 mode == MODE_AP_RPTR ? "AP RPTR" : "Error",
+                 test_bit(FLAG_RADIO_OFF, &ai->flags) ? "off" : "on",
+                 ai->config.nodeName,
+                 ai->config.powerSaveMode == POWERSAVE_CAM ? "CAM" :
+                 ai->config.powerSaveMode == POWERSAVE_PSP ? "PSP" :
+                 ai->config.powerSaveMode == POWERSAVE_PSPCAM ? "PSPCAM" :
+                 "Error",
+                 (int)ai->config.rates[0],
+                 (int)ai->config.rates[1],
+                 (int)ai->config.rates[2],
+                 (int)ai->config.rates[3],
+                 (int)ai->config.rates[4],
+                 (int)ai->config.rates[5],
+                 (int)ai->config.rates[6],
+                 (int)ai->config.rates[7],
+                 le16_to_cpu(ai->config.channelSet),
+                 le16_to_cpu(ai->config.txPower)
+               );
+    sprintf( data->rbuffer + i,
+             "LongRetryLimit: %d\n"
+             "ShortRetryLimit: %d\n"
+             "RTSThreshold: %d\n"
+             "TXMSDULifetime: %d\n"
+             "RXMSDULifetime: %d\n"
+             "TXDiversity: %s\n"
+             "RXDiversity: %s\n"
+             "FragThreshold: %d\n"
+             "WEP: %s\n"
+             "Modulation: %s\n"
+             "Preamble: %s\n",
+             le16_to_cpu(ai->config.longRetryLimit),
+             le16_to_cpu(ai->config.shortRetryLimit),
+             le16_to_cpu(ai->config.rtsThres),
+             le16_to_cpu(ai->config.txLifetime),
+             le16_to_cpu(ai->config.rxLifetime),
+             ai->config.txDiversity == 1 ? "left" :
+             ai->config.txDiversity == 2 ? "right" : "both",
+             ai->config.rxDiversity == 1 ? "left" :
+             ai->config.rxDiversity == 2 ? "right" : "both",
+             le16_to_cpu(ai->config.fragThresh),
+             ai->config.authType == AUTH_ENCRYPT ? "encrypt" :
+             ai->config.authType == AUTH_SHAREDKEY ? "shared" : "open",
+             ai->config.modulation == MOD_DEFAULT ? "default" :
+             ai->config.modulation == MOD_CCK ? "cck" :
+             ai->config.modulation == MOD_MOK ? "mok" : "error",
+             ai->config.preamble == PREAMBLE_AUTO ? "auto" :
+             ai->config.preamble == PREAMBLE_LONG ? "long" :
+             ai->config.preamble == PREAMBLE_SHORT ? "short" : "error"
+           );
+    data->readlen = strlen( data->rbuffer );
+    return 0;
+}
 
-	for (i = 0; i < 3 && p < end; i++) {
-		int j = 0;
-		/* copy up to 32 characters from this line */
-		while (*p != '\n' && j < 32)
-			SSID_rid.ssids[i].ssid[j++] = *p++;
-		if (j == 0)
-			break;
-		SSID_rid.ssids[i].len = cpu_to_le16(j);
-		/* skip to the beginning of the next line */
-		while (*p++ != '\n')
-			;
-	}
-	if (i)
-		SSID_rid.len = cpu_to_le16(sizeof(SSID_rid));
-	disable_MAC(ai, 1);
-	writeSsidRid(ai, &SSID_rid, 1);
-	enable_MAC(ai, 1);
+static void proc_SSID_on_close(struct inode *inode, struct file *file) {
+    struct proc_data *data = file->private_data;
+    struct proc_dir_entry *dp = PDE(inode);
+    struct net_device *dev = dp->data;
+    struct airo_info *ai = dev->ml_priv;
+    SsidRid SSID_rid;
+    int i;
+    char *p = data->wbuffer;
+    char *end = p + data->writelen;
+
+    if (!data->writelen)
+        return;
+
+    *end = '\n'; /* sentinel; we have space for it */
+
+    memset(&SSID_rid, 0, sizeof(SSID_rid));
+
+    for (i = 0; i < 3 && p < end; i++) {
+        int j = 0;
+        /* copy up to 32 characters from this line */
+        while (*p != '\n' && j < 32)
+            SSID_rid.ssids[i].ssid[j++] = *p++;
+        if (j == 0)
+            break;
+        SSID_rid.ssids[i].len = cpu_to_le16(j);
+        /* skip to the beginning of the next line */
+        while (*p++ != '\n')
+            ;
+    }
+    if (i)
+        SSID_rid.len = cpu_to_le16(sizeof(SSID_rid));
+    disable_MAC(ai, 1);
+    writeSsidRid(ai, &SSID_rid, 1);
+    enable_MAC(ai, 1);
 }
 
 static void proc_APList_on_close( struct inode *inode, struct file *file ) {
-	struct proc_data *data = file->private_data;
-	struct net_device *dev = PDE_DATA(inode);
-	struct airo_info *ai = dev->ml_priv;
-	APListRid APList_rid;
-	int i;
+    struct proc_data *data = file->private_data;
+    struct proc_dir_entry *dp = PDE(inode);
+    struct net_device *dev = dp->data;
+    struct airo_info *ai = dev->ml_priv;
+    APListRid APList_rid;
+    int i;
 
-	if ( !data->writelen ) return;
+    if ( !data->writelen ) return;
 
-	memset( &APList_rid, 0, sizeof(APList_rid) );
-	APList_rid.len = cpu_to_le16(sizeof(APList_rid));
+    memset( &APList_rid, 0, sizeof(APList_rid) );
+    APList_rid.len = cpu_to_le16(sizeof(APList_rid));
 
-	for( i = 0; i < 4 && data->writelen >= (i+1)*6*3; i++ ) {
-		int j;
-		for( j = 0; j < 6*3 && data->wbuffer[j+i*6*3]; j++ ) {
-			switch(j%3) {
-			case 0:
-				APList_rid.ap[i][j/3]=
-					hex_to_bin(data->wbuffer[j+i*6*3])<<4;
-				break;
-			case 1:
-				APList_rid.ap[i][j/3]|=
-					hex_to_bin(data->wbuffer[j+i*6*3]);
-				break;
-			}
-		}
-	}
-	disable_MAC(ai, 1);
-	writeAPListRid(ai, &APList_rid, 1);
-	enable_MAC(ai, 1);
+    for( i = 0; i < 4 && data->writelen >= (i+1)*6*3; i++ ) {
+        int j;
+        for( j = 0; j < 6*3 && data->wbuffer[j+i*6*3]; j++ ) {
+            switch(j%3) {
+            case 0:
+                APList_rid.ap[i][j/3]=
+                    hex_to_bin(data->wbuffer[j+i*6*3])<<4;
+                break;
+            case 1:
+                APList_rid.ap[i][j/3]|=
+                    hex_to_bin(data->wbuffer[j+i*6*3]);
+                break;
+            }
+        }
+    }
+    disable_MAC(ai, 1);
+    writeAPListRid(ai, &APList_rid, 1);
+    enable_MAC(ai, 1);
 }
 
 /* This function wraps PC4500_writerid with a MAC disable */
@@ -5216,174 +5229,176 @@ static int set_wep_tx_idx(struct airo_info *ai, u16 index, int perm, int lock) {
 }
 
 static void proc_wepkey_on_close( struct inode *inode, struct file *file ) {
-	struct proc_data *data;
-	struct net_device *dev = PDE_DATA(inode);
-	struct airo_info *ai = dev->ml_priv;
-	int i, rc;
-	char key[16];
-	u16 index = 0;
-	int j = 0;
+    struct proc_data *data;
+    struct proc_dir_entry *dp = PDE(inode);
+    struct net_device *dev = dp->data;
+    struct airo_info *ai = dev->ml_priv;
+    int i, rc;
+    char key[16];
+    u16 index = 0;
+    int j = 0;
 
-	memset(key, 0, sizeof(key));
+    memset(key, 0, sizeof(key));
 
-	data = file->private_data;
-	if ( !data->writelen ) return;
+    data = file->private_data;
+    if ( !data->writelen ) return;
 
-	if (data->wbuffer[0] >= '0' && data->wbuffer[0] <= '3' &&
-	    (data->wbuffer[1] == ' ' || data->wbuffer[1] == '\n')) {
-		index = data->wbuffer[0] - '0';
-		if (data->wbuffer[1] == '\n') {
-			rc = set_wep_tx_idx(ai, index, 1, 1);
-			if (rc < 0) {
-				airo_print_err(ai->dev->name, "failed to set "
-				               "WEP transmit index to %d: %d.",
-				               index, rc);
-			}
-			return;
-		}
-		j = 2;
-	} else {
-		airo_print_err(ai->dev->name, "WepKey passed invalid key index");
-		return;
-	}
+    if (data->wbuffer[0] >= '0' && data->wbuffer[0] <= '3' &&
+            (data->wbuffer[1] == ' ' || data->wbuffer[1] == '\n')) {
+        index = data->wbuffer[0] - '0';
+        if (data->wbuffer[1] == '\n') {
+            rc = set_wep_tx_idx(ai, index, 1, 1);
+            if (rc < 0) {
+                airo_print_err(ai->dev->name, "failed to set "
+                               "WEP transmit index to %d: %d.",
+                               index, rc);
+            }
+            return;
+        }
+        j = 2;
+    } else {
+        airo_print_err(ai->dev->name, "WepKey passed invalid key index");
+        return;
+    }
 
-	for( i = 0; i < 16*3 && data->wbuffer[i+j]; i++ ) {
-		switch(i%3) {
-		case 0:
-			key[i/3] = hex_to_bin(data->wbuffer[i+j])<<4;
-			break;
-		case 1:
-			key[i/3] |= hex_to_bin(data->wbuffer[i+j]);
-			break;
-		}
-	}
+    for( i = 0; i < 16*3 && data->wbuffer[i+j]; i++ ) {
+        switch(i%3) {
+        case 0:
+            key[i/3] = hex_to_bin(data->wbuffer[i+j])<<4;
+            break;
+        case 1:
+            key[i/3] |= hex_to_bin(data->wbuffer[i+j]);
+            break;
+        }
+    }
 
-	rc = set_wep_key(ai, index, key, i/3, 1, 1);
-	if (rc < 0) {
-		airo_print_err(ai->dev->name, "failed to set WEP key at index "
-		               "%d: %d.", index, rc);
-	}
+    rc = set_wep_key(ai, index, key, i/3, 1, 1);
+    if (rc < 0) {
+        airo_print_err(ai->dev->name, "failed to set WEP key at index "
+                       "%d: %d.", index, rc);
+    }
 }
 
-static int proc_wepkey_open( struct inode *inode, struct file *file )
-{
-	struct proc_data *data;
-	struct net_device *dev = PDE_DATA(inode);
-	struct airo_info *ai = dev->ml_priv;
-	char *ptr;
-	WepKeyRid wkr;
-	__le16 lastindex;
-	int j=0;
-	int rc;
+static int proc_wepkey_open( struct inode *inode, struct file *file ) {
+    struct proc_data *data;
+    struct proc_dir_entry *dp = PDE(inode);
+    struct net_device *dev = dp->data;
+    struct airo_info *ai = dev->ml_priv;
+    char *ptr;
+    WepKeyRid wkr;
+    __le16 lastindex;
+    int j=0;
+    int rc;
 
-	if ((file->private_data = kzalloc(sizeof(struct proc_data ), GFP_KERNEL)) == NULL)
-		return -ENOMEM;
-	memset(&wkr, 0, sizeof(wkr));
-	data = file->private_data;
-	if ((data->rbuffer = kzalloc( 180, GFP_KERNEL )) == NULL) {
-		kfree (file->private_data);
-		return -ENOMEM;
-	}
-	data->writelen = 0;
-	data->maxwritelen = 80;
-	if ((data->wbuffer = kzalloc( 80, GFP_KERNEL )) == NULL) {
-		kfree (data->rbuffer);
-		kfree (file->private_data);
-		return -ENOMEM;
-	}
-	data->on_close = proc_wepkey_on_close;
+    if ((file->private_data = kzalloc(sizeof(struct proc_data ), GFP_KERNEL)) == NULL)
+        return -ENOMEM;
+    memset(&wkr, 0, sizeof(wkr));
+    data = file->private_data;
+    if ((data->rbuffer = kzalloc( 180, GFP_KERNEL )) == NULL) {
+        kfree (file->private_data);
+        return -ENOMEM;
+    }
+    data->writelen = 0;
+    data->maxwritelen = 80;
+    if ((data->wbuffer = kzalloc( 80, GFP_KERNEL )) == NULL) {
+        kfree (data->rbuffer);
+        kfree (file->private_data);
+        return -ENOMEM;
+    }
+    data->on_close = proc_wepkey_on_close;
 
-	ptr = data->rbuffer;
-	strcpy(ptr, "No wep keys\n");
-	rc = readWepKeyRid(ai, &wkr, 1, 1);
-	if (rc == SUCCESS) do {
-		lastindex = wkr.kindex;
-		if (wkr.kindex == cpu_to_le16(0xffff)) {
-			j += sprintf(ptr+j, "Tx key = %d\n",
-				     (int)wkr.mac[0]);
-		} else {
-			j += sprintf(ptr+j, "Key %d set with length = %d\n",
-				     le16_to_cpu(wkr.kindex),
-				     le16_to_cpu(wkr.klen));
-		}
-		readWepKeyRid(ai, &wkr, 0, 1);
-	} while((lastindex != wkr.kindex) && (j < 180-30));
+    ptr = data->rbuffer;
+    strcpy(ptr, "No wep keys\n");
+    rc = readWepKeyRid(ai, &wkr, 1, 1);
+    if (rc == SUCCESS) do {
+            lastindex = wkr.kindex;
+            if (wkr.kindex == cpu_to_le16(0xffff)) {
+                j += sprintf(ptr+j, "Tx key = %d\n",
+                             (int)wkr.mac[0]);
+            } else {
+                j += sprintf(ptr+j, "Key %d set with length = %d\n",
+                             le16_to_cpu(wkr.kindex),
+                             le16_to_cpu(wkr.klen));
+            }
+            readWepKeyRid(ai, &wkr, 0, 1);
+        } while((lastindex != wkr.kindex) && (j < 180-30));
 
-	data->readlen = strlen( data->rbuffer );
-	return 0;
+    data->readlen = strlen( data->rbuffer );
+    return 0;
 }
 
-static int proc_SSID_open(struct inode *inode, struct file *file)
-{
-	struct proc_data *data;
-	struct net_device *dev = PDE_DATA(inode);
-	struct airo_info *ai = dev->ml_priv;
-	int i;
-	char *ptr;
-	SsidRid SSID_rid;
+static int proc_SSID_open(struct inode *inode, struct file *file) {
+    struct proc_data *data;
+    struct proc_dir_entry *dp = PDE(inode);
+    struct net_device *dev = dp->data;
+    struct airo_info *ai = dev->ml_priv;
+    int i;
+    char *ptr;
+    SsidRid SSID_rid;
 
-	if ((file->private_data = kzalloc(sizeof(struct proc_data ), GFP_KERNEL)) == NULL)
-		return -ENOMEM;
-	data = file->private_data;
-	if ((data->rbuffer = kmalloc( 104, GFP_KERNEL )) == NULL) {
-		kfree (file->private_data);
-		return -ENOMEM;
-	}
-	data->writelen = 0;
-	data->maxwritelen = 33*3;
-	/* allocate maxwritelen + 1; we'll want a sentinel */
-	if ((data->wbuffer = kzalloc(33*3 + 1, GFP_KERNEL)) == NULL) {
-		kfree (data->rbuffer);
-		kfree (file->private_data);
-		return -ENOMEM;
-	}
-	data->on_close = proc_SSID_on_close;
+    if ((file->private_data = kzalloc(sizeof(struct proc_data ), GFP_KERNEL)) == NULL)
+        return -ENOMEM;
+    data = file->private_data;
+    if ((data->rbuffer = kmalloc( 104, GFP_KERNEL )) == NULL) {
+        kfree (file->private_data);
+        return -ENOMEM;
+    }
+    data->writelen = 0;
+    data->maxwritelen = 33*3;
+    /* allocate maxwritelen + 1; we'll want a sentinel */
+    if ((data->wbuffer = kzalloc(33*3 + 1, GFP_KERNEL)) == NULL) {
+        kfree (data->rbuffer);
+        kfree (file->private_data);
+        return -ENOMEM;
+    }
+    data->on_close = proc_SSID_on_close;
 
-	readSsidRid(ai, &SSID_rid);
-	ptr = data->rbuffer;
-	for (i = 0; i < 3; i++) {
-		int j;
-		size_t len = le16_to_cpu(SSID_rid.ssids[i].len);
-		if (!len)
-			break;
-		if (len > 32)
-			len = 32;
-		for (j = 0; j < len && SSID_rid.ssids[i].ssid[j]; j++)
-			*ptr++ = SSID_rid.ssids[i].ssid[j];
-		*ptr++ = '\n';
-	}
-	*ptr = '\0';
-	data->readlen = strlen( data->rbuffer );
-	return 0;
+    readSsidRid(ai, &SSID_rid);
+    ptr = data->rbuffer;
+    for (i = 0; i < 3; i++) {
+        int j;
+        size_t len = le16_to_cpu(SSID_rid.ssids[i].len);
+        if (!len)
+            break;
+        if (len > 32)
+            len = 32;
+        for (j = 0; j < len && SSID_rid.ssids[i].ssid[j]; j++)
+            *ptr++ = SSID_rid.ssids[i].ssid[j];
+        *ptr++ = '\n';
+    }
+    *ptr = '\0';
+    data->readlen = strlen( data->rbuffer );
+    return 0;
 }
 
 static int proc_APList_open( struct inode *inode, struct file *file ) {
-	struct proc_data *data;
-	struct net_device *dev = PDE_DATA(inode);
-	struct airo_info *ai = dev->ml_priv;
-	int i;
-	char *ptr;
-	APListRid APList_rid;
+    struct proc_data *data;
+    struct proc_dir_entry *dp = PDE(inode);
+    struct net_device *dev = dp->data;
+    struct airo_info *ai = dev->ml_priv;
+    int i;
+    char *ptr;
+    APListRid APList_rid;
 
-	if ((file->private_data = kzalloc(sizeof(struct proc_data ), GFP_KERNEL)) == NULL)
-		return -ENOMEM;
-	data = file->private_data;
-	if ((data->rbuffer = kmalloc( 104, GFP_KERNEL )) == NULL) {
-		kfree (file->private_data);
-		return -ENOMEM;
-	}
-	data->writelen = 0;
-	data->maxwritelen = 4*6*3;
-	if ((data->wbuffer = kzalloc( data->maxwritelen, GFP_KERNEL )) == NULL) {
-		kfree (data->rbuffer);
-		kfree (file->private_data);
-		return -ENOMEM;
-	}
-	data->on_close = proc_APList_on_close;
+    if ((file->private_data = kzalloc(sizeof(struct proc_data ), GFP_KERNEL)) == NULL)
+        return -ENOMEM;
+    data = file->private_data;
+    if ((data->rbuffer = kmalloc( 104, GFP_KERNEL )) == NULL) {
+        kfree (file->private_data);
+        return -ENOMEM;
+    }
+    data->writelen = 0;
+    data->maxwritelen = 4*6*3;
+    if ((data->wbuffer = kzalloc( data->maxwritelen, GFP_KERNEL )) == NULL) {
+        kfree (data->rbuffer);
+        kfree (file->private_data);
+        return -ENOMEM;
+    }
+    data->on_close = proc_APList_on_close;
 
-	readAPListRid(ai, &APList_rid);
-	ptr = data->rbuffer;
-	for( i = 0; i < 4; i++ ) {
+    readAPListRid(ai, &APList_rid);
+    ptr = data->rbuffer;
+    for( i = 0; i < 4; i++ ) {
 // We end when we find a zero MAC
         if ( !*(int*)APList_rid.ap[i] &&
                 !*(int*)&APList_rid.ap[i][2]) break;
@@ -5397,46 +5412,47 @@ static int proc_APList_open( struct inode *inode, struct file *file ) {
 }
 
 static int proc_BSSList_open( struct inode *inode, struct file *file ) {
-	struct proc_data *data;
-	struct net_device *dev = PDE_DATA(inode);
-	struct airo_info *ai = dev->ml_priv;
-	char *ptr;
-	BSSListRid BSSList_rid;
-	int rc;
-	/* If doLoseSync is not 1, we won't do a Lose Sync */
-	int doLoseSync = -1;
+    struct proc_data *data;
+    struct proc_dir_entry *dp = PDE(inode);
+    struct net_device *dev = dp->data;
+    struct airo_info *ai = dev->ml_priv;
+    char *ptr;
+    BSSListRid BSSList_rid;
+    int rc;
+    /* If doLoseSync is not 1, we won't do a Lose Sync */
+    int doLoseSync = -1;
 
-	if ((file->private_data = kzalloc(sizeof(struct proc_data ), GFP_KERNEL)) == NULL)
-		return -ENOMEM;
-	data = file->private_data;
-	if ((data->rbuffer = kmalloc( 1024, GFP_KERNEL )) == NULL) {
-		kfree (file->private_data);
-		return -ENOMEM;
-	}
-	data->writelen = 0;
-	data->maxwritelen = 0;
-	data->wbuffer = NULL;
-	data->on_close = NULL;
+    if ((file->private_data = kzalloc(sizeof(struct proc_data ), GFP_KERNEL)) == NULL)
+        return -ENOMEM;
+    data = file->private_data;
+    if ((data->rbuffer = kmalloc( 1024, GFP_KERNEL )) == NULL) {
+        kfree (file->private_data);
+        return -ENOMEM;
+    }
+    data->writelen = 0;
+    data->maxwritelen = 0;
+    data->wbuffer = NULL;
+    data->on_close = NULL;
 
-	if (file->f_mode & FMODE_WRITE) {
-		if (!(file->f_mode & FMODE_READ)) {
-			Cmd cmd;
-			Resp rsp;
+    if (file->f_mode & FMODE_WRITE) {
+        if (!(file->f_mode & FMODE_READ)) {
+            Cmd cmd;
+            Resp rsp;
 
-			if (ai->flags & FLAG_RADIO_MASK) return -ENETDOWN;
-			memset(&cmd, 0, sizeof(cmd));
-			cmd.cmd=CMD_LISTBSS;
-			if (down_interruptible(&ai->sem))
-				return -ERESTARTSYS;
-			issuecommand(ai, &cmd, &rsp);
-			up(&ai->sem);
-			data->readlen = 0;
-			return 0;
-		}
-		doLoseSync = 1;
-	}
-	ptr = data->rbuffer;
-	/* There is a race condition here if there are concurrent opens.
+            if (ai->flags & FLAG_RADIO_MASK) return -ENETDOWN;
+            memset(&cmd, 0, sizeof(cmd));
+            cmd.cmd=CMD_LISTBSS;
+            if (down_interruptible(&ai->sem))
+                return -ERESTARTSYS;
+            issuecommand(ai, &cmd, &rsp);
+            up(&ai->sem);
+            data->readlen = 0;
+            return 0;
+        }
+        doLoseSync = 1;
+    }
+    ptr = data->rbuffer;
+    /* There is a race condition here if there are concurrent opens.
            Since it is a rare condition, we'll just live with it, otherwise
            we have to add a spin lock... */
     rc = readBSSListRid(ai, doLoseSync, &BSSList_rid);

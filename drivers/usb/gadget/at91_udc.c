@@ -217,14 +217,8 @@ static int proc_udc_show(struct seq_file *s, void *unused) {
     return 0;
 }
 
-<<<<<<< HEAD
 static int proc_udc_open(struct inode *inode, struct file *file) {
     return single_open(file, proc_udc_show, PDE(inode)->data);
-=======
-static int proc_udc_open(struct inode *inode, struct file *file)
-{
-	return single_open(file, proc_udc_show, PDE_DATA(inode));
->>>>>>> d9dda78... procfs: new helper - PDE_DATA(inode)
 }
 
 static const struct file_operations proc_ops = {

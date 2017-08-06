@@ -48,9 +48,8 @@ static int idedisk_cache_proc_show(struct seq_file *m, void *v) {
     return 0;
 }
 
-static int idedisk_cache_proc_open(struct inode *inode, struct file *file)
-{
-	return single_open(file, idedisk_cache_proc_show, PDE_DATA(inode));
+static int idedisk_cache_proc_open(struct inode *inode, struct file *file) {
+    return single_open(file, idedisk_cache_proc_show, PDE(inode)->data);
 }
 
 static const struct file_operations idedisk_cache_proc_fops = {
@@ -68,9 +67,8 @@ static int idedisk_capacity_proc_show(struct seq_file *m, void *v) {
     return 0;
 }
 
-static int idedisk_capacity_proc_open(struct inode *inode, struct file *file)
-{
-	return single_open(file, idedisk_capacity_proc_show, PDE_DATA(inode));
+static int idedisk_capacity_proc_open(struct inode *inode, struct file *file) {
+    return single_open(file, idedisk_capacity_proc_show, PDE(inode)->data);
 }
 
 static const struct file_operations idedisk_capacity_proc_fops = {
@@ -107,9 +105,8 @@ static int idedisk_sv_proc_show(struct seq_file *m, void *v) {
     return __idedisk_proc_show(m, m->private, ATA_SMART_READ_VALUES);
 }
 
-static int idedisk_sv_proc_open(struct inode *inode, struct file *file)
-{
-	return single_open(file, idedisk_sv_proc_show, PDE_DATA(inode));
+static int idedisk_sv_proc_open(struct inode *inode, struct file *file) {
+    return single_open(file, idedisk_sv_proc_show, PDE(inode)->data);
 }
 
 static const struct file_operations idedisk_sv_proc_fops = {
@@ -124,9 +121,8 @@ static int idedisk_st_proc_show(struct seq_file *m, void *v) {
     return __idedisk_proc_show(m, m->private, ATA_SMART_READ_THRESHOLDS);
 }
 
-static int idedisk_st_proc_open(struct inode *inode, struct file *file)
-{
-	return single_open(file, idedisk_st_proc_show, PDE_DATA(inode));
+static int idedisk_st_proc_open(struct inode *inode, struct file *file) {
+    return single_open(file, idedisk_st_proc_show, PDE(inode)->data);
 }
 
 static const struct file_operations idedisk_st_proc_fops = {

@@ -192,9 +192,6 @@ struct bt_sock {
 struct bt_sock_list {
 	struct hlist_head head;
 	rwlock_t          lock;
-#ifdef CONFIG_PROC_FS
-        int (* custom_seq_show)(struct seq_file *, void *);
-#endif
 };
 
 int  bt_sock_register(int proto, const struct net_proto_family *ops);

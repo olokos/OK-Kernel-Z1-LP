@@ -2578,153 +2578,148 @@ static struct platform_driver ipmi_driver = {
     .remove		= __devexit_p(ipmi_remove),
 };
 
-static int wait_for_msg_done(struct smi_info *smi_info)
-{
-	enum si_sm_result     smi_result;
+static int wait_for_msg_done(struct smi_info *smi_info) {
+    enum si_sm_result     smi_result;
 
-	smi_result = smi_info->handlers->event(smi_info->si_sm, 0);
-	for (;;) {
-		if (smi_result == SI_SM_CALL_WITH_DELAY ||
-		    smi_result == SI_SM_CALL_WITH_TICK_DELAY) {
-			schedule_timeout_uninterruptible(1);
-			smi_result = smi_info->handlers->event(
-				smi_info->si_sm, 100);
-		} else if (smi_result == SI_SM_CALL_WITHOUT_DELAY) {
-			smi_result = smi_info->handlers->event(
-				smi_info->si_sm, 0);
-		} else
-			break;
-	}
-	if (smi_result == SI_SM_HOSED)
-		/*
-		 * We couldn't get the state machine to run, so whatever's at
-		 * the port is probably not an IPMI SMI interface.
-		 */
-		return -ENODEV;
+    smi_result = smi_info->handlers->event(smi_info->si_sm, 0);
+    for (;;) {
+        if (smi_result == SI_SM_CALL_WITH_DELAY ||
+                smi_result == SI_SM_CALL_WITH_TICK_DELAY) {
+            schedule_timeout_uninterruptible(1);
+            smi_result = smi_info->handlers->event(
+                             smi_info->si_sm, 100);
+        } else if (smi_result == SI_SM_CALL_WITHOUT_DELAY) {
+            smi_result = smi_info->handlers->event(
+                             smi_info->si_sm, 0);
+        } else
+            break;
+    }
+    if (smi_result == SI_SM_HOSED)
+        /*
+         * We couldn't get the state machine to run, so whatever's at
+         * the port is probably not an IPMI SMI interface.
+         */
+        return -ENODEV;
 
-	return 0;
+    return 0;
 }
 
-static int try_get_dev_id(struct smi_info *smi_info)
-{
-	unsigned char         msg[2];
-	unsigned char         *resp;
-	unsigned long         resp_len;
-	int                   rv = 0;
+static int try_get_dev_id(struct smi_info *smi_info) {
+    unsigned char         msg[2];
+    unsigned char         *resp;
+    unsigned long         resp_len;
+    int                   rv = 0;
 
-	resp = kmalloc(IPMI_MAX_MSG_LENGTH, GFP_KERNEL);
-	if (!resp)
-		return -ENOMEM;
+    resp = kmalloc(IPMI_MAX_MSG_LENGTH, GFP_KERNEL);
+    if (!resp)
+        return -ENOMEM;
 
-	/*
-	 * Do a Get Device ID command, since it comes back with some
-	 * useful info.
-	 */
-	msg[0] = IPMI_NETFN_APP_REQUEST << 2;
-	msg[1] = IPMI_GET_DEVICE_ID_CMD;
-	smi_info->handlers->start_transaction(smi_info->si_sm, msg, 2);
+    /*
+     * Do a Get Device ID command, since it comes back with some
+     * useful info.
+     */
+    msg[0] = IPMI_NETFN_APP_REQUEST << 2;
+    msg[1] = IPMI_GET_DEVICE_ID_CMD;
+    smi_info->handlers->start_transaction(smi_info->si_sm, msg, 2);
 
-	rv = wait_for_msg_done(smi_info);
-	if (rv)
-		goto out;
+    rv = wait_for_msg_done(smi_info);
+    if (rv)
+        goto out;
 
-	resp_len = smi_info->handlers->get_result(smi_info->si_sm,
-						  resp, IPMI_MAX_MSG_LENGTH);
+    resp_len = smi_info->handlers->get_result(smi_info->si_sm,
+               resp, IPMI_MAX_MSG_LENGTH);
 
-	/* Check and record info from the get device id, in case we need it. */
-	rv = ipmi_demangle_device_id(resp, resp_len, &smi_info->device_id);
+    /* Check and record info from the get device id, in case we need it. */
+    rv = ipmi_demangle_device_id(resp, resp_len, &smi_info->device_id);
 
- out:
-	kfree(resp);
-	return rv;
+out:
+    kfree(resp);
+    return rv;
 }
 
-static int try_enable_event_buffer(struct smi_info *smi_info)
-{
-	unsigned char         msg[3];
-	unsigned char         *resp;
-	unsigned long         resp_len;
-	int                   rv = 0;
+static int try_enable_event_buffer(struct smi_info *smi_info) {
+    unsigned char         msg[3];
+    unsigned char         *resp;
+    unsigned long         resp_len;
+    int                   rv = 0;
 
-	resp = kmalloc(IPMI_MAX_MSG_LENGTH, GFP_KERNEL);
-	if (!resp)
-		return -ENOMEM;
+    resp = kmalloc(IPMI_MAX_MSG_LENGTH, GFP_KERNEL);
+    if (!resp)
+        return -ENOMEM;
 
-	msg[0] = IPMI_NETFN_APP_REQUEST << 2;
-	msg[1] = IPMI_GET_BMC_GLOBAL_ENABLES_CMD;
-	smi_info->handlers->start_transaction(smi_info->si_sm, msg, 2);
+    msg[0] = IPMI_NETFN_APP_REQUEST << 2;
+    msg[1] = IPMI_GET_BMC_GLOBAL_ENABLES_CMD;
+    smi_info->handlers->start_transaction(smi_info->si_sm, msg, 2);
 
-	rv = wait_for_msg_done(smi_info);
-	if (rv) {
-		printk(KERN_WARNING PFX "Error getting response from get"
-		       " global enables command, the event buffer is not"
-		       " enabled.\n");
-		goto out;
-	}
+    rv = wait_for_msg_done(smi_info);
+    if (rv) {
+        printk(KERN_WARNING PFX "Error getting response from get"
+               " global enables command, the event buffer is not"
+               " enabled.\n");
+        goto out;
+    }
 
-	resp_len = smi_info->handlers->get_result(smi_info->si_sm,
-						  resp, IPMI_MAX_MSG_LENGTH);
+    resp_len = smi_info->handlers->get_result(smi_info->si_sm,
+               resp, IPMI_MAX_MSG_LENGTH);
 
-	if (resp_len < 4 ||
-			resp[0] != (IPMI_NETFN_APP_REQUEST | 1) << 2 ||
-			resp[1] != IPMI_GET_BMC_GLOBAL_ENABLES_CMD   ||
-			resp[2] != 0) {
-		printk(KERN_WARNING PFX "Invalid return from get global"
-		       " enables command, cannot enable the event buffer.\n");
-		rv = -EINVAL;
-		goto out;
-	}
+    if (resp_len < 4 ||
+            resp[0] != (IPMI_NETFN_APP_REQUEST | 1) << 2 ||
+            resp[1] != IPMI_GET_BMC_GLOBAL_ENABLES_CMD   ||
+            resp[2] != 0) {
+        printk(KERN_WARNING PFX "Invalid return from get global"
+               " enables command, cannot enable the event buffer.\n");
+        rv = -EINVAL;
+        goto out;
+    }
 
-	if (resp[3] & IPMI_BMC_EVT_MSG_BUFF)
-		/* buffer is already enabled, nothing to do. */
-		goto out;
+    if (resp[3] & IPMI_BMC_EVT_MSG_BUFF)
+        /* buffer is already enabled, nothing to do. */
+        goto out;
 
-	msg[0] = IPMI_NETFN_APP_REQUEST << 2;
-	msg[1] = IPMI_SET_BMC_GLOBAL_ENABLES_CMD;
-	msg[2] = resp[3] | IPMI_BMC_EVT_MSG_BUFF;
-	smi_info->handlers->start_transaction(smi_info->si_sm, msg, 3);
+    msg[0] = IPMI_NETFN_APP_REQUEST << 2;
+    msg[1] = IPMI_SET_BMC_GLOBAL_ENABLES_CMD;
+    msg[2] = resp[3] | IPMI_BMC_EVT_MSG_BUFF;
+    smi_info->handlers->start_transaction(smi_info->si_sm, msg, 3);
 
-	rv = wait_for_msg_done(smi_info);
-	if (rv) {
-		printk(KERN_WARNING PFX "Error getting response from set"
-		       " global, enables command, the event buffer is not"
-		       " enabled.\n");
-		goto out;
-	}
+    rv = wait_for_msg_done(smi_info);
+    if (rv) {
+        printk(KERN_WARNING PFX "Error getting response from set"
+               " global, enables command, the event buffer is not"
+               " enabled.\n");
+        goto out;
+    }
 
-	resp_len = smi_info->handlers->get_result(smi_info->si_sm,
-						  resp, IPMI_MAX_MSG_LENGTH);
+    resp_len = smi_info->handlers->get_result(smi_info->si_sm,
+               resp, IPMI_MAX_MSG_LENGTH);
 
-	if (resp_len < 3 ||
-			resp[0] != (IPMI_NETFN_APP_REQUEST | 1) << 2 ||
-			resp[1] != IPMI_SET_BMC_GLOBAL_ENABLES_CMD) {
-		printk(KERN_WARNING PFX "Invalid return from get global,"
-		       "enables command, not enable the event buffer.\n");
-		rv = -EINVAL;
-		goto out;
-	}
+    if (resp_len < 3 ||
+            resp[0] != (IPMI_NETFN_APP_REQUEST | 1) << 2 ||
+            resp[1] != IPMI_SET_BMC_GLOBAL_ENABLES_CMD) {
+        printk(KERN_WARNING PFX "Invalid return from get global,"
+               "enables command, not enable the event buffer.\n");
+        rv = -EINVAL;
+        goto out;
+    }
 
-	if (resp[2] != 0)
-		/*
-		 * An error when setting the event buffer bit means
-		 * that the event buffer is not supported.
-		 */
-		rv = -ENOENT;
- out:
-	kfree(resp);
-	return rv;
+    if (resp[2] != 0)
+        /*
+         * An error when setting the event buffer bit means
+         * that the event buffer is not supported.
+         */
+        rv = -ENOENT;
+out:
+    kfree(resp);
+    return rv;
 }
 
-static int smi_type_proc_show(struct seq_file *m, void *v)
-{
-	struct smi_info *smi = m->private;
+static int smi_type_proc_show(struct seq_file *m, void *v) {
+    struct smi_info *smi = m->private;
 
-	return seq_printf(m, "%s\n", si_to_str[smi->si_type]);
+    return seq_printf(m, "%s\n", si_to_str[smi->si_type]);
 }
 
-static int smi_type_proc_open(struct inode *inode, struct file *file)
-{
-	return single_open(file, smi_type_proc_show, PDE_DATA(inode));
+static int smi_type_proc_open(struct inode *inode, struct file *file) {
+    return single_open(file, smi_type_proc_show, PDE(inode)->data);
 }
 
 static const struct file_operations smi_type_proc_ops = {
@@ -2734,40 +2729,38 @@ static const struct file_operations smi_type_proc_ops = {
     .release	= single_release,
 };
 
-static int smi_si_stats_proc_show(struct seq_file *m, void *v)
-{
-	struct smi_info *smi = m->private;
+static int smi_si_stats_proc_show(struct seq_file *m, void *v) {
+    struct smi_info *smi = m->private;
 
-	seq_printf(m, "interrupts_enabled:    %d\n",
-		       smi->irq && !smi->interrupt_disabled);
-	seq_printf(m, "short_timeouts:        %u\n",
-		       smi_get_stat(smi, short_timeouts));
-	seq_printf(m, "long_timeouts:         %u\n",
-		       smi_get_stat(smi, long_timeouts));
-	seq_printf(m, "idles:                 %u\n",
-		       smi_get_stat(smi, idles));
-	seq_printf(m, "interrupts:            %u\n",
-		       smi_get_stat(smi, interrupts));
-	seq_printf(m, "attentions:            %u\n",
-		       smi_get_stat(smi, attentions));
-	seq_printf(m, "flag_fetches:          %u\n",
-		       smi_get_stat(smi, flag_fetches));
-	seq_printf(m, "hosed_count:           %u\n",
-		       smi_get_stat(smi, hosed_count));
-	seq_printf(m, "complete_transactions: %u\n",
-		       smi_get_stat(smi, complete_transactions));
-	seq_printf(m, "events:                %u\n",
-		       smi_get_stat(smi, events));
-	seq_printf(m, "watchdog_pretimeouts:  %u\n",
-		       smi_get_stat(smi, watchdog_pretimeouts));
-	seq_printf(m, "incoming_messages:     %u\n",
-		       smi_get_stat(smi, incoming_messages));
-	return 0;
+    seq_printf(m, "interrupts_enabled:    %d\n",
+               smi->irq && !smi->interrupt_disabled);
+    seq_printf(m, "short_timeouts:        %u\n",
+               smi_get_stat(smi, short_timeouts));
+    seq_printf(m, "long_timeouts:         %u\n",
+               smi_get_stat(smi, long_timeouts));
+    seq_printf(m, "idles:                 %u\n",
+               smi_get_stat(smi, idles));
+    seq_printf(m, "interrupts:            %u\n",
+               smi_get_stat(smi, interrupts));
+    seq_printf(m, "attentions:            %u\n",
+               smi_get_stat(smi, attentions));
+    seq_printf(m, "flag_fetches:          %u\n",
+               smi_get_stat(smi, flag_fetches));
+    seq_printf(m, "hosed_count:           %u\n",
+               smi_get_stat(smi, hosed_count));
+    seq_printf(m, "complete_transactions: %u\n",
+               smi_get_stat(smi, complete_transactions));
+    seq_printf(m, "events:                %u\n",
+               smi_get_stat(smi, events));
+    seq_printf(m, "watchdog_pretimeouts:  %u\n",
+               smi_get_stat(smi, watchdog_pretimeouts));
+    seq_printf(m, "incoming_messages:     %u\n",
+               smi_get_stat(smi, incoming_messages));
+    return 0;
 }
 
-static int smi_si_stats_proc_open(struct inode *inode, struct file *file)
-{
-	return single_open(file, smi_si_stats_proc_show, PDE_DATA(inode));
+static int smi_si_stats_proc_open(struct inode *inode, struct file *file) {
+    return single_open(file, smi_si_stats_proc_show, PDE(inode)->data);
 }
 
 static const struct file_operations smi_si_stats_proc_ops = {
@@ -2792,9 +2785,8 @@ static int smi_params_proc_show(struct seq_file *m, void *v) {
                       smi->slave_addr);
 }
 
-static int smi_params_proc_open(struct inode *inode, struct file *file)
-{
-	return single_open(file, smi_params_proc_show, PDE_DATA(inode));
+static int smi_params_proc_open(struct inode *inode, struct file *file) {
+    return single_open(file, smi_params_proc_show, PDE(inode)->data);
 }
 
 static const struct file_operations smi_params_proc_ops = {
