@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2017 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,42 +18,26 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+
 /*
- * Copyright (c) 2012, The Linux Foundation. All rights reserved.
- *
- * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
- *
- *
- * Permission to use, copy, modify, and/or distribute this software for
- * any purpose with or without fee is hereby granted, provided that the
- * above copyright notice and this permission notice appear in all
- * copies.
- *
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
- * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
- * AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
- * DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
- * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
- * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
- * PERFORMANCE OF THIS SOFTWARE.
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
  */
 
-/** ------------------------------------------------------------------------- *
-    ------------------------------------------------------------------------- *
+/** ------------------------------------------------------------------------- * 
+    ------------------------------------------------------------------------- *  
 
-
+  
     \file csrInsideApi.h
-
+  
     Define interface only used by CSR.
-
-
-   Copyright (C) 2006 Airgo Networks, Incorporated
    ========================================================================== */
 #ifndef CSR_INSIDE_API_H__
 #define CSR_INSIDE_API_H__
 
 
+#include <linux/version.h>
 #include "csrSupport.h"
 #include "smeInside.h"
 #include "vos_nvitem.h"
@@ -64,12 +48,15 @@
 #define CSR_ACTIVE_MAX_CHANNEL_TIME    40
 #define CSR_ACTIVE_MIN_CHANNEL_TIME    20
 
-#define CSR_ACTIVE_MAX_CHANNEL_TIME_BTC    120
-#define CSR_ACTIVE_MIN_CHANNEL_TIME_BTC    60
+#define CSR_ACTIVE_MAX_CHANNEL_TIME_ESCO_BTC    120
+#define CSR_ACTIVE_MIN_CHANNEL_TIME_ESCO_BTC    60
+
+#define CSR_ACTIVE_MIN_CHANNEL_TIME_SCO_BTC    20
+#define CSR_ACTIVE_MAX_CHANNEL_TIME_SCO_BTC    40
 
 #ifdef WLAN_AP_STA_CONCURRENCY
 #define CSR_PASSIVE_MAX_CHANNEL_TIME_CONC   110
-#define CSR_PASSIVE_MIN_CHANNEL_TIME_CONC   60
+#define CSR_PASSIVE_MIN_CHANNEL_TIME_CONC   60 
 
 #define CSR_ACTIVE_MAX_CHANNEL_TIME_CONC    27
 #define CSR_ACTIVE_MIN_CHANNEL_TIME_CONC    20
@@ -84,11 +71,13 @@
 
 #define CSR_MAX_2_4_GHZ_SUPPORTED_CHANNELS 14
 
-#define CSR_MAX_BSS_SUPPORT            250
+#define CSR_MAX_BSS_SUPPORT            512
+#define SYSTEM_TIME_MSEC_TO_USEC      1000
+#define SYSTEM_TIME_SEC_TO_MSEC       1000
 
 //This number minus 1 means the number of times a channel is scanned before a BSS is remvoed from
 //cache scan result
-#define CSR_AGING_COUNT     3
+#define CSR_AGING_COUNT     3   
 //The following defines are used by palTimer
 //This is used for palTimer when request to imps fails
 #define CSR_IDLE_SCAN_WAIT_TIME     (1 * PAL_TIMER_TO_SEC_UNIT)     //1 second 
@@ -100,7 +89,6 @@
 #define CSR_MIC_ERROR_TIMEOUT  (60 * PAL_TIMER_TO_SEC_UNIT)     //60 seconds
 #define CSR_TKIP_COUNTER_MEASURE_TIMEOUT  (60 * PAL_TIMER_TO_SEC_UNIT)     //60 seconds
 #define CSR_SCAN_RESULT_AGING_INTERVAL    (5 * PAL_TIMER_TO_SEC_UNIT)     //5 seconds
-#define CSR_SCAN_RESULT_CFG_AGING_INTERVAL    (PAL_TIMER_TO_SEC_UNIT)     // 1  second
 //the following defines are NOT used by palTimer
 #define CSR_SCAN_AGING_TIME_NOT_CONNECT_NO_PS 50     //50 seconds
 #define CSR_SCAN_AGING_TIME_NOT_CONNECT_W_PS 300     //300 seconds
@@ -112,10 +100,10 @@
 #define CSR_BEST_RSSI_VALUE         (-30)   //RSSI >= this is in CAT4
 #define CSR_DEFAULT_RSSI_DB_GAP     30 //every 30 dbm for one category
 #define CSR_BSS_CAP_VALUE_NONE  0    //not much value
-#define CSR_BSS_CAP_VALUE_HT    2
+#define CSR_BSS_CAP_VALUE_HT    2    
 #define CSR_BSS_CAP_VALUE_WMM   1
 #define CSR_BSS_CAP_VALUE_UAPSD 1
-#if  defined (WLAN_FEATURE_VOWIFI_11R) || defined (FEATURE_WLAN_CCX) || defined(FEATURE_WLAN_LFR)
+#if  defined (WLAN_FEATURE_VOWIFI_11R) || defined (FEATURE_WLAN_ESE) || defined(FEATURE_WLAN_LFR)
 #define CSR_BSS_CAP_VALUE_5GHZ  1
 #endif
 #define CSR_DEFAULT_ROAMING_TIME 10   //10 seconds
@@ -127,7 +115,49 @@
 #define CSR_JOIN_RETRY_TIMEOUT_PERIOD        ( 1 *  PAL_TIMER_TO_SEC_UNIT )  // 1 second
 #endif
 
-typedef enum {
+#define CSR_DISABLE_SCAN_DURING_SCO          100 //100 milliseconds
+
+
+#ifdef WLAN_FEATURE_ROAM_SCAN_OFFLOAD
+#define ROAMING_RSSI_WEIGHT 50
+#define MIN_RSSI (-100)
+#define MAX_RSSI 0
+#define ROAM_AP_COUNT_WEIGHT 50
+#define ROAM_MAX_COUNT 30
+#define ROAM_MIN_COUNT 0
+#define ROAM_MAX_WEIGHT 100
+
+#define RSSI_WEIGHTAGE 25
+#define HT_CAPABILITY_WEIGHTAGE 10
+#define VHT_CAP_WEIGHTAGE 6
+#define BEAMFORMING_CAP_WEIGHTAGE 2
+#define CHAN_WIDTH_WEIGHTAGE 10
+#define CHAN_BAND_WEIGHTAGE 5
+#define WMM_WEIGHTAGE 2
+#define CCA_WEIGHTAGE 10
+#define OTHER_AP_WEIGHT 30
+
+#define MAX_AP_LOAD 255
+#define PENALTY_TIMEOUT (30 * 60 * 1000)
+#define PENALTY_REMAINING_SCORE (7)
+#define PENALTY_TOTAL_SCORE (10)
+#define PER_EXCELENT_RSSI -40
+#define PER_GOOD_RSSI -55
+#define PER_POOR_RSSI -65
+#define PER_BAD_RSSI  -80
+#define PER_ROAM_EXCELLENT_RSSI_WEIGHT 100
+#define PER_ROAM_GOOD_RSSI_WEIGHT 80
+#define PER_ROAM_BAD_RSSI_WEIGHT 60
+#define PER_ROAM_MAX_WEIGHT 100
+#define PER_ROAM_80MHZ 100
+#define PER_ROAM_40MHZ 70
+#define PER_ROAM_20MHZ 30
+#define PER_ROAM_PENALTY (3/10)
+#define PER_ROAM_MAX_BSS_SCORE 10000
+#endif
+
+typedef enum 
+{
     eCsrNextScanNothing,
     eCsrNextLostLinkScan1Success,
     eCsrNextLostLinkScan1Failed,
@@ -138,60 +168,77 @@ typedef enum {
     eCsrNextLostLinkScan3Failed,
     eCsrNext11dScan1Failure,
     eCsrNext11dScan1Success,
-    eCsrNext11dScan2Failure,
+    eCsrNext11dScan2Failure, 
     eCsrNext11dScan2Success,
     eCsrNext11dScanComplete,
     eCsrNexteScanForSsidFailure,
     eCsrNextIdleScanComplete,
     eCsrNextCapChangeScanComplete,
 
-} eCsrScanCompleteNextCommand;
+}eCsrScanCompleteNextCommand;
 
-typedef enum {
-    eCsrJoinSuccess,
+typedef enum  
+{
+    eCsrJoinSuccess, 
     eCsrJoinFailure,
     eCsrReassocSuccess,
-    eCsrReassocFailure,
-    eCsrNothingToJoin,
+    eCsrReassocFailure, 
+    eCsrNothingToJoin, 
     eCsrStartBssSuccess,
     eCsrStartBssFailure,
     eCsrSilentlyStopRoaming,
     eCsrSilentlyStopRoamingSaveState,
     eCsrJoinWdsFailure,
     eCsrJoinFailureDueToConcurrency,
+    
+}eCsrRoamCompleteResult;
 
-} eCsrRoamCompleteResult;
-
-typedef struct tagScanReqParam {
+typedef struct tagScanReqParam
+{
     tANI_U8 bReturnAfter1stMatch;
     tANI_U8 fUniqueResult;
     tANI_U8 freshScan;
     tANI_U8 hiddenSsid;
     tANI_U8 reserved;
-} tScanReqParam;
+}tScanReqParam;
 
-typedef struct tagCsrScanResult {
+typedef struct tagCsrScanResult
+{
     tListElem Link;
     tANI_S32 AgingCount;    //This BSS is removed when it reaches 0 or less
     tANI_U32 preferValue;   //The bigger the number, the better the BSS. This value override capValue
     tANI_U32 capValue;  //The biggger the better. This value is in use only if we have equal preferValue
     //This member must be the last in the structure because the end of tSirBssDescription (inside) is an
     //    array with nonknown size at this time
-
+    
     eCsrEncryptionType ucEncryptionType; //Preferred Encryption type that matched with profile.
-    eCsrEncryptionType mcEncryptionType;
+    eCsrEncryptionType mcEncryptionType; 
     eCsrAuthType authType; //Preferred auth type that matched with the profile.
-
+#ifdef WLAN_FEATURE_ROAM_SCAN_OFFLOAD
+    int congestionScore;
+#endif
     tCsrScanResultInfo Result;
-} tCsrScanResult;
+}tCsrScanResult;
 
-typedef struct {
+typedef struct
+{
     tDblLinkList List;
     tListElem *pCurEntry;
-} tScanResultList;
+}tScanResultList;
 
-
-
+/**
+ * csr_scan_for_ssid_context() - Callback context for SSID scan
+ *
+ * @pMac: pMac handle
+ * @sessionId: scan session id
+ * @roamId: roam Id
+ */
+struct csr_scan_for_ssid_context
+{
+    tpAniSirGlobal pMac;
+    tANI_U32 sessionId;
+    tANI_U32 roamId;
+};
 
 #define CSR_IS_ROAM_REASON( pCmd, reason ) ( (reason) == (pCmd)->roamCmd.roamReason )
 #define CSR_IS_BETTER_PREFER_VALUE(v1, v2)   ((v1) > (v2))
@@ -210,6 +257,14 @@ typedef struct {
                                       ( eCSR_ENCRYPT_TYPE_WEP40 != (encType) ) && \
                                       ( eCSR_ENCRYPT_TYPE_WEP104 != (encType) ) )
 
+#define CSR_IS_DISCONNECT_COMMAND(pCommand) ( ( eSmeCommandRoam == (pCommand)->command ) &&\
+                                              ( ( eCsrForcedDisassoc == (pCommand)->u.roamCmd.roamReason ) ||\
+                                                ( eCsrForcedDeauth == (pCommand)->u.roamCmd.roamReason ) ||\
+                                                ( eCsrSmeIssuedDisassocForHandoff ==\
+                                                                        (pCommand)->u.roamCmd.roamReason ) ||\
+                                                ( eCsrForcedDisassocMICFailure ==\
+                                                                          (pCommand)->u.roamCmd.roamReason ) ) )
+
 eCsrRoamState csrRoamStateChange( tpAniSirGlobal pMac, eCsrRoamState NewRoamState, tANI_U8 sessionId);
 eHalStatus csrScanningStateMsgProcessor( tpAniSirGlobal pMac, void *pMsgBuf );
 void csrRoamingStateMsgProcessor( tpAniSirGlobal pMac, void *pMsgBuf );
@@ -219,14 +274,14 @@ void csrReleaseCommandRoam(tpAniSirGlobal pMac, tSmeCmd *pCommand);
 void csrReleaseCommandScan(tpAniSirGlobal pMac, tSmeCmd *pCommand);
 void csrReleaseCommandWmStatusChange(tpAniSirGlobal pMac, tSmeCmd *pCommand);
 //pIes2 can be NULL
-tANI_BOOLEAN csrIsDuplicateBssDescription( tpAniSirGlobal pMac, tSirBssDescription *pSirBssDesc1,
-        tSirBssDescription *pSirBssDesc2, tDot11fBeaconIEs *pIes2 );
+tANI_BOOLEAN csrIsDuplicateBssDescription( tpAniSirGlobal pMac, tSirBssDescription *pSirBssDesc1, 
+                                           tSirBssDescription *pSirBssDesc2, tDot11fBeaconIEs *pIes2, tANI_BOOLEAN fForced );
 eHalStatus csrRoamSaveConnectedBssDesc( tpAniSirGlobal pMac, tANI_U32 sessionId, tSirBssDescription *pBssDesc );
 tANI_BOOLEAN csrIsNetworkTypeEqual( tSirBssDescription *pSirBssDesc1, tSirBssDescription *pSirBssDesc2 );
 eHalStatus csrScanSmeScanResponse( tpAniSirGlobal pMac, void *pMsgBuf );
 /*
    Prepare a filter base on a profile for parsing the scan results.
-   Upon successful return, caller MUST call csrFreeScanFilter on
+   Upon successful return, caller MUST call csrFreeScanFilter on 
    pScanFilter when it is done with the filter.
 */
 eHalStatus csrRoamPrepareFilterFromProfile(tpAniSirGlobal pMac, tCsrRoamProfile *pProfile, tCsrScanResultFilter *pScanFilter);
@@ -246,27 +301,23 @@ eHalStatus csrScanRequestLostLink3( tpAniSirGlobal pMac, tANI_U32 sessionId );
 eHalStatus csrScanHandleFailedLostlink1(tpAniSirGlobal pMac, tANI_U32 sessionId);
 eHalStatus csrScanHandleFailedLostlink2(tpAniSirGlobal pMac, tANI_U32 sessionId);
 eHalStatus csrScanHandleFailedLostlink3(tpAniSirGlobal pMac, tANI_U32 sessionId);
-tCsrScanResult *csrScanAppendBssDescription( tpAniSirGlobal pMac,
-        tSirBssDescription *pSirBssDescription,
-        tDot11fBeaconIEs *pIes);
+tCsrScanResult *csrScanAppendBssDescription( tpAniSirGlobal pMac, 
+                                             tSirBssDescription *pSirBssDescription,
+                                             tDot11fBeaconIEs *pIes, tANI_BOOLEAN fForced);
 void csrScanCallCallback(tpAniSirGlobal pMac, tSmeCmd *pCommand, eCsrScanStatus scanStatus);
 eHalStatus csrScanCopyRequest(tpAniSirGlobal pMac, tCsrScanRequest *pDstReq, tCsrScanRequest *pSrcReq);
 eHalStatus csrScanFreeRequest(tpAniSirGlobal pMac, tCsrScanRequest *pReq);
 eHalStatus csrScanCopyResultList(tpAniSirGlobal pMac, tScanResultHandle hIn, tScanResultHandle *phResult);
 void csrInitBGScanChannelList(tpAniSirGlobal pMac);
-eHalStatus csrScanForSSID(tpAniSirGlobal pMac, tANI_U32 sessionId, tCsrRoamProfile *pProfile, tANI_U32 roamId);
+eHalStatus csrScanForSSID(tpAniSirGlobal pMac, tANI_U32 sessionId, tCsrRoamProfile *pProfile, tANI_U32 roamId, tANI_BOOLEAN notify);
 eHalStatus csrScanForCapabilityChange(tpAniSirGlobal pMac, tSirSmeApNewCaps *pNewCaps);
 eHalStatus csrScanStartGetResultTimer(tpAniSirGlobal pMac);
 eHalStatus csrScanStopGetResultTimer(tpAniSirGlobal pMac);
-eHalStatus csrScanStartResultAgingTimer(tpAniSirGlobal pMac);
-eHalStatus csrScanStopResultAgingTimer(tpAniSirGlobal pMac);
-eHalStatus csrScanStartResultCfgAgingTimer(tpAniSirGlobal pMac);
-eHalStatus csrScanStopResultCfgAgingTimer(tpAniSirGlobal pMac);
 eHalStatus csrScanBGScanEnable(tpAniSirGlobal pMac);
 eHalStatus csrScanStartIdleScanTimer(tpAniSirGlobal pMac, tANI_U32 interval);
 eHalStatus csrScanStopIdleScanTimer(tpAniSirGlobal pMac);
 eHalStatus csrScanStartIdleScan(tpAniSirGlobal pMac);
-//Param: pTimeInterval -- Caller allocated memory in return, if failed, to specify the nxt time interval for
+//Param: pTimeInterval -- Caller allocated memory in return, if failed, to specify the nxt time interval for 
 //idle scan timer interval
 //Return: Not success -- meaning it cannot start IMPS, caller needs to start a timer for idle scan
 eHalStatus csrScanTriggerIdleScan(tpAniSirGlobal pMac, tANI_U32 *pTimeInterval);
@@ -276,11 +327,21 @@ void csrScanStopTimers(tpAniSirGlobal pMac);
 tANI_BOOLEAN csrScanRemoveNotRoamingScanCommand(tpAniSirGlobal pMac);
 //To remove fresh scan commands from the pending queue
 tANI_BOOLEAN csrScanRemoveFreshScanCommand(tpAniSirGlobal pMac, tANI_U8 sessionId);
-eHalStatus csrScanAbortMacScan(tpAniSirGlobal pMac);
-void csrRemoveCmdFromPendingList(tpAniSirGlobal pMac, tDblLinkList *pList,
-                                 eSmeCommandType commandType );
-eHalStatus csrScanAbortMacScanNotForConnect(tpAniSirGlobal pMac);
-eHalStatus csrScanGetScanChannelInfo(tpAniSirGlobal pMac);
+tSirAbortScanStatus csrScanAbortMacScan(tpAniSirGlobal pMac,
+                                        tANI_U8 sessionId,
+                                        eCsrAbortReason reason);
+void csrRemoveCmdFromPendingList(tpAniSirGlobal pMac, tDblLinkList *pList, 
+                                              eSmeCommandType commandType );
+void csrRemoveCmdWithSessionIdFromPendingList(tpAniSirGlobal pMac,
+                                              tANI_U8 sessionId,
+                                              tDblLinkList *pList,
+                                              eSmeCommandType commandType);
+eHalStatus csrScanAbortMacScanNotForConnect(tpAniSirGlobal pMac,
+                                            tANI_U8 sessionId);
+eHalStatus csrScanGetScanChannelInfo(tpAniSirGlobal pMac, tANI_U8 sessionId);
+eHalStatus csrScanAbortScanForSSID(tpAniSirGlobal pMac, tANI_U32 sessionId);
+void csrRemoveScanForSSIDFromPendingList(tpAniSirGlobal pMac, tDblLinkList *pList, tANI_U32 sessionId);
+
 //To age out scan results base. tSmeGetScanChnRsp is a pointer returned by LIM that
 //has the information regarding scanned channels.
 //The logic is that whenever CSR add a BSS to scan result, it set the age count to
@@ -288,38 +349,40 @@ eHalStatus csrScanGetScanChannelInfo(tpAniSirGlobal pMac);
 //The BSS is remove if the count reaches 0.
 eHalStatus csrScanAgeResults(tpAniSirGlobal pMac, tSmeGetScanChnRsp *pScanChnInfo);
 
+eHalStatus csrIbssAgeBss(tpAniSirGlobal pMac);
+
 //If fForce is TRUE we will save the new String that is learn't.
 //Typically it will be true in case of Join or user initiated ioctl
 tANI_BOOLEAN csrLearnCountryInformation( tpAniSirGlobal pMac, tSirBssDescription *pSirBssDesc,
-        tDot11fBeaconIEs *pIes, tANI_BOOLEAN fForce );
+                                         tDot11fBeaconIEs *pIes, tANI_BOOLEAN fForce );
 void csrApplyCountryInformation( tpAniSirGlobal pMac, tANI_BOOLEAN fForce );
 void csrSetCfgScanControlList( tpAniSirGlobal pMac, tANI_U8 *countryCode, tCsrChannel *pChannelList  );
 void csrReinitScanCmd(tpAniSirGlobal pMac, tSmeCmd *pCommand);
 void csrFreeScanResultEntry( tpAniSirGlobal pMac, tCsrScanResult *pResult );
 
-eHalStatus csrRoamCallCallback(tpAniSirGlobal pMac, tANI_U32 sessionId, tCsrRoamInfo *pRoamInfo,
+eHalStatus csrRoamCallCallback(tpAniSirGlobal pMac, tANI_U32 sessionId, tCsrRoamInfo *pRoamInfo, 
                                tANI_U32 roamId, eRoamCmdStatus u1, eCsrRoamResult u2);
-eHalStatus csrRoamIssueConnect(tpAniSirGlobal pMac, tANI_U32 sessionId, tCsrRoamProfile *pProfile,
-                               tScanResultHandle hBSSList,
-                               eCsrRoamReason reason, tANI_U32 roamId,
+eHalStatus csrRoamIssueConnect(tpAniSirGlobal pMac, tANI_U32 sessionId, tCsrRoamProfile *pProfile, 
+                               tScanResultHandle hBSSList, 
+                               eCsrRoamReason reason, tANI_U32 roamId, 
                                tANI_BOOLEAN fImediate, tANI_BOOLEAN fClearScan);
 eHalStatus csrRoamIssueReassoc(tpAniSirGlobal pMac, tANI_U32 sessionId, tCsrRoamProfile *pProfile,
                                tCsrRoamModifyProfileFields *pModProfileFields,
                                eCsrRoamReason reason, tANI_U32 roamId, tANI_BOOLEAN fImediate);
 void csrRoamComplete( tpAniSirGlobal pMac, eCsrRoamCompleteResult Result, void *Context );
-eHalStatus csrRoamIssueSetContextReq( tpAniSirGlobal pMac, tANI_U32 sessionId, eCsrEncryptionType EncryptType,
-                                      tSirBssDescription *pBssDescription,
-                                      tSirMacAddr *bssId, tANI_BOOLEAN addKey,
-                                      tANI_BOOLEAN fUnicast, tAniKeyDirection aniKeyDirection,
-                                      tANI_U8 keyId, tANI_U16 keyLength,
-                                      tANI_U8 *pKey, tANI_U8 paeRole );
-eHalStatus csrRoamProcessDisassocDeauth( tpAniSirGlobal pMac, tSmeCmd *pCommand,
-        tANI_BOOLEAN fDisassoc, tANI_BOOLEAN fMICFailure );
-eHalStatus csrRoamSaveConnectedInfomation(tpAniSirGlobal pMac, tANI_U32 sessionId, tCsrRoamProfile *pProfile,
-        tSirBssDescription *pSirBssDesc, tDot11fBeaconIEs *pIes);
+eHalStatus csrRoamIssueSetContextReq( tpAniSirGlobal pMac, tANI_U32 sessionId, eCsrEncryptionType EncryptType, 
+                                     tSirBssDescription *pBssDescription,
+                                tSirMacAddr *bssId, tANI_BOOLEAN addKey,
+                                 tANI_BOOLEAN fUnicast, tAniKeyDirection aniKeyDirection, 
+                                 tANI_U8 keyId, tANI_U16 keyLength, 
+                                 tANI_U8 *pKey, tANI_U8 paeRole );
+eHalStatus csrRoamProcessDisassocDeauth( tpAniSirGlobal pMac, tSmeCmd *pCommand, 
+                                         tANI_BOOLEAN fDisassoc, tANI_BOOLEAN fMICFailure );
+eHalStatus csrRoamSaveConnectedInfomation(tpAniSirGlobal pMac, tANI_U32 sessionId, tCsrRoamProfile *pProfile, 
+                                          tSirBssDescription *pSirBssDesc, tDot11fBeaconIEs *pIes);
 void csrRoamCheckForLinkStatusChange( tpAniSirGlobal pMac, tSirSmeRsp *pSirMsg );
 void csrRoamStatsRspProcessor(tpAniSirGlobal pMac, tSirSmeRsp *pSirMsg);
-eHalStatus csrRoamIssueStartBss( tpAniSirGlobal pMac, tANI_U32 sessionId, tCsrRoamStartBssParams *pParam,
+eHalStatus csrRoamIssueStartBss( tpAniSirGlobal pMac, tANI_U32 sessionId, tCsrRoamStartBssParams *pParam, 
                                  tCsrRoamProfile *pProfile, tSirBssDescription *pBssDesc, tANI_U32 roamId );
 eHalStatus csrRoamIssueStopBss( tpAniSirGlobal pMac, tANI_U32 sessionId, eCsrRoamSubState NewSubstate );
 tANI_BOOLEAN csrIsSameProfile(tpAniSirGlobal pMac, tCsrRoamConnectedProfile *pProfile1, tCsrRoamProfile *pProfile2);
@@ -333,8 +396,8 @@ eHalStatus csrRoamIssueDisassociateCmd( tpAniSirGlobal pMac, tANI_U32 sessionId,
 eHalStatus csrRoamDisconnectInternal(tpAniSirGlobal pMac, tANI_U32 sessionId, eCsrRoamDisconnectReason reason);
 //pCommand may be NULL
 void csrRoamRemoveDuplicateCommand(tpAniSirGlobal pMac, tANI_U32 sessionId, tSmeCmd *pCommand, eCsrRoamReason eRoamReason);
-
-eHalStatus csrSendJoinReqMsg( tpAniSirGlobal pMac, tANI_U32 sessionId, tSirBssDescription *pBssDescription,
+                                 
+eHalStatus csrSendJoinReqMsg( tpAniSirGlobal pMac, tANI_U32 sessionId, tSirBssDescription *pBssDescription, 
                               tCsrRoamProfile *pProfile, tDot11fBeaconIEs *pIes, tANI_U16 messageType );
 eHalStatus csrSendMBDisassocReqMsg( tpAniSirGlobal pMac, tANI_U32 sessionId, tSirMacAddr bssId, tANI_U16 reasonCode );
 eHalStatus csrSendMBDeauthReqMsg( tpAniSirGlobal pMac, tANI_U32 sessionId, tSirMacAddr bssId, tANI_U16 reasonCode );
@@ -342,18 +405,18 @@ eHalStatus csrSendMBDisassocCnfMsg( tpAniSirGlobal pMac, tpSirSmeDisassocInd pDi
 eHalStatus csrSendMBDeauthCnfMsg( tpAniSirGlobal pMac, tpSirSmeDeauthInd pDeauthInd );
 eHalStatus csrSendAssocCnfMsg( tpAniSirGlobal pMac, tpSirSmeAssocInd pAssocInd, eHalStatus status );
 eHalStatus csrSendAssocIndToUpperLayerCnfMsg( tpAniSirGlobal pMac, tpSirSmeAssocInd pAssocInd, eHalStatus Halstatus, tANI_U8 sessionId );
-eHalStatus csrSendMBStartBssReqMsg( tpAniSirGlobal pMac, tANI_U32 sessionId, eCsrRoamBssType bssType,
+eHalStatus csrSendMBStartBssReqMsg( tpAniSirGlobal pMac, tANI_U32 sessionId, eCsrRoamBssType bssType, 
                                     tCsrRoamStartBssParams *pParam, tSirBssDescription *pBssDesc );
 eHalStatus csrSendMBStopBssReqMsg( tpAniSirGlobal pMac, tANI_U32 sessionId );
 
 tANI_BOOLEAN csrIsMacAddressEqual( tpAniSirGlobal pMac, tCsrBssid *pMacAddr1, tCsrBssid *pMacAddr2 );
 //Caller should put the BSS' ssid to fiedl bssSsid when comparing SSID for a BSS.
-tANI_BOOLEAN csrIsSsidMatch( tpAniSirGlobal pMac, tANI_U8 *ssid1, tANI_U8 ssid1Len, tANI_U8 *bssSsid,
-                             tANI_U8 bssSsidLen, tANI_BOOLEAN fSsidRequired );
+tANI_BOOLEAN csrIsSsidMatch( tpAniSirGlobal pMac, tANI_U8 *ssid1, tANI_U8 ssid1Len, tANI_U8 *bssSsid, 
+                            tANI_U8 bssSsidLen, tANI_BOOLEAN fSsidRequired );
 tANI_BOOLEAN csrIsPhyModeMatch( tpAniSirGlobal pMac, tANI_U32 phyMode,
-                                tSirBssDescription *pSirBssDesc, tCsrRoamProfile *pProfile,
-                                eCsrCfgDot11Mode *pReturnCfgDot11Mode,
-                                tDot11fBeaconIEs *pIes);
+                                    tSirBssDescription *pSirBssDesc, tCsrRoamProfile *pProfile,
+                                    eCsrCfgDot11Mode *pReturnCfgDot11Mode,
+                                    tDot11fBeaconIEs *pIes);
 tANI_BOOLEAN csrRoamIsChannelValid( tpAniSirGlobal pMac, tANI_U8 channel );
 
 //pNumChan is a caller allocated space with the sizeof pChannels
@@ -378,7 +441,7 @@ tANI_U32 csrTranslateToWNICfgDot11Mode(tpAniSirGlobal pMac, eCsrCfgDot11Mode csr
 void csrSaveChannelPowerForBand( tpAniSirGlobal pMac, tANI_BOOLEAN fPopulate5GBand );
 void csrApplyChannelPowerCountryInfo( tpAniSirGlobal pMac, tCsrChannel *pChannelList, tANI_U8 *countryCode, tANI_BOOLEAN updateRiva);
 void csrApplyPower2Current( tpAniSirGlobal pMac );
-void csrAssignRssiForCategory(tpAniSirGlobal pMac, tANI_U8 catOffset);
+void csrAssignRssiForCategory(tpAniSirGlobal pMac, tANI_S8 bestApRssi, tANI_U8 catOffset);
 tANI_BOOLEAN csrIsMacAddressZero( tpAniSirGlobal pMac, tCsrBssid *pMacAddr );
 tANI_BOOLEAN csrIsMacAddressBroadcast( tpAniSirGlobal pMac, tCsrBssid *pMacAddr );
 eHalStatus csrRoamRemoveConnectedBssFromScanCache(tpAniSirGlobal pMac, tCsrRoamConnectedProfile *pConnProfile);
@@ -405,13 +468,17 @@ eHalStatus csrScanGetSupportedChannels( tpAniSirGlobal pMac );
 //pIes cannot be NULL
 tANI_BOOLEAN csrMatchCountryCode( tpAniSirGlobal pMac, tANI_U8 *pCountry, tDot11fBeaconIEs *pIes );
 eHalStatus csrRoamSetKey( tpAniSirGlobal pMac, tANI_U32 sessionId, tCsrRoamSetKey *pSetKey, tANI_U32 roamId );
-eHalStatus csrRoamOpenSession( tpAniSirGlobal pMac, csrRoamCompleteCallback callback, void *pContext,
-                               tANI_U8 *pSelfMacAddr, tANI_U8 *pbSessionId );
+eHalStatus csrRoamOpenSession(tpAniSirGlobal pMac,
+                              csrRoamCompleteCallback callback,
+                              void *pContext, tANI_U8 *pSelfMacAddr,
+                              tANI_U8 *pbSessionId);
 //fSync: TRUE means cleanupneeds to handle synchronously.
 eHalStatus csrRoamCloseSession( tpAniSirGlobal pMac, tANI_U32 sessionId,
-                                tANI_BOOLEAN fSync,
+                                tANI_BOOLEAN fSync, tANI_U8 bPurgeList,
                                 csrRoamSessionCloseCallback callback,
                                 void *pContext );
+void csrPurgeSmeCmdList(tpAniSirGlobal pMac, tANI_U32 sessionId,
+                        bool flush_all);
 void csrCleanupSession(tpAniSirGlobal pMac, tANI_U32 sessionId);
 eHalStatus csrRoamGetSessionIdFromBSSID( tpAniSirGlobal pMac, tCsrBssid *bssid, tANI_U32 *pSessionId );
 eCsrCfgDot11Mode csrFindBestPhyMode( tpAniSirGlobal pMac, tANI_U32 phyMode );
@@ -420,16 +487,16 @@ eCsrCfgDot11Mode csrFindBestPhyMode( tpAniSirGlobal pMac, tANI_U32 phyMode );
     \fn csrScanEnable
     \brief Enable the scanning feature of CSR. It must be called before any scan request can be performed.
     \param tHalHandle - HAL context handle
-    \return eHalStatus
+    \return eHalStatus     
   -------------------------------------------------------------------------------*/
 eHalStatus csrScanEnable(tpAniSirGlobal);
 
 /* ---------------------------------------------------------------------------
     \fn csrScanDisable
-    \brief Disableing the scanning feature of CSR. After this function return success, no scan is performed until
+    \brief Disableing the scanning feature of CSR. After this function return success, no scan is performed until 
 a successfull to csrScanEnable
     \param tHalHandle - HAL context handle
-    \return eHalStatus
+    \return eHalStatus     
   -------------------------------------------------------------------------------*/
 eHalStatus csrScanDisable(tpAniSirGlobal);
 /* ---------------------------------------------------------------------------
@@ -438,17 +505,17 @@ eHalStatus csrScanDisable(tpAniSirGlobal);
     \param pScanRequestID - pointer to an object to get back the request ID
     \param callback - a callback function that scan calls upon finish, will not be called if csrScanRequest returns error
     \param pContext - a pointer passed in for the callback
-    \return eHalStatus
+    \return eHalStatus     
   -------------------------------------------------------------------------------*/
 eHalStatus csrScanRequest(tpAniSirGlobal, tANI_U16, tCsrScanRequest *,
-                          tANI_U32 *pScanRequestID, csrScanCompleteCallback callback,
-                          void *pContext);
+                   tANI_U32 *pScanRequestID, csrScanCompleteCallback callback,
+                   void *pContext);
 
 /* ---------------------------------------------------------------------------
     \fn csrScanAbort
     \brief If a scan request is abort, the scan complete callback will be called first before csrScanAbort returns.
     \param pScanRequestID - The request ID returned from csrScanRequest
-    \return eHalStatus
+    \return eHalStatus     
   -------------------------------------------------------------------------------*/
 eHalStatus csrScanAbort(tpAniSirGlobal, tANI_U32 scanRequestID);
 
@@ -460,21 +527,49 @@ eHalStatus csrScanBGScanAbort(tpAniSirGlobal);
     \brief Return scan results.
     \param pFilter - If pFilter is NULL, all cached results are returned
     \param phResult - an object for the result.
-    \return eHalStatus
+    \return eHalStatus     
   -------------------------------------------------------------------------------*/
 eHalStatus csrScanGetResult(tpAniSirGlobal, tCsrScanResultFilter *pFilter, tScanResultHandle *phResult);
 
+#ifdef FEATURE_WLAN_LFR
+/* ---------------------------------------------------------------------------
+    \fn csrAddChannelToOccupiedChannelList
+    \brief Add channel no given by fast reassoc cmd into occ chn list
+    \param channel - channel no passed by fast reassoc cmd
+    \return void
+  -------------------------------------------------------------------------------*/
+void csrAddChannelToOccupiedChannelList(tpAniSirGlobal pMac, tANI_U8 channel);
+#endif
 /* ---------------------------------------------------------------------------
     \fn csrScanFlushResult
     \brief Clear scan results.
-    \return eHalStatus
+    \return eHalStatus     
   -------------------------------------------------------------------------------*/
 eHalStatus csrScanFlushResult(tpAniSirGlobal);
+/* ---------------------------------------------------------------------------
+ *  \fn csrScanFilterResults
+ *  \brief Filter scan results based on valid channel list.
+ *  \return eHalStatus
+ *-------------------------------------------------------------------------------
+ */
+eHalStatus csrScanFilterResults(tpAniSirGlobal pMac);
+
+/* ---------------------------------------------------------------------------
+ *  \fn csrScanFilterDFSResults
+ *  \brief Filter BSSIDs on DFS channels from the scan results.
+ *  \return eHalStatus
+ *-------------------------------------------------------------------------------
+ */
+eHalStatus csrScanFilterDFSResults(tpAniSirGlobal pMac);
+
 eHalStatus csrScanFlushSelectiveResult(tpAniSirGlobal, v_BOOL_t flushP2P);
+
+eHalStatus csrScanFlushSelectiveResultForBand(tpAniSirGlobal, v_BOOL_t flushP2P, tSirRFBand band);
+
 /* ---------------------------------------------------------------------------
     \fn csrScanBGScanGetParam
     \brief Returns the current background scan settings.
-    \return eHalStatus
+    \return eHalStatus     
   -------------------------------------------------------------------------------*/
 eHalStatus csrScanBGScanGetParam(tpAniSirGlobal, tCsrBGScanRequest *);
 
@@ -482,14 +577,14 @@ eHalStatus csrScanBGScanGetParam(tpAniSirGlobal, tCsrBGScanRequest *);
     \fn csrScanResultGetFirst
     \brief Returns the first element of scan result.
     \param hScanResult - returned from csrScanGetResult
-    \return tCsrScanResultInfo * - NULL if no result
+    \return tCsrScanResultInfo * - NULL if no result     
   -------------------------------------------------------------------------------*/
 tCsrScanResultInfo *csrScanResultGetFirst(tpAniSirGlobal, tScanResultHandle hScanResult);
 /* ---------------------------------------------------------------------------
     \fn csrScanResultGetNext
     \brief Returns the next element of scan result. It can be called without calling csrScanResultGetFirst first
     \param hScanResult - returned from csrScanGetResult
-    \return Null if no result or reach the end
+    \return Null if no result or reach the end     
   -------------------------------------------------------------------------------*/
 tCsrScanResultInfo *csrScanResultGetNext(tpAniSirGlobal, tScanResultHandle hScanResult);
 
@@ -499,7 +594,7 @@ tCsrScanResultInfo *csrScanResultGetNext(tpAniSirGlobal, tScanResultHandle hScan
     \param pBuf - Caller allocated buffer with at least 3 bytes, upon success return, this has the country code
     \param pbLen - Caller allocated, as input, it indicates the length of pBuf. Upon success return,
     this contains the length of the data in pBuf
-    \return eHalStatus
+    \return eHalStatus     
   -------------------------------------------------------------------------------*/
 eHalStatus csrGetCountryCode(tpAniSirGlobal pMac, tANI_U8 *pBuf, tANI_U8 *pbLen);
 
@@ -508,9 +603,9 @@ eHalStatus csrGetCountryCode(tpAniSirGlobal pMac, tANI_U8 *pBuf, tANI_U8 *pbLen)
     \brief this function is to set the country code so channel/power setting matches the countrycode and
     the domain it belongs to.
     \param pCountry - Caller allocated buffer with at least 3 bytes specifying the country code
-    \param pfRestartNeeded - pointer to a caller allocated space. Upon successful return, it indicates whether
+    \param pfRestartNeeded - pointer to a caller allocated space. Upon successful return, it indicates whether 
     a restart is needed to apply the change
-    \return eHalStatus
+    \return eHalStatus     
   -------------------------------------------------------------------------------*/
 eHalStatus csrSetCountryCode(tpAniSirGlobal pMac, tANI_U8 *pCountry, tANI_BOOLEAN *pfRestartNeeded);
 
@@ -518,21 +613,21 @@ eHalStatus csrSetCountryCode(tpAniSirGlobal pMac, tANI_U8 *pCountry, tANI_BOOLEA
     \fn csrResetCountryCodeInformation
     \brief this function is to reset the country code current being used back to EEPROM default
     this includes channel list and power setting.
-    \param pfRestartNeeded - pointer to a caller allocated space. Upon successful return, it indicates whether
+    \param pfRestartNeeded - pointer to a caller allocated space. Upon successful return, it indicates whether 
     a restart is needed to apply the change
-    \return eHalStatus
+    \return eHalStatus     
   -------------------------------------------------------------------------------*/
 eHalStatus csrResetCountryCodeInformation(tpAniSirGlobal pMac, tANI_BOOLEAN *pfRestartNeeded);
 
 /* ---------------------------------------------------------------------------
     \fn csrGetSupportedCountryCode
     \brief this function is to get a list of the country code current being supported
-    \param pBuf - Caller allocated buffer with at least 3 bytes, upon success return,
+    \param pBuf - Caller allocated buffer with at least 3 bytes, upon success return, 
     this has the country code list. 3 bytes for each country code. This may be NULL if
     caller wants to know the needed bytes.
     \param pbLen - Caller allocated, as input, it indicates the length of pBuf. Upon success return,
     this contains the length of the data in pBuf
-    \return eHalStatus
+    \return eHalStatus     
   -------------------------------------------------------------------------------*/
 eHalStatus csrGetSupportedCountryCode(tpAniSirGlobal pMac, tANI_U8 *pBuf, tANI_U32 *pbLen);
 
@@ -541,11 +636,11 @@ eHalStatus csrGetSupportedCountryCode(tpAniSirGlobal pMac, tANI_U8 *pBuf, tANI_U
     \brief this function is to set the current regulatory domain.
     This function must be called after CFG is downloaded and all the band/mode setting already passed into
     CSR.
-    \param domainId - indicate the domain (defined in the driver) needs to set to.
+    \param domainId - indicate the domain (defined in the driver) needs to set to.  
     See eRegDomainId for definition
-    \param pfRestartNeeded - pointer to a caller allocated space. Upon successful return, it indicates whether
+    \param pfRestartNeeded - pointer to a caller allocated space. Upon successful return, it indicates whether 
     a restart is needed to apply the change
-    \return eHalStatus
+    \return eHalStatus     
   -------------------------------------------------------------------------------*/
 eHalStatus csrSetRegulatoryDomain(tpAniSirGlobal pMac, v_REGDOMAIN_t domainId, tANI_BOOLEAN *pfRestartNeeded);
 
@@ -554,7 +649,7 @@ eHalStatus csrSetRegulatoryDomain(tpAniSirGlobal pMac, v_REGDOMAIN_t domainId, t
     \brief this function is to get the current regulatory domain.
     This function must be called after CFG is downloaded and all the band/mode setting already passed into
     CSR.
-    \return eRegDomainId
+    \return eRegDomainId     
   -------------------------------------------------------------------------------*/
 v_REGDOMAIN_t csrGetCurrentRegulatoryDomain(tpAniSirGlobal pMac);
 
@@ -565,9 +660,13 @@ v_REGDOMAIN_t csrGetCurrentRegulatoryDomain(tpAniSirGlobal pMac);
     CSR.
     \param pCountry - Caller allocated buffer with at least 3 bytes specifying the country code
     \param pDomainId - Caller allocated buffer to get the return domain ID upon success return. Can be NULL.
-    \return eHalStatus
+    \param source - the source of country information.
+    \return eHalStatus     
   -------------------------------------------------------------------------------*/
-eHalStatus csrGetRegulatoryDomainForCountry(tpAniSirGlobal pMac, tANI_U8 *pCountry, v_REGDOMAIN_t *pDomainId);
+eHalStatus csrGetRegulatoryDomainForCountry(tpAniSirGlobal pMac,
+                                            tANI_U8 *pCountry,
+                                            v_REGDOMAIN_t *pDomainId,
+                                            v_CountryInfoSource_t source);
 
 
 tANI_BOOLEAN csrSave11dCountryString( tpAniSirGlobal pMac, tANI_U8 *pCountryCode, tANI_BOOLEAN fForce );
@@ -600,7 +699,12 @@ tANI_BOOLEAN csrIsProfileWapi( tCsrRoamProfile *pProfile );
 #define WLAN_SECURITY_EVENT_REMOVE_KEY_RSP  6
 #define WLAN_SECURITY_EVENT_PMKID_CANDIDATE_FOUND  7
 #define WLAN_SECURITY_EVENT_PMKID_UPDATE    8
-#define WLAN_SECURITY_EVENT_MIC_ERROR       9
+#define WLAN_SECURITY_EVENT_MIC_ERROR       9   
+#define WLAN_SECURITY_EVENT_SET_UNICAST_REQ  10
+#define WLAN_SECURITY_EVENT_SET_UNICAST_RSP  11
+#define WLAN_SECURITY_EVENT_SET_BCAST_REQ    12
+#define WLAN_SECURITY_EVENT_SET_BCAST_RSP    13
+
 
 #define AUTH_OPEN       0
 #define AUTH_SHARED     1
@@ -671,9 +775,9 @@ int diagEncTypeFromCSRType(eCsrEncryptionType encType);
 /* ---------------------------------------------------------------------------
     \fn csrScanResultPurge
     \brief remove all items(tCsrScanResult) in the list and free memory for each item
-    \param hScanResult - returned from csrScanGetResult. hScanResult is considered gone by
+    \param hScanResult - returned from csrScanGetResult. hScanResult is considered gone by 
     calling this function and even before this function reutrns.
-    \return eHalStatus
+    \return eHalStatus     
   -------------------------------------------------------------------------------*/
 eHalStatus csrScanResultPurge(tpAniSirGlobal pMac, tScanResultHandle hScanResult);
 
@@ -686,22 +790,22 @@ eHalStatus csrScanResultPurge(tpAniSirGlobal pMac, tScanResultHandle hScanResult
     \param pProfile - can be NULL to join to any open ones
     \param hBssListIn - a list of BSS descriptor to roam to. It is returned from csrScanGetResult
     \param pRoamId - to get back the request ID
-    \return eHalStatus
+    \return eHalStatus     
   -------------------------------------------------------------------------------*/
-eHalStatus csrRoamConnect(tpAniSirGlobal pMac, tANI_U32 sessionId, tCsrRoamProfile *pProfile,
+eHalStatus csrRoamConnect(tpAniSirGlobal pMac, tANI_U32 sessionId, tCsrRoamProfile *pProfile, 
                           tScanResultHandle hBssListIn, tANI_U32 *pRoamId);
 
 /* ---------------------------------------------------------------------------
     \fn csrRoamReassoc
     \brief To inititiate a re-association
-    \param pProfile - can be NULL to join the currently connected AP. In that
+    \param pProfile - can be NULL to join the currently connected AP. In that 
     case modProfileFields should carry the modified field(s) which could trigger
-    reassoc
-    \param modProfileFields - fields which are part of tCsrRoamConnectedProfile
-    that might need modification dynamically once STA is up & running and this
+    reassoc  
+    \param modProfileFields - fields which are part of tCsrRoamConnectedProfile 
+    that might need modification dynamically once STA is up & running and this 
     could trigger a reassoc
     \param pRoamId - to get back the request ID
-    \return eHalStatus
+    \return eHalStatus     
   -------------------------------------------------------------------------------*/
 eHalStatus csrRoamReassoc(tpAniSirGlobal pMac, tANI_U32 sessionId, tCsrRoamProfile *pProfile,
                           tCsrRoamModifyProfileFields modProfileFields,
@@ -711,7 +815,7 @@ eHalStatus csrRoamReassoc(tpAniSirGlobal pMac, tANI_U32 sessionId, tCsrRoamProfi
 /* ---------------------------------------------------------------------------
     \fn csrRoamReconnect
     \brief To disconnect and reconnect with the same profile
-    \return eHalStatus. It returns fail if currently not connected
+    \return eHalStatus. It returns fail if currently not connected     
   -------------------------------------------------------------------------------*/
 eHalStatus csrRoamReconnect(tpAniSirGlobal pMac, tANI_U32 sessionId);
 
@@ -725,12 +829,15 @@ eHalStatus csrRoamReconnect(tpAniSirGlobal pMac, tANI_U32 sessionId);
     has the number of tPmkidCacheInfo.
     \Note: pNumItems is a number of tPmkidCacheInfo, not sizeof(tPmkidCacheInfo) * something
   -------------------------------------------------------------------------------*/
-eHalStatus csrRoamSetPMKIDCache( tpAniSirGlobal pMac, tANI_U32 sessionId, tPmkidCacheInfo *pPMKIDCache, tANI_U32 numItems );
+eHalStatus csrRoamSetPMKIDCache( tpAniSirGlobal pMac, tANI_U32 sessionId,
+                                 tPmkidCacheInfo *pPMKIDCache,
+                                 tANI_U32 numItems,
+                                 tANI_BOOLEAN update_entire_cache );
 
 /* ---------------------------------------------------------------------------
     \fn csrRoamGetWpaRsnReqIE
     \brief return the WPA or RSN IE CSR passes to PE to JOIN request or START_BSS request
-    \param pLen - caller allocated memory that has the length of pBuf as input. Upon returned, *pLen has the
+    \param pLen - caller allocated memory that has the length of pBuf as input. Upon returned, *pLen has the 
     needed or IE length in pBuf.
     \param pBuf - Caller allocated memory that contain the IE field, if any, upon return
     \return eHalStatus - when fail, it usually means the buffer allocated is not big enough
@@ -740,7 +847,7 @@ eHalStatus csrRoamGetWpaRsnReqIE(tpAniSirGlobal pMac, tANI_U32 sessionId, tANI_U
 /* ---------------------------------------------------------------------------
     \fn csrRoamGetWpaRsnRspIE
     \brief return the WPA or RSN IE from the beacon or probe rsp if connected
-    \param pLen - caller allocated memory that has the length of pBuf as input. Upon returned, *pLen has the
+    \param pLen - caller allocated memory that has the length of pBuf as input. Upon returned, *pLen has the 
     needed or IE length in pBuf.
     \param pBuf - Caller allocated memory that contain the IE field, if any, upon return
     \return eHalStatus - when fail, it usually means the buffer allocated is not big enough
@@ -758,12 +865,12 @@ tANI_U32 csrRoamGetNumPMKIDCache(tpAniSirGlobal pMac, tANI_U32 sessionId);
 /* ---------------------------------------------------------------------------
     \fn csrRoamGetPMKIDCache
     \brief return PMKID cache from CSR
-    \param pNum - caller allocated memory that has the space of the number of pBuf tPmkidCacheInfo as input. Upon returned, *pNum has the
+    \param pNum - caller allocated memory that has the space of the number of pBuf tPmkidCacheInfo as input. Upon returned, *pNum has the 
     needed or actually number in tPmkidCacheInfo.
     \param pPmkidCache - Caller allocated memory that contains PMKID cache, if any, upon return
     \return eHalStatus - when fail, it usually means the buffer allocated is not big enough
   -------------------------------------------------------------------------------*/
-eHalStatus csrRoamGetPMKIDCache(tpAniSirGlobal pMac, tANI_U32 sessionId,
+eHalStatus csrRoamGetPMKIDCache(tpAniSirGlobal pMac, tANI_U32 sessionId, 
                                 tANI_U32 *pNum, tPmkidCacheInfo *pPmkidCache);
 
 /* ---------------------------------------------------------------------------
@@ -771,15 +878,15 @@ eHalStatus csrRoamGetPMKIDCache(tpAniSirGlobal pMac, tANI_U32 sessionId,
     \brief To return the current connect profile. Caller must call csrRoamFreeConnectProfile
            after it is done and before reuse for another csrRoamGetConnectProfile call.
     \param pProfile - pointer to a caller allocated structure tCsrRoamConnectedProfile
-    \return eHalStatus. Failure if not connected
+    \return eHalStatus. Failure if not connected     
   -------------------------------------------------------------------------------*/
-eHalStatus csrRoamGetConnectProfile(tpAniSirGlobal pMac, tANI_U32 sessionId,
+eHalStatus csrRoamGetConnectProfile(tpAniSirGlobal pMac, tANI_U32 sessionId, 
                                     tCsrRoamConnectedProfile *pProfile);
 
 /* ---------------------------------------------------------------------------
     \fn csrRoamGetConnectState
     \brief To return the current connect state of Roaming
-    \return eHalStatus
+    \return eHalStatus     
   -------------------------------------------------------------------------------*/
 eHalStatus csrRoamGetConnectState(tpAniSirGlobal pMac, tANI_U32 sessionId, eCsrConnectState *pState);
 
@@ -787,7 +894,7 @@ eHalStatus csrRoamGetConnectState(tpAniSirGlobal pMac, tANI_U32 sessionId, eCsrC
     \fn csrRoamFreeConnectProfile
     \brief To free and reinitialize the profile return previous by csrRoamGetConnectProfile.
     \param pProfile - pointer to a caller allocated structure tCsrRoamConnectedProfile
-    \return eHalStatus.
+    \return eHalStatus.      
   -------------------------------------------------------------------------------*/
 eHalStatus csrRoamFreeConnectProfile(tpAniSirGlobal pMac, tCsrRoamConnectedProfile *pProfile);
 
@@ -796,35 +903,35 @@ eHalStatus csrRoamFreeConnectProfile(tpAniSirGlobal pMac, tCsrRoamConnectedProfi
     \brief HDD calls this function to set the WNI_CFG_VALID_CHANNEL_LIST base on the band/mode settings.
     This function must be called after CFG is downloaded and all the band/mode setting already passed into
     CSR.
-    \return eHalStatus
+    \return eHalStatus     
   -------------------------------------------------------------------------------*/
 eHalStatus csrInitChannelList( tHalHandle hHal );
 
 /* ---------------------------------------------------------------------------
     \fn csrChangeConfigParams
-    \brief The CSR API exposed for HDD to provide config params to CSR during
+    \brief The CSR API exposed for HDD to provide config params to CSR during 
     SMEs stop -> start sequence.
-    If HDD changed the domain that will cause a reset. This function will
+    If HDD changed the domain that will cause a reset. This function will 
     provide the new set of 11d information for the new domain. Currrently this
     API provides info regarding 11d only at reset but we can extend this for
     other params (PMC, QoS) which needs to be initialized again at reset.
-    \param
-    hHal - Handle to the HAL. The HAL handle is returned by the HAL after it is
+    \param 
+    hHal - Handle to the HAL. The HAL handle is returned by the HAL after it is 
            opened (by calling halOpen).
-    pUpdateConfigParam - a pointer to a structure (tCsrUpdateConfigParam) that
-                currently provides 11d related information like Country code,
-                Regulatory domain, valid channel list, Tx power per channel, a
-                list with active/passive scan allowed per valid channel.
+    pUpdateConfigParam - a pointer to a structure (tCsrUpdateConfigParam) that 
+                currently provides 11d related information like Country code, 
+                Regulatory domain, valid channel list, Tx power per channel, a 
+                list with active/passive scan allowed per valid channel. 
 
-    \return eHalStatus
+    \return eHalStatus     
   ---------------------------------------------------------------------------*/
-eHalStatus csrChangeConfigParams(tpAniSirGlobal pMac,
+eHalStatus csrChangeConfigParams(tpAniSirGlobal pMac, 
                                  tCsrUpdateConfigParam *pUpdateConfigParam);
 
 /* ---------------------------------------------------------------------------
     \fn csrRoamConnectToLastProfile
     \brief To disconnect and reconnect with the same profile
-    \return eHalStatus. It returns fail if currently connected
+    \return eHalStatus. It returns fail if currently connected     
   -------------------------------------------------------------------------------*/
 eHalStatus csrRoamConnectToLastProfile(tpAniSirGlobal pMac, tANI_U32 sessionId);
 
@@ -832,9 +939,17 @@ eHalStatus csrRoamConnectToLastProfile(tpAniSirGlobal pMac, tANI_U32 sessionId);
     \fn csrRoamDisconnect
     \brief To disconnect from a network
     \param reason -- To indicate the reason for disconnecting. Currently, only eCSR_DISCONNECT_REASON_MIC_ERROR is meanful.
-    \return eHalStatus
+    \return eHalStatus     
   -------------------------------------------------------------------------------*/
 eHalStatus csrRoamDisconnect(tpAniSirGlobal pMac, tANI_U32 sessionId, eCsrRoamDisconnectReason reason);
+
+/* ---------------------------------------------------------------------------
+    \fn csr_abortConnection
+    \brief To disconnect from a connecting network
+    \retutn void.
+----------------------------------------------------------------------------*/
+
+void csr_abortConnection(tpAniSirGlobal pMac, tANI_U32 sessionId);
 
 /* ---------------------------------------------------------------------------
     \fn csrScanGetPMKIDCandidateList
@@ -853,7 +968,7 @@ eHalStatus csrScanGetPMKIDCandidateList(tpAniSirGlobal pMac, tANI_U32 sessionId,
 //doesn't have any logic other than blindly trying to stop BSS
 eHalStatus csrRoamIssueStopBssCmd( tpAniSirGlobal pMac, tANI_U32 sessionId, tANI_BOOLEAN fHighPriority );
 
-void csrCallRoamingCompletionCallback(tpAniSirGlobal pMac, tCsrRoamSession *pSession,
+void csrCallRoamingCompletionCallback(tpAniSirGlobal pMac, tCsrRoamSession *pSession, 
                                       tCsrRoamInfo *pRoamInfo, tANI_U32 roamId, eCsrRoamResult roamResult);
 
 /* ---------------------------------------------------------------------------
@@ -864,23 +979,25 @@ void csrCallRoamingCompletionCallback(tpAniSirGlobal pMac, tCsrRoamSession *pSes
     \param reason - reason code, be one of the tSirMacReasonCodes
     \return eHalStatus
   ---------------------------------------------------------------------------*/
-eHalStatus csrRoamIssueDisassociateStaCmd( tpAniSirGlobal pMac,
-        tANI_U32 sessionId,
-        tANI_U8 *pPeerMacAddr,
-        tANI_U32 reason);
+eHalStatus csrRoamIssueDisassociateStaCmd( tpAniSirGlobal pMac, 
+                                           tANI_U32 sessionId,
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,0))
+                                           const tANI_U8 *pPeerMacAddr,
+#else
+                                           tANI_U8 *pPeerMacAddr,
+#endif
+                                           tANI_U32 reason);
 
 /* ---------------------------------------------------------------------------
     \fn csrRoamIssueDeauthSta
     \brief csr function that HDD calls to delete a associated station
     \param sessionId    - session Id for Soft AP
-    \param pPeerMacAddr - MAC of associated station to delete
-    \param reason - reason code, be one of the tSirMacReasonCodes
+    \param pDelStaParams- Pointer to parameters of the station to deauthenticate
     \return eHalStatus
   ---------------------------------------------------------------------------*/
-eHalStatus csrRoamIssueDeauthStaCmd( tpAniSirGlobal pMac,
+eHalStatus csrRoamIssueDeauthStaCmd( tpAniSirGlobal pMac, 
                                      tANI_U32 sessionId,
-                                     tANI_U8 *pPeerMacAddr,
-                                     tANI_U32 reason);
+                                     struct tagCsrDelStaParams *pDelStaParams);
 
 /* ---------------------------------------------------------------------------
     \fn csrRoamIssueTkipCounterMeasures
@@ -907,7 +1024,7 @@ eHalStatus csrRoamGetAssociatedStas( tpAniSirGlobal pMac, tANI_U32 sessionId, VO
                                      void *pUsrContext, void *pfnSapEventCallback, tANI_U8 *pAssocStasBuf );
 
 eHalStatus csrSendMBGetAssociatedStasReqMsg( tpAniSirGlobal pMac, tANI_U32 sessionId, VOS_MODULE_ID modId,  tSirMacAddr bssId,
-        void *pUsrContext, void *pfnSapEventCallback, tANI_U8 *pAssocStasBuf );
+                                             void *pUsrContext, void *pfnSapEventCallback, tANI_U8 *pAssocStasBuf );
 
 /* ---------------------------------------------------------------------------
     \fn csrRoamGetWpsSessionOverlap
@@ -919,10 +1036,10 @@ eHalStatus csrSendMBGetAssociatedStasReqMsg( tpAniSirGlobal pMac, tANI_U32 sessi
     \return eHalStatus
   ---------------------------------------------------------------------------*/
 eHalStatus csrRoamGetWpsSessionOverlap( tpAniSirGlobal pMac, tANI_U32 sessionId,
-                                        void *pUsrContext, void *pfnSapEventCallback,v_MACADDR_t pRemoveMac );
-
+                             void *pUsrContext, void *pfnSapEventCallback,v_MACADDR_t pRemoveMac );
+                                        
 eHalStatus csrSendMBGetWPSPBCSessions( tpAniSirGlobal pMac, tANI_U32 sessionId,
-                                       tSirMacAddr bssId, void *pUsrContext, void *pfnSapEventCallback,v_MACADDR_t pRemoveMac);
+                            tSirMacAddr bssId, void *pUsrContext, void *pfnSapEventCallback,v_MACADDR_t pRemoveMac);
 
 /* ---------------------------------------------------------------------------
     \fn csrSendChngMCCBeaconInterval
@@ -940,13 +1057,17 @@ eHalStatus csrRoamStopJoinRetryTimer(tpAniSirGlobal pMac, tANI_U32 sessionId);
 #ifdef WLAN_FEATURE_VOWIFI_11R
 /* ---------------------------------------------------------------------------
     \fn csrRoamFTPreAuthRspProcessor
-    \brief csr function that handles pre auth response from LIM
+    \brief csr function that handles pre auth response from LIM 
   ---------------------------------------------------------------------------*/
 void csrRoamFTPreAuthRspProcessor( tHalHandle hHal, tpSirFTPreAuthRsp pFTPreAuthRsp );
 #endif
 
-#ifdef FEATURE_WLAN_CCX
-void csrCcxSendAdjacentApRepMsg(tpAniSirGlobal pMac, tCsrRoamSession *pSession);
+#if defined(FEATURE_WLAN_ESE) && !defined(FEATURE_WLAN_ESE_UPLOAD)
+void csrEseSendAdjacentApRepMsg(tpAniSirGlobal pMac, tCsrRoamSession *pSession);
+#endif
+
+#if defined(FEATURE_WLAN_ESE)
+void UpdateCCKMTSF(tANI_U32 *timeStamp0, tANI_U32 *timeStamp1, tANI_U32 *incr);
 #endif
 
 eHalStatus csrGetDefaultCountryCodeFrmNv(tpAniSirGlobal pMac, tANI_U8 *pCountry);
@@ -954,14 +1075,38 @@ eHalStatus csrGetCurrentCountryCode(tpAniSirGlobal pMac, tANI_U8 *pCountry);
 
 
 eHalStatus csrRoamEnqueuePreauth(tpAniSirGlobal pMac, tANI_U32 sessionId, tpSirBssDescription pBssDescription,
-                                 eCsrRoamReason reason, tANI_BOOLEAN fImmediate);
+                                eCsrRoamReason reason, tANI_BOOLEAN fImmediate);
 eHalStatus csrRoamDequeuePreauth(tpAniSirGlobal pMac);
 #ifdef FEATURE_WLAN_LFR
 void csrInitOccupiedChannelsList(tpAniSirGlobal pMac);
 tANI_BOOLEAN csrNeighborRoamIsNewConnectedProfile(tpAniSirGlobal pMac);
 tANI_BOOLEAN csrNeighborRoamConnectedProfileMatch(tpAniSirGlobal pMac, tCsrScanResult *pResult,
-        tDot11fBeaconIEs *pIes);
+                                                  tDot11fBeaconIEs *pIes);
 #endif
 eHalStatus csrSetTxPower(tpAniSirGlobal pMac, v_U8_t sessionId, v_U8_t mW);
+eHalStatus csrHT40StopOBSSScan(tpAniSirGlobal pMac, v_U8_t sessionId);
+
+eHalStatus csrScanCreateEntryInScanCache(tpAniSirGlobal pMac, tANI_U32 sessionId,
+                                         tCsrBssid bssid, tANI_U8 channel);
+
+eHalStatus csrUpdateChannelList(tpAniSirGlobal pMac);
+eHalStatus csrRoamDelPMKIDfromCache( tpAniSirGlobal pMac, tANI_U32 sessionId,
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,0))
+                                     const tANI_U8 *pBSSId,
+#else
+                                     tANI_U8 *pBSSId,
+#endif
+                                     tANI_BOOLEAN flush_cache );
+tANI_BOOLEAN csrElectedCountryInfo(tpAniSirGlobal pMac);
+void csrAddVoteForCountryInfo(tpAniSirGlobal pMac, tANI_U8 *pCountryCode);
+void csrClearVotesForCountryInfo(tpAniSirGlobal pMac);
+void csr_remove_bssid_from_scan_list(tpAniSirGlobal pMac,
+       tSirMacAddr bssid);
+
+#ifdef WLAN_FEATURE_AP_HT40_24G
+eHalStatus csrSetHT2040Mode(tpAniSirGlobal pMac, tANI_U32 sessionId, tANI_U8 cbMode);
+#endif
+void csrValidateScanChannels(tpAniSirGlobal pMac, tCsrScanRequest *pDstReq,
+               tCsrScanRequest *pSrcReq, tANI_U32 *new_index, tANI_U8 ch144_support);
 #endif
 

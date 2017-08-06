@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2016 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,25 +18,11 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+
 /*
- * Copyright (c) 2012, The Linux Foundation. All rights reserved.
- *
- * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
- *
- *
- * Permission to use, copy, modify, and/or distribute this software for
- * any purpose with or without fee is hereby granted, provided that the
- * above copyright notice and this permission notice appear in all
- * copies.
- *
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
- * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
- * AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
- * DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
- * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
- * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
- * PERFORMANCE OF THIS SOFTWARE.
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
  */
 
 #if !defined( __LIM_SESSION_H )
@@ -59,28 +45,30 @@
 
 
 
-/*--------------------------------------------------------------------------
+/*-------------------------------------------------------------------------- 
   Preprocessor definitions and constants
   ------------------------------------------------------------------------*/
 #define NUM_WEP_KEYS 4
 
-/*--------------------------------------------------------------------------
+/*-------------------------------------------------------------------------- 
   Type declarations
   ------------------------------------------------------------------------*/
-typedef struct {
+typedef struct 
+{
     tSirMacBeaconInterval   beaconInterval;
-    tANI_U8                 fShortPreamble;
-    tANI_U8                 llaCoexist;
+    tANI_U8                 fShortPreamble;   
+    tANI_U8                 llaCoexist;    
     tANI_U8                 llbCoexist;
     tANI_U8                 llgCoexist;
     tANI_U8                 ht20Coexist;
     tANI_U8                 llnNonGFCoexist;
     tANI_U8                 fRIFSMode;
     tANI_U8                 fLsigTXOPProtectionFullSupport;
-    tANI_U8                 gHTObssMode;
-} tBeaconParams, *tpBeaconParams;
+    tANI_U8                 gHTObssMode; 
+}tBeaconParams, *tpBeaconParams;
 
-typedef struct sPESession {         // Added to Support BT-AMP
+typedef struct sPESession           // Added to Support BT-AMP
+{
     /* To check session table is in use or free*/
     tANI_U8                 available;
     tANI_U8                 peSessionId;
@@ -100,17 +88,20 @@ typedef struct sPESession {         // Added to Support BT-AMP
     tLimSmeStates           limPrevSmeState;        //Previous SME State
     tLimSystemRole          limSystemRole;
     tSirBssType             bssType;
-    tANI_U8                 operMode;               // AP - 0; STA - 1 ;
+    tANI_U8                 operMode;               // AP - 0; STA - 1 ; 
     tSirNwType              nwType;
     tpSirSmeStartBssReq     pLimStartBssReq;        //handle to smestart bss req
+    tANI_BOOLEAN            bOSENAssociation;       //handle to OSEN assoc req
+    tANI_BOOLEAN            bWPSAssociation;        //WPS Registration
     tpSirSmeJoinReq         pLimJoinReq;            // handle to sme join req
     tpSirSmeJoinReq         pLimReAssocReq;         //handle to sme reassoc req
     tpLimMlmJoinReq         pLimMlmJoinReq;         //handle to MLM join Req
-#if  defined (WLAN_FEATURE_VOWIFI_11R) || defined (FEATURE_WLAN_CCX) || defined(FEATURE_WLAN_LFR)
+#if  defined (WLAN_FEATURE_VOWIFI_11R) || defined (FEATURE_WLAN_ESE) || defined(FEATURE_WLAN_LFR)
     void                    *pLimMlmReassocRetryReq; //keep reasoc req for retry
 #endif
     void                    *pLimMlmReassocReq;      //handle to MLM reassoc Req
     tANI_U16                channelChangeReasonCode;
+    tANI_U16                channelChangeCSA;        // channel change flag for CSA
     tANI_U8                 dot11mode;
     tANI_U8                 htCapability;
     /* Supported Channel Width Set: 0-20MHz 1 - 40MHz */
@@ -147,7 +138,7 @@ typedef struct sPESession {         // Added to Support BT-AMP
 
     // Assoc or ReAssoc Response Data/Frame
     void                   *limAssocResponseData;
-
+    
 
 
     /** BSS Table parameters **/
@@ -168,7 +159,7 @@ typedef struct sPESession {         // Added to Support BT-AMP
     tANI_U8                 currentOperChannel;
     tANI_U8                 currentReqChannel;
     tANI_U8                 LimRxedBeaconCntDuringHB;
-
+    
     //Time stamp of the last beacon received from the BSS to which STA is connected.
     tANI_U64                lastBeaconTimeStamp;
     //RX Beacon count for the current BSS to which STA is connected.
@@ -186,11 +177,11 @@ typedef struct sPESession {         // Added to Support BT-AMP
     tANI_U8                 *assocRsp;              //Used to store association response received while associating
     tAniSirDph              dph;
     void *                  *parsedAssocReq;        //Used to store parsed assoc req from various requesting station
-#ifdef WLAN_FEATURE_VOWIFI_11R
+#ifdef WLAN_FEATURE_VOWIFI_11R    
     tANI_U32                RICDataLen;             //Used to store the Ric data received in the assoc response
     tANI_U8                 *ricData;
 #endif
-#ifdef FEATURE_WLAN_CCX
+#ifdef FEATURE_WLAN_ESE
     tANI_U32                tspecLen;               //Used to store the TSPEC IEs received in the assoc response
     tANI_U8                 *tspecIes;
 #endif
@@ -264,7 +255,9 @@ typedef struct sPESession {         // Added to Support BT-AMP
     tANI_U8            limWsmEnabled:1; //WSM
     tANI_U8            limHcfEnabled:1;
     tANI_U8            lim11dEnabled:1;
-
+#ifdef WLAN_FEATURE_11W
+    tANI_U8            limRmfEnabled:1; //11W
+#endif
     tANI_U32           lim11hEnable;
 
     tPowerdBm  maxTxPower;   //MIN (Regulatory and local power constraint)
@@ -277,11 +270,11 @@ typedef struct sPESession {         // Added to Support BT-AMP
     tAniBool            is11Rconnection;
 #endif
 
-#ifdef FEATURE_WLAN_CCX
-    tAniBool            isCCXconnection;
-    tCcxPEContext       ccxContext;
+#ifdef FEATURE_WLAN_ESE
+    tAniBool            isESEconnection;
+    tEsePEContext       eseContext;
 #endif
-#if defined WLAN_FEATURE_VOWIFI_11R || defined FEATURE_WLAN_CCX || defined(FEATURE_WLAN_LFR)
+#if defined WLAN_FEATURE_VOWIFI_11R || defined FEATURE_WLAN_ESE || defined(FEATURE_WLAN_LFR)
     tAniBool            isFastTransitionEnabled;
 #endif
 #ifdef FEATURE_WLAN_LFR
@@ -295,19 +288,19 @@ typedef struct sPESession {         // Added to Support BT-AMP
     /* EDCA QoS parameters
      * gLimEdcaParams - These EDCA parameters are used locally on AP or STA.
      * If STA, then these are values taken from the Assoc Rsp when associating,
-     * or Beacons/Probe Response after association.  If AP, then these are
-     * values originally set locally on AP.
+     * or Beacons/Probe Response after association.  If AP, then these are 
+     * values originally set locally on AP. 
      *
-     * gLimEdcaParamsBC - These EDCA parameters are use by AP to broadcast
-     * to other STATIONs in the BSS.
+     * gLimEdcaParamsBC - These EDCA parameters are use by AP to broadcast 
+     * to other STATIONs in the BSS. 
      *
      * gLimEdcaParamsActive: These EDCA parameters are what's actively being
-     * used on station. Specific AC values may be downgraded depending on
-     * admission control for that particular AC.
+     * used on station. Specific AC values may be downgraded depending on 
+     * admission control for that particular AC. 
      */
-    tSirMacEdcaParamRecord gLimEdcaParams[MAX_NUM_AC];   //used locally
+    tSirMacEdcaParamRecord gLimEdcaParams[MAX_NUM_AC];   //used locally 
     tSirMacEdcaParamRecord gLimEdcaParamsBC[MAX_NUM_AC]; //used for broadcast
-    tSirMacEdcaParamRecord gLimEdcaParamsActive[MAX_NUM_AC];
+    tSirMacEdcaParamRecord gLimEdcaParamsActive[MAX_NUM_AC]; 
 
     tANI_U8  gLimEdcaParamSetCount;
 
@@ -321,6 +314,7 @@ typedef struct sPESession {         // Added to Support BT-AMP
     tANI_U8    apCenterChan;
     tANI_U8    apChanWidth;
     tANI_U8    txBFIniFeatureEnabled;
+    tANI_U8    txMuBformee;
 #endif
     tANI_U8            spectrumMgtEnabled;
     /* *********************11H related*****************************/
@@ -346,34 +340,52 @@ typedef struct sPESession {         // Added to Support BT-AMP
     tANI_U16  gLimNumOfCurrentSTAs;
 #ifdef FEATURE_WLAN_TDLS
     tANI_U32  peerAIDBitmap[2];
+    tANI_BOOLEAN tdlsChanSwitProhibited;
 #endif
     tANI_BOOLEAN fWaitForProbeRsp;
     tANI_BOOLEAN fIgnoreCapsChange;
-} tPESession, *tpPESession;
+    tANI_BOOLEAN fDeauthReceived;
+#ifdef FEATURE_WLAN_DIAG_SUPPORT_LIM
+    tANI_S8 rssi;
+#endif
+    tANI_U8 isAmsduSupportInAMPDU;
+    tANI_U8 isCoalesingInIBSSAllowed;
+    tANI_BOOLEAN isCiscoVendorAP;
+    /* To hold OBSS Scan IE Parameters */
+    tSirOBSSHT40Param obssHT40ScanParam;
+    /* flag to indicate country code in beacon */
+    tANI_U8  countryInfoPresent;
+    /*  DSCP to UP mapping for HS 2.0 */
+    tSirQosMapSet QosMapSet;
+    tANI_U8  isKeyInstalled;
+    tANI_BOOLEAN is11Gonly;
+    tANI_BOOLEAN addBssfailed;
+    tDot11fIEExtCap ExtCap;
+}tPESession, *tpPESession;
 
 #define LIM_MAX_ACTIVE_SESSIONS 4
 
 
-/*-------------------------------------------------------------------------
+/*------------------------------------------------------------------------- 
   Function declarations and documenation
   ------------------------------------------------------------------------*/
 
 
 /*--------------------------------------------------------------------------
-
+  
   \brief peCreateSession() - creates a new PE session given the BSSID
 
-  This function returns the session context and the session ID if the session
+  This function returns the session context and the session ID if the session 
   corresponding to the passed BSSID is found in the PE session table.
-
+    
   \param pMac                   - pointer to global adapter context
   \param bssid                   - BSSID of the new session
   \param sessionId             -session ID is returned here, if session is created.
-
+  
   \return tpPESession          - pointer to the session context or NULL if session can not be created.
-
+  
   \sa
-
+  
   --------------------------------------------------------------------------*/
 tpPESession peCreateSession(tpAniSirGlobal pMac, tANI_U8 *bssid , tANI_U8* sessionId, tANI_U16 numSta);
 
@@ -381,15 +393,15 @@ tpPESession peCreateSession(tpAniSirGlobal pMac, tANI_U8 *bssid , tANI_U8* sessi
 /*--------------------------------------------------------------------------
   \brief peFindSessionByBssid() - looks up the PE session given the BSSID.
 
-  This function returns the session context and the session ID if the session
+  This function returns the session context and the session ID if the session 
   corresponding to the given BSSID is found in the PE session table.
-
+    
   \param pMac                   - pointer to global adapter context
   \param bssid                   - BSSID of the session
-  \param sessionId             -session ID is returned here, if session is found.
-
+  \param sessionId             -session ID is returned here, if session is found. 
+  
   \return tpPESession          - pointer to the session context or NULL if session is not found.
-
+  
   \sa
   --------------------------------------------------------------------------*/
 tpPESession peFindSessionByBssid(tpAniSirGlobal pMac,  tANI_U8*  bssid,    tANI_U8* sessionId);
@@ -414,15 +426,15 @@ tpPESession peFindSessionByBssIdx(tpAniSirGlobal pMac,  tANI_U8 bssIdx);
 /*--------------------------------------------------------------------------
   \brief peFindSessionByPeerSta() - looks up the PE session given the Peer Station Address.
 
-  This function returns the session context and the session ID if the session
+  This function returns the session context and the session ID if the session 
   corresponding to the given destination address is found in the PE session table.
-
+    
   \param pMac                   - pointer to global adapter context
   \param sa                   - Peer STA Address of the session
-  \param sessionId             -session ID is returned here, if session is found.
-
+  \param sessionId             -session ID is returned here, if session is found. 
+  
   \return tpPESession          - pointer to the session context or NULL if session is not found.
-
+  
   \sa
   --------------------------------------------------------------------------*/
 tpPESession peFindSessionByPeerSta(tpAniSirGlobal pMac, tANI_U8*  sa, tANI_U8* sessionId);
@@ -430,24 +442,24 @@ tpPESession peFindSessionByPeerSta(tpAniSirGlobal pMac, tANI_U8*  sa, tANI_U8* s
 /*--------------------------------------------------------------------------
   \brief peFindSessionBySessionId() - looks up the PE session given the session ID.
 
-  This function returns the session context  if the session
+  This function returns the session context  if the session 
   corresponding to the given session ID is found in the PE session table.
-
+    
   \param pMac                   - pointer to global adapter context
   \param sessionId             -session ID for which session context needs to be looked up.
-
+  
   \return tpPESession          - pointer to the session context or NULL if session is not found.
-
+  
   \sa
   --------------------------------------------------------------------------*/
-tpPESession peFindSessionBySessionId(tpAniSirGlobal pMac , tANI_U8 sessionId);
+ tpPESession peFindSessionBySessionId(tpAniSirGlobal pMac , tANI_U8 sessionId);
 
 /*--------------------------------------------------------------------------
   \brief peFindSessionByBssid() - looks up the PE session given staid.
 
   This function returns the session context and the session ID if the session
   corresponding to the given StaId is found in the PE session table.
-
+   
   \param pMac                  - pointer to global adapter context
   \param staid                 - StaId of the session
   \param sessionId             - session ID is returned here, if session is found.
@@ -455,8 +467,8 @@ tpPESession peFindSessionBySessionId(tpAniSirGlobal pMac , tANI_U8 sessionId);
   \return tpPESession          - pointer to the session context or NULL if session is not found.
 
 --------------------------------------------------------------------------*/
-tpPESession peFindSessionByStaId(tpAniSirGlobal pMac,  tANI_U8  staid,    tANI_U8* sessionId);
-
+ tpPESession peFindSessionByStaId(tpAniSirGlobal pMac,  tANI_U8  staid,    tANI_U8* sessionId);
+ 
 
 
 
@@ -464,10 +476,10 @@ tpPESession peFindSessionByStaId(tpAniSirGlobal pMac,  tANI_U8  staid,    tANI_U
 /*--------------------------------------------------------------------------
   \brief peDeleteSession() - deletes the PE session given the session ID.
 
-
+    
   \param pMac                   - pointer to global adapter context
   \param sessionId             -session ID of the session which needs to be deleted.
-
+    
   \sa
   --------------------------------------------------------------------------*/
 void peDeleteSession(tpAniSirGlobal pMac, tpPESession psessionEntry);
@@ -476,10 +488,10 @@ void peDeleteSession(tpAniSirGlobal pMac, tpPESession psessionEntry);
 /*--------------------------------------------------------------------------
   \brief peDeleteSession() - Returns the SME session ID and Transaction ID .
 
-
+    
   \param pMac                   - pointer to global adapter context
   \param sessionId             -session ID of the session which needs to be deleted.
-
+    
   \sa
   --------------------------------------------------------------------------*/
 

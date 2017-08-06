@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2016 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,26 +18,14 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+
 /*
- * Copyright (c) 2012, The Linux Foundation. All rights reserved.
- *
- * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
- *
- *
- * Permission to use, copy, modify, and/or distribute this software for
- * any purpose with or without fee is hereby granted, provided that the
- * above copyright notice and this permission notice appear in all
- * copies.
- *
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
- * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
- * AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
- * DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
- * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
- * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
- * PERFORMANCE OF THIS SOFTWARE.
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
  */
+
+
 
 
 #ifndef WLAN_QCT_TLI_H
@@ -70,6 +58,7 @@ DESCRIPTION
 
 when        who    what, where, why
 --------    ---    ----------------------------------------------------------
+08/19/13    rajekuma Added RMC support in TL
 02/19/10    bad     Fixed 802.11 to 802.3 ft issues with WAPI
 01/14/10    rnair   Fixed the byte order for the WAI packet type.
 01/08/10    lti     Added TL Data Caching
@@ -134,6 +123,7 @@ when        who    what, where, why
 
 /*WAPI protocol type */
 #define WLANTL_LLC_WAI_TYPE              0x88b4
+#define WLANTL_ETHERTYPE_ARP             0x0806
 
 #ifdef FEATURE_WLAN_TDLS
 #define WLANTL_LLC_TDLS_TYPE             0x890d
@@ -180,16 +170,25 @@ when        who    what, where, why
 #define WLANTL_CTRL_FRAME_TYPE       0x10
 #define WLANTL_DATA_FRAME_TYPE       0x20
 
+#define WLANTL_MGMT_PROBE_REQ_FRAME_TYPE    0x04
+
 /*Value of the data type field in the 802.11 frame */
 #define WLANTL_80211_DATA_TYPE         0x02
 #define WLANTL_80211_DATA_QOS_SUBTYPE  0x08
 #define WLANTL_80211_NULL_QOS_SUBTYPE  0x0C
+#define WLANTL_80211_MGMT_ACTION_SUBTYPE  0x0D
+#define WLANTL_80211_MGMT_ACTION_NO_ACK_SUBTYPE  0x0E
 
 /*Defines for internal utility functions */
 #define WLANTL_FRAME_TYPE_BCAST 0xff
 #define WLANTL_FRAME_TYPE_MCAST 0x01
 #define WLANTL_FRAME_TYPE_UCAST 0x00
 
+#define WLANTL_FRAME_TYPESUBTYPE_MASK 0x3F
+
+#ifdef WLAN_FEATURE_RMC
+#define WLANTL_RMC_HASH_TABLE_SIZE (32)
+#endif
 
 /*-------------------------------------------------------------------------
   BT-AMP related definition - !!! should probably be moved to BT-AMP header
@@ -198,7 +197,7 @@ when        who    what, where, why
 /*-------------------------------------------------------------------------
   Helper macros
 ---------------------------------------------------------------------------*/
-/*Checks STA index validity*/
+ /*Checks STA index validity*/
 #define WLANTL_STA_ID_INVALID( _staid )( _staid >= WLAN_MAX_STA_COUNT )
 
 /*As per Libra behavior */
@@ -247,52 +246,77 @@ when        who    what, where, why
 /*get RSSI1 from a RX BD*/
 #define WLANTL_GETRSSI1(pBD)    (WDA_GETRSSI1(pBD) - WLAN_TL_RSSI_CORRECTION)
 
+#define WLANTL_GETSNR(pBD)      WDA_GET_RX_SNR(pBD)
+
 /* Check whether Rx frame is LS or EAPOL packet (other than data) */
 #define WLANTL_BAP_IS_NON_DATA_PKT_TYPE(usType) \
   ((WLANTL_BT_AMP_TYPE_AR == usType) || (WLANTL_BT_AMP_TYPE_SEC == usType) || \
    (WLANTL_BT_AMP_TYPE_LS_REQ == usType) || (WLANTL_BT_AMP_TYPE_LS_REP == usType))
 
+#define WLANTL_CACHE_TRACE_WATERMARK 100
 /*---------------------------------------------------------------------------
   TL signals for TX thread
 ---------------------------------------------------------------------------*/
-typedef enum {
-    /*Suspend signal - following serialization of a HAL suspend request*/
-    WLANTL_TX_SIG_SUSPEND = 0,
+typedef enum
+{
+  /*Suspend signal - following serialization of a HAL suspend request*/
+  WLANTL_TX_SIG_SUSPEND = 0,
 
-    /*Res need signal - triggered when all pending TxComp have been received
-     and TL is low on resources*/
-    WLANTL_TX_RES_NEEDED  = 1,
+  /*Res need signal - triggered when all pending TxComp have been received
+   and TL is low on resources*/
+  WLANTL_TX_RES_NEEDED  = 1,
 
-    /* Forwarding RX cached frames */
-    WLANTL_TX_FWD_CACHED  = 2,
+  /* Forwarding RX cached frames. This is not used anymore as it is
+     replaced by WLANTL_RX_FWD_CACHED in RX thread*/
+  WLANTL_TX_FWD_CACHED  = 2,
 
-    /* Serialized STAID AC Indication */
-    WLANTL_TX_STAID_AC_IND = 3,
+  /* Serialized STAID AC Indication */
+  WLANTL_TX_STAID_AC_IND = 3,
 
-    /* Serialzie TX transmit request */
-    WLANTL_TX_START_XMIT = 4,
+  /* Serialzie TX transmit request */
+  WLANTL_TX_START_XMIT = 4,
 
-    /* Serialzie Finish UL Authentication request */
-    WLANTL_FINISH_ULA   = 5,
+  /* Serialzie Finish UL Authentication request */
+  WLANTL_FINISH_ULA   = 5,
 
-    /* Serialized Snapshot request indication */
-    WLANTL_TX_SNAPSHOT = 6,
+  /* Serialized Snapshot request indication */
+  WLANTL_TX_SNAPSHOT = 6,
 
-    WLANTL_TX_MAX
-} WLANTL_TxSignalsType;
+  /* Detected a fatal error issue SSR */
+  WLANTL_TX_FATAL_ERROR = 7,
+
+  WLANTL_TX_FW_DEBUG = 8,
+
+  WLANTL_TX_KICKDXE = 9,
+
+  WLANTL_TX_MAX
+}WLANTL_TxSignalsType;
+
+
+/*---------------------------------------------------------------------------
+  TL signals for RX thread
+---------------------------------------------------------------------------*/
+typedef enum
+{
+
+  /* Forwarding RX cached frames */
+  WLANTL_RX_FWD_CACHED  = 0,
+
+}WLANTL_RxSignalsType;
 
 /*---------------------------------------------------------------------------
   STA Event type
 ---------------------------------------------------------------------------*/
-typedef enum {
-    /* Transmit frame event */
-    WLANTL_TX_EVENT = 0,
+typedef enum
+{
+  /* Transmit frame event */
+  WLANTL_TX_EVENT = 0,
 
-    /* Receive frame event */
-    WLANTL_RX_EVENT = 1,
+  /* Receive frame event */
+  WLANTL_RX_EVENT = 1,
 
-    WLANTL_MAX_EVENT
-} WLANTL_STAEventType;
+  WLANTL_MAX_EVENT
+}WLANTL_STAEventType;
 
 /*---------------------------------------------------------------------------
 
@@ -313,75 +337,80 @@ typedef enum {
 
 ---------------------------------------------------------------------------*/
 typedef VOS_STATUS (*WLANTL_STAFuncType)( v_PVOID_t     pAdapter,
-        v_U8_t        ucSTAId,
-        vos_pkt_t**   pvosDataBuff);
+                                          v_U8_t        ucSTAId,
+                                          vos_pkt_t**   pvosDataBuff,
+                                          v_BOOL_t      bForwardIAPPwithLLC);
 
 /*---------------------------------------------------------------------------
   STA FSM Entry type
 ---------------------------------------------------------------------------*/
-typedef struct {
-    WLANTL_STAFuncType  pfnSTATbl[WLANTL_MAX_EVENT];
+typedef struct
+{
+  WLANTL_STAFuncType  pfnSTATbl[WLANTL_MAX_EVENT];
 } WLANTL_STAFsmEntryType;
 
 /* Receive in connected state - only EAPOL or WAI*/
 VOS_STATUS WLANTL_STARxConn( v_PVOID_t     pAdapter,
                              v_U8_t        ucSTAId,
-                             vos_pkt_t**   pvosDataBuff );
+                             vos_pkt_t**   pvosDataBuff,
+                             v_BOOL_t      bForwardIAPPwithLLC);
 
 /* Transmit in connected state - only EAPOL or WAI*/
 VOS_STATUS WLANTL_STATxConn( v_PVOID_t     pAdapter,
                              v_U8_t        ucSTAId,
-                             vos_pkt_t**   pvosDataBuff );
+                             vos_pkt_t**   pvosDataBuff,
+                             v_BOOL_t      bForwardIAPPwithLLC);
 
 /* Receive in authenticated state - all data allowed*/
 VOS_STATUS WLANTL_STARxAuth( v_PVOID_t     pAdapter,
                              v_U8_t        ucSTAId,
-                             vos_pkt_t**   pvosDataBuff );
+                             vos_pkt_t**   pvosDataBuff,
+                             v_BOOL_t      bForwardIAPPwithLLC);
 
 /* Transmit in authenticated state - all data allowed*/
 VOS_STATUS WLANTL_STATxAuth( v_PVOID_t     pAdapter,
                              v_U8_t        ucSTAId,
-                             vos_pkt_t**   pvosDataBuff );
+                             vos_pkt_t**   pvosDataBuff,
+                             v_BOOL_t      bForwardIAPPwithLLC);
 
 /* Receive in disconnected state - no data allowed*/
 VOS_STATUS WLANTL_STARxDisc( v_PVOID_t     pAdapter,
                              v_U8_t        ucSTAId,
-                             vos_pkt_t**   pvosDataBuff );
+                             vos_pkt_t**   pvosDataBuff,
+                             v_BOOL_t      bForwardIAPPwithLLC);
 
 /* Transmit in disconnected state - no data allowed*/
 VOS_STATUS WLANTL_STATxDisc( v_PVOID_t     pAdapter,
                              v_U8_t        ucSTAId,
-                             vos_pkt_t**   pvosDataBuff );
+                             vos_pkt_t**   pvosDataBuff,
+                             v_BOOL_t      bForwardIAPPwithLLC);
 
 /* TL State Machine */
-STATIC const WLANTL_STAFsmEntryType tlSTAFsm[WLANTL_STA_MAX_STATE] = {
-    /* WLANTL_STA_INIT */
-    { {
-            NULL,      /* WLANTL_TX_EVENT - no packets should get transmitted*/
-            NULL,      /* WLANTL_RX_EVENT - no packets should be received - drop*/
-        }
-    },
+STATIC const WLANTL_STAFsmEntryType tlSTAFsm[WLANTL_STA_MAX_STATE] =
+{
+  /* WLANTL_STA_INIT */
+  { {
+    NULL,      /* WLANTL_TX_EVENT - no packets should get transmitted*/
+    NULL,      /* WLANTL_RX_EVENT - no packets should be received - drop*/
+  } },
 
-    /* WLANTL_STA_CONNECTED */
-    { {
-            WLANTL_STATxConn,      /* WLANTL_TX_EVENT - only EAPoL or WAI frames are allowed*/
-            WLANTL_STARxConn,      /* WLANTL_RX_EVENT - only EAPoL or WAI frames can be rx*/
-        }
-    },
+  /* WLANTL_STA_CONNECTED */
+  { {
+    WLANTL_STATxConn,      /* WLANTL_TX_EVENT - only EAPoL or WAI frames are allowed*/
+    WLANTL_STARxConn,      /* WLANTL_RX_EVENT - only EAPoL or WAI frames can be rx*/
+  } },
 
-    /* WLANTL_STA_AUTHENTICATED */
-    { {
-            WLANTL_STATxAuth,      /* WLANTL_TX_EVENT - all data frames allowed*/
-            WLANTL_STARxAuth,      /* WLANTL_RX_EVENT - all data frames can be rx */
-        }
-    },
+  /* WLANTL_STA_AUTHENTICATED */
+  { {
+    WLANTL_STATxAuth,      /* WLANTL_TX_EVENT - all data frames allowed*/
+    WLANTL_STARxAuth,      /* WLANTL_RX_EVENT - all data frames can be rx */
+  } },
 
-    /* WLANTL_STA_DISCONNECTED */
-    { {
-            WLANTL_STATxDisc,      /* WLANTL_TX_EVENT - do nothing */
-            WLANTL_STARxDisc,      /* WLANTL_RX_EVENT - frames will still be fwd-ed*/
-        }
-    }
+  /* WLANTL_STA_DISCONNECTED */
+  { {
+    WLANTL_STATxDisc,      /* WLANTL_TX_EVENT - do nothing */
+    WLANTL_STARxDisc,      /* WLANTL_RX_EVENT - frames will still be fwd-ed*/
+  } }
 };
 
 /*---------------------------------------------------------------------------
@@ -391,10 +420,11 @@ STATIC const WLANTL_STAFsmEntryType tlSTAFsm[WLANTL_STA_MAX_STATE] = {
 #define WLANTL_MAX_WINSIZE      64
 #define WLANTL_MAX_BA_SESSION   40
 
-typedef struct {
-    v_BOOL_t     isAvailable;
-    v_U64_t      ullReplayCounter[WLANTL_MAX_WINSIZE];
-    v_PVOID_t    arrayBuffer[WLANTL_MAX_WINSIZE];
+typedef struct
+{
+   v_BOOL_t     isAvailable;
+   v_U64_t      ullReplayCounter[WLANTL_MAX_WINSIZE];
+   v_PVOID_t    arrayBuffer[WLANTL_MAX_WINSIZE];
 } WLANTL_REORDER_BUFFER_T;
 
 
@@ -402,425 +432,545 @@ typedef struct {
  * After timer expired, Qed frames have to be routed to upper layer
  * WLANTL_TIMER_EXPIER_UDATA_T is user data type for timer callback
  */
-typedef struct {
-    /* Global contect, HAL, HDD need this */
-    v_PVOID_t          pAdapter;
+typedef struct
+{
+   /* Global contect, HAL, HDD need this */
+   v_PVOID_t          pAdapter;
 
-    /* TL context handle */
-    v_PVOID_t          pTLHandle;
+   /* TL context handle */
+   v_PVOID_t          pTLHandle;
 
-    /* Current STAID, to know STA context */
-    v_U32_t            STAID;
+   /* Current STAID, to know STA context */
+   v_U32_t            STAID;
 
-    v_U8_t             TID;
+   v_U8_t             TID;
 } WLANTL_TIMER_EXPIER_UDATA_T;
 
-typedef struct {
-    /*specifies if re-order session exists*/
-    v_U8_t             ucExists;
+typedef struct
+{
+  /*specifies if re-order session exists*/
+  v_U8_t             ucExists;
 
-    /* Current Index */
-    v_U32_t             ucCIndex;
+  /* Current Index */
+  v_U32_t             ucCIndex;
 
-    /* Count of the total packets in list*/
-    v_U16_t            usCount;
+  /* Count of the total packets in list*/
+  v_U16_t            usCount;
 
-    /* vos ttimer to handle Qed frames aging */
-    vos_timer_t        agingTimer;
+  /* vos ttimer to handle Qed frames aging */
+  vos_timer_t        agingTimer;
 
-    /* Q windoe size */
-    v_U32_t            winSize;
+  /* Q windoe size */
+  v_U32_t            winSize;
 
-    /* Available RX frame buffer size */
-    v_U32_t            bufferSize;
+  /* Available RX frame buffer size */
+  v_U32_t            bufferSize;
 
-    /* Start Sequence number */
-    v_U32_t            SSN;
+  /* Start Sequence number */
+  v_U32_t            SSN;
 
-    /* BA session ID, generate by HAL */
-    v_U32_t            sessionID;
+  /* BA session ID, generate by HAL */
+  v_U32_t            sessionID;
 
-    v_U32_t            currentESN;
+  v_U32_t            currentESN;
 
-    v_U32_t            pendingFramesCount;
+  v_U32_t            pendingFramesCount;
 
-    vos_lock_t         reorderLock;
+  vos_lock_t         reorderLock;
 
-    /* Aging timer callback user data */
-    WLANTL_TIMER_EXPIER_UDATA_T timerUdata;
+  /* Aging timer callback user data */
+  WLANTL_TIMER_EXPIER_UDATA_T timerUdata;
 
-    WLANTL_REORDER_BUFFER_T     *reorderBuffer;
-} WLANTL_BAReorderType;
+  WLANTL_REORDER_BUFFER_T     *reorderBuffer;
+
+  v_U16_t            LastSN;
+  bool               set_data_filter;
+}WLANTL_BAReorderType;
 
 
 /*---------------------------------------------------------------------------
   UAPSD information
 ---------------------------------------------------------------------------*/
-typedef struct {
-    /* flag set when a UAPSD session with triggers generated in fw is being set*/
-    v_U8_t              ucSet;
-} WLANTL_UAPSDInfoType;
+typedef struct
+{
+  /* flag set when a UAPSD session with triggers generated in fw is being set*/
+  v_U8_t              ucSet;
+}WLANTL_UAPSDInfoType;
+
+#ifdef WLAN_FEATURE_RMC
+struct tTL_RMCList
+{
+  struct tTL_RMCList    *next;
+  v_MACADDR_t           rmcAddr;
+  v_U16_t               mcSeqCtl;
+  v_U32_t               rxMCDupcnt;
+};
+
+typedef struct tTL_RMCList WLANTL_RMC_SESSION;
+#endif
+
+/*---------------------------------------------------------------------------
+  per-STA cache info
+---------------------------------------------------------------------------*/
+typedef struct
+{
+  v_U16_t               cacheSize;
+  v_TIME_t              cacheInitTime;
+  v_TIME_t              cacheDoneTime;
+  v_TIME_t              cacheClearTime;
+}WLANTL_CacheInfoType;
+
 
 /*---------------------------------------------------------------------------
   STA Client type
 ---------------------------------------------------------------------------*/
-typedef struct {
-    /* Flag that keeps track of registration; only one STA with unique
-       ID allowed */
-    v_U8_t                        ucExists;
+typedef struct
+{
+  /* Flag that keeps track of registration; only one STA with unique
+     ID allowed */
+  v_U8_t                        ucExists;
 
-    /*The flag controls the Rx path for the station - as long as there are
-      packets at sta level that need to be fwd-ed the Rx path will be blocked,
-      it will become unblocked only when the cached frames were fwd-ed;
-      while the rx path is blocked all rx-ed frames for that STA will be cached
-      */
-    v_U8_t                        ucRxBlocked;
+  /* Function pointer to the receive packet handler from HDD */
+  WLANTL_STARxCBType            pfnSTARx;
 
-    /* Function pointer to the receive packet handler from HDD */
-    WLANTL_STARxCBType            pfnSTARx;
+  /* Function pointer to the transmit complete confirmation handler
+    from HDD */
+  WLANTL_TxCompCBType           pfnSTATxComp;
 
-    /* Function pointer to the transmit complete confirmation handler
-      from HDD */
-    WLANTL_TxCompCBType           pfnSTATxComp;
+  /* Function pointer to the packet retrieval routine in HDD */
+  WLANTL_STAFetchPktCBType      pfnSTAFetchPkt;
 
-    /* Function pointer to the packet retrieval routine in HDD */
-    WLANTL_STAFetchPktCBType      pfnSTAFetchPkt;
+  /* Reordering information for the STA */
+  WLANTL_BAReorderType          atlBAReorderInfo[WLAN_MAX_TID];
 
-    /* Reordering information for the STA */
-    WLANTL_BAReorderType          atlBAReorderInfo[WLAN_MAX_TID];
+  /* STA Descriptor, contains information related to the new added STA */
+  WLAN_STADescType              wSTADesc;
 
-    /* STA Descriptor, contains information related to the new added STA */
-    WLAN_STADescType              wSTADesc;
+  /* Current connectivity state of the STA */
+  WLANTL_STAStateType           tlState;
 
-    /* Current connectivity state of the STA */
-    WLANTL_STAStateType           tlState;
+  /* Station priority */
+  WLANTL_STAPriorityType        tlPri;
 
-    /* Station priority */
-    WLANTL_STAPriorityType        tlPri;
+  /* Value of the averaged RSSI for this station */
+  v_S7_t                        rssiAvg;
 
-    /* Value of the averaged RSSI for this station */
-    v_S7_t                        rssiAvg;
+  /* Value of the averaged RSSI for this station in BMPS */
+  v_S7_t                        rssiAvgBmps;
 
-    /* Value of the averaged RSSI for this station in BMPS */
-    v_S7_t                        rssiAvgBmps;
+  /* Value of the Alpha to calculate RSSI average */
+  v_S7_t                        rssiAlpha;
 
-    /* Value of the Alpha to calculate RSSI average */
-    v_S7_t                        rssiAlpha;
+  /* Value of the averaged RSSI for this station */
+  v_U32_t                       uLinkQualityAvg;
 
-    /* Value of the averaged RSSI for this station */
-    v_U32_t                       uLinkQualityAvg;
+  /* Sum of SNR for snrIdx number of consecutive frames */
+  v_U32_t                       snrSum;
 
-    /* Tx packet count per station per TID */
-    v_U32_t                       auTxCount[WLAN_MAX_TID];
+  /* Number of consecutive frames over which snrSum is calculated */
+  v_S7_t                        snrIdx;
 
-    /* Rx packet count per station per TID */
-    v_U32_t                       auRxCount[WLAN_MAX_TID];
+  /* Average SNR of previous 20 frames */
+  v_S7_t                        prevSnrAvg;
 
-    /* Suspend flag */
-    v_U8_t                        ucTxSuspended;
+  /* Average SNR returned by fw */
+  v_S7_t                        snrAvgBmps;
 
-    /* Pointer to the AMSDU chain maintained by the AMSDU de-aggregation
-       completion sub-module */
-    vos_pkt_t*                    vosAMSDUChainRoot;
+  /* Tx packet count per station per TID */
+  v_U32_t                       auTxCount[WLAN_MAX_TID];
 
-    /* Pointer to the root of the chain */
-    vos_pkt_t*                    vosAMSDUChain;
+  /* Rx packet count per station per TID */
+  v_U32_t                       auRxCount[WLAN_MAX_TID];
 
-    /* Used for saving/restoring frame header for 802.3/11 AMSDU sub-frames */
-    v_U8_t                        aucMPDUHeader[WLANTL_MPDU_HEADER_LEN];
+  /* Suspend flag */
+  v_U8_t                        ucTxSuspended;
 
-    /* length of the header */
-    v_U8_t                        ucMPDUHeaderLen;
+  /* Pointer to the AMSDU chain maintained by the AMSDU de-aggregation
+     completion sub-module */
+  vos_pkt_t*                    vosAMSDUChainRoot;
 
-    /* Enabled ACs currently serviced by TL (automatic setup in TL)*/
-    v_U8_t                        aucACMask[WLANTL_MAX_AC];
+  /* Pointer to the root of the chain */
+  vos_pkt_t*                    vosAMSDUChain;
 
-    /* Current AC to be retrieved */
-    WLANTL_ACEnumType             ucCurrentAC;
+  /* Used for saving/restoring frame header for 802.3/11 AMSDU sub-frames */
+  v_U8_t                        aucMPDUHeader[WLANTL_MPDU_HEADER_LEN];
 
-    /*Packet pending flag - set if tx is pending for the station*/
-    v_U8_t                        ucPktPending;
+  /* length of the header */
+  v_U8_t                        ucMPDUHeaderLen;
 
-    /*EAPOL Packet pending flag - set if EAPOL packet is pending for the station*/
-    v_U8_t                        ucEapolPktPending;
+  /* Enabled ACs currently serviced by TL (automatic setup in TL)*/
+  v_U8_t                        aucACMask[WLANTL_NUM_TX_QUEUES];
 
-    /*used on tx packet to signal when there is no more data to tx for the
-     moment=> packets can be passed to BAL */
-    v_U8_t                    ucNoMoreData;
+  /* Current AC to be retrieved */
+  WLANTL_ACEnumType             ucCurrentAC;
 
-    /* Last serviced AC to be retrieved */
-    WLANTL_ACEnumType             ucServicedAC;
+  /*Packet pending flag - set if tx is pending for the station*/
+  v_U8_t                        ucPktPending;
 
-    /* Current weight for the AC */
-    v_U8_t                        ucCurrentWeight;
+  /*EAPOL Packet pending flag - set if EAPOL packet is pending for the station*/
+  v_U8_t                        ucEapolPktPending;
 
-    /* Info used for UAPSD trigger frame generation  */
-    WLANTL_UAPSDInfoType          wUAPSDInfo[WLANTL_MAX_AC];
+  /*used on tx packet to signal when there is no more data to tx for the
+   moment=> packets can be passed to BAL */
+  v_U8_t                    ucNoMoreData;
 
-    /* flag to signal if a trigger frames is pending */
-    v_U8_t                        ucPendingTrigFrm;
+  /* Last serviced AC to be retrieved */
+  WLANTL_ACEnumType             ucServicedAC;
 
-    WLANTL_TRANSFER_STA_TYPE      trafficStatistics;
+   /* Current weight for the AC */
+  v_U8_t                        ucCurrentWeight;
 
-    /*Members needed for packet caching in TL*/
-    /*Begining of the cached packets chain*/
-    vos_pkt_t*                 vosBegCachedFrame;
+  /* Info used for UAPSD trigger frame generation  */
+  WLANTL_UAPSDInfoType          wUAPSDInfo[WLANTL_MAX_AC];
 
-    /*Begining of the cached packets chain*/
-    vos_pkt_t*                 vosEndCachedFrame;
+  /* flag to signal if a trigger frames is pending */
+  v_U8_t                        ucPendingTrigFrm;
+
+  WLANTL_TRANSFER_STA_TYPE      trafficStatistics;
+
+  /*Members needed for packet caching in TL*/
+  /*Begining of the cached packets chain*/
+  vos_pkt_t*                 vosBegCachedFrame;
+
+  /*Begining of the cached packets chain*/
+  vos_pkt_t*                 vosEndCachedFrame;
+
+  WLANTL_CacheInfoType       tlCacheInfo;
+  /* LWM related fields */
+
+  v_BOOL_t  enableCaching;
+
+  //current station is slow. LWM mode is enabled.
+  v_BOOL_t ucLwmModeEnabled;
+  //LWM events is reported when LWM mode is on. Able to send more traffic
+  //under the constraints of uBuffThresholdMax
+  v_BOOL_t ucLwmEventReported;
+
+  //v_U8_t uLwmEventReported;
+
+  /* Flow control fields */
+  //memory used in previous round
+  v_U8_t bmuMemConsumed;
+
+  //the number packets injected in this round
+  v_U32_t uIngress_length;
+
+  //number of packets allowed in current round beforing receiving new FW memory updates
+  v_U32_t uBuffThresholdMax;
 
 
-    /* LWM related fields */
+  // v_U32_t uEgress_length;
 
-    //current station is slow. LWM mode is enabled.
-    v_BOOL_t ucLwmModeEnabled;
-    //LWM events is reported when LWM mode is on. Able to send more traffic
-    //under the constraints of uBuffThresholdMax
-    v_BOOL_t ucLwmEventReported;
+  // v_U32_t uIngress_length;
 
-    //v_U8_t uLwmEventReported;
+  // v_U32_t uBuffThresholdMax;
 
-    /* Flow control fields */
-    //memory used in previous round
-    v_U8_t bmuMemConsumed;
+  // v_U32_t uBuffThresholdUsed;
 
-    //the number packets injected in this round
-    v_U32_t uIngress_length;
+  /* Value used to set LWM in FW. Initialized to 1/3* WLAN_STA_BMU_THRESHOLD_MAX
+     In the future, it can be dynamically adjusted if we find the reason to implement
+     such algorithm. */
+  v_U32_t uLwmThreshold;
 
-    //number of packets allowed in current round beforing receiving new FW memory updates
-    v_U32_t uBuffThresholdMax;
+  //tx disable forced by Riva software
+  v_U16_t fcStaTxDisabled;
 
+  /** HDD buffer status for packet scheduling. Once HDD
+   *  stores a new packet in a previously empty queue, it
+   *  will call TL interface to set the fields. The fields
+   *  will be cleaned by TL when TL can't fetch more packets
+   *  from the queue. */
+  // the fields are ucPktPending and ucACMask;
 
-    // v_U32_t uEgress_length;
+  /* Queue to keep unicast station management frame */
+  vos_list_t pStaManageQ;
 
-    // v_U32_t uIngress_length;
+ /* 1 means replay check is needed for the station,
+  * 0 means replay check is not needed for the station*/
+  v_BOOL_t      ucIsReplayCheckValid;
 
-    // v_U32_t uBuffThresholdMax;
+ /* It contains 48-bit replay counter per TID*/
+  v_U64_t       ullReplayCounter[WLANTL_MAX_TID];
 
-    // v_U32_t uBuffThresholdUsed;
+ /* It contains no of replay packets found per STA.
+    It is for debugging purpose only.*/
+  v_U32_t       ulTotalReplayPacketsDetected;
 
-    /* Value used to set LWM in FW. Initialized to 1/3* WLAN_STA_BMU_THRESHOLD_MAX
-       In the future, it can be dynamically adjusted if we find the reason to implement
-       such algorithm. */
-    v_U32_t uLwmThreshold;
+ /* Set when pairwise key is installed, if ptkInstalled is
+    1 then we have to encrypt the data irrespective of TL
+    state (CONNECTED/AUTHENTICATED) */
+  v_U8_t ptkInstalled;
 
-    //tx disable forced by Riva software
-    v_U16_t fcStaTxDisabled;
+  v_U32_t       linkCapacity;
 
-    /** HDD buffer status for packet scheduling. Once HDD
-     *  stores a new packet in a previously empty queue, it
-     *  will call TL interface to set the fields. The fields
-     *  will be cleaned by TL when TL can't fetch more packets
-     *  from the queue. */
-    // the fields are ucPktPending and ucACMask;
+#ifdef WLAN_FEATURE_RMC
+  WLANTL_RMC_SESSION *mcastSession[WLANTL_RMC_HASH_TABLE_SIZE];
+  vos_lock_t mcLock;
+#endif
 
-    /* Queue to keep unicast station management frame */
-    vos_list_t pStaManageQ;
+#ifdef WLAN_FEATURE_LINK_LAYER_STATS
 
-    /* 1 means replay check is needed for the station,
-     * 0 means replay check is not needed for the station*/
-    v_BOOL_t      ucIsReplayCheckValid;
+  /* Value of the averaged Data RSSI for this station */
+  v_S7_t                        rssiDataAvg;
 
-    /* It contains 48-bit replay counter per TID*/
-    v_U64_t       ullReplayCounter[WLANTL_MAX_TID];
+  /* Value of the averaged Data RSSI for this station in BMPS */
+  v_S7_t                        rssiDataAvgBmps;
 
-    /* It contains no of replay packets found per STA.
-       It is for debugging purpose only.*/
-    v_U32_t       ulTotalReplayPacketsDetected;
+  /* Value of the Alpha to calculate Data RSSI average */
+  v_S7_t                        rssiDataAlpha;
 
-    /* Set when pairwise key is installed, if ptkInstalled is
-       1 then we have to encrypt the data irrespective of TL
-       state (CONNECTED/AUTHENTICATED) */
-    v_U8_t ptkInstalled;
+  WLANTL_InterfaceStatsType         interfaceStats;
+#endif
+  /* BD Rate for transmitting ARP packets */
+  v_U8_t arpRate;
+  v_BOOL_t arpOnWQ5;
 
-    v_U32_t       linkCapacity;
-} WLANTL_STAClientType;
+  /* Disassoc in progress */
+  v_BOOL_t disassoc_progress;
+}WLANTL_STAClientType;
 
 /*---------------------------------------------------------------------------
   BAP Client type
 ---------------------------------------------------------------------------*/
-typedef struct {
-    /* flag that keeps track of registration; only one non-data BT-AMP client
-       allowed */
-    v_U8_t                    ucExists;
+typedef struct
+{
+  /* flag that keeps track of registration; only one non-data BT-AMP client
+     allowed */
+  v_U8_t                    ucExists;
 
-    /* pointer to the receive processing routine for non-data BT-AMP frames */
-    WLANTL_BAPRxCBType        pfnTlBAPRx;
+  /* pointer to the receive processing routine for non-data BT-AMP frames */
+  WLANTL_BAPRxCBType        pfnTlBAPRx;
 
-    /* pointer to the flush call back complete function */
-    WLANTL_FlushOpCompCBType    pfnFlushOpCompleteCb;
+  /* pointer to the flush call back complete function */
+  WLANTL_FlushOpCompCBType    pfnFlushOpCompleteCb;
 
-    /* pointer to the non-data BT-AMP frame pending transmission */
-    vos_pkt_t*                vosPendingDataBuff;
+  /* pointer to the non-data BT-AMP frame pending transmission */
+  vos_pkt_t*                vosPendingDataBuff;
 
-    /* BAP station ID */
-    v_U8_t                    ucBAPSTAId;
-} WLANTL_BAPClientType;
+  /* BAP station ID */
+  v_U8_t                    ucBAPSTAId;
+}WLANTL_BAPClientType;
 
 
 /*---------------------------------------------------------------------------
   Management Frame Client type
 ---------------------------------------------------------------------------*/
-typedef struct {
-    /* flag that keeps track of registration; only one management frame
-       client allowed */
-    v_U8_t                       ucExists;
+typedef struct
+{
+  /* flag that keeps track of registration; only one management frame
+     client allowed */
+  v_U8_t                       ucExists;
 
-    /* pointer to the receive processing routine for management frames */
-    WLANTL_MgmtFrmRxCBType       pfnTlMgmtFrmRx;
+  /* pointer to the receive processing routine for management frames */
+  WLANTL_MgmtFrmRxCBType       pfnTlMgmtFrmRx;
 
-    /* pointer to the management frame pending transmission */
-    vos_pkt_t*                   vosPendingDataBuff;
-} WLANTL_MgmtFrmClientType;
+  /* pointer to the management frame pending transmission */
+  vos_pkt_t*                   vosPendingDataBuff;
+}WLANTL_MgmtFrmClientType;
 
-typedef struct {
-    WLANTL_TrafficStatusChangedCBType  trafficCB;
-    WLANTL_HO_TRAFFIC_STATUS_TYPE      trafficStatus;
-    v_U32_t                            idleThreshold;
-    v_U32_t                            measurePeriod;
-    v_U32_t                            rtRXFrameCount;
-    v_U32_t                            rtTXFrameCount;
-    v_U32_t                            nrtRXFrameCount;
-    v_U32_t                            nrtTXFrameCount;
-    vos_timer_t                        trafficTimer;
-    v_PVOID_t                          usrCtxt;
+typedef struct
+{
+   WLANTL_TrafficStatusChangedCBType  trafficCB;
+   WLANTL_HO_TRAFFIC_STATUS_TYPE      trafficStatus;
+   v_U32_t                            idleThreshold;
+   v_U32_t                            measurePeriod;
+   v_U32_t                            rtRXFrameCount;
+   v_U32_t                            rtTXFrameCount;
+   v_U32_t                            nrtRXFrameCount;
+   v_U32_t                            nrtTXFrameCount;
+   vos_timer_t                        trafficTimer;
+   v_PVOID_t                          usrCtxt;
 } WLANTL_HO_TRAFFIC_STATUS_HANDLE_TYPE;
 
-typedef struct {
-    v_S7_t                          rssiValue;
-    v_U8_t                          triggerEvent[WLANTL_HS_NUM_CLIENT];
-    v_PVOID_t                       usrCtxt[WLANTL_HS_NUM_CLIENT];
-    v_U8_t                          whoIsClient[WLANTL_HS_NUM_CLIENT];
-    WLANTL_RSSICrossThresholdCBType crossCBFunction[WLANTL_HS_NUM_CLIENT];
-    v_U8_t                          numClient;
+typedef struct
+{
+   v_S7_t                          rssiValue;
+   v_U8_t                          triggerEvent[WLANTL_HS_NUM_CLIENT];
+   v_PVOID_t                       usrCtxt[WLANTL_HS_NUM_CLIENT];
+   v_U8_t                          whoIsClient[WLANTL_HS_NUM_CLIENT];
+   WLANTL_RSSICrossThresholdCBType crossCBFunction[WLANTL_HS_NUM_CLIENT];
+   v_U8_t                          numClient;
 } WLANTL_HO_RSSI_INDICATION_TYPE;
 
-typedef struct {
-    v_U8_t                             numThreshold;
-    v_U8_t                             regionNumber;
-    v_S7_t                             historyRSSI;
-    v_U8_t                             alpha;
-    v_U32_t                            sampleTime;
-    v_U32_t                            fwNotification;
+typedef struct
+{
+   v_U8_t                             numThreshold;
+   v_U8_t                             regionNumber;
+   v_S7_t                             historyRSSI;
+   v_U8_t                             alpha;
+   v_U32_t                            sampleTime;
+   v_U32_t                            fwNotification;
 } WLANTL_CURRENT_HO_STATE_TYPE;
 
-typedef struct {
-    WLANTL_HO_RSSI_INDICATION_TYPE       registeredInd[WLANTL_MAX_AVAIL_THRESHOLD];
-    WLANTL_CURRENT_HO_STATE_TYPE         currentHOState;
-    WLANTL_HO_TRAFFIC_STATUS_HANDLE_TYPE currentTraffic;
-    v_PVOID_t                            macCtxt;
-    vos_lock_t                           hosLock;
+typedef struct
+{
+   WLANTL_HO_RSSI_INDICATION_TYPE       registeredInd[WLANTL_MAX_AVAIL_THRESHOLD];
+   WLANTL_CURRENT_HO_STATE_TYPE         currentHOState;
+   WLANTL_HO_TRAFFIC_STATUS_HANDLE_TYPE currentTraffic;
+   v_PVOID_t                            macCtxt;
+   vos_lock_t                           hosLock;
 } WLANTL_HO_SUPPORT_TYPE;
+
+#ifdef WLAN_FEATURE_ROAM_SCAN_OFFLOAD
+#define ROAM_MAX_INDEX_NUM              50
+#define ROAM_PER_INDEX_TIME             500 /* (msec) */
+#define MIN_PKTS_TO_START_MONTIOR       10
+
+typedef struct
+{
+  v_U64_t lowRateRxPacketsRcvd;
+  v_U64_t totalPktRcvd;
+  v_U64_t time;
+}WLANTL_RoamTrafficStatsType;
+
+typedef struct {
+   v_U8_t running;
+   v_U8_t staId;
+   v_S7_t index;
+   v_U8_t intialPktToStart;
+   v_U8_t minPercentage;
+   v_U16_t minRate;
+   v_U16_t maxRate;
+   v_U32_t minPktRequired;
+   v_U64_t totalPkt;
+   v_U64_t timeToWait;
+   v_U64_t lowRatePkt;
+   v_U64_t lastTriggerTime;
+   WLANTL_RoamTrafficStatsType rxRoamStats[ROAM_MAX_INDEX_NUM];
+   void (*triggerRoamScanfn) (void *, v_U8_t);
+   void *hHal;
+}WLANTL_RoamMonitorType;
+#endif
 
 /*---------------------------------------------------------------------------
   TL control block type
 ---------------------------------------------------------------------------*/
-typedef struct {
-    /* TL configuration information */
-    WLANTL_ConfigInfoType     tlConfigInfo;
+typedef struct
+{
+  /* TL configuration information */
+  WLANTL_ConfigInfoType     tlConfigInfo;
 
-    /* list of the active stations */
-    WLANTL_STAClientType*      atlSTAClients[WLAN_MAX_STA_COUNT];
-
-
-    /* information on the management frame client */
-    WLANTL_MgmtFrmClientType  tlMgmtFrmClient;
-
-    /* information on the BT AMP client */
-    WLANTL_BAPClientType      tlBAPClient;
-
-    /* number of packets sent to BAL waiting for tx complete confirmation */
-    v_U16_t                   usPendingTxCompleteCount;
-
-    /* global suspend flag */
-    v_U8_t                    ucTxSuspended;
-
-    /* resource flag */
-    v_U32_t                   uResCount;
-
-    /* dummy vos buffer - used for chains */
-    vos_pkt_t*                vosDummyBuf;
-
-    /* temporary buffer for storing the packet that no longer fits */
-    vos_pkt_t*                vosTempBuf;
-
-    /* The value of the station id and AC for the cached buffer */
-    v_U8_t                    ucCachedSTAId;
-    v_U8_t                    ucCachedAC;
-
-    /* Last registered STA - until multiple sta support is added this will
-       be used always for tx */
-    v_U8_t                    ucRegisteredStaId;
-
-    /*Current TL STA used for TX*/
-    v_U8_t                    ucCurrentSTA;
-
-    WLANTL_REORDER_BUFFER_T   *reorderBufferPool; /* Allocate memory for [WLANTL_MAX_BA_SESSION] sessions */
-
-    WLANTL_HO_SUPPORT_TYPE    hoSupport;
-
-    v_BOOL_t                  bUrgent;
+  /* list of the active stations */
+  WLANTL_STAClientType*      atlSTAClients[WLAN_MAX_STA_COUNT];
 
 
-    /* resource flag */
-    v_U32_t bd_pduResCount;
+  /* information on the management frame client */
+  WLANTL_MgmtFrmClientType  tlMgmtFrmClient;
 
-    /* time interval to evaluate LWM mode*/
-    //vos_timer_t tThresholdSamplingTimer;
+  /* information on the BT AMP client */
+  WLANTL_BAPClientType      tlBAPClient;
+
+  /* number of packets sent to BAL waiting for tx complete confirmation */
+  v_U16_t                   usPendingTxCompleteCount;
+
+  /* global suspend flag */
+  v_U8_t                    ucTxSuspended;
+
+  /* resource flag */
+  v_U32_t                   uResCount;
+
+  /* dummy vos buffer - used for chains */
+  vos_pkt_t*                vosDummyBuf;
+
+  /* temporary buffer for storing the packet that no longer fits */
+  vos_pkt_t*                vosTempBuf;
+
+  /* The value of the station id and AC for the cached buffer */
+  v_U8_t                    ucCachedSTAId;
+  v_U8_t                    ucCachedAC;
+
+  /* Last registered STA - until multiple sta support is added this will
+     be used always for tx */
+  v_U8_t                    ucRegisteredStaId;
+
+  /*Current TL STA used for TX*/
+  v_U8_t                    ucCurrentSTA;
+
+  WLANTL_REORDER_BUFFER_T   *reorderBufferPool; /* Allocate memory for [WLANTL_MAX_BA_SESSION] sessions */
+
+  WLANTL_HO_SUPPORT_TYPE    hoSupport;
+
+  v_BOOL_t                  bUrgent;
+
+
+  /* resource flag */
+  v_U32_t bd_pduResCount;
+
+  /* time interval to evaluate LWM mode*/
+  //vos_timer_t tThresholdSamplingTimer;
 
 #if 0
-    //information fields for flow control
-    tFcTxParams_type tlFCInfo;
+  //information fields for flow control
+  tFcTxParams_type tlFCInfo;
 #endif
 
-    vos_pkt_t*                vosTxFCBuf;
+  vos_pkt_t*                vosTxFCBuf;
 
-    /* LWM mode is enabled or not for each station. Bit-wise operation.32 station maximum. */
-    //  v_U32_t uStaLwmMask;
+  /* LWM mode is enabled or not for each station. Bit-wise operation.32 station maximum. */
+  //  v_U32_t uStaLwmMask;
 
-    /* LWM event is reported by FW. */
-    //  v_U32_t uStaLwmEventReported;
+  /* LWM event is reported by FW. */
+  //  v_U32_t uStaLwmEventReported;
 
-    /** Multiple Station Scheduling and TL queue management.
-        4 HDD BC/MC data packet queue status is specified as Station 0's status. Weights used
-        in WFQ algorith are initialized in WLANTL_OPEN and contained in tlConfigInfo field.
-        Each station has fields of ucPktPending and AC mask to tell whether a AC has traffic
-        or not.
+  /** Multiple Station Scheduling and TL queue management.
+      4 HDD BC/MC data packet queue status is specified as Station 0's status. Weights used
+      in WFQ algorith are initialized in WLANTL_OPEN and contained in tlConfigInfo field.
+      Each station has fields of ucPktPending and AC mask to tell whether a AC has traffic
+      or not.
 
-        Stations are served in a round-robin fashion from highest priority to lowest priority.
-        The number of round-robin times of each prioirty equals to the WFQ weights and differetiates
-        the traffic of different prioirty. As such, stations can not provide low priority packets if
-        high priority packets are all served.
-        */
+      Stations are served in a round-robin fashion from highest priority to lowest priority.
+      The number of round-robin times of each prioirty equals to the WFQ weights and differetiates
+      the traffic of different prioirty. As such, stations can not provide low priority packets if
+      high priority packets are all served.
+      */
 
-    /* Currently served station id. Reuse ucCurrentSTA field. */
-    //v_U8_t uCurStaId;
+  /* Currently served station id. Reuse ucCurrentSTA field. */
+  //v_U8_t uCurStaId;
 
-    /* Current served station ID in round-robin method to traverse all stations.*/
-    WLANTL_ACEnumType uCurServedAC;
+  /* Current served station ID in round-robin method to traverse all stations.*/
+  WLANTL_ACEnumType uCurServedAC;
 
-    /* How many weights have not been served in current AC. */
-    v_U8_t ucCurLeftWeight;
+  WLANTL_SpoofMacAddr   spoofMacAddr;
 
-    /* BC/MC management queue. Current implementation uses queue size 1. Will check whether
-      size N is supported. */
-    vos_list_t pMCBCManageQ;
+  /* How many weights have not been served in current AC. */
+  v_U8_t ucCurLeftWeight;
 
-    v_U32_t sendFCFrame;
+  /* BC/MC management queue. Current implementation uses queue size 1. Will check whether
+    size N is supported. */
+  vos_list_t pMCBCManageQ;
 
-    v_U8_t done_once;
-    v_U8_t uFramesProcThres;
+  v_U32_t sendFCFrame;
+
+  v_U8_t done_once;
+  v_U8_t uFramesProcThres;
 #ifdef FEATURE_WLAN_TDLS
-    /*number of total TDLS peers registered to TL
-      Incremented at WLANTL_RegisterSTAClient(staType == WLAN_STA_TDLS)
-      Decremented at WLANTL_ClearSTAClient(staType == WLAN_STA_TDLS) */
-    v_U8_t        ucTdlsPeerCount;
+  /*number of total TDLS peers registered to TL
+    Incremented at WLANTL_RegisterSTAClient(staType == WLAN_STA_TDLS)
+    Decremented at WLANTL_ClearSTAClient(staType == WLAN_STA_TDLS) */
+  v_U8_t        ucTdlsPeerCount;
 #endif
-    /*whether we are in BMPS/UAPSD/WOWL mode, since the latter 2 need to be BMPS first*/
-    v_BOOL_t                  isBMPS;
-    /* Whether WDA_DS_TX_START_XMIT msg is pending or not */
-    v_BOOL_t   isTxTranmitMsgPending;
-} WLANTL_CbType;
+  /*whether we are in BMPS/UAPSD/WOWL mode, since the latter 2 need to be BMPS first*/
+  v_BOOL_t                  isBMPS;
+  /* Whether WDA_DS_TX_START_XMIT msg is pending or not */
+  v_BOOL_t   isTxTranmitMsgPending;
+
+#ifdef WLAN_FEATURE_RMC
+  WLANTL_RMC_SESSION *rmcSession[WLANTL_RMC_HASH_TABLE_SIZE];
+  vos_lock_t rmcLock;
+  v_U8_t multicastDuplicateDetectionEnabled;
+  v_U8_t rmcDataPathEnabled;
+  v_U32_t mcastDupCnt;
+#endif
+  WLANTL_MonRxCBType           pfnMonRx;
+  v_BOOL_t              isConversionReq;
+#ifdef WLAN_FEATURE_ROAM_SCAN_OFFLOAD
+  WLANTL_RoamMonitorType gDsRxRoamStats;
+#endif
+
+  uint8_t track_arp;
+  uint32_t txbd_token;
+}WLANTL_CbType;
+
 
 /*==========================================================================
 
@@ -865,11 +1015,11 @@ typedef struct {
 v_U32_t
 WLANTL_GetFrames
 (
-    v_PVOID_t       pAdapter,
-    vos_pkt_t     **ppFrameDataBuff,
-    v_U32_t         uSize,
-    v_U8_t          uFlowMask,
-    v_BOOL_t*       pbUrgent
+  v_PVOID_t       pAdapter,
+  vos_pkt_t     **ppFrameDataBuff,
+  v_U32_t         uSize,
+  v_U8_t          uFlowMask,
+  v_BOOL_t*       pbUrgent
 );
 
 /*==========================================================================
@@ -903,9 +1053,9 @@ WLANTL_GetFrames
 VOS_STATUS
 WLANTL_TxComp
 (
-    v_PVOID_t      pAdapter,
-    vos_pkt_t     *pFrameDataBuff,
-    VOS_STATUS     wTxStatus
+  v_PVOID_t      pAdapter,
+  vos_pkt_t     *pFrameDataBuff,
+  VOS_STATUS     wTxStatus
 );
 
 /*==========================================================================
@@ -942,8 +1092,8 @@ WLANTL_TxComp
 VOS_STATUS
 WLANTL_RxFrames
 (
-    v_PVOID_t      pAdapter,
-    vos_pkt_t     *pFrameDataBuff
+  v_PVOID_t      pAdapter,
+  vos_pkt_t     *pFrameDataBuff
 );
 
 /*==========================================================================
@@ -984,9 +1134,9 @@ WLANTL_RxFrames
 VOS_STATUS
 WLANTL_RxCachedFrames
 (
-    WLANTL_CbType*  pTLCb,
-    v_U8_t          ucSTAId,
-    vos_pkt_t*      vosDataBuff
+  WLANTL_CbType*  pTLCb,
+  v_U8_t          ucSTAId,
+  vos_pkt_t*      vosDataBuff
 );
 
 /*==========================================================================
@@ -1014,8 +1164,8 @@ WLANTL_RxCachedFrames
 VOS_STATUS
 WLANTL_ResourceCB
 (
-    v_PVOID_t       pAdapter,
-    v_U32_t         uCount
+  v_PVOID_t       pAdapter,
+  v_U32_t         uCount
 );
 
 
@@ -1046,8 +1196,8 @@ WLANTL_ResourceCB
 VOS_STATUS
 WLANTL_ProcessMainMessage
 (
-    v_PVOID_t        pAdapter,
-    vos_msg_t*       message
+  v_PVOID_t        pAdapter,
+  vos_msg_t*       message
 );
 
 /*==========================================================================
@@ -1080,8 +1230,8 @@ WLANTL_ProcessMainMessage
 VOS_STATUS
 WLANTL_ProcessTxMessage
 (
-    v_PVOID_t        pAdapter,
-    vos_msg_t*       message
+  v_PVOID_t        pAdapter,
+  vos_msg_t*       message
 );
 
 /*==========================================================================
@@ -1106,8 +1256,8 @@ WLANTL_ProcessTxMessage
 VOS_STATUS
 WLAN_TLGetNextTxIds
 (
-    v_PVOID_t    pAdapter,
-    v_U8_t*      pucSTAId
+  v_PVOID_t    pAdapter,
+  v_U8_t*      pucSTAId
 );
 
 /*==========================================================================
@@ -1134,8 +1284,8 @@ WLAN_TLGetNextTxIds
 VOS_STATUS
 WLANTL_CleanCB
 (
-    WLANTL_CbType*  pTLCb,
-    v_U8_t          ucEmpty
+  WLANTL_CbType*  pTLCb,
+  v_U8_t          ucEmpty
 );
 
 /*==========================================================================
@@ -1163,8 +1313,8 @@ WLANTL_CleanCB
 VOS_STATUS
 WLANTL_CleanSTA
 (
-    WLANTL_STAClientType*  ptlSTAClient,
-    v_U8_t                 ucEmpty
+  WLANTL_STAClientType*  ptlSTAClient,
+  v_U8_t                 ucEmpty
 );
 
 /*==========================================================================
@@ -1199,7 +1349,7 @@ WLANTL_CleanSTA
 VOS_STATUS
 WLANTL_GetTxResourcesCB
 (
-    v_PVOID_t        pvosGCtx
+  v_PVOID_t        pvosGCtx
 );
 
 /*==========================================================================
@@ -1227,15 +1377,15 @@ WLANTL_GetTxResourcesCB
 void
 WLANTL_PrepareBDHeader
 (
-    vos_pkt_t*      vosDataBuff,
-    v_PVOID_t*      ppvBDHeader,
-    v_MACADDR_t*    pvDestMacAdddr,
-    v_U8_t          ucDisableFrmXtl,
-    VOS_STATUS*     pvosSTAtus,
-    v_U16_t*        usPktLen,
-    v_U8_t          ucQosEnabled,
-    v_U8_t          ucWDSEnabled,
-    v_U8_t          extraHeadSpace
+  vos_pkt_t*      vosDataBuff,
+  v_PVOID_t*      ppvBDHeader,
+  v_MACADDR_t*    pvDestMacAdddr,
+  v_U8_t          ucDisableFrmXtl,
+  VOS_STATUS*     pvosSTAtus,
+  v_U16_t*        usPktLen,
+  v_U8_t          ucQosEnabled,
+  v_U8_t          ucWDSEnabled,
+  v_U8_t          extraHeadSpace
 );
 
 /*==========================================================================
@@ -1270,13 +1420,13 @@ WLANTL_PrepareBDHeader
 VOS_STATUS
 WLANTL_Translate8023To80211Header
 (
-    vos_pkt_t*      vosDataBuff,
-    VOS_STATUS*     pvosStatus,
-    WLANTL_CbType*  pTLCb,
-    v_U8_t          *pucStaId,
-    v_U8_t          ucUP,
-    v_U8_t          *ucWDSEnabled,
-    v_U8_t          *extraHeadSpace
+  vos_pkt_t*      vosDataBuff,
+  VOS_STATUS*     pvosStatus,
+  WLANTL_CbType*  pTLCb,
+  v_U8_t          *pucStaId,
+  WLANTL_MetaInfoType* pTlMetaInfo,
+  v_U8_t          *ucWDSEnabled,
+  v_U8_t          *extraHeadSpace
 );
 /*==========================================================================
   FUNCTION    WLANTL_Translate80211To8023Header
@@ -1310,14 +1460,21 @@ WLANTL_Translate8023To80211Header
 VOS_STATUS
 WLANTL_Translate80211To8023Header
 (
-    vos_pkt_t*      vosDataBuff,
-    VOS_STATUS*     pvosStatus,
-    v_U16_t         usActualHLen,
-    v_U8_t          ucHeaderLen,
-    WLANTL_CbType*  pTLCb,
-    v_U8_t          ucSTAId
+  vos_pkt_t*      vosDataBuff,
+  VOS_STATUS*     pvosStatus,
+  v_U16_t         usActualHLen,
+  v_U8_t          ucHeaderLen,
+  WLANTL_CbType*  pTLCb,
+  v_U8_t          ucSTAId,
+  v_BOOL_t       bForwardIAPPwithLLC
 );
 
+VOS_STATUS
+WLANTL_MonTranslate80211To8023Header
+(
+  vos_pkt_t*      vosDataBuff,
+  WLANTL_CbType*  pTLCb
+);
 /*==========================================================================
   FUNCTION    WLANTL_FindFrameTypeBcMcUc
 
@@ -1351,10 +1508,10 @@ WLANTL_Translate80211To8023Header
 VOS_STATUS
 WLANTL_FindFrameTypeBcMcUc
 (
-    WLANTL_CbType *pTLCb,
-    v_U8_t        ucSTAId,
-    vos_pkt_t     *vosDataBuff,
-    v_U8_t        *pucBcMcUc
+  WLANTL_CbType *pTLCb,
+  v_U8_t        ucSTAId,
+  vos_pkt_t     *vosDataBuff,
+  v_U8_t        *pucBcMcUc
 );
 
 /*==========================================================================
@@ -1378,8 +1535,8 @@ WLANTL_FindFrameTypeBcMcUc
 VOS_STATUS
 WLANTL_MgmtFrmRxDefaultCb
 (
-    v_PVOID_t  pAdapter,
-    v_PVOID_t  vosBuff
+  v_PVOID_t  pAdapter,
+  v_PVOID_t  vosBuff
 );
 
 /*==========================================================================
@@ -1403,9 +1560,9 @@ WLANTL_MgmtFrmRxDefaultCb
 VOS_STATUS
 WLANTL_BAPRxDefaultCb
 (
-    v_PVOID_t    pAdapter,
-    vos_pkt_t*   vosDataBuff,
-    WLANTL_BAPFrameEnumType frameType
+  v_PVOID_t    pAdapter,
+  vos_pkt_t*   vosDataBuff,
+  WLANTL_BAPFrameEnumType frameType
 );
 
 /*==========================================================================
@@ -1430,10 +1587,10 @@ WLANTL_BAPRxDefaultCb
 VOS_STATUS
 WLANTL_STARxDefaultCb
 (
-    v_PVOID_t               pAdapter,
-    vos_pkt_t*              vosDataBuff,
-    v_U8_t                  ucSTAId,
-    WLANTL_RxMetaInfoType*  pRxMetaInfo
+  v_PVOID_t               pAdapter,
+  vos_pkt_t*              vosDataBuff,
+  v_U8_t                  ucSTAId,
+  WLANTL_RxMetaInfoType*  pRxMetaInfo
 );
 
 /*==========================================================================
@@ -1458,11 +1615,11 @@ WLANTL_STARxDefaultCb
 VOS_STATUS
 WLANTL_STAFetchPktDefaultCb
 (
-    v_PVOID_t              pAdapter,
-    v_U8_t*                pucSTAId,
-    WLANTL_ACEnumType      ucAC,
-    vos_pkt_t**            vosDataBuff,
-    WLANTL_MetaInfoType*   tlMetaInfo
+  v_PVOID_t              pAdapter,
+  v_U8_t*                pucSTAId,
+  WLANTL_ACEnumType      ucAC,
+  vos_pkt_t**            vosDataBuff,
+  WLANTL_MetaInfoType*   tlMetaInfo
 );
 
 /*==========================================================================
@@ -1491,9 +1648,9 @@ WLANTL_STAFetchPktDefaultCb
 VOS_STATUS
 WLANTL_TxCompDefaultCb
 (
-    v_PVOID_t      pAdapter,
-    vos_pkt_t*     vosDataBuff,
-    VOS_STATUS     wTxSTAtus
+ v_PVOID_t      pAdapter,
+ vos_pkt_t*     vosDataBuff,
+ VOS_STATUS     wTxSTAtus
 );
 
 /*==========================================================================
@@ -1523,10 +1680,10 @@ WLANTL_TxCompDefaultCb
 VOS_STATUS
 WLANTL_PackUpTriggerFrame
 (
-    WLANTL_CbType*            pTLCb,
-    WLANTL_TxCompCBType       pfnSTATxComp,
-    v_U8_t                    ucSTAId,
-    WLANTL_ACEnumType         ucAC
+  WLANTL_CbType*            pTLCb,
+  WLANTL_TxCompCBType       pfnSTATxComp,
+  v_U8_t                    ucSTAId,
+  WLANTL_ACEnumType         ucAC
 );
 
 /*==========================================================================
@@ -1554,9 +1711,9 @@ WLANTL_PackUpTriggerFrame
 VOS_STATUS
 WLANTL_TxCompTriggFrameSI
 (
-    v_PVOID_t      pvosGCtx,
-    vos_pkt_t*     vosDataBuff,
-    VOS_STATUS     wTxSTAtus
+  v_PVOID_t      pvosGCtx,
+  vos_pkt_t*     vosDataBuff,
+  VOS_STATUS     wTxSTAtus
 );
 
 /*==========================================================================
@@ -1584,9 +1741,9 @@ WLANTL_TxCompTriggFrameSI
 VOS_STATUS
 WLANTL_TxCompTriggFrameDI
 (
-    v_PVOID_t      pvosGCtx,
-    vos_pkt_t*     vosDataBuff,
-    VOS_STATUS     wTxSTAtus
+ v_PVOID_t      pvosGCtx,
+ vos_pkt_t*     vosDataBuff,
+ VOS_STATUS     wTxSTAtus
 );
 
 /*==========================================================================
@@ -1602,17 +1759,34 @@ WLANTL_TxCompTriggFrameDI
 ============================================================================*/
 VOS_STATUS WLANTL_ReadRSSI
 (
-    v_PVOID_t        pAdapter,
-    v_PVOID_t        pBDHeader,
-    v_U8_t           STAid
+   v_PVOID_t        pAdapter,
+   v_PVOID_t        pBDHeader,
+   v_U8_t           STAid
 );
 
+/*==========================================================================
+
+   FUNCTION
+
+   DESCRIPTION   Read SNR value out of a RX BD
+
+   PARAMETERS: Caller must validate all parameters
+
+   RETURN VALUE
+
+============================================================================*/
+VOS_STATUS WLANTL_ReadSNR
+(
+   v_PVOID_t        pAdapter,
+   v_PVOID_t        pBDHeader,
+   v_U8_t           STAid
+);
 
 
 void WLANTL_PowerStateChangedCB
 (
-    v_PVOID_t pAdapter,
-    tPmcState newState
+   v_PVOID_t pAdapter,
+   tPmcState newState
 );
 
 /*==========================================================================
@@ -1646,9 +1820,104 @@ void WLANTL_PowerStateChangedCB
 VOS_STATUS
 WLANTL_FwdPktToHDD
 (
-    v_PVOID_t       pvosGCtx,
-    vos_pkt_t*     pvosDataBuff,
-    v_U8_t          ucSTAId
+  v_PVOID_t       pvosGCtx,
+  vos_pkt_t*     pvosDataBuff,
+  v_U8_t          ucSTAId
 );
+
+#ifdef WLAN_FEATURE_RMC
+VOS_STATUS WLANTL_RmcInit
+(
+     v_PVOID_t   pAdapter
+);
+
+VOS_STATUS WLANTL_RmcDeInit
+(
+    v_PVOID_t   pAdapter
+);
+
+
+tANI_U8 WLANTL_RmcHashRmcSession ( v_MACADDR_t   *pMcastAddr );
+
+
+WLANTL_RMC_SESSION *WLANTL_RmcLookUpRmcSession
+(
+    WLANTL_RMC_SESSION *rmcSession[],
+    v_MACADDR_t     *pMcastAddr
+);
+
+WLANTL_RMC_SESSION *WLANTL_RmcAddRmcSession
+(
+    WLANTL_RMC_SESSION *rmcSession[],
+    v_MACADDR_t   *pMcastAddr
+);
+
+tANI_U8
+WLANTL_RmcDeleteRmcSession
+(
+    WLANTL_RMC_SESSION *rmcSession[],
+    v_MACADDR_t   *pMcastAddr
+);
+
+VOS_STATUS
+WLANTL_ProcessRmcCommand
+(
+    WLANTL_CbType*  pTLCb,
+    v_MACADDR_t    *pMcastAddr,
+    tANI_U32        command
+);
+
+/*=============================================================================
+  FUNCTION    WLANTL_IsDuplicateMcastFrm
+
+  DESCRIPTION
+    This function checks for duplicast multicast frames and drops them.
+
+  DEPENDENCIES
+
+  PARAMETERS
+
+   IN
+
+   pClientSTA  : Pointer to WLANTL_STAClientType
+   aucBDHeader : Pointer to BD header
+
+  RETURN VALUE
+
+    VOS_FALSE:  This frame is not a duplicate
+
+    VOS_TRUE:   This frame is a duplicate
+
+==============================================================================*/
+v_U8_t
+WLANTL_IsDuplicateMcastFrm
+(
+    WLANTL_STAClientType *pClientSTA,
+    vos_pkt_t* vosDataBuff
+);
+
+/*=============================================================================
+  FUNCTION    WLANTL_McastDeleteAllEntries
+
+  DESCRIPTION
+    This function removes all multicast entries used for duplicate detection
+
+  DEPENDENCIES
+
+  PARAMETERS
+
+   IN
+
+   pClientSTA  : Pointer to WLANTL_STAClientType
+
+  RETURN VALUE
+
+    None
+
+==============================================================================*/
+void
+WLANTL_McastDeleteAllEntries(WLANTL_STAClientType * pClientSTA);
+
+#endif /*WLAN_FEATURE_RMC*/
 
 #endif /* #ifndef WLAN_QCT_TLI_H */

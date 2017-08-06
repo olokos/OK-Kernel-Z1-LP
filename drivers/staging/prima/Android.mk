@@ -1,13 +1,16 @@
 # Android makefile for the WLAN Module
 
+# Assume no targets will be supported
+WLAN_CHIPSET :=
+
 # Build/Package options for 8960 target
-ifeq ($(call is-board-platform,msm8960),true)
+ifeq ($(TARGET_BOARD_PLATFORM),msm8960)
 WLAN_CHIPSET := prima
 WLAN_SELECT := CONFIG_PRIMA_WLAN=m
 endif
 
-# Build/Package options for 8974, 8226 targets
-ifeq ($(call is-board-platform-in-list,msm8974 msm8226),true)
+# Build/Package options for 8916, 8974, 8226, 8610, 8909, 8952, 8937, 8953 targets
+ifneq (,$(filter msm8916 msm8974 msm8226 msm8610 msm8909 msm8952 msm8937 msm8953 msm8953,$(TARGET_BOARD_PLATFORM)))
 WLAN_CHIPSET := pronto
 WLAN_SELECT := CONFIG_PRONTO_WLAN=m
 endif
@@ -33,14 +36,22 @@ else
     WLAN_BLD_DIR := vendor/qcom/opensource/wlan
 endif
 
-ifeq ($(call is-android-codename,JELLY_BEAN),true)
+# DLKM_DIR was moved for JELLY_BEAN (PLATFORM_SDK 16)
+ifeq (1,$(filter 1,$(shell echo "$$(( $(PLATFORM_SDK_VERSION) >= 16 ))" )))
        DLKM_DIR := $(TOP)/device/qcom/common/dlkm
 else
        DLKM_DIR := build/dlkm
 endif
 
-ifeq ($(WLAN_PROPRIETARY),1)
-# For the proprietary driver the firmware files are handled here
+# Copy WCNSS_cfg.dat file from firmware_bin/ folder to target out directory.
+ifeq ($(WLAN_PROPRIETARY),0)
+
+$(shell mkdir -p $(TARGET_OUT_ETC)/firmware/wlan/prima)
+$(shell rm -f $(TARGET_OUT_ETC)/firmware/wlan/prima/WCNSS_cfg.dat)
+$(shell cp $(LOCAL_PATH)/firmware_bin/WCNSS_cfg.dat $(TARGET_OUT_ETC)/firmware/wlan/prima)
+
+else
+
 include $(CLEAR_VARS)
 LOCAL_MODULE       := WCNSS_qcom_wlan_nv.bin
 LOCAL_MODULE_TAGS  := optional
@@ -67,11 +78,22 @@ include $(BUILD_PREBUILT)
 
 endif
 
+ifeq ($(TARGET_KERNEL_VERSION),)
+$(info "WLAN: TARGET_KERNEL_VERSION is not defined, assuming default")
+TARGET_KERNEL_SOURCE := kernel
+KERNEL_TO_BUILD_ROOT_OFFSET := ../
+endif
+
+ifeq ($(KERNEL_TO_BUILD_ROOT_OFFSET),)
+$(info "WLAN: KERNEL_TO_BUILD_ROOT_OFFSET is not defined, assuming default")
+KERNEL_TO_BUILD_ROOT_OFFSET := ../
+endif
+
 # Build wlan.ko as either prima_wlan.ko or pronto_wlan.ko
 ###########################################################
 
 # This is set once per LOCAL_PATH, not per (kernel) module
-KBUILD_OPTIONS := WLAN_ROOT=../$(WLAN_BLD_DIR)/prima
+KBUILD_OPTIONS := WLAN_ROOT=$(KERNEL_TO_BUILD_ROOT_OFFSET)$(WLAN_BLD_DIR)/prima
 # We are actually building wlan.ko here, as per the
 # requirement we are specifying <chipset>_wlan.ko as LOCAL_MODULE.
 # This means we need to rename the module to <chipset>_wlan.ko
@@ -87,8 +109,8 @@ PATCHLEVEL=$(shell grep -w "PATCHLEVEL =" $(TOP)/kernel/Makefile | sed 's/^PATCH
 include $(CLEAR_VARS)
 LOCAL_MODULE              := $(WLAN_CHIPSET)_wlan.ko
 LOCAL_MODULE_KBUILD_NAME  := wlan.ko
-LOCAL_MODULE_TAGS         := optional
-LOCAL_MODULE_DEBUG_ENABLE := false
+LOCAL_MODULE_TAGS         := debug
+LOCAL_MODULE_DEBUG_ENABLE := true
 LOCAL_MODULE_PATH         := $(TARGET_OUT)/lib/modules/$(WLAN_CHIPSET)
 include $(DLKM_DIR)/AndroidKernelModule.mk
 ###########################################################
@@ -97,14 +119,6 @@ include $(DLKM_DIR)/AndroidKernelModule.mk
 $(shell mkdir -p $(TARGET_OUT)/lib/modules; \
         ln -sf /system/lib/modules/$(WLAN_CHIPSET)/$(WLAN_CHIPSET)_wlan.ko \
                $(TARGET_OUT)/lib/modules/wlan.ko)
-
-ifeq ($(WLAN_PROPRIETARY),1)
-$(shell mkdir -p $(TARGET_OUT_ETC)/firmware/wlan/prima; \
-        ln -sf /persist/WCNSS_qcom_wlan_nv.bin \
-        $(TARGET_OUT_ETC)/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin; \
-        ln -sf /data/misc/wifi/WCNSS_qcom_cfg.ini \
-        $(TARGET_OUT_ETC)/firmware/wlan/prima/WCNSS_qcom_cfg.ini)
-endif
 
 endif # DLKM check
 

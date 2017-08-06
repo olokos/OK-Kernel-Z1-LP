@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -17,6 +17,12 @@
  * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
+ */
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
  */
 
 #ifndef __TL_DEBUG_H__
@@ -46,19 +52,19 @@
 #ifdef TL_DEBUG_LOG2
 #define TLLOG2(x0)  x0
 #else
-#define TLLOG2(x0)
+ #define TLLOG2(x0)
 #endif
 
 #ifdef TL_DEBUG_LOG3
 #define TLLOG3(x0)  x0
 #else
-#define TLLOG3(x0)
+ #define TLLOG3(x0)
 #endif
 
 #ifdef TL_DEBUG_LOG4
 #define TLLOG4(x0)  x0
 #else
-#define TLLOG4(x0)
+ #define TLLOG4(x0)
 #endif
 
 

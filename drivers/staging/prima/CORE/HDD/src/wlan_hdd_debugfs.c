@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2015 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -28,30 +28,41 @@
 #ifdef WLAN_OPEN_SOURCE
 #include <wlan_hdd_includes.h>
 #include <wlan_hdd_wowl.h>
+#include <vos_sched.h>
 
 #define MAX_USER_COMMAND_SIZE_WOWL_ENABLE 8
 #define MAX_USER_COMMAND_SIZE_WOWL_PATTERN 512
 #define MAX_USER_COMMAND_SIZE_FRAME 4096
 
-static ssize_t wcnss_wowenable_write(struct file *file,
-                                     const char __user *buf, size_t count, loff_t *ppos) {
-    hdd_adapter_t *pAdapter = (hdd_adapter_t *)file->private_data;
-
+static ssize_t __wcnss_wowenable_write(struct file *file,
+               const char __user *buf, size_t count, loff_t *ppos)
+{
+    hdd_adapter_t *pAdapter;
+    hdd_context_t *pHddCtx;
     char cmd[MAX_USER_COMMAND_SIZE_WOWL_ENABLE + 1];
     char *sptr, *token;
     v_U8_t wow_enable = 0;
     v_U8_t wow_mp = 0;
     v_U8_t wow_pbm = 0;
 
-    if ((NULL == pAdapter) || (WLAN_HDD_ADAPTER_MAGIC != pAdapter->magic)) {
+    ENTER();
+
+    pAdapter = (hdd_adapter_t *)file->private_data;
+    if ((NULL == pAdapter) || (WLAN_HDD_ADAPTER_MAGIC != pAdapter->magic))
+    {
         VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
                   "%s: Invalid adapter or adapter has invalid magic.",
                   __func__);
-
+        return -EINVAL;
+    }
+    pHddCtx = WLAN_HDD_GET_CTX(pAdapter);
+    if (0 != wlan_hdd_validate_context(pHddCtx))
+    {
         return -EINVAL;
     }
 
-    if (!sme_IsFeatureSupportedByFW(WOW)) {
+    if (!sme_IsFeatureSupportedByFW(WOW))
+    {
         VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                   "%s: Wake-on-Wireless feature is not supported "
                   "in firmware!", __func__);
@@ -59,7 +70,8 @@ static ssize_t wcnss_wowenable_write(struct file *file,
         return -EINVAL;
     }
 
-    if (count > MAX_USER_COMMAND_SIZE_WOWL_ENABLE) {
+    if (count > MAX_USER_COMMAND_SIZE_WOWL_ENABLE)
+    {
         VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                   "%s: Command length is larger than %d bytes.",
                   __func__, MAX_USER_COMMAND_SIZE_WOWL_ENABLE);
@@ -82,11 +94,12 @@ static ssize_t wcnss_wowenable_write(struct file *file,
 
     /* Disable wow */
     if (!wow_enable) {
-        if (!hdd_exit_wowl(pAdapter, eWOWL_EXIT_USER)) {
-            VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
-                      "%s: hdd_exit_wowl failed!", __func__);
+        if (!hdd_exit_wowl(pAdapter, eWOWL_EXIT_USER))
+        {
+          VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
+                    "%s: hdd_exit_wowl failed!", __func__);
 
-            return -EFAULT;
+          return -EFAULT;
         }
 
         return count;
@@ -110,20 +123,34 @@ static ssize_t wcnss_wowenable_write(struct file *file,
     if (wow_pbm > 1)
         wow_pbm = 1;
 
-    if (!hdd_enter_wowl(pAdapter, wow_mp, wow_pbm)) {
-        VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
-                  "%s: hdd_enter_wowl failed!", __func__);
+    if (!hdd_enter_wowl(pAdapter, wow_mp, wow_pbm))
+    {
+      VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
+                "%s: hdd_enter_wowl failed!", __func__);
 
-        return -EFAULT;
+      return -EFAULT;
     }
-
+    EXIT();
     return count;
 }
 
-static ssize_t wcnss_wowpattern_write(struct file *file,
-                                      const char __user *buf, size_t count, loff_t *ppos) {
-    hdd_adapter_t *pAdapter = (hdd_adapter_t *)file->private_data;
+static ssize_t wcnss_wowenable_write(struct file *file,
+               const char __user *buf, size_t count, loff_t *ppos)
+{
+    ssize_t ret;
 
+    vos_ssr_protect(__func__);
+    ret = __wcnss_wowenable_write(file, buf, count, ppos);
+    vos_ssr_unprotect(__func__);
+
+    return ret;
+}
+
+static ssize_t __wcnss_wowpattern_write(struct file *file,
+               const char __user *buf, size_t count, loff_t *ppos)
+{
+    hdd_adapter_t *pAdapter;
+    hdd_context_t *pHddCtx;
     char cmd[MAX_USER_COMMAND_SIZE_WOWL_PATTERN + 1];
     char *sptr, *token;
     v_U8_t pattern_idx = 0;
@@ -131,15 +158,24 @@ static ssize_t wcnss_wowpattern_write(struct file *file,
     char *pattern_buf;
     char *pattern_mask;
 
-    if ((NULL == pAdapter) || (WLAN_HDD_ADAPTER_MAGIC != pAdapter->magic)) {
+    ENTER();
+
+    pAdapter = (hdd_adapter_t *)file->private_data;
+    if ((NULL == pAdapter) || (WLAN_HDD_ADAPTER_MAGIC != pAdapter->magic))
+    {
         VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
                    "%s: Invalid adapter or adapter has invalid magic.",
                    __func__);
 
         return -EINVAL;
     }
-
-    if (!sme_IsFeatureSupportedByFW(WOW)) {
+    pHddCtx = WLAN_HDD_GET_CTX(pAdapter);
+    if (0 != wlan_hdd_validate_context(pHddCtx))
+    {
+        return -EINVAL;
+    }
+    if (!sme_IsFeatureSupportedByFW(WOW))
+    {
         VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                    "%s: Wake-on-Wireless feature is not supported "
                    "in firmware!", __func__);
@@ -147,7 +183,8 @@ static ssize_t wcnss_wowpattern_write(struct file *file,
         return -EINVAL;
     }
 
-    if (count > MAX_USER_COMMAND_SIZE_WOWL_PATTERN) {
+    if (count > MAX_USER_COMMAND_SIZE_WOWL_PATTERN)
+    {
         VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                    "%s: Command length is larger than %d bytes.",
                    __func__, MAX_USER_COMMAND_SIZE_WOWL_PATTERN);
@@ -199,17 +236,29 @@ static ssize_t wcnss_wowpattern_write(struct file *file,
 
     hdd_add_wowl_ptrn_debugfs(pAdapter, pattern_idx, pattern_offset,
                               pattern_buf, pattern_mask);
-
+    EXIT();
     return count;
 }
 
-static ssize_t wcnss_patterngen_write(struct file *file,
-                                      const char __user *buf, size_t count, loff_t *ppos) {
-    hdd_adapter_t *pAdapter = (hdd_adapter_t *)file->private_data;
+static ssize_t wcnss_wowpattern_write(struct file *file,
+               const char __user *buf, size_t count, loff_t *ppos)
+{
+    ssize_t ret;
+
+    vos_ssr_protect(__func__);
+    ret = __wcnss_wowpattern_write(file, buf, count, ppos);
+    vos_ssr_unprotect(__func__);
+
+    return ret;
+}
+
+static ssize_t __wcnss_patterngen_write(struct file *file,
+               const char __user *buf, size_t count, loff_t *ppos)
+{
+    hdd_adapter_t *pAdapter;
     hdd_context_t *pHddCtx;
     tSirAddPeriodicTxPtrn *addPeriodicTxPtrnParams;
     tSirDelPeriodicTxPtrn *delPeriodicTxPtrnParams;
-
     char *cmd, *sptr, *token;
     v_U8_t pattern_idx = 0;
     v_U8_t pattern_duration = 0;
@@ -217,17 +266,25 @@ static ssize_t wcnss_patterngen_write(struct file *file,
     v_U16_t pattern_len = 0;
     v_U16_t i = 0;
 
-    if ((NULL == pAdapter) || (WLAN_HDD_ADAPTER_MAGIC != pAdapter->magic)) {
+    ENTER();
+
+    pAdapter = (hdd_adapter_t *)file->private_data;
+    if ((NULL == pAdapter) || (WLAN_HDD_ADAPTER_MAGIC != pAdapter->magic))
+    {
         VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
                    "%s: Invalid adapter or adapter has invalid magic.",
                    __func__);
 
         return -EINVAL;
     }
-
     pHddCtx = WLAN_HDD_GET_CTX(pAdapter);
+    if (0 != wlan_hdd_validate_context(pHddCtx))
+    {
+        return -EINVAL;
+    }
 
-    if (!sme_IsFeatureSupportedByFW(WLAN_PERIODIC_TX_PTRN)) {
+    if (!sme_IsFeatureSupportedByFW(WLAN_PERIODIC_TX_PTRN))
+    {
         VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                    "%s: Periodic Tx Pattern Offload feature is not supported "
                    "in firmware!", __func__);
@@ -238,7 +295,8 @@ static ssize_t wcnss_patterngen_write(struct file *file,
     /* Get command from user */
     if (count <= MAX_USER_COMMAND_SIZE_FRAME)
         cmd = vos_mem_malloc(count + 1);
-    else {
+    else
+    {
         VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                    "%s: Command length is larger than %d bytes.",
                    __func__, MAX_USER_COMMAND_SIZE_FRAME);
@@ -246,14 +304,16 @@ static ssize_t wcnss_patterngen_write(struct file *file,
         return -EINVAL;
     }
 
-    if (!cmd) {
+    if (!cmd)
+    {
         VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                   "%s: Memory allocation for cmd failed!", __func__);
 
         return -EFAULT;
     }
 
-    if (copy_from_user(cmd, buf, count)) {
+    if (copy_from_user(cmd, buf, count))
+    {
         vos_mem_free(cmd);
         return -EFAULT;
     }
@@ -267,7 +327,8 @@ static ssize_t wcnss_patterngen_write(struct file *file,
     if (kstrtou8(token, 0, &pattern_idx))
         goto failure;
 
-    if (pattern_idx > (MAXNUM_PERIODIC_TX_PTRNS - 1)) {
+    if (pattern_idx > (MAXNUM_PERIODIC_TX_PTRNS - 1))
+    {
         VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                    "%s: Pattern index %d is not in the range (0 ~ %d).",
                    __func__, pattern_idx, MAXNUM_PERIODIC_TX_PTRNS - 1);
@@ -283,10 +344,12 @@ static ssize_t wcnss_patterngen_write(struct file *file,
         goto failure;
 
     /* Delete pattern using index if duration is 0 */
-    if (!pattern_duration) {
+    if (!pattern_duration)
+    {
         delPeriodicTxPtrnParams =
             vos_mem_malloc(sizeof(tSirDelPeriodicTxPtrn));
-        if (!delPeriodicTxPtrnParams) {
+        if (!delPeriodicTxPtrnParams)
+        {
             VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                       "%s: Memory allocation for delPeriodicTxPtrnParams "
                       "failed!", __func__);
@@ -301,7 +364,8 @@ static ssize_t wcnss_patterngen_write(struct file *file,
 
         /* Delete pattern */
         if (eHAL_STATUS_SUCCESS != sme_DelPeriodicTxPtrn(pHddCtx->hHal,
-                delPeriodicTxPtrnParams)) {
+                                                delPeriodicTxPtrnParams))
+        {
             VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                        "%s: sme_DelPeriodicTxPtrn() failed!", __func__);
 
@@ -315,7 +379,8 @@ static ssize_t wcnss_patterngen_write(struct file *file,
     }
 
     /* Check if it's in connected state only when adding patterns */
-    if (!hdd_connIsConnected(WLAN_HDD_GET_STATION_CTX_PTR(pAdapter))) {
+    if (!hdd_connIsConnected(WLAN_HDD_GET_STATION_CTX_PTR(pAdapter)))
+    {
         VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                    "%s: Not in Connected state!", __func__);
 
@@ -332,15 +397,18 @@ static ssize_t wcnss_patterngen_write(struct file *file,
     pattern_len = strlen(pattern_buf);
 
     /* Since the pattern is a hex string, 2 characters represent 1 byte. */
-    if (pattern_len % 2) {
+    if (pattern_len % 2)
+    {
         VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                    "%s: Malformed pattern!", __func__);
 
         goto failure;
-    } else
+    }
+    else
         pattern_len >>= 1;
 
-    if (pattern_len < 14 || pattern_len > PERIODIC_TX_PTRN_MAX_SIZE) {
+    if (pattern_len < 14 || pattern_len > PERIODIC_TX_PTRN_MAX_SIZE)
+    {
         VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                    "%s: Not an 802.3 frame!", __func__);
 
@@ -348,7 +416,8 @@ static ssize_t wcnss_patterngen_write(struct file *file,
     }
 
     addPeriodicTxPtrnParams = vos_mem_malloc(sizeof(tSirAddPeriodicTxPtrn));
-    if (!addPeriodicTxPtrnParams) {
+    if (!addPeriodicTxPtrnParams)
+    {
         VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                   "%s: Memory allocation for addPeriodicTxPtrnParams "
                   "failed!", __func__);
@@ -364,9 +433,10 @@ static ssize_t wcnss_patterngen_write(struct file *file,
                  pAdapter->macAddressCurrent.bytes, 6);
 
     /* Extract the pattern */
-    for(i = 0; i < addPeriodicTxPtrnParams->ucPtrnSize; i++) {
+    for(i = 0; i < addPeriodicTxPtrnParams->ucPtrnSize; i++)
+    {
         addPeriodicTxPtrnParams->ucPattern[i] =
-            (hdd_parse_hex(pattern_buf[0]) << 4) + hdd_parse_hex(pattern_buf[1]);
+        (hdd_parse_hex(pattern_buf[0]) << 4) + hdd_parse_hex(pattern_buf[1]);
 
         /* Skip to next byte */
         pattern_buf += 2;
@@ -374,7 +444,8 @@ static ssize_t wcnss_patterngen_write(struct file *file,
 
     /* Add pattern */
     if (eHAL_STATUS_SUCCESS != sme_AddPeriodicTxPtrn(pHddCtx->hHal,
-            addPeriodicTxPtrnParams)) {
+                                            addPeriodicTxPtrnParams))
+    {
         VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                    "%s: sme_AddPeriodicTxPtrn() failed!", __func__);
 
@@ -384,6 +455,7 @@ static ssize_t wcnss_patterngen_write(struct file *file,
 
     vos_mem_free(addPeriodicTxPtrnParams);
     vos_mem_free(cmd);
+    EXIT();
     return count;
 
 failure:
@@ -391,12 +463,57 @@ failure:
     return -EINVAL;
 }
 
-static int wcnss_debugfs_open(struct inode *inode, struct file *file) {
-    if (inode->i_private) {
-        file->private_data = inode->i_private;
+static ssize_t wcnss_patterngen_write(struct file *file,
+               const char __user *buf, size_t count, loff_t *ppos)
+{
+    ssize_t ret;
+
+    vos_ssr_protect(__func__);
+    ret = __wcnss_patterngen_write(file, buf, count, ppos);
+    vos_ssr_unprotect(__func__);
+
+    return ret;
+
+}
+
+static int __wcnss_debugfs_open(struct inode *inode, struct file *file)
+{
+    hdd_adapter_t *pAdapter;
+    hdd_context_t *pHddCtx;
+
+    ENTER();
+
+    pAdapter = (hdd_adapter_t *)file->private_data;
+    if ((NULL == pAdapter) || (WLAN_HDD_ADAPTER_MAGIC != pAdapter->magic))
+    {
+        VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
+                   "%s: Invalid adapter or adapter has invalid magic.",
+                   __func__);
+        return -EINVAL;
+    }
+    pHddCtx = WLAN_HDD_GET_CTX(pAdapter);
+    if (0 != wlan_hdd_validate_context(pHddCtx))
+    {
+        return -EINVAL;
     }
 
+    if (inode->i_private)
+    {
+        file->private_data = inode->i_private;
+    }
+    EXIT();
     return 0;
+}
+
+static int wcnss_debugfs_open(struct inode *inode, struct file *file)
+{
+    int ret;
+
+    vos_ssr_protect(__func__);
+    ret = __wcnss_debugfs_open(inode, file);
+    vos_ssr_unprotect(__func__);
+
+    return ret;
 }
 
 static const struct file_operations fops_wowenable = {
@@ -420,7 +537,8 @@ static const struct file_operations fops_patterngen = {
     .llseek = default_llseek,
 };
 
-VOS_STATUS hdd_debugfs_init(hdd_adapter_t *pAdapter) {
+VOS_STATUS hdd_debugfs_init(hdd_adapter_t *pAdapter)
+{
     hdd_context_t *pHddCtx = WLAN_HDD_GET_CTX(pAdapter);
     pHddCtx->debugfs_phy = debugfs_create_dir("wlan_wcnss", 0);
 
@@ -428,21 +546,22 @@ VOS_STATUS hdd_debugfs_init(hdd_adapter_t *pAdapter) {
         return VOS_STATUS_E_FAILURE;
 
     if (NULL == debugfs_create_file("wow_enable", S_IRUSR | S_IWUSR,
-                                    pHddCtx->debugfs_phy, pAdapter, &fops_wowenable))
+        pHddCtx->debugfs_phy, pAdapter, &fops_wowenable))
         return VOS_STATUS_E_FAILURE;
 
     if (NULL == debugfs_create_file("wow_pattern", S_IRUSR | S_IWUSR,
-                                    pHddCtx->debugfs_phy, pAdapter, &fops_wowpattern))
+        pHddCtx->debugfs_phy, pAdapter, &fops_wowpattern))
         return VOS_STATUS_E_FAILURE;
 
     if (NULL == debugfs_create_file("pattern_gen", S_IRUSR | S_IWUSR,
-                                    pHddCtx->debugfs_phy, pAdapter, &fops_patterngen))
+        pHddCtx->debugfs_phy, pAdapter, &fops_patterngen))
         return VOS_STATUS_E_FAILURE;
 
     return VOS_STATUS_SUCCESS;
 }
 
-void hdd_debugfs_exit(hdd_context_t *pHddCtx) {
+void hdd_debugfs_exit(hdd_context_t *pHddCtx)
+{
     debugfs_remove_recursive(pHddCtx->debugfs_phy);
 }
 #endif /* #ifdef WLAN_OPEN_SOURCE */

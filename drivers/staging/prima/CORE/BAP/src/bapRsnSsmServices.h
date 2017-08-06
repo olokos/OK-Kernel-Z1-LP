@@ -1,25 +1,5 @@
 /*
- * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
- *
- * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
- *
- *
- * Permission to use, copy, modify, and/or distribute this software for
- * any purpose with or without fee is hereby granted, provided that the
- * above copyright notice and this permission notice appear in all
- * copies.
- *
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
- * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
- * AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
- * DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
- * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
- * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
- * PERFORMANCE OF THIS SOFTWARE.
- */
-/*
- * Copyright (c) 2012, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -40,11 +20,16 @@
  */
 
 /*
- * Airgo Networks, Inc proprietary. All rights reserved.
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+ */
+
+/*
  * $File: //depot/software/projects/feature_branches/gen5_phase1/os/linux/classic/ap/apps/include/aniSsmServices.h $
  *
  * Contains definitions of common types that the SSM exports to other
- * modules.
+ * modules. 
  *
  * Author:      Mayank D. Upadhyay
  * Date:        23-January-2003
@@ -86,7 +71,7 @@
 
 /*
  * PMKSA ID data type
- * (PMKID is an HMAC-SHA1-128 value)
+ * (PMKID is an HMAC-SHA1-128 value) 
  */
 #define ANI_AAG_PMKID_SIZE 16
 
@@ -152,7 +137,7 @@ typedef struct sAniSsmUserId {
 
 /*
  * PMKSA ID data type
- * (PMKID is an HMAC-SHA1-128 value)
+ * (PMKID is an HMAC-SHA1-128 value) 
  */
 typedef v_U8_t tAniSsmPmkId[ANI_AAG_PMKID_SIZE];
 
@@ -214,7 +199,7 @@ aniSsmIsStaMacAllowed(const tAniMacAddr staMac, const tAniSSID *ssid);
  * open-auth in the lowest security level, the STA is required to
  * initiate EAPOL in order to establish WEP keys, or WEP cannot be not
  * used.)
- *
+ * 
  * @param secMode the security mode that is in force
  * @param macAuthType the MAC-level authentication type to check
  * @param ieLen is set 0 if no RSN IE is present, or to the number of
@@ -231,7 +216,7 @@ aniSsmIsStaMacAllowed(const tAniMacAddr staMac, const tAniSSID *ssid);
  */
 v_BOOL_t
 aniSsmIsSecModeAllowed(v_U32_t secMode,
-                       tAniAuthType macAuthType,
+                       tAniAuthType macAuthType, 
                        v_U8_t ieLen,
                        v_U8_t *ieData,
                        v_BOOL_t bpIndicator,

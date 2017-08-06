@@ -1,25 +1,5 @@
 /*
- * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
- *
- * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
- *
- *
- * Permission to use, copy, modify, and/or distribute this software for
- * any purpose with or without fee is hereby granted, provided that the
- * above copyright notice and this permission notice appear in all
- * copies.
- *
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
- * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
- * AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
- * DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
- * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
- * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
- * PERFORMANCE OF THIS SOFTWARE.
- */
-/*
- * Copyright (c) 2012, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -40,7 +20,12 @@
  */
 
 /*
- * Woodside Networks, Inc proprietary. All rights reserved.
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+ */
+
+/*
  * File: $File: //depot/software/projects/feature_branches/gen5_phase1/os/linux/classic/ap/apps/include/aniErrors.h $
  *
  * Contains definitions of error codes that are globally visible
@@ -133,7 +118,7 @@
 #define ANI_E_CLI_SYS_INTERNAL_ERROR            -1047 // Internal error
 #define ANI_E_CLI_OLD_PASSWORD_MISSING          -1048 // Old password missing
 #define ANI_E_CLI_NEW_PASSWORD_MISSING          -1049 // New password
-// missing
+                                                      // missing
 #define ANI_E_CLI_WEP_KEY_LEN_ERROR             -1051 // key length error
 #define ANI_E_CLI_WEP_KEY_HEX_ERROR             -1052 // no hex character
 #define ANI_E_CLI_WPA_MODES_CFG_ERROR           -1053 // WPA config error
@@ -152,14 +137,14 @@
 #define ANI_E_CLI_AUTH_ZONE_NAME_INVALID        -1066 // zone name invalid
 #define ANI_E_CLI_OLD_PASSWORD_INVALID          -1067 // Old password invalid
 #define ANI_E_CLI_NO_EXT_RAD_ON_NONSECP         -1068 // Cannot add ext auth-server on
-// non-SEC/P with RAD proxying on
+                                                      // non-SEC/P with RAD proxying on
 #define ANI_E_CLI_NO_EXT_AUTH_ZONE_ALLOWED      -1069 // Cannot add ext auth-zone on
-// with RAD proxying on
+                                                      // with RAD proxying on
 #define ANI_E_CLI_PORTAL_ZONE_AUTO_CONFIGURED   -1070 // Cannot manage portal auth-zone
 #define ANI_E_CLI_DEL_REQ_ON_REF_AUTH_SERVER    -1071 // Cannot delete auth-server
-// that is in a zone
+                                                      // that is in a zone
 #define ANI_E_CLI_DEL_REQ_ON_REF_AUTH_ZONE      -1072 // Cannot delete auth-zone
-// that is used by SSID
+                                                      // that is used by SSID
 #define ANI_E_CLI_INVALID_INTERIM_UPDT_VALUE    -1073 // Invalid Accounting interim update interval
 #define ANI_E_RANGE_END_AAG_CLI                 -1199
 // ...CLI Range ends here
@@ -168,7 +153,7 @@
 #define ANI_E_MIC_FAILED                        -1200 // A MIC check failed
 #define ANI_E_REPLAY_CHECK_FAILED               -1201 // Replay Ctr mismatch
 #define ANI_E_RADIUS_PROFILE_MISSING            -1202 // User profile
-// not found
+                                                      // not found
 #define ANI_E_AUTH_FAILED                       -1203 // Authentication failed
 #define ANI_E_RADIUS_PRIV_LEVEL_MISSING         -1204 // ANI_ADMIN_LEVEL is missing
 #define ANI_E_RADIUS_PRIV_LEVEL_INCORRECT       -1205 // ANI_ADMIN_LEVEL is incorrect

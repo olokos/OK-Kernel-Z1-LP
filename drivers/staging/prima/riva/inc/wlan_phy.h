@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,60 +18,44 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+
 /*
- * Copyright (c) 2012, The Linux Foundation. All rights reserved.
- *
- * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
- *
- *
- * Permission to use, copy, modify, and/or distribute this software for
- * any purpose with or without fee is hereby granted, provided that the
- * above copyright notice and this permission notice appear in all
- * copies.
- *
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
- * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
- * AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
- * DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
- * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
- * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
- * PERFORMANCE OF THIS SOFTWARE.
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
  */
 
 #ifndef WLAN_PHY_H
 #define WLAN_PHY_H
-/*============================================================================
-@file wlan_phy.h
+/*============================================================================ 
+@file wlan_phy.h 
 
 Contains definitions of all PHY related structures that aree needed by FTM/PTT
-
-Copyright (c) 2007 Qualcomm Technologies, Inc. All Rights Reserved.
-Qualcomm Technologies Proprietary and Confidential
-
 ============================================================================*/
 #include <wlan_nv.h>
-
+ 
 /* Currently this structure holds the information about the current calibration mode.
 In future, if anymore info is needed, that can be added here */
-typedef PACKED_PRE struct PACKED_POST {
+typedef PACKED_PRE struct PACKED_POST
+{
     tANI_U8 currentCalibration;
 } sCalibrationInfo;
 
 typedef PACKED_PRE struct PACKED_POST {
     tANI_S16 I;   //ADC sample of PHY_I_RAIL
     tANI_S16 Q;   //ADC sample of PHY_Q_RAIL
-} tIQSamples;
+}tIQSamples;
 
 typedef tIQSamples tIQAdc;
 typedef tIQSamples tIQDac;
 
-typedef PACKED_PRE struct PACKED_POST {
+typedef PACKED_PRE struct PACKED_POST
+{
     tANI_U8 maxGainIndex;
     tANI_U8 topGainDb;
     tANI_U8 bottomGainDb;
     tANI_U8 unused[1];
-} tAsicAgc;
+}tAsicAgc;
 
 #define TXFIR_MEM                           QWLAN_TXFIR_TXCAL_MEM0_MREG
 #define TXFIR_MEM_GAIN_MULT                 (16)    //bytes per gain
@@ -83,30 +67,30 @@ typedef tIQAdc tTxCarrierError;
 #define DEFAULT_INTERFRAME_SPACE    (ONE_MICROSECOND * 10)  //10 microseconds
 
 typedef enum {
-    PHYDBG_TX_IDLE = 0,
-    PHYDBG_TX_START = 1,
-    PHYDBG_TX_WARMUP = 2,
-    PHYDBG_TX_INFD = 3,
-    PHYDBG_TX_CMD = 4,
-    PHYDBG_TX_SVC = 5,
-    PHYDBG_TX_PYLDF = 6,
-    PHYDBG_TX_PYLDR = 7,
-    PHYDBG_TX_CRC = 8,
-    PHYDBG_TX_FLUSH = 9,
-    PHYDBG_TX_TXDONEWAIT = 10,
-    PHYDBG_TX_TIFWAIT = 11
+   PHYDBG_TX_IDLE = 0,
+   PHYDBG_TX_START = 1,
+   PHYDBG_TX_WARMUP = 2,
+   PHYDBG_TX_INFD = 3,
+   PHYDBG_TX_CMD = 4,
+   PHYDBG_TX_SVC = 5,
+   PHYDBG_TX_PYLDF = 6,
+   PHYDBG_TX_PYLDR = 7,
+   PHYDBG_TX_CRC = 8,
+   PHYDBG_TX_FLUSH = 9,
+   PHYDBG_TX_TXDONEWAIT = 10,
+   PHYDBG_TX_TIFWAIT = 11
 } ePhyDbgTxStatus;
 
 typedef enum {
-    PHYDBG_PREAMBLE_OFDM,
-    PHYDBG_PREAMBLE_GREENFIELD,
-    PHYDBG_PREAMBLE_MIXED,
-    PHYDBG_PREAMBLE_SHORTB,
-    PHYDBG_PREAMBLE_LONGB,
+   PHYDBG_PREAMBLE_OFDM,
+   PHYDBG_PREAMBLE_GREENFIELD,
+   PHYDBG_PREAMBLE_MIXED,
+   PHYDBG_PREAMBLE_SHORTB,
+   PHYDBG_PREAMBLE_LONGB,
 
-    PHYDBG_LDPC_PREAMBLE_OFDM = 0x10,
-    PHYDBG_LDPC_PREAMBLE_GREENFIELD = 0x11,
-    PHYDBG_LDPC_PREAMBLE_MIXED = 0x12
+   PHYDBG_LDPC_PREAMBLE_OFDM = 0x10,
+   PHYDBG_LDPC_PREAMBLE_GREENFIELD = 0x11,
+   PHYDBG_LDPC_PREAMBLE_MIXED = 0x12
 } ePhyDbgPreamble;
 
 
@@ -123,13 +107,13 @@ typedef enum {
 
 
 typedef PACKED_PRE struct PACKED_POST {
-    tIQAdc rx0;
+   tIQAdc rx0;
 } tGrabRamSample;
 
 
 enum {
-    GRABRAM_RAWADC = 0,
-    GRABRAM_POSTIQ
+   GRABRAM_RAWADC = 0,
+   GRABRAM_POSTIQ
 };
 typedef tANI_U32 eGrabRamSampleType;
 
@@ -151,23 +135,26 @@ typedef tANI_S16 t2Decimal;
 //so this reserves space in our structures to allow floating point measurements
 #endif
 
-typedef enum {
+typedef enum
+{
     PHY_RX_CHAIN_0 = 0,
 
     PHY_MAX_RX_CHAINS = 1,
     PHY_ALL_RX_CHAINS,
     PHY_NO_RX_CHAINS
-} ePhyRxChains;
+}ePhyRxChains;
 
-typedef enum {
+typedef enum
+{
     PHY_I_RAIL = 0,
     PHY_Q_RAIL = 1,
     PHY_NUM_IQ_RAILS
-} ePhyIQ;
+}ePhyIQ;
 
 //[RY] extend total gain steps to 24
 
-enum {
+enum
+{
     TX_GAIN_STEP_0,
     TX_GAIN_STEP_1,
     TX_GAIN_STEP_2,
@@ -232,86 +219,92 @@ typedef tANI_U32 eGainSteps;
 typedef PACKED_PRE struct PACKED_POST {
     tANI_U8  dpdCalFailCnt;                     //Count for number of times DPD cal failed.
     tANI_U8  dpdCalSuccessCnt;                  //Count for number of times DPD cal passed.
+    tANI_U8  dpdColdBootRepeatCalStatus;
+    tANI_U8  dpdLastIteration;
     tANI_S16 dpd_threshold[DPD_RESPONSE_SIZE];
     tANI_S16 dpd_aoffset[DPD_RESPONSE_SIZE];
     tANI_S16 dpd_again[DPD_RESPONSE_SIZE];
     tANI_S16 dpd_poffset[DPD_RESPONSE_SIZE];
     tANI_S16 dpd_pgain[DPD_RESPONSE_SIZE];
-} sDPDcorrectionCalValues;
+    tANI_S32 dpd_sample[20];
+    tANI_U8  dpd_try;
+    tANI_U8  band;
+}sDPDcorrectionCalValues;
 
 typedef PACKED_PRE struct PACKED_POST {
     sDPDcorrectionCalValues dpd[PHY_MAX_TX_CHAINS];
-} sTxChainsDPDCalValues;
+}sTxChainsDPDCalValues;
 
 
 //[RY] RX IQ correction coefficients Memory
 typedef PACKED_PRE struct PACKED_POST {
     tANI_S9 coeff_i[5];
     tANI_S9 coeff_q[5];
-} sIQCalValues;
+}sIQCalValues;
 
 //[RY], added for RIVA
 typedef PACKED_PRE struct PACKED_POST {
     tANI_S9 iq_ampimb_coeff;
     tANI_S16 txloleakage_i;     // raw data is 6-bit 2's compliment
     tANI_S16 txloleakage_q;     // raw data is 6-bit 2's compliment
-} sTXIQCalValues;
+}sTXIQCalValues;
 
 //[RY], added for RIVA
 typedef PACKED_PRE struct PACKED_POST {
     tANI_S9 iqphaseimb_coeff_i[5];
     tANI_S9 iqphaseimb_coeff_q[5];
-} sTXIQPhaseImbCalValues;
+}sTXIQPhaseImbCalValues;
 
 typedef PACKED_PRE struct PACKED_POST {
     sIQCalValues iq[PHY_MAX_RX_CHAINS];
-} sRxChainsIQCalValues;
+}sRxChainsIQCalValues;
 
 //[RY] change for PRIMA
 typedef PACKED_PRE struct PACKED_POST {
     sTXIQCalValues iq[PHY_MAX_TX_CHAINS];
     sTXIQPhaseImbCalValues iqImb[PHY_MAX_TX_CHAINS];
-} sTxChainsIQCalValues;
+}sTxChainsIQCalValues;
 
 typedef PACKED_PRE struct PACKED_POST {
     tANI_S9 co_i[3];
     tANI_S9 co_q[3];
-} sHKIQCalValues;
+}sHKIQCalValues;
 
 typedef PACKED_PRE struct PACKED_POST {
     sHKIQCalValues co[PHY_MAX_TX_CHAINS];
-} sTxChainsHKIQCalValues;
+}sTxChainsHKIQCalValues;
 
 typedef PACKED_PRE struct PACKED_POST {
     tANI_U8 lna_code;    //wlan_lna_5g_control1,wl_5g_lna_load_ctune
-    tANI_U8 gm_code;     //wlan_rxgm_5g_control4,wlgm_ctune
-} sLnaBandCalValues;
+    tANI_U8 gm_code;     //wlan_rxgm_5g_control4,wlgm_ctune 
+}sLnaBandCalValues;
 
 typedef PACKED_PRE struct PACKED_POST {
     sLnaBandCalValues lnaCode[PHY_MAX_RX_CHAINS];
-} sTxChainsLnaBandCalValues;
+}sTxChainsLnaBandCalValues;
 
 typedef tANI_U16 t_mW;       //milliWatts
 typedef tANI_U8 tPwrTemplateIndex;   //5-bit number used as the index into the tx gain tables
 
 typedef PACKED_PRE struct PACKED_POST {
     tANI_U8 txPowerAdc[PHY_MAX_TX_CHAINS];
-} sTxChainsPowerAdcReadings;
+}sTxChainsPowerAdcReadings;
 
-typedef PACKED_PRE struct PACKED_POST {
+typedef PACKED_PRE struct PACKED_POST
+{
     tANI_U8 agcGain;
-} tRxGain;
+}tRxGain;
 
 typedef PACKED_PRE struct PACKED_POST {
     tANI_U8 rx[PHY_MAX_RX_CHAINS];
-} sRxChainsData;
+}sRxChainsData;
 
 typedef sRxChainsData sRxChainsRssi;
 typedef sRxChainsData sRxChainsAgcDisable;
 
 typedef PACKED_PRE struct PACKED_POST {
     tANI_BOOLEAN rx[PHY_MAX_RX_CHAINS];
-} sRxChainsBoolean;
+}sRxChainsBoolean;
 
 typedef sRxChainsBoolean sRxChainsAgcEnable;
 
@@ -319,17 +312,19 @@ typedef sRxChainsBoolean sRxChainsAgcEnable;
 typedef tRxGain sAgcGainLut[NUM_AGC_GAINS];
 
 
-typedef PACKED_PRE struct PACKED_POST {
+typedef PACKED_PRE struct PACKED_POST
+{
     tANI_S6 iLo;
     tANI_S6 qLo;
-} sTxFirLoCorrect;
+}sTxFirLoCorrect;
 
 typedef tIQAdc sTxLoCorrectBB[PHY_MAX_TX_CHAINS][NUM_TX_GAIN_STEPS];
 
-typedef PACKED_PRE struct PACKED_POST {
+typedef PACKED_PRE struct PACKED_POST
+{
     tANI_U32 txIqLoCache[PHY_MAX_TX_CHAINS][NUM_TX_GAIN_STEPS][4];
     tANI_U32 spatialRotation;
-} tAsicTxFir;
+}tAsicTxFir;
 
 //Tx Power Config
 //A collection of selected calibrated power points at selected frequencies.
@@ -364,10 +359,11 @@ typedef PACKED_PRE struct PACKED_POST {
 
 typedef tANI_U8 tTxGainCombo;        //7-bit gain value used to get the power measurement
 
-typedef PACKED_PRE struct PACKED_POST {
+typedef PACKED_PRE struct PACKED_POST
+{
     tPowerDetect min;
     tPowerDetect max;
-} tPwrTemplateRange;
+}tPwrTemplateRange;
 
 
 
@@ -379,25 +375,28 @@ typedef PACKED_PRE struct PACKED_POST {
     We just need to be careful not to interpret a pre-existing table's txGain as extra precision.
 */
 
-typedef union {
-    tTxGainCombo txGain;               //7-bit gain used to measure the pwrDetAdc value
-    tANI_U8 hi8_adjustedPwrDet;        //if the MSB is set in adjustedPwrDet, then these are extra bits of precision
-} uExtraLutBits;
+ typedef union
+ {
+     tTxGainCombo txGain;               //7-bit gain used to measure the pwrDetAdc value
+     tANI_U8 hi8_adjustedPwrDet;        //if the MSB is set in adjustedPwrDet, then these are extra bits of precision
+ }uExtraLutBits;
 
 
-typedef PACKED_PRE struct PACKED_POST {
+typedef PACKED_PRE struct PACKED_POST
+{
     t2Decimal min;  //sometimes used for comparing chain powers
     t2Decimal max;  //sometimes used for comparing chain powers
-} tPowerdBmRange;       //absolute power measurement precision maintained to two decimal places
+}tPowerdBmRange;        //absolute power measurement precision maintained to two decimal places
 
 
 typedef tANI_U16 tRfADCVal;
 typedef tRfADCVal tTempADCVal;
 
-typedef PACKED_PRE struct PACKED_POST {
+typedef PACKED_PRE struct PACKED_POST
+{
     tRfADCVal pdadc_offset;
     tANI_U8 reserved[2];
-} tTpcParams;
+}tTpcParams;
 
 
 //these definitions used as indexing to power per channel per rate table stored in NV
@@ -407,55 +406,60 @@ typedef PACKED_PRE struct PACKED_POST {
 /* TX Power Calibration & Report Types */
 
 
-typedef PACKED_PRE struct PACKED_POST {
-    tANI_U8  temperatureAdc;                //= 5 bit temperature measured at time sample was taken
-    tANI_U8  txGain;                        //= 7 bit gain value used to get the power measurement
-    tANI_U8  pwrDetAdc;                     //= 8 bit ADC power detect value
-    tANI_U8  reserved;
-    uAbsPwrPrecision absPowerMeasured;      //= dBm measurement, will be truncated to two decimal places
-} tTpcCalPoint;
-
-
-typedef PACKED_PRE struct PACKED_POST {
-    tANI_U16 numTpcCalPoints;
-    tANI_U16 reserved;
-    tTpcCalPoint chain[MAX_TPC_CAL_POINTS];
-} tTpcChainData;
-
-
-typedef PACKED_PRE struct PACKED_POST {
-    tANI_U16 freq;                                          //frequency in MHz
-    tANI_U16 reserved;
-    tTpcChainData empirical[PHY_MAX_TX_CHAINS];  //TPC samples passed in
-} tTpcFreqData;
-
-typedef PACKED_PRE struct PACKED_POST {
-    tANI_U8 numChannels;
-    tANI_U8 reserved[3];
-    tTpcFreqData calValues[MAX_TPC_CHANNELS];
-} sTpcFreqCalTable;
-
-
+ typedef PACKED_PRE struct PACKED_POST
+ {
+     tANI_U8  temperatureAdc;                //= 5 bit temperature measured at time sample was taken
+     tANI_U8  txGain;                        //= 7 bit gain value used to get the power measurement
+     tANI_U8  pwrDetAdc;                     //= 8 bit ADC power detect value
+     tANI_U8  reserved;
+     uAbsPwrPrecision absPowerMeasured;      //= dBm measurement, will be truncated to two decimal places
+ }tTpcCalPoint;
+ 
+ 
+ typedef PACKED_PRE struct PACKED_POST
+ {
+     tANI_U16 numTpcCalPoints;
+     tANI_U16 reserved;
+     tTpcCalPoint chain[MAX_TPC_CAL_POINTS];
+ }tTpcChainData;
+ 
+ 
+ typedef PACKED_PRE struct PACKED_POST
+ {
+     tANI_U16 freq;                                          //frequency in MHz
+     tANI_U16 reserved;
+     tTpcChainData empirical[PHY_MAX_TX_CHAINS];  //TPC samples passed in
+ }tTpcFreqData;
+ 
+ typedef PACKED_PRE struct PACKED_POST
+ {
+     tANI_U8 numChannels;
+     tANI_U8 reserved[3];
+     tTpcFreqData calValues[MAX_TPC_CHANNELS];
+ }sTpcFreqCalTable;
+ 
+ 
 typedef PACKED_PRE struct PACKED_POST {
     tPowerDetect lut;                   //7-bit value in the power Lookup Table
     tANI_U8 reserved[3];
-
+    
     uAbsPwrPrecision abs;               //LUT value conversion to absolute dBm
-} tTxPowerLutOutput;
+}tTxPowerLutOutput;
 
 typedef PACKED_PRE struct PACKED_POST {
     tANI_U8      gain;                  //8-bit coarse(bits 4-7) & fine(bits 0-3) gain commanded for the current index
     tPowerDetect adc;                   //8-bit power ADC sampled during the packet preamble
     tANI_U16 rawAdc;                   //11-bit power raw ADC sampled
-
+    
     tTxPowerLutOutput indexMinMatch;    //minimum LUT matching power that satisfies the power template index setting
     tTxPowerLutOutput indexMaxMatch;    //maximum LUT matching power that satisfies the power template index setting
     tTxPowerLutOutput output;           //output power values corresponding to power ADC index
-} tTxChainPower;
+}tTxChainPower;
 
 extern const tRfChannelProps rfChannels[NUM_RF_CHANNELS];
 
-typedef enum {
+typedef enum
+{
     RF_CAL_TONE_28NEG,
     RF_CAL_TONE_24NEG,
     RF_CAL_TONE_20NEG,
@@ -475,7 +479,7 @@ typedef enum {
 
     MIN_RF_TONE = RF_CAL_TONE_28NEG,
     MAX_RF_TONE = RF_CAL_TONE_28POS
-} eRfTones;
+}eRfTones;
 
 typedef tANI_U8 tDcoCorrect;
 typedef tANI_S8 tIm2Correct;
@@ -484,29 +488,29 @@ typedef PACKED_PRE struct PACKED_POST {
     tDcoCorrect IDcoCorrect;
     tDcoCorrect QDcoCorrect;
     tANI_U8     dcRange;
-} tRxDcoCorrect;
+}tRxDcoCorrect;
 
 typedef PACKED_PRE struct PACKED_POST {
     tRxDcoCorrect dco[PHY_MAX_RX_CHAINS];
-} tRxChainsDcoCorrections;
+}tRxChainsDcoCorrections;
 
 typedef PACKED_PRE struct PACKED_POST {
     tIm2Correct ICorrect;
     tIm2Correct QCorrect;
-} tRxIm2Correct;
+}tRxIm2Correct;
 
 typedef PACKED_PRE struct PACKED_POST {
     tRxIm2Correct dco[PHY_MAX_RX_CHAINS];
-} tRxChainsIm2Corrections;
+}tRxChainsIm2Corrections;
 
 typedef PACKED_PRE struct PACKED_POST {
     tDcoCorrect IDcoCorrect;
     tDcoCorrect QDcoCorrect;
-} tTxLoCorrect;
+}tTxLoCorrect;
 
 typedef PACKED_PRE struct PACKED_POST {
     tTxLoCorrect txLo[PHY_MAX_TX_CHAINS];
-} sTxChainsLoCorrections;
+}sTxChainsLoCorrections;
 
 
 //tDcoCorrect is needed to define rf specific structures
@@ -522,62 +526,69 @@ typedef PACKED_PRE struct PACKED_POST {
 #define MAX_RF_DCO_VALUE        (NUM_RF_DCO_VALUES - 1)
 
 
-typedef PACKED_PRE struct PACKED_POST {
+typedef PACKED_PRE struct PACKED_POST
+{
     tANI_U16 gainReg1;   //GEMINI_REG_RX_GC_0 (lna + mix + tia + bq1 + bq2 + pga)
-} tRfRxGain;
+}tRfRxGain;
 
 
-typedef PACKED_PRE struct PACKED_POST {
+typedef PACKED_PRE struct PACKED_POST
+{
     tANI_U16 bbf_gain_cnt;
     tANI_U16 bbf_lin_adj;
     tANI_U16 lo_mix_da_gain_cntl;
     tANI_U16 pa_gain_cntl;
     tANI_U16 da_pa_bias_1_cnt;
     tANI_U16 da_pa_bias_2_cntl;
-} tRfTxGain;
-
-typedef PACKED_PRE struct PACKED_POST {
+}tRfTxGain;
+ 
+typedef PACKED_PRE struct PACKED_POST
+{
     //TODO:define this struct for Gemini
     tANI_U8 rxIf;
     tANI_U8 txIf;
     tANI_U8 txRf;
     tANI_U8 reserved;
-} sRfSpecificFilterSettings;
+}sRfSpecificFilterSettings;
 
 typedef sRfSpecificFilterSettings sRfChannelFilterSettings[NUM_RF_CHANNELS];
 
 
-typedef PACKED_PRE struct PACKED_POST {
+typedef PACKED_PRE struct PACKED_POST
+{
     tANI_U8 hdet_ctl_ext_atten;
     tANI_U8 hdet_dcoc_code;
     tANI_U8 hdet_dcoc_ib_rcal_en;
     tANI_U8 hdet_dcoc_ib_scal_en;
-} sRfNvCalValues; //stored in QFUSE
+}sRfNvCalValues;  //stored in QFUSE
 
 
 
-typedef enum {
+typedef enum
+{
     SYNTH_UNLOCKED,
     SYNTH_LOCK
-} eRfSynthLock;
+}eRfSynthLock;
 
-typedef enum {
+typedef enum
+{
     TEMP_SENSOR_PA,
     TEMP_SENSOR_RX
-} eRfTempSensor;
+}eRfTempSensor;
 
-typedef enum {
+typedef enum
+{
     TEMPERATURE_BIN_0,          //-30 to 5 C
     TEMPERATURE_BIN_1,          //5 to 45 C
     TEMPERATURE_BIN_2,          //45 to 85 C
     TEMPERATURE_BIN_3,          //85 to 125 C
     NUM_TEMPERATURE_BINS
-} eTemperatureBins;
+}eTemperatureBins;
 
 typedef PACKED_PRE struct PACKED_POST {
     tANI_U16 hdetDcocCode;
     tANI_U16 hdetDcoOffset;
-} sRfHdetCalValues;
+}sRfHdetCalValues;
 
 #define TPC_TXPWR_ENABLE_MASK                   QWLAN_TPC_TXPWR_ENABLE_EN_MASK
 
@@ -648,7 +659,8 @@ typedef PACKED_PRE struct PACKED_POST {
 #define FINE_GAIN_MASK      MSK_4   //the upper most bit overlaps the coarse gain and should not be used for TPC LUT data
 #define FINE_GAIN_OFFSET    0
 
-typedef enum {
+typedef enum
+{
     TPC_COARSE_TXPWR_0,
     TPC_COARSE_TXPWR_1,
     TPC_COARSE_TXPWR_2,
@@ -684,9 +696,10 @@ typedef enum {
     NUM_TPC_COARSE_STEPS = TPC_COARSE_TXPWR_31 - TPC_COARSE_TXPWR_0 + 1,
     MIN_TPC_COARSE_TXPWR = TPC_COARSE_TXPWR_0,
     MAX_TPC_COARSE_TXPWR = TPC_COARSE_TXPWR_31
-} eTxCoarseGain;                                //refers to the external RF power adjustment
+}eTxCoarseGain;                                 //refers to the external RF power adjustment
 
-typedef enum {
+typedef enum
+{
     TPC_FINE_TXPWR_0,
     TPC_FINE_TXPWR_1,
     TPC_FINE_TXPWR_2,
@@ -705,17 +718,18 @@ typedef enum {
     TPC_FINE_TXPWR_15,
     MIN_TPC_FINE_TXPWR = TPC_FINE_TXPWR_0,
     MAX_TPC_FINE_TXPWR = TPC_FINE_TXPWR_15
-} eTxFineGain;                                 //refers to the internal TxFIR power adjustment
+}eTxFineGain;                                  //refers to the internal TxFIR power adjustment
 
 typedef PACKED_PRE struct PACKED_POST {
     eTxCoarseGain coarsePwr;
     eTxFineGain finePwr;
-} tTxGain;
+}tTxGain;
 
 //for 30second periodic interrupt, do this every 5 minutes
 #define HAL_PHY_PERIODIC_CAL_ITER_LIMIT       10
 
-typedef enum {
+typedef enum
+{
     //these show which rx and tx chains are enabled, other chains are disable accordingly
     //Production modes
     PHY_CHAIN_SEL_R0_T0_ON,
@@ -730,19 +744,24 @@ typedef enum {
 
     MAX_PHY_CHAIN_SEL,
     INVALID_PHY_CHAIN_SEL,
-    PHY_MAX_CHAIN_SELECT = 0x7FFFFFFF  /* define as 4 bytes data */
-} ePhyChainSelect;
+    PHY_CHAIN_SEL_ANT_0, //append for antenna 0 selection
+    PHY_CHAIN_SEL_ANT_1, //append for antenna 1 selection
 
-typedef enum {
+    PHY_MAX_CHAIN_SELECT = 0x7FFFFFFF  /* define as 4 bytes data */
+}ePhyChainSelect;
+
+typedef enum
+{
 #ifdef CHANNEL_BONDED_CAPABLE
 
     PHY_CCA_40MHZ_SOURCE = 0,
 #endif
 
     PHY_CCA_20MHZ_SOURCE = 1
-} ePhyCCASource;
+}ePhyCCASource;
 
-typedef enum {
+typedef enum
+{
     PHY_CCA_FORCED_ON = 0,
     PHY_CCA_ED = 1,
     PHY_CCA_CD = 2,
@@ -753,23 +772,25 @@ typedef enum {
     PHY_CCA_ED_OR_CD_AND_CS = 7,
     PHY_CCA_SEC_ED40_AND_NOR_PKTDET40_PKTDET20 = 8,
     PHY_CCA_SEC_BUSY = 9
-} ePhyCCAMode;
+}ePhyCCAMode;
 
-typedef enum {
+typedef enum
+{
     PHY_RX_DISABLE_NONE             = 0,
-    PHY_RX_DISABLE_11AG             = 0x00000001,
-    PHY_RX_DISABLE_11B              = 0x00000002,
-    PHY_RX_DISABLE_11N40            = 0x00000004,
-    PHY_RX_DISABLE_11AC80           = 0x00000008,
+    PHY_RX_DISABLE_11AG             = 0x00000001,          
+    PHY_RX_DISABLE_11B              = 0x00000002,          
+    PHY_RX_DISABLE_11N40            = 0x00000004,          
+    PHY_RX_DISABLE_11AC80           = 0x00000008,          
 
     PHY_RX_DISABLE_11ABG            = (PHY_RX_DISABLE_11AG | PHY_RX_DISABLE_11B),
-    PHY_RX_DISABLE_ALL_TYPES        = (PHY_RX_DISABLE_11B | PHY_RX_DISABLE_11AG |
+    PHY_RX_DISABLE_ALL_TYPES        = (PHY_RX_DISABLE_11B | PHY_RX_DISABLE_11AG | 
                                        PHY_RX_DISABLE_11N40 | PHY_RX_DISABLE_11AC80),
-} ePhyRxDisabledPktTypes;
+}ePhyRxDisabledPktTypes;
 
 
 // Enum for network density setting.
-typedef enum {
+typedef enum
+{
     PHY_NW_DENSITY_LOW = 0,
     PHY_NW_DENSITY_MED,
     PHY_NW_DENSITY_HIGH,
@@ -777,7 +798,8 @@ typedef enum {
 } ePhyNwDensity;
 
 
-typedef enum {
+typedef enum
+{
     ALL_CALS,           //RxDco 1st, TxLO 2nd
     RX_DCO_CAL_ONLY,
     RX_IM2_CAL_ONLY,
@@ -787,18 +809,19 @@ typedef enum {
     TX_IQ_CAL_ONLY,
     HKDAC_TX_IQ_CAL_ONLY,
     NO_CALS = 0xFF
-} eCalSelection;
+}eCalSelection;
 
 
 //supports testing of closed-loop power control
-typedef enum {
+typedef enum
+{
     FORCE_CLOSED_LOOP_GAIN     = 0,  //phyDbg pkt gen only uses gain index 0 when we are taking measurements with the closed-loop gain
     FORCE_POWER_TEMPLATE_INDEX = 1,  //only use forced power template index
     FIXED_POWER_DBM            = 2,  //only use to specify fixed power, ignoring rate/channel/reg limits
     REGULATORY_POWER_LIMITS    = 3,  //use production power Lut settings limited by power limit table per channel
     RATE_POWER_NON_LIMITED     = 4,   //use power specified per rate and channel group, but don't limit power by channel
     POWER_INDX_SRC_MAX_VAL     = 0x7FFFFFFF, //dummy val to set enum to 4 bytes
-} ePowerTempIndexSource;
+}ePowerTempIndexSource;
 
 #define BIT_0   0x00000001
 #define BIT_1   0x00000002
@@ -810,7 +833,7 @@ typedef enum {
 #define BIT_7   0x00000080
 #define BIT_8   0x00000100
 #define BIT_9   0x00000200
-#define BIT_10  0x00000400
+#define BIT_10  0x00000400  
 #define BIT_11  0x00000800
 #define BIT_12  0x00001000
 #define BIT_13  0x00002000
@@ -841,19 +864,21 @@ typedef enum {
 #define WFM_MEM_Q_DATA_OFFSET       (0xB)
 #define WFM_MEM_Q_DATA_MASK         (0x3FF800)
 
-typedef enum {
+typedef enum
+{
     WAVE_SINGLE_SHOT = 0,
     WAVE_CONTINUOUS = BIT_2
-} eWaveMode;
+}eWaveMode;
 
-typedef enum {
+typedef enum
+{
     RATE_240 = 0,
     RATE_160 = 1,
     RATE_120 = 2,
     RATE_80 = 3,
     RATE_40 = 4,
     RATE_20 = 5,
-} eWaveRate;
+}eWaveRate;
 
 #define MAX_TONE_AMPLITUDE  (2^11)  // peak to peak
 
@@ -881,13 +906,14 @@ typedef enum {
 #define MAX_TPC_GAIN_LUT_DBM_2DEC_PLACES    (MAX_TPC_GAIN_LUT_DBM * 100)
 #define MIN_TPC_GAIN_LUT_DBM_2DEC_PLACES    (MIN_TPC_GAIN_LUT_DBM * 100)
 
-typedef enum {
+typedef enum
+{
     RF_BANDWIDTH_20MHZ = 20,
     RF_BANDWIDTH_40MHZ = 40,
     RF_BANDWIDTH_80MHZ = 80,
     RF_MIN_BANDWIDTH = RF_BANDWIDTH_20MHZ,
     RF_MAX_BANDWIDTH = RF_BANDWIDTH_80MHZ,
     RF_BANDWIDTH_INVALID = 0x7FFFFFFF
-} eRfBandwidth;
+}eRfBandwidth;
 
 #endif /* WLAN_PHY_H */

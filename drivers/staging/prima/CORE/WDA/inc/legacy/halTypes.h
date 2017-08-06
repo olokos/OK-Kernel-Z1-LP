@@ -1,25 +1,5 @@
 /*
- * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
- *
- * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
- *
- *
- * Permission to use, copy, modify, and/or distribute this software for
- * any purpose with or without fee is hereby granted, provided that the
- * above copyright notice and this permission notice appear in all
- * copies.
- *
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
- * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
- * AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
- * DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
- * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
- * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
- * PERFORMANCE OF THIS SOFTWARE.
- */
-/*
- * Copyright (c) 2012, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2013, 2017 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -39,6 +19,11 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+ */
 
 /** ------------------------------------------------------------------------- *
     ------------------------------------------------------------------------- *
@@ -50,8 +35,6 @@
             module headers before inclusion into halCommonApi.h.
 
     $Id$
-
-    Copyright (C) 2006 Airgo Networks, Incorporated
 
 
    ========================================================================== */
@@ -89,7 +72,8 @@ typedef void *tHalHandle;
     HAL interface functions.
 
     -------------------------------------------------------------------------- */
-typedef enum {
+typedef enum
+{
     eHAL_STATUS_SUCCESS,
 
     // general failure.  This status applies to all failure that are not covered
@@ -233,32 +217,41 @@ typedef enum {
     eHAL_STATUS_FT_PREAUTH_KEY_SUCCESS,
     eHAL_STATUS_FT_PREAUTH_KEY_FAILED,
 #endif
-
+    //CMD not Queued in SME
+    eHAL_STATUS_CMD_NOT_QUEUED,
     // not a real status.  Just a way to mark the maximum in the enum.
     eHAL_STATUS_MAX
 
 } eHalStatus;
 
+typedef enum
+{
+    HAL_STOP_TYPE_SYS_RESET,
+    HAL_STOP_TYPE_SYS_DEEP_SLEEP,
+    HAL_STOP_TYPE_RF_KILL,
+}tHalStopType;
 
 // macro to check for SUCCESS value of the halStatus
 #define HAL_STATUS_SUCCESS( variable ) ( eHAL_STATUS_SUCCESS == ( variable ) )
 
 /// Bit value data structure
-typedef enum sHalBitVal { // For Bit operations
+typedef enum sHalBitVal  // For Bit operations
+{
     eHAL_CLEAR,
     eHAL_SET
-} tHalBitVal;
+}tHalBitVal;
 
 // -------------------------------------------------------------
 /// MMH APIs
 enum {
-    eHI_PRI,
-    ePROT,
-    eDBG
+   eHI_PRI,
+   ePROT,
+   eDBG
 };
 
 /// System role definition on a per BSS
-typedef enum eBssSystemRole {
+typedef enum eBssSystemRole
+{
     eSYSTEM_UNKNOWN_ROLE,
     eSYSTEM_AP_ROLE,
     eSYSTEM_STA_IN_IBSS_ROLE,
@@ -274,12 +267,13 @@ typedef enum eBssSystemRole {
 // ---------------------------------------
 // Channel Bonding Sideband configuration
 // ---------------------------------------
-typedef enum sHalCBsidebandType {
+typedef enum sHalCBsidebandType
+{
     eHAL_SIDEBAND_CENTER=0,
     eHAL_SIDEBAND_LOWER,
     eHAL_SIDEBAND_UPPER,
     eHAL_SIDEBAND_COPY
-} tHalCBsidebandType;
+}tHalCBsidebandType;
 
 
 /// HAL states
@@ -296,7 +290,8 @@ typedef enum {
 
 
 // Type to define softmac mode (also system mode)
-typedef enum {
+typedef enum
+{
     //3- Promisc, 2 - Scan, 1 - Learn  0 - Normal
     eHAL_SYS_MODE_NORMAL = 0,
     eHAL_SYS_MODE_LEARN,
@@ -326,7 +321,8 @@ typedef enum {
 } eFrameType;
 
 
-typedef enum {
+typedef enum
+{
     ANI_TXDIR_IBSS = 0,
     ANI_TXDIR_TODS,
     ANI_TXDIR_FROMDS,
@@ -334,7 +330,8 @@ typedef enum {
 
 } eFrameTxDir;
 
-typedef enum {
+typedef enum
+{
     eRF_BAND_UNKNOWN = 0,
     eRF_BAND_2_4_GHZ = 1,
     eRF_BAND_5_GHZ = 2
@@ -351,10 +348,13 @@ typedef enum {
 
 #define HAL_MAX_TXPOWER_INVALID       127
 
-#define MIN_STA_PWR_CAP_DBM         13
-#define MAX_STA_PWR_CAP_DBM         19
+/* These are the min/max tx power (non virtual rates) range
+ * supported by rome/prima hardware
+ */
+#define MIN_TX_PWR_CAP    8
+#define MAX_TX_PWR_CAP    30
 
-/* Moving the miscellaneous defination required by UMAC are moved here from
+/* Moving the miscellaneous defination required by UMAC are moved here from 
  * volansdefs.h */
 /* --------------------------------------------------------------------
  * Support definitions for taurus
@@ -402,7 +402,7 @@ typedef enum {
 #define IS_VSTA_IDX(__x) \
                    (((__x) >= QWLAN_VSTA_MIN_IDX) && ((__x) < HAL_NUM_STA))
 
-
+                 
 // is the STA a General Purpose STA?
 #define IS_GPSTA_IDX(__x) \
     (((__x) >= (HAL_NUM_HW_STA-HAL_NUM_GPSTA)) && \

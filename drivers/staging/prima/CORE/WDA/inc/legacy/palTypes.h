@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,46 +18,30 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+
 /*
- * Copyright (c) 2012, The Linux Foundation. All rights reserved.
- *
- * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
- *
- *
- * Permission to use, copy, modify, and/or distribute this software for
- * any purpose with or without fee is hereby granted, provided that the
- * above copyright notice and this permission notice appear in all
- * copies.
- *
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
- * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
- * AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
- * DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
- * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
- * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
- * PERFORMANCE OF THIS SOFTWARE.
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
  */
 
 #if !defined( PALTYPES_H__ )
 #define PALTYPES_H__
 
-/** ------------------------------------------------------------------------- *
-    ------------------------------------------------------------------------- *
+/** ------------------------------------------------------------------------- * 
+    ------------------------------------------------------------------------- *  
 
-
+  
     \file palTypes.h
-
+  
     \brief Exports and types for the Platform Abstraction Layer typedefs.
     These are common typedefs that can be used across Platforms (OS/compiler
     and bus types).  All common code should adhere to these common types.
-
+  
     $Id$
-
-    Copyright (C) 2006 Airgo Networks, Incorporated
-
+  
     ... description...
-
+  
    ========================================================================== */
 #ifndef WINXP_APPS_BUILD
 #include "vos_types.h"
@@ -121,7 +105,7 @@
 //
 // Validate the compiler...
 //
-#if ( defined( ANI_COMPILER_TYPE_MSVC ) && defined( ANI_COMPILER_TYPE_GCC ) && defined( ANI_COMPILER_TYPE_RVCT ) )
+#if ( defined( ANI_COMPILER_TYPE_MSVC ) && defined( ANI_COMPILER_TYPE_GCC ) && defined( ANI_COMPILER_TYPE_RVCT ) ) 
 #error "more than one ANI_COMPILER_TYPE_xxx is defined for this build"
 
 #elif !( defined( ANI_COMPILER_TYPE_MSVC ) || defined( ANI_COMPILER_TYPE_GCC ) || defined( ANI_COMPILER_TYPE_RVCT ) )
@@ -144,7 +128,7 @@
 
 #define ANI_INLINE_FUNCTION INLINE
 
-#else
+#else 
 
 #error "invalid ANI_COMPILER_TYPE definition"
 
@@ -163,10 +147,11 @@ typedef tANI_U32     tANI_U32_OR_PTR;
 typedef tANI_U32_OR_PTR    tANI_BUFFER_ADDR;
 // which boolean is the most usefule...or both ?
 
-typedef enum tagAniBoolean {
+typedef enum tagAniBoolean 
+{
     eANI_BOOLEAN_FALSE = 0,
     eANI_BOOLEAN_TRUE,
-
+    
     eANI_BOOLEAN_OFF = 0,
     eANI_BOOLEAN_ON = 1,
 } eAniBoolean;
@@ -177,7 +162,7 @@ typedef enum tagAniBoolean {
 // MAC address data type...
 //
 // review the usefulness of this type.  I suspect this type is not
-// real useful unless we provide some 'helper' functions to manage
+// real useful unless we provide some 'helper' functions to manage 
 // the MAC addresses.
 //
 #define ANI_MAC_ADDR_SIZE ( 6 )
@@ -187,18 +172,18 @@ typedef tANI_U8 tAniMacAddr[ ANI_MAC_ADDR_SIZE ];
 
 
 
-/** ------------------------------------------------------------------------- *
+/** ------------------------------------------------------------------------- * 
 
     \typedef tHddHandle
-
-    \brief Handle to the HDD.  The HDD handle is given to the HAL from
+    
+    \brief Handle to the HDD.  The HDD handle is given to the HAL from 
     the HDD on halOpen.  The HDD handle is an input to all HDD/PAL function
     calls and represents an opaque handle to the HDD instance that is tied
-    to the HAL instance, opened through halOpen.
-
+    to the HAL instance, opened through halOpen.  
+    
     The HDD must be able to derive it's internal instance structure pointer
     through this handle.  hint hint...
-
+    
     -------------------------------------------------------------------------- */
 typedef void *tHddHandle;
 // define a value for an invalid HAL handle.....
@@ -220,7 +205,7 @@ This represent an object for a spin lock and it is platform dependant
 */
 //User of this variable must initialize it to PAL_INVALID_SPINLOCK_HANDLE in order for validation to work.
 typedef void * tPalSpinLockHandle;
-
+   
 #define PAL_INVALID_SPINLOCK_HANDLE (NULL)
 
 /*
