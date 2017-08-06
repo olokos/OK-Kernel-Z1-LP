@@ -58,46 +58,40 @@
 
 typedef struct list_head hdd_list_node_t;
 
-typedef struct hdd_list_s
-{
-   hdd_list_node_t anchor;
-   v_SIZE_t count;
-   v_SIZE_t max_size;
-   int ratelimit_count;
-   spinlock_t lock; 
+typedef struct hdd_list_s {
+    hdd_list_node_t anchor;
+    v_SIZE_t count;
+    v_SIZE_t max_size;
+    int ratelimit_count;
+    spinlock_t lock;
 } hdd_list_t;
 
-typedef struct
-{
-   hdd_list_node_t anchor;
-   struct sk_buff *skb;
-   int userPriority;
+typedef struct {
+    hdd_list_node_t anchor;
+    struct sk_buff *skb;
+    int userPriority;
 } skb_list_node_t;
 
 //FIXME Need a helper function to cleanup skbs in a queue. Required for cleanup/shutdown
-  
+
 /**-----------------------------------------------------------------------------
   Function declarations and documenation
  ----------------------------------------------------------------------------*/
-VOS_INLINE_FN v_VOID_t hdd_list_init( hdd_list_t *pList, v_SIZE_t max_size)
-{
-   INIT_LIST_HEAD( &pList->anchor );
-   pList->count = 0;
-   pList->max_size = max_size;
-   spin_lock_init(&pList->lock);
+VOS_INLINE_FN v_VOID_t hdd_list_init( hdd_list_t *pList, v_SIZE_t max_size) {
+    INIT_LIST_HEAD( &pList->anchor );
+    pList->count = 0;
+    pList->max_size = max_size;
+    spin_lock_init(&pList->lock);
 }
 
-VOS_INLINE_FN v_VOID_t hdd_list_destroy( hdd_list_t *pList )
-{
-   if ( pList->count !=0 )
-   {
-       VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO_HIGH, "%s: list length not equal to zero",__func__);
-   }
+VOS_INLINE_FN v_VOID_t hdd_list_destroy( hdd_list_t *pList ) {
+    if ( pList->count !=0 ) {
+        VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO_HIGH, "%s: list length not equal to zero",__func__);
+    }
 }
 
-VOS_INLINE_FN v_VOID_t hdd_list_size( hdd_list_t *pList, v_SIZE_t *pSize )
-{
-   *pSize = pList->count;
+VOS_INLINE_FN v_VOID_t hdd_list_size( hdd_list_t *pList, v_SIZE_t *pSize ) {
+    *pSize = pList->count;
 }
 
 VOS_STATUS hdd_list_insert_front( hdd_list_t *pList, hdd_list_node_t *pNode );

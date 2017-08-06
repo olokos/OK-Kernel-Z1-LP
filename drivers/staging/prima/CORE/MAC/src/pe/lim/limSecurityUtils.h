@@ -54,7 +54,7 @@ void               limAddPreAuthNode(tpAniSirGlobal, struct tLimPreAuthNode *);
 void               limDeletePreAuthNode(tpAniSirGlobal, tSirMacAddr);
 void               limReleasePreAuthNode(tpAniSirGlobal pMac, tpLimPreAuthNode pAuthNode);
 void               limRestoreFromAuthState(tpAniSirGlobal,
-                                           tSirResultCodes, tANI_U16,tpPESession);
+        tSirResultCodes, tANI_U16,tpPESession);
 tANI_U8 limDeleteOpenAuthPreAuthNode(tpAniSirGlobal pMac);
 
 // Encryption/Decryption related functions
@@ -75,8 +75,7 @@ void limPostSmeRemoveKeyCnf(tpAniSirGlobal pMac, tpPESession psessionEntry, tLim
 #define  PTAPS  0xedb88320
 
 static inline tANI_U32
-limCrcUpdate(tANI_U32 crc, tANI_U8 x)
-{
+limCrcUpdate(tANI_U32 crc, tANI_U8 x) {
 
     // Update CRC computation for 8 bits contained in x
     //

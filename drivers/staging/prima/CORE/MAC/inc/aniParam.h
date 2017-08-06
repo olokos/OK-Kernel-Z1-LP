@@ -25,7 +25,7 @@
  * to the Linux Foundation.
  */
 
-/* 
+/*
  *
  * aniParam.h: MAC parameter interface.
  * Author:  Kevin Nguyen
@@ -56,12 +56,11 @@
  *                                                                         *
  *-------------------------------------------------------------------------
  */
-typedef struct 
-{
+typedef struct {
     // HDD to MAC parameters
     int             radioId;
 
-    void          (*pPacketBufAlloc)(unsigned short size, void **ppBuf, 
+    void          (*pPacketBufAlloc)(unsigned short size, void **ppBuf,
                                      void **ppSkb, void *dev);
     void          (*pPacketBufFree)(void* pBuf, void *pSkb);
 

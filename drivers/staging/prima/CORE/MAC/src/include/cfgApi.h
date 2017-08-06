@@ -27,12 +27,12 @@
 
 /*
  *
- * Author:      Kevin Nguyen    
+ * Author:      Kevin Nguyen
  * Date:        04/09/02
  * History:-
  * 04/09/02        Created.
  * --------------------------------------------------------------------
- * 
+ *
  */
 
 #ifndef __CFGAPI_H
@@ -61,11 +61,10 @@ typedef enum eCfgStatusTypes {
 } tCfgStatusTypes;
 
 // WEP key mapping table row structure
-typedef struct
-{
+typedef struct {
     tANI_U8    keyMappingAddr[SIR_MAC_ADDR_LENGTH];
     tANI_U32   wepOn;
-    tANI_U8    key[SIR_MAC_KEY_LENGTH]; 
+    tANI_U8    key[SIR_MAC_KEY_LENGTH];
     tANI_U32   status;
 } tCfgWepKeyEntry;
 

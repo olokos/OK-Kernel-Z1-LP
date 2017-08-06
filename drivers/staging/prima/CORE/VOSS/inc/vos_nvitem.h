@@ -53,12 +53,11 @@
 
 #define TX_POWER_DEFAULT  30//in dbm
 
-typedef struct sCsrIgnoreChannels
-{
-   tANI_U8 countryCode[NV_FIELD_COUNTRY_CODE_SIZE];
-   tANI_U16 channelList[MAX_CHANNELS_IGNORE];
-   tANI_U16 channelCount;
-}tCsrIgnoreChannels;
+typedef struct sCsrIgnoreChannels {
+    tANI_U8 countryCode[NV_FIELD_COUNTRY_CODE_SIZE];
+    tANI_U16 channelList[MAX_CHANNELS_IGNORE];
+    tANI_U16 channelCount;
+} tCsrIgnoreChannels;
 
 extern tCsrIgnoreChannels countryIgnoreList[];
 
@@ -139,82 +138,77 @@ ADD_VNV_ITEM( VNV_TABLE_VIRTUAL_RATE, 1, 4, VNV_TABLE_VIRTUAL_RATE_I ) \
   Type declarations
   ------------------------------------------------------------------------*/
 // enum of RX sensitivity table index
-typedef enum
-{
-   // 11b
-   MAC_RATE_11B_1_MBPS,
-   MAC_RATE_11B_2_MBPS,
-   MAC_RATE_11B_5_5_MBPS,
-   MAC_RATE_11B_11_MBPS,
+typedef enum {
+    // 11b
+    MAC_RATE_11B_1_MBPS,
+    MAC_RATE_11B_2_MBPS,
+    MAC_RATE_11B_5_5_MBPS,
+    MAC_RATE_11B_11_MBPS,
 
-   // 11g
-   MAC_RATE_11G_6_MBPS,
-   MAC_RATE_11G_9_MBPS,
-   MAC_RATE_11G_12_MBPS,
-   MAC_RATE_11G_18_MBPS,
-   MAC_RATE_11G_24_MBPS,
-   MAC_RATE_11G_36_MBPS,
-   MAC_RATE_11G_48_MBPS,
-   MAC_RATE_11G_54_MBPS,
+    // 11g
+    MAC_RATE_11G_6_MBPS,
+    MAC_RATE_11G_9_MBPS,
+    MAC_RATE_11G_12_MBPS,
+    MAC_RATE_11G_18_MBPS,
+    MAC_RATE_11G_24_MBPS,
+    MAC_RATE_11G_36_MBPS,
+    MAC_RATE_11G_48_MBPS,
+    MAC_RATE_11G_54_MBPS,
 
-   // 11n
-   MAC_RATE_11N_MCS_0,
-   MAC_RATE_11N_MCS_1,
-   MAC_RATE_11N_MCS_2,
-   MAC_RATE_11N_MCS_3,
-   MAC_RATE_11N_MCS_4,
-   MAC_RATE_11N_MCS_5,
-   MAC_RATE_11N_MCS_6,
-   MAC_RATE_11N_MCS_7,
+    // 11n
+    MAC_RATE_11N_MCS_0,
+    MAC_RATE_11N_MCS_1,
+    MAC_RATE_11N_MCS_2,
+    MAC_RATE_11N_MCS_3,
+    MAC_RATE_11N_MCS_4,
+    MAC_RATE_11N_MCS_5,
+    MAC_RATE_11N_MCS_6,
+    MAC_RATE_11N_MCS_7,
 
-   MAC_RATE_COUNT
+    MAC_RATE_COUNT
 
 } v_MAC_RATE_t;
 
 // enum of regulatory doamains in WLAN
-typedef enum
-{
-   REGDOMAIN_FCC,
-   REGDOMAIN_ETSI,
-   REGDOMAIN_JAPAN,
-   REGDOMAIN_WORLD,
-   REGDOMAIN_N_AMER_EXC_FCC,
-   REGDOMAIN_APAC,
-   REGDOMAIN_KOREA,
-   REGDOMAIN_HI_5GHZ,
-   REGDOMAIN_NO_5GHZ,
-   // add new regulatory domain here
-   REGDOMAIN_COUNT
+typedef enum {
+    REGDOMAIN_FCC,
+    REGDOMAIN_ETSI,
+    REGDOMAIN_JAPAN,
+    REGDOMAIN_WORLD,
+    REGDOMAIN_N_AMER_EXC_FCC,
+    REGDOMAIN_APAC,
+    REGDOMAIN_KOREA,
+    REGDOMAIN_HI_5GHZ,
+    REGDOMAIN_NO_5GHZ,
+    // add new regulatory domain here
+    REGDOMAIN_COUNT
 }
 v_REGDOMAIN_t;
 
-typedef enum
-{
-   COUNTRY_NV,
-   COUNTRY_IE,
-   COUNTRY_USER,
-   COUNTRY_CELL_BASE,
-   //add new sources here
-   COUNTRY_QUERY,
-   COUNTRY_MAX = COUNTRY_QUERY
+typedef enum {
+    COUNTRY_NV,
+    COUNTRY_IE,
+    COUNTRY_USER,
+    COUNTRY_CELL_BASE,
+    //add new sources here
+    COUNTRY_QUERY,
+    COUNTRY_MAX = COUNTRY_QUERY
 }
 v_CountryInfoSource_t;
 
 //enum of NV version
-typedef enum
-{
-   E_NV_V2,
-   E_NV_V3,
-   E_NV_INVALID
+typedef enum {
+    E_NV_V2,
+    E_NV_V3,
+    E_NV_INVALID
 } eNvVersionType;
 
 // enum of supported NV items in VOSS
-typedef enum
-{
+typedef enum {
 #define ADD_VNV_ITEM(_name, _cnt, _size, _label) _name,
-   VNV_ITEM_TABLE
+    VNV_ITEM_TABLE
 #undef ADD_VNV_ITEM
-   VNV_TYPE_COUNT
+    VNV_TYPE_COUNT
 }
 VNV_TYPE;
 
@@ -267,7 +261,7 @@ VOS_STATUS vos_nv_init(void);
 
   -------------------------------------------------------------------------*/
 VOS_STATUS vos_nv_getRegDomainFromCountryCode( v_REGDOMAIN_t *pRegDomain,
-      const v_COUNTRYCODE_t countryCode, v_CountryInfoSource_t source);
+        const v_COUNTRYCODE_t countryCode, v_CountryInfoSource_t source);
 
 /**------------------------------------------------------------------------
 
@@ -293,7 +287,7 @@ VOS_STATUS vos_nv_getRegDomainFromCountryCode( v_REGDOMAIN_t *pRegDomain,
 
   -------------------------------------------------------------------------*/
 VOS_STATUS vos_nv_getSupportedCountryCode( v_BYTE_t *pBuffer, v_SIZE_t *pBufferSize,
-      v_SIZE_t paddingSize );
+        v_SIZE_t paddingSize );
 
 /**------------------------------------------------------------------------
 
@@ -367,7 +361,7 @@ VOS_STATUS vos_nv_getValidity( VNV_TYPE type, v_BOOL_t *pItemIsValid );
 
   -------------------------------------------------------------------------*/
 VOS_STATUS vos_nv_read( VNV_TYPE type, v_VOID_t *outputBuffer,
-      v_VOID_t *defaultBuffer, v_SIZE_t bufferSize );
+                        v_VOID_t *defaultBuffer, v_SIZE_t bufferSize );
 
 /**------------------------------------------------------------------------
 
@@ -401,7 +395,7 @@ VOS_STATUS vos_nv_read( VNV_TYPE type, v_VOID_t *outputBuffer,
 
   -------------------------------------------------------------------------*/
 VOS_STATUS vos_nv_readAtIndex( VNV_TYPE type, v_UINT_t index,
-      v_VOID_t *outputBuffer, v_VOID_t *defaultBuffer, v_SIZE_t bufferSize );
+                               v_VOID_t *outputBuffer, v_VOID_t *defaultBuffer, v_SIZE_t bufferSize );
 
 /**------------------------------------------------------------------------
 
@@ -425,7 +419,7 @@ VOS_STATUS vos_nv_readAtIndex( VNV_TYPE type, v_UINT_t index,
 
   -------------------------------------------------------------------------*/
 VOS_STATUS vos_nv_write( VNV_TYPE type, v_VOID_t *inputBuffer,
-       v_SIZE_t inputBufferSize );
+                         v_SIZE_t inputBufferSize );
 
 /**------------------------------------------------------------------------
 
@@ -454,7 +448,7 @@ VOS_STATUS vos_nv_write( VNV_TYPE type, v_VOID_t *inputBuffer,
 
   -------------------------------------------------------------------------*/
 VOS_STATUS vos_nv_writeAtIndex( VNV_TYPE type, v_UINT_t index,
-      v_VOID_t *inputBuffer, v_SIZE_t inputBufferSize );
+                                v_VOID_t *inputBuffer, v_SIZE_t inputBufferSize );
 
 /**------------------------------------------------------------------------
 
@@ -469,16 +463,14 @@ VOS_STATUS vos_nv_writeAtIndex( VNV_TYPE type, v_UINT_t index,
   \sa
 
   -------------------------------------------------------------------------*/
-VOS_INLINE_FN v_SIZE_t vos_nv_getElementCount( VNV_TYPE type )
-{
-   switch (type)
-   {
+VOS_INLINE_FN v_SIZE_t vos_nv_getElementCount( VNV_TYPE type ) {
+    switch (type) {
 #define ADD_VNV_ITEM(_name, _cnt, _size, _label) case (_name): return (_cnt);
-      VNV_ITEM_TABLE
+        VNV_ITEM_TABLE
 #undef ADD_VNV_ITEM
-      default:
-         return 0;
-   }
+    default:
+        return 0;
+    }
 }
 
 /**------------------------------------------------------------------------
@@ -494,16 +486,14 @@ VOS_INLINE_FN v_SIZE_t vos_nv_getElementCount( VNV_TYPE type )
   \sa
 
   -------------------------------------------------------------------------*/
-VOS_INLINE_FN v_SIZE_t vos_nv_getElementSize( VNV_TYPE type )
-{
-   switch (type)
-   {
+VOS_INLINE_FN v_SIZE_t vos_nv_getElementSize( VNV_TYPE type ) {
+    switch (type) {
 #define ADD_VNV_ITEM(_name, _cnt, _size, _label) case (_name): return (_size);
-      VNV_ITEM_TABLE
+        VNV_ITEM_TABLE
 #undef ADD_VNV_ITEM
-      default:
-         return 0;
-   }
+    default:
+        return 0;
+    }
 }
 
 /**------------------------------------------------------------------------
@@ -519,9 +509,8 @@ VOS_INLINE_FN v_SIZE_t vos_nv_getElementSize( VNV_TYPE type )
   \sa
 
   -------------------------------------------------------------------------*/
-VOS_INLINE_FN v_SIZE_t vos_nv_getItemSize( VNV_TYPE type )
-{
-   return vos_nv_getElementCount(type) * vos_nv_getElementSize(type);
+VOS_INLINE_FN v_SIZE_t vos_nv_getItemSize( VNV_TYPE type ) {
+    return vos_nv_getElementCount(type) * vos_nv_getElementSize(type);
 }
 
 // TODO: HAL NV interface should be used to access individual NV items
@@ -621,10 +610,10 @@ VOS_STATUS vos_nv_readDefaultCountryTable( uNvTables *tableData );
   \sa
   -------------------------------------------------------------------------*/
 VOS_STATUS vos_nv_getChannelListWithPower(tChannelListWithPower *pChannels20MHz /*[NUM_LEGIT_RF_CHANNELS] */,
-                                          tANI_U8 *pNum20MHzChannelsFound,
-                                          tChannelListWithPower *pChannels40MHz /*[NUM_CHAN_BOND_CHANNELS] */,
-                                          tANI_U8 *pNum40MHzChannelsFound
-                                          );
+        tANI_U8 *pNum20MHzChannelsFound,
+        tChannelListWithPower *pChannels40MHz /*[NUM_CHAN_BOND_CHANNELS] */,
+        tANI_U8 *pNum40MHzChannelsFound
+                                         );
 
 /**------------------------------------------------------------------------
 
@@ -719,7 +708,7 @@ VOS_STATUS vos_nv_get_dictionary_data(void);
   \sa
   -------------------------------------------------------------------------*/
 VOS_STATUS vos_nv_setRegDomain(void * clientCtxt, v_REGDOMAIN_t regId,
-                                                  v_BOOL_t sendRegHint);
+                               v_BOOL_t sendRegHint);
 
 /**------------------------------------------------------------------------
   \brief vos_nv_getChannelEnabledState -
@@ -733,7 +722,7 @@ VOS_STATUS vos_nv_setRegDomain(void * clientCtxt, v_REGDOMAIN_t regId,
 
 eNVChannelEnabledType vos_nv_getChannelEnabledState
 (
-   v_U32_t    rfChannel
+    v_U32_t    rfChannel
 );
 
 VOS_STATUS vos_init_wiphy_from_nv_bin(void);
@@ -749,7 +738,7 @@ VOS_STATUS vos_init_wiphy_from_nv_bin(void);
   -------------------------------------------------------------------------*/
 eNvVersionType vos_nv_getNvVersion
 (
-   void
+    void
 );
 
 
@@ -778,7 +767,7 @@ v_U8_t vos_freq_to_chan(v_U32_t freq);
 
 v_BOOL_t vos_is_nv_country_non_zero
 (
-   void
+    void
 );
 
 /**------------------------------------------------------------------------
@@ -800,11 +789,11 @@ v_BOOL_t vos_is_channel_valid_for_vht80(v_U32_t chan);
 
 void vos_getCurrentCountryCode
 (
-   tANI_U8 *cc
+    tANI_U8 *cc
 );
 #endif
 
 int vos_update_nv_table_from_wiphy_band(void *hdd_ctx,
-                                         void *wiphy,v_U8_t nBandCapability);
+                                        void *wiphy,v_U8_t nBandCapability);
 
 #endif // __VOS_NVITEM_H

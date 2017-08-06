@@ -58,8 +58,7 @@
  */
 
 void
-limProcessDeauthFrame(tpAniSirGlobal pMac, tANI_U8 *pRxPacketInfo, tpPESession psessionEntry)
-{
+limProcessDeauthFrame(tpAniSirGlobal pMac, tANI_U8 *pRxPacketInfo, tpPESession psessionEntry) {
     tANI_U8           *pBody;
     tANI_U16          aid, reasonCode;
     tpSirMacMgmtHdr   pHdr;
@@ -78,47 +77,40 @@ limProcessDeauthFrame(tpAniSirGlobal pMac, tANI_U8 *pRxPacketInfo, tpPESession p
     pBody = WDA_GET_RX_MPDU_DATA(pRxPacketInfo);
 
 
-    if ((eLIM_STA_ROLE == psessionEntry->limSystemRole) && (eLIM_SME_WT_DEAUTH_STATE == psessionEntry->limSmeState))
-    {
+    if ((eLIM_STA_ROLE == psessionEntry->limSystemRole) && (eLIM_SME_WT_DEAUTH_STATE == psessionEntry->limSmeState)) {
         /*Every 15th deauth frame will be logged in kmsg*/
-        if(!(pMac->lim.deauthMsgCnt & 0xF))
-        {
+        if(!(pMac->lim.deauthMsgCnt & 0xF)) {
             PELOGE(limLog(pMac, LOGE,
-             FL("received Deauth frame in DEAUTH_WT_STATE"
-             "(already processing previously received DEAUTH frame).."
-             "Dropping this.. Deauth Failed %d"),++pMac->lim.deauthMsgCnt);)
-        }
-        else
-        {
+                          FL("received Deauth frame in DEAUTH_WT_STATE"
+                             "(already processing previously received DEAUTH frame).."
+                             "Dropping this.. Deauth Failed %d"),++pMac->lim.deauthMsgCnt);)
+        } else {
             pMac->lim.deauthMsgCnt++;
         }
         return;
     }
 
-    if (limIsGroupAddr(pHdr->sa))
-    {
+    if (limIsGroupAddr(pHdr->sa)) {
         // Received Deauth frame from a BC/MC address
         // Log error and ignore it
         PELOGE(limLog(pMac, LOGE,
-               FL("received Deauth frame from a BC/MC address"));)
+                      FL("received Deauth frame from a BC/MC address"));)
 
         return;
     }
 
-    if (limIsGroupAddr(pHdr->da) && !limIsAddrBC(pHdr->da))
-    {
+    if (limIsGroupAddr(pHdr->da) && !limIsAddrBC(pHdr->da)) {
         // Received Deauth frame for a MC address
         // Log error and ignore it
         PELOGE(limLog(pMac, LOGE,
-               FL("received Deauth frame for a MC address"));)
+                      FL("received Deauth frame for a MC address"));)
 
         return;
     }
 
 #ifdef WLAN_FEATURE_11W
     /* PMF: If this session is a PMF session, then ensure that this frame was protected */
-    if(psessionEntry->limRmfEnabled  && (WDA_GET_RX_DPU_FEEDBACK(pRxPacketInfo) & DPU_FEEDBACK_UNPROTECTED_ERROR))
-    {
+    if(psessionEntry->limRmfEnabled  && (WDA_GET_RX_DPU_FEEDBACK(pRxPacketInfo) & DPU_FEEDBACK_UNPROTECTED_ERROR)) {
         PELOGE(limLog(pMac, LOGE, FL("received an unprotected deauth from AP"));)
         // If the frame received is unprotected, forward it to the supplicant to initiate
         // an SA query
@@ -133,10 +125,10 @@ limProcessDeauthFrame(tpAniSirGlobal pMac, tANI_U8 *pRxPacketInfo, tpPESession p
 #endif
 
     // Get reasonCode from Deauthentication frame body
-    reasonCode = sirReadU16(pBody); 
+    reasonCode = sirReadU16(pBody);
 
     PELOGE(limLog(pMac, LOGE,
-        FL("Received Deauth frame for Addr: "MAC_ADDRESS_STR" (mlm state = %s,"
+                  FL("Received Deauth frame for Addr: "MAC_ADDRESS_STR" (mlm state = %s,"
         " sme state = %d systemrole  = %d) with reason code %d from "
         MAC_ADDRESS_STR), MAC_ADDR_ARRAY(pHdr->da),
         limMlmStateStr(psessionEntry->limMlmState), psessionEntry->limSmeState,

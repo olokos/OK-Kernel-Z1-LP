@@ -74,20 +74,17 @@ extern void SysProcessMmhMsg(tpAniSirGlobal pMac, tSirMsgQ* pMsg);
  */
 void
 cfgSendHostMsg(tpAniSirGlobal pMac, tANI_U16 msgType, tANI_U32 msgLen, tANI_U32 paramNum, tANI_U32 *pParamList,
-              tANI_U32 dataLen, tANI_U32 *pData)
-{
+               tANI_U32 dataLen, tANI_U32 *pData) {
     tANI_U32        *pMsg, *pEnd;
     tSirMsgQ    mmhMsg;
 
     // sanity
-    if ((paramNum > 0) && (NULL == pParamList))
-    {
+    if ((paramNum > 0) && (NULL == pParamList)) {
         PELOGE(cfgLog(pMac, LOGE,
                       FL("pParamList NULL when paramNum greater than 0!"));)
         return;
     }
-    if ((dataLen > 0) && (NULL == pData))
-    {
+    if ((dataLen > 0) && (NULL == pData)) {
         PELOGE(cfgLog(pMac, LOGE,
                       FL("pData NULL when dataLen greater than 0!"));)
         return;
@@ -95,8 +92,7 @@ cfgSendHostMsg(tpAniSirGlobal pMac, tANI_U16 msgType, tANI_U32 msgLen, tANI_U32 
 
     // Allocate message buffer
     pMsg = vos_mem_malloc(msgLen);
-    if ( NULL == pMsg )
-    {
+    if ( NULL == pMsg ) {
         PELOGE(cfgLog(pMac, LOGE,
                       FL("Memory allocation failure!"));)
         return;
@@ -109,39 +105,34 @@ cfgSendHostMsg(tpAniSirGlobal pMac, tANI_U16 msgType, tANI_U32 msgLen, tANI_U32 
     ((tSirMbMsg*)pMsg)->type   = msgType;
     ((tSirMbMsg*)pMsg)->msgLen = (tANI_U16)msgLen;
 
-    switch (msgType)
-    {
-        case WNI_CFG_GET_RSP:
-        case WNI_CFG_PARAM_UPDATE_IND:
-        case WNI_CFG_DNLD_REQ:
-        case WNI_CFG_DNLD_CNF:
-        case WNI_CFG_SET_CNF:
-            // Fill in parameters
-            pMsg++;
-            if (NULL != pParamList)
-            {
-                pEnd  = pMsg + paramNum;
-                while (pMsg < pEnd)
-                {
-                    *pMsg++ = *pParamList++;
-                }
+    switch (msgType) {
+    case WNI_CFG_GET_RSP:
+    case WNI_CFG_PARAM_UPDATE_IND:
+    case WNI_CFG_DNLD_REQ:
+    case WNI_CFG_DNLD_CNF:
+    case WNI_CFG_SET_CNF:
+        // Fill in parameters
+        pMsg++;
+        if (NULL != pParamList) {
+            pEnd  = pMsg + paramNum;
+            while (pMsg < pEnd) {
+                *pMsg++ = *pParamList++;
             }
-            // Copy data if there is any
-            if (NULL != pData)
-            {
-                pEnd = pMsg + (dataLen >> 2);
-                while (pMsg < pEnd)
-                {
-                    *pMsg++ = *pData++;
-                }
+        }
+        // Copy data if there is any
+        if (NULL != pData) {
+            pEnd = pMsg + (dataLen >> 2);
+            while (pMsg < pEnd) {
+                *pMsg++ = *pData++;
             }
-            break;
+        }
+        break;
 
-        default:
-           PELOGE(cfgLog(pMac, LOGE,
-                         FL("Unknown msg %d!"), (int) msgType);)
-            vos_mem_free( pMsg);
-            return;
+    default:
+        PELOGE(cfgLog(pMac, LOGE,
+                      FL("Unknown msg %d!"), (int) msgType);)
+        vos_mem_free( pMsg);
+        return;
     }
 
     // Ship it

@@ -103,11 +103,10 @@ struct tAniPacket {
  * @see aniAsfPacketFree
  */
 int
-aniAsfPacketAllocate(tAniPacket **packetPtr)
-{
-  return aniAsfPacketAllocateExplicit(packetPtr,
-                                   ANI_INTERNAL_DEFAULT_PACKET_SIZE,
-                                   ANI_INTERNAL_DEFAULT_PACKET_SIZE/2);
+aniAsfPacketAllocate(tAniPacket **packetPtr) {
+    return aniAsfPacketAllocateExplicit(packetPtr,
+                                        ANI_INTERNAL_DEFAULT_PACKET_SIZE,
+                                        ANI_INTERNAL_DEFAULT_PACKET_SIZE/2);
 }
 
 /**
@@ -139,45 +138,42 @@ aniAsfPacketAllocate(tAniPacket **packetPtr)
 int
 aniAsfPacketAllocateExplicit(tAniPacket **packetPtr,
                              v_U32_t size,
-                             v_U32_t offset)
-{
-  tAniPacket *packet = NULL;
-  v_U32_t maxHead = size;
+                             v_U32_t offset) {
+    tAniPacket *packet = NULL;
+    v_U32_t maxHead = size;
 
-  *packetPtr = NULL;
-  if (size == 0)
-    return ANI_E_ILLEGAL_ARG;
+    *packetPtr = NULL;
+    if (size == 0)
+        return ANI_E_ILLEGAL_ARG;
 
-  VOS_ASSERT(ANI_CHECK_RANGE(offset, maxHead));
-  if (!ANI_CHECK_RANGE(offset, maxHead))
-    return ANI_E_ILLEGAL_ARG;
+    VOS_ASSERT(ANI_CHECK_RANGE(offset, maxHead));
+    if (!ANI_CHECK_RANGE(offset, maxHead))
+        return ANI_E_ILLEGAL_ARG;
 
-  packet = (tAniPacket *) vos_mem_malloc( sizeof(tAniPacket) );
+    packet = (tAniPacket *) vos_mem_malloc( sizeof(tAniPacket) );
 
-  if (packet == NULL) 
-  {
-      VOS_ASSERT( 0 );
-      return ANI_E_MALLOC_FAILED;
-  }
+    if (packet == NULL) {
+        VOS_ASSERT( 0 );
+        return ANI_E_MALLOC_FAILED;
+    }
 
-  // transparently add one to the size since last byte is wasted
-  size = (size + 4) & 0xfffffffc;
+    // transparently add one to the size since last byte is wasted
+    size = (size + 4) & 0xfffffffc;
 
-  packet->buf = (v_U8_t *)vos_mem_malloc( sizeof(v_U8_t) * size );
-  if (packet->buf == NULL) 
-  {
-      vos_mem_free( packet );
-      VOS_ASSERT( 0 );
-      return ANI_E_MALLOC_FAILED;
-  }
+    packet->buf = (v_U8_t *)vos_mem_malloc( sizeof(v_U8_t) * size );
+    if (packet->buf == NULL) {
+        vos_mem_free( packet );
+        VOS_ASSERT( 0 );
+        return ANI_E_MALLOC_FAILED;
+    }
 
-  packet->size = size; // Should not be visible to the user
-  packet->head = packet->buf + offset;
-  packet->tail = packet->head;
-  packet->len = 0;
+    packet->size = size; // Should not be visible to the user
+    packet->head = packet->buf + offset;
+    packet->tail = packet->head;
+    packet->len = 0;
 
-  *packetPtr = packet;
-  return ANI_OK;
+    *packetPtr = packet;
+    return ANI_OK;
 }
 
 /**
@@ -192,11 +188,10 @@ aniAsfPacketAllocateExplicit(tAniPacket **packetPtr,
  * @param oldPacket the original packet that should be duplicated
  *
  * @return ANI_OK if the operation succeeds; ANI_E_NULL if oldPacket
- * is NULL; 
+ * is NULL;
  */
 int
-aniAsfPacketDuplicate(tAniPacket **newPacketPtr, tAniPacket *oldPacket)
-{
+aniAsfPacketDuplicate(tAniPacket **newPacketPtr, tAniPacket *oldPacket) {
     int retVal;
     int recordPos;
     tAniPacket *packet = NULL;
@@ -213,15 +208,13 @@ aniAsfPacketDuplicate(tAniPacket **newPacketPtr, tAniPacket *oldPacket)
     retVal = aniAsfPacketAppendBuffer(packet,
                                       oldPacket->head,
                                       oldPacket->len);
-    if (retVal != ANI_OK) 
-    {
+    if (retVal != ANI_OK) {
         VOS_ASSERT( 0 );
         aniAsfPacketFree(packet);
         return ANI_E_FAILED;
     }
 
-    if (oldPacket->recordHeader != NULL) 
-    {
+    if (oldPacket->recordHeader != NULL) {
         recordPos = oldPacket->recordHeader - oldPacket->buf;
         packet->recordHeader = packet->buf + recordPos;
     }
@@ -243,17 +236,16 @@ aniAsfPacketDuplicate(tAniPacket **newPacketPtr, tAniPacket *oldPacket)
  * unexpected NULL pointer is encountered
  */
 int
-aniAsfPacketFree(tAniPacket *packet)
-{
-  if (packet == NULL)
-    return ANI_E_NULL_VALUE;
+aniAsfPacketFree(tAniPacket *packet) {
+    if (packet == NULL)
+        return ANI_E_NULL_VALUE;
 
-  if (packet->buf != NULL)
-    vos_mem_free( packet->buf );
+    if (packet->buf != NULL)
+        vos_mem_free( packet->buf );
 
-  vos_mem_free( packet );
+    vos_mem_free( packet );
 
-  return ANI_OK;
+    return ANI_OK;
 }
 
 
@@ -285,19 +277,18 @@ aniAsfPacketFree(tAniPacket *packet)
  */
 int
 aniAsfPacketAppendBuffer(tAniPacket *destPacket,
-                      const v_U8_t *buf,
-                      v_U32_t len)
-{
-  if (aniAsfPacketCanAppendBuffer(destPacket, len) != ANI_OK)
-      return ANI_E_FAILED;
+                         const v_U8_t *buf,
+                         v_U32_t len) {
+    if (aniAsfPacketCanAppendBuffer(destPacket, len) != ANI_OK)
+        return ANI_E_FAILED;
 
-  if (buf == NULL)
-    return ANI_E_NULL_VALUE;
+    if (buf == NULL)
+        return ANI_E_NULL_VALUE;
 
-  vos_mem_copy(destPacket->tail, buf, len);
-  destPacket->tail += len;
-  destPacket->len += len;
-  return ANI_OK;
+    vos_mem_copy(destPacket->tail, buf, len);
+    destPacket->tail += len;
+    destPacket->len += len;
+    return ANI_OK;
 }
 
 /**
@@ -328,19 +319,18 @@ aniAsfPacketAppendBuffer(tAniPacket *destPacket,
  */
 int
 aniAsfPacketPrependBuffer(tAniPacket *destPacket,
-                       const v_U8_t *buf,
-                       v_U32_t len)
-{
-  if (aniAsfPacketCanPrependBuffer(destPacket, len) != ANI_OK)
-      return ANI_E_FAILED;
+                          const v_U8_t *buf,
+                          v_U32_t len) {
+    if (aniAsfPacketCanPrependBuffer(destPacket, len) != ANI_OK)
+        return ANI_E_FAILED;
 
-  if (buf == NULL)
-      return ANI_E_NULL_VALUE;
+    if (buf == NULL)
+        return ANI_E_NULL_VALUE;
 
-  destPacket->head -= len;
-  destPacket->len += len;
-  vos_mem_copy(destPacket->head, buf, len);
-  return ANI_OK;
+    destPacket->head -= len;
+    destPacket->len += len;
+    vos_mem_copy(destPacket->head, buf, len);
+    return ANI_OK;
 
 }
 
@@ -366,15 +356,14 @@ aniAsfPacketPrependBuffer(tAniPacket *destPacket,
  */
 int
 aniAsfPacketCanAppendBuffer(tAniPacket *destPacket,
-                         v_U32_t len)
-{
-  if (destPacket == NULL)
-    return ANI_E_FAILED;
+                            v_U32_t len) {
+    if (destPacket == NULL)
+        return ANI_E_FAILED;
 
-  if ((int)len <= TAIL_SPACE(destPacket))
-      return ANI_OK;
-  else
-      return ANI_E_FAILED;
+    if ((int)len <= TAIL_SPACE(destPacket))
+        return ANI_OK;
+    else
+        return ANI_E_FAILED;
 }
 
 /**
@@ -399,18 +388,17 @@ aniAsfPacketCanAppendBuffer(tAniPacket *destPacket,
  */
 int
 aniAsfPacketCanPrependBuffer(tAniPacket *destPacket,
-                          v_U32_t len)
-{
-  if (destPacket == NULL)
-      return ANI_E_FAILED;
+                             v_U32_t len) {
+    if (destPacket == NULL)
+        return ANI_E_FAILED;
 
-  if (!(len > 0))
-      return ANI_E_FAILED;
+    if (!(len > 0))
+        return ANI_E_FAILED;
 
-  if ((int)len <= HEAD_SPACE(destPacket))
-      return ANI_OK;
-  else
-      return ANI_E_FAILED;
+    if ((int)len <= HEAD_SPACE(destPacket))
+        return ANI_OK;
+    else
+        return ANI_E_FAILED;
 }
 
 /**
@@ -428,8 +416,7 @@ aniAsfPacketCanPrependBuffer(tAniPacket *destPacket,
  */
 int
 aniAsfPacketTruncateFromFront(tAniPacket *packet,
-                           v_U32_t len)
-{
+                              v_U32_t len) {
     if (packet == NULL)
         return ANI_E_NULL_VALUE;
 
@@ -457,8 +444,7 @@ aniAsfPacketTruncateFromFront(tAniPacket *packet,
  */
 int
 aniAsfPacketTruncateFromRear(tAniPacket *packet,
-                          v_U32_t len)
-{
+                             v_U32_t len) {
     if (packet == NULL)
         return ANI_E_NULL_VALUE;
 
@@ -482,8 +468,7 @@ aniAsfPacketTruncateFromRear(tAniPacket *packet,
  * @return the non-negative number of bytes stored in the packet
  */
 int
-aniAsfPacketGetLen(tAniPacket *packet)
-{
+aniAsfPacketGetLen(tAniPacket *packet) {
     if (packet == NULL)
         return ANI_E_NULL_VALUE;
 
@@ -506,8 +491,7 @@ aniAsfPacketGetLen(tAniPacket *packet)
  * returned by aniAsfPacketGetLen.
  */
 int
-aniAsfPacketGetBytes(tAniPacket *packet, v_U8_t **rawBytesPtr)
-{
+aniAsfPacketGetBytes(tAniPacket *packet, v_U8_t **rawBytesPtr) {
     if (packet == NULL)
         return ANI_E_NULL_VALUE;
 
@@ -529,8 +513,7 @@ aniAsfPacketGetBytes(tAniPacket *packet, v_U8_t **rawBytesPtr)
  * packet does not have n bytes.
  */
 int
-aniAsfPacketGetN(tAniPacket *packet, int n, v_U8_t **bytesPtr)
-{
+aniAsfPacketGetN(tAniPacket *packet, int n, v_U8_t **bytesPtr) {
     int retVal;
     v_U8_t *bytes = NULL;
 
@@ -560,8 +543,7 @@ aniAsfPacketGetN(tAniPacket *packet, int n, v_U8_t **bytesPtr)
  * @return ANI_OK if the operation succeeded
  */
 int
-aniAsfPacketEmpty(tAniPacket *packet)
-{
+aniAsfPacketEmpty(tAniPacket *packet) {
     return aniAsfPacketEmptyExplicit(packet, packet->size/2);
 }
 
@@ -581,8 +563,7 @@ aniAsfPacketEmpty(tAniPacket *packet)
  */
 int
 aniAsfPacketEmptyExplicit(tAniPacket *packet,
-                       v_U32_t offset)
-{
+                          v_U32_t offset) {
     if (packet == NULL)
         return ANI_E_NULL_VALUE;
 
@@ -612,8 +593,7 @@ aniAsfPacketEmptyExplicit(tAniPacket *packet,
  * @return ANI_OK if the operation succeeds
  */
 int
-aniAsfPacketPrependHdr(tAniPacket *packet, v_U16_t msgType)
-{
+aniAsfPacketPrependHdr(tAniPacket *packet, v_U16_t msgType) {
     int retVal;
     int length;
 
@@ -649,8 +629,7 @@ aniAsfPacketPrependHdr(tAniPacket *packet, v_U16_t msgType)
  * @return ANI_OK if the operation succeeds
  */
 int
-aniAsfPacketGet32(tAniPacket *packet, v_U32_t *val)
-{
+aniAsfPacketGet32(tAniPacket *packet, v_U32_t *val) {
     v_U8_t u32Arr[4];
 
     if (packet == NULL)
@@ -686,8 +665,7 @@ aniAsfPacketGet32(tAniPacket *packet, v_U32_t *val)
  * @return ANI_OK if the operation succeeds
  */
 int
-aniAsfPacketAppend32(tAniPacket *packet, v_U32_t val)
-{
+aniAsfPacketAppend32(tAniPacket *packet, v_U32_t val) {
     v_U8_t *p8;
 
     if (packet == NULL)
@@ -721,8 +699,7 @@ aniAsfPacketAppend32(tAniPacket *packet, v_U32_t val)
  * @return ANI_OK if the operation succeeds
  */
 int
-aniAsfPacketGet16(tAniPacket *packet, v_U16_t *val)
-{
+aniAsfPacketGet16(tAniPacket *packet, v_U16_t *val) {
     v_U8_t u16Arr[2];
 
     if (packet == NULL)
@@ -755,8 +732,7 @@ aniAsfPacketGet16(tAniPacket *packet, v_U16_t *val)
  * @return ANI_OK if the operation succeeds
  */
 int
-aniAsfPacketPrepend16(tAniPacket *packet, v_U16_t val)
-{
+aniAsfPacketPrepend16(tAniPacket *packet, v_U16_t val) {
     v_U8_t *p8;
 
     if (packet == NULL)
@@ -787,8 +763,7 @@ aniAsfPacketPrepend16(tAniPacket *packet, v_U16_t val)
  * @return ANI_OK if the operation succeeds
  */
 int
-aniAsfPacketAppend16(tAniPacket *packet, v_U16_t val)
-{
+aniAsfPacketAppend16(tAniPacket *packet, v_U16_t val) {
     v_U8_t *p8;
 
     if (packet == NULL)
@@ -820,8 +795,7 @@ aniAsfPacketAppend16(tAniPacket *packet, v_U16_t val)
  * @return ANI_OK if the operation succeeds
  */
 int
-aniAsfPacketGet8(tAniPacket *packet, v_U8_t *val)
-{
+aniAsfPacketGet8(tAniPacket *packet, v_U8_t *val) {
     if (packet == NULL)
         return ANI_E_NULL_VALUE;
 
@@ -850,8 +824,7 @@ aniAsfPacketGet8(tAniPacket *packet, v_U8_t *val)
  * @return ANI_OK if the operation succeeds
  */
 int
-aniAsfPacketPrepend8(tAniPacket *packet, v_U8_t val)
-{
+aniAsfPacketPrepend8(tAniPacket *packet, v_U8_t val) {
     if (packet == NULL)
         return ANI_E_NULL_VALUE;
 
@@ -878,8 +851,7 @@ aniAsfPacketPrepend8(tAniPacket *packet, v_U8_t val)
  * @return ANI_OK if the operation succeeds
  */
 int
-aniAsfPacketAppend8(tAniPacket *packet, v_U8_t val)
-{
+aniAsfPacketAppend8(tAniPacket *packet, v_U8_t val) {
     if (packet == NULL)
         return ANI_E_NULL_VALUE;
 
@@ -905,8 +877,7 @@ aniAsfPacketAppend8(tAniPacket *packet, v_U8_t val)
  * pointer is advanced past the MAC address.
  */
 int
-aniAsfPacketGetMac(tAniPacket *packet, tAniMacAddr macAddr)
-{
+aniAsfPacketGetMac(tAniPacket *packet, tAniMacAddr macAddr) {
     if (packet->len < sizeof(tAniMacAddr))
         return ANI_E_SHORT_PACKET;
 
@@ -928,7 +899,7 @@ aniAsfPacketGetMac(tAniPacket *packet, tAniMacAddr macAddr)
  * interfacing with other libraries that only support byte array
  * manipulation.
  *
- * WARNING: 
+ * WARNING:
  * Applications are discouraged from using this function
  * because correct usage is a two-step process - one: copy some bytes
  * to the packet's internal buffer, two: move head and length. This
@@ -940,8 +911,7 @@ aniAsfPacketGetMac(tAniPacket *packet, tAniMacAddr macAddr)
  * @return ANI_OK if the operation succeeds
  */
 int
-aniAsfPacketMoveLeft(tAniPacket *packet, v_U32_t count)
-{
+aniAsfPacketMoveLeft(tAniPacket *packet, v_U32_t count) {
     if (aniAsfPacketCanPrependBuffer(packet, count) != ANI_OK)
         return ANI_E_FAILED;
 
@@ -961,7 +931,7 @@ aniAsfPacketMoveLeft(tAniPacket *packet, v_U32_t count)
  * interfacing with other libraries that only support byte array
  * manipulation.
  *
- * WARNING: 
+ * WARNING:
  * Applications are discouraged from using this function
  * because correct usage is a two-step process - one: copy some bytes
  * to the packet's internal buffer, two: move tail and length. This
@@ -973,8 +943,7 @@ aniAsfPacketMoveLeft(tAniPacket *packet, v_U32_t count)
  * @return ANI_OK if the operation succeeds
  */
 int
-aniAsfPacketMoveRight(tAniPacket *packet, v_U32_t count)
-{
+aniAsfPacketMoveRight(tAniPacket *packet, v_U32_t count) {
     if (aniAsfPacketCanAppendBuffer(packet, count) != ANI_OK)
         return ANI_E_FAILED;
 
@@ -988,16 +957,16 @@ aniAsfPacketMoveRight(tAniPacket *packet, v_U32_t count)
  * aniAsfPacketGetBytesFromTail
  *
  * FUNCTION:
- * Returns a pointer to the tail of the valid data stored 
+ * Returns a pointer to the tail of the valid data stored
  * in the packet.
  *
- * WARNING: 
+ * WARNING:
  * Applications are discouraged from using this function
  * because correct usage is a three-step process - one: call this
- * routine to obtain a pointer to the current tail of the packet. 
- * two: treat this returned pointer like a simple array and copy 
- * some bytes to the packet's internal buffer, and finally 
- * three: move tail and length. This violates the encapsulation 
+ * routine to obtain a pointer to the current tail of the packet.
+ * two: treat this returned pointer like a simple array and copy
+ * some bytes to the packet's internal buffer, and finally
+ * three: move tail and length. This violates the encapsulation
  * the packet library aims to provide.
  *
  * @param packet the packet whose bytes we need
@@ -1009,8 +978,7 @@ aniAsfPacketMoveRight(tAniPacket *packet, v_U32_t count)
  * returned by aniAsfPacketGetLen.
  */
 int
-aniAsfPacketGetBytesFromTail(tAniPacket *packet, v_U8_t **rawBytesPtr)
-{
+aniAsfPacketGetBytesFromTail(tAniPacket *packet, v_U8_t **rawBytesPtr) {
     if (packet == NULL)
         return ANI_E_NULL_VALUE;
 

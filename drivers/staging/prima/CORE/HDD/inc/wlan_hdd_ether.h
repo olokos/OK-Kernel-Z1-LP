@@ -56,35 +56,35 @@
  * Type Declarations
  * -------------------------------------------------------------------------*/
 struct wlan_snap_hdr {
-   unsigned char dsap;
-   unsigned char ssap;
-   unsigned char ctrl;
-   unsigned char oui[WLAN_SNAP_OUI_LEN];
+    unsigned char dsap;
+    unsigned char ssap;
+    unsigned char ctrl;
+    unsigned char oui[WLAN_SNAP_OUI_LEN];
 } __packed;
 
 struct wlan_8023 {
-   unsigned char        h_dest[ETH_ALEN];
-   unsigned char        h_source[ETH_ALEN];
-   __be16               h_len;
-   struct wlan_snap_hdr h_snap;
-   __be16               h_proto;
+    unsigned char        h_dest[ETH_ALEN];
+    unsigned char        h_source[ETH_ALEN];
+    __be16               h_len;
+    struct wlan_snap_hdr h_snap;
+    __be16               h_proto;
 } __packed;
 
 struct wlan_8023_vlan {
-   unsigned char        h_dest[ETH_ALEN];
-   unsigned char        h_source[ETH_ALEN];
-   __be16               h_vlan_proto;
-   __be16               h_vlan_TCI;
-   __be16               h_len;
-   struct wlan_snap_hdr h_snap;
-   __be16               h_proto;
+    unsigned char        h_dest[ETH_ALEN];
+    unsigned char        h_source[ETH_ALEN];
+    __be16               h_vlan_proto;
+    __be16               h_vlan_TCI;
+    __be16               h_len;
+    struct wlan_snap_hdr h_snap;
+    __be16               h_proto;
 } __packed;
 
 union generic_ethhdr {
-   struct ethhdr eth_II;
-   struct vlan_ethhdr eth_IIv;
-   struct wlan_8023 eth_8023;
-   struct wlan_8023_vlan eth_8023v;
+    struct ethhdr eth_II;
+    struct vlan_ethhdr eth_IIv;
+    struct wlan_8023 eth_8023;
+    struct wlan_8023_vlan eth_8023v;
 };
 
 #endif /* #ifndef _WLAN_HDD_ETHER_H */

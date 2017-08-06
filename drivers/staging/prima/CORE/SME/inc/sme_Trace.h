@@ -42,9 +42,9 @@
 
 #define NO_SESSION 0xFF
 enum {
-     TRACE_CODE_SME_COMMAND,
-     TRACE_CODE_SME_TX_WDA_MSG,
-     TRACE_CODE_SME_RX_WDA_MSG,
+    TRACE_CODE_SME_COMMAND,
+    TRACE_CODE_SME_TX_WDA_MSG,
+    TRACE_CODE_SME_RX_WDA_MSG,
 };
 enum {
     /* Starts enums from 3 onwards, because unknown code captures for first

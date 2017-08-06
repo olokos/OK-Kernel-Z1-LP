@@ -41,45 +41,40 @@
 #include "limSerDesUtils.h"
 
 void ConvertSSID(tpAniSirGlobal pMac,
-                       tSirMacSSid   *pOld,
-                       tDot11fIESSID    *pNew)
-{
+                 tSirMacSSid   *pOld,
+                 tDot11fIESSID    *pNew) {
     pOld->length = pNew->num_ssid;
     vos_mem_copy( pOld->ssId, pNew->ssid, pNew->num_ssid );
 }
 
 void ConvertSuppRates(tpAniSirGlobal   pMac,
-                            tSirMacRateSet  *pOld,
-                            tDot11fIESuppRates *pNew)
-{
+                      tSirMacRateSet  *pOld,
+                      tDot11fIESuppRates *pNew) {
     pOld->numRates = pNew->num_rates;
     vos_mem_copy( pOld->rate, pNew->rates, pNew->num_rates );
 }
 
 void ConvertExtSuppRates(tpAniSirGlobal      pMac,
-                               tSirMacRateSet     *pOld,
-                               tDot11fIEExtSuppRates *pNew)
-{
+                         tSirMacRateSet     *pOld,
+                         tDot11fIEExtSuppRates *pNew) {
     pOld->numRates = pNew->num_rates;
     vos_mem_copy(  pOld->rate, pNew->rates, pNew->num_rates );
 }
 
 
 void ConvertQOSCaps(tpAniSirGlobal                pMac,
-                          tSirMacQosCapabilityIE *pOld,
-                          tDot11fIEQOSCapsAp     *pNew)
-{
+                    tSirMacQosCapabilityIE *pOld,
+                    tDot11fIEQOSCapsAp     *pNew) {
     pOld->type    = 46;
     pOld->length  = 1;
 
-    pOld->qosInfo.count   = pNew->count;   
+    pOld->qosInfo.count   = pNew->count;
 }
 
 
 void ConvertQOSCapsStation(tpAniSirGlobal              pMac,
                            tSirMacQosCapabilityStaIE  *pOld,
-                           tDot11fIEQOSCapsStation    *pNew)
-{
+                           tDot11fIEQOSCapsStation    *pNew) {
     pOld->type    = 46;
     pOld->length  = 1;
 
@@ -89,20 +84,18 @@ void ConvertQOSCapsStation(tpAniSirGlobal              pMac,
     pOld->qosInfo.acbe_uapsd  = pNew->acbe_uapsd;
     pOld->qosInfo.acbk_uapsd  = pNew->acbk_uapsd;
     pOld->qosInfo.acvi_uapsd  = pNew->acvi_uapsd;
-    pOld->qosInfo.acvo_uapsd  = pNew->acvo_uapsd;    
+    pOld->qosInfo.acvo_uapsd  = pNew->acvo_uapsd;
 }
 
 tSirRetStatus ConvertWPA(tpAniSirGlobal  pMac,
-                               tSirMacWpaInfo *pOld,
-                               tDot11fIEWPA      *pNew)
-{
+                         tSirMacWpaInfo *pOld,
+                         tDot11fIEWPA      *pNew) {
     // This is awful, I know, but the old code just rammed the IE into an
     // array...
     tANI_U8 buffer[257];
     tANI_U32 status, written = 0, nbuffer = 257;
     status = dot11fPackIeWPA( pMac, pNew, buffer, nbuffer, &written );
-    if ( DOT11F_FAILED( status ) )
-    {
+    if ( DOT11F_FAILED( status ) ) {
         dot11fLog(pMac, LOG2, FL("Failed to re-pack the WPA IE (0x%0x"
                                  "8).\n"), status);
         return eSIR_FAILURE;
@@ -116,8 +109,7 @@ tSirRetStatus ConvertWPA(tpAniSirGlobal  pMac,
 
 tSirRetStatus ConvertWPAOpaque( tpAniSirGlobal      pMac,
                                 tSirMacWpaInfo     *pOld,
-                                tDot11fIEWPAOpaque *pNew )
-{
+                                tDot11fIEWPAOpaque *pNew ) {
     // This is awful, I know, but the old code just rammed the IE into
     // an opaque array.  Note that we need to explicitly add the OUI!
     pOld->length    = pNew->num_data + 4;
@@ -132,11 +124,10 @@ tSirRetStatus ConvertWPAOpaque( tpAniSirGlobal      pMac,
 
 tSirRetStatus ConvertWscOpaque( tpAniSirGlobal      pMac,
                                 tSirAddie           *pOld,
-                                tDot11fIEWscIEOpaque *pNew )
-{
+                                tDot11fIEWscIEOpaque *pNew ) {
     // This is awful, I know, but the old code just rammed the IE into
     // an opaque array.  Note that we need to explicitly add the vendorIE and OUI !
-    tANI_U8 curAddIELen = pOld->length; 
+    tANI_U8 curAddIELen = pOld->length;
 
     pOld->length    = curAddIELen + pNew->num_data + 6;
     pOld->addIEdata[ curAddIELen++ ] = 0xdd;
@@ -152,11 +143,10 @@ tSirRetStatus ConvertWscOpaque( tpAniSirGlobal      pMac,
 
 tSirRetStatus ConvertP2POpaque( tpAniSirGlobal      pMac,
                                 tSirAddie           *pOld,
-                                tDot11fIEP2PIEOpaque *pNew )
-{
+                                tDot11fIEP2PIEOpaque *pNew ) {
     // This is awful, I know, but the old code just rammed the IE into
     // an opaque array.  Note that we need to explicitly add the vendorIE and OUI !
-    tANI_U8 curAddIELen = pOld->length; 
+    tANI_U8 curAddIELen = pOld->length;
 
     pOld->length    = curAddIELen + pNew->num_data + 6;
     pOld->addIEdata[ curAddIELen++ ] = 0xdd;
@@ -173,11 +163,10 @@ tSirRetStatus ConvertP2POpaque( tpAniSirGlobal      pMac,
 #ifdef WLAN_FEATURE_WFD
 tSirRetStatus ConvertWFDOpaque( tpAniSirGlobal      pMac,
                                 tSirAddie           *pOld,
-                                tDot11fIEWFDIEOpaque *pNew )
-{
+                                tDot11fIEWFDIEOpaque *pNew ) {
     // This is awful, I know, but the old code just rammed the IE into
     // an opaque array.  Note that we need to explicitly add the vendorIE and OUI !
-    tANI_U8 curAddIELen = pOld->length; 
+    tANI_U8 curAddIELen = pOld->length;
 
     pOld->length    = curAddIELen + pNew->num_data + 6;
     pOld->addIEdata[ curAddIELen++ ] = 0xdd;
@@ -193,14 +182,12 @@ tSirRetStatus ConvertWFDOpaque( tpAniSirGlobal      pMac,
 #endif
 
 tSirRetStatus ConvertRSN(tpAniSirGlobal  pMac,
-                               tSirMacRsnInfo *pOld,
-                               tDot11fIERSN      *pNew)
-{
+                         tSirMacRsnInfo *pOld,
+                         tDot11fIERSN      *pNew) {
     tANI_U8 buffer[257];
     tANI_U32 status, written = 0, nbuffer = 257;
     status = dot11fPackIeRSN( pMac, pNew, buffer, nbuffer, &written );
-    if ( DOT11F_FAILED( status ) )
-    {
+    if ( DOT11F_FAILED( status ) ) {
         dot11fLog(pMac, LOG2, FL("Failed to re-pack the RSN IE (0x%0x"
                                  "8).\n"), status);
         return eSIR_FAILURE;
@@ -214,8 +201,7 @@ tSirRetStatus ConvertRSN(tpAniSirGlobal  pMac,
 
 tSirRetStatus ConvertRSNOpaque( tpAniSirGlobal      pMac,
                                 tSirMacRsnInfo     *pOld,
-                                tDot11fIERSNOpaque *pNew )
-{
+                                tDot11fIERSNOpaque *pNew ) {
     // This is awful, I know, but the old code just rammed the IE into
     // an opaque array.
     pOld->length = pNew->num_data;
@@ -225,9 +211,8 @@ tSirRetStatus ConvertRSNOpaque( tpAniSirGlobal      pMac,
 }
 
 void ConvertPowerCaps(tpAniSirGlobal            pMac,
-                            tSirMacPowerCapabilityIE *pOld,
-                            tDot11fIEPowerCaps          *pNew)
-{
+                      tSirMacPowerCapabilityIE *pOld,
+                      tDot11fIEPowerCaps          *pNew) {
     pOld->type       = 33;
     pOld->length     = 2;
     pOld->minTxPower = pNew->minTxPower;
@@ -235,18 +220,16 @@ void ConvertPowerCaps(tpAniSirGlobal            pMac,
 }
 
 void ConvertSuppChannels(tpAniSirGlobal             pMac,
-                               tSirMacSupportedChannelIE *pOld,
-                               tDot11fIESuppChannels        *pNew)
-{
+                         tSirMacSupportedChannelIE *pOld,
+                         tDot11fIESuppChannels        *pNew) {
     pOld->type   = 36;
     pOld->length = ( pNew->num_bands * 2 );
     vos_mem_copy( ( tANI_U8* )pOld->supportedChannels, ( tANI_U8* )pNew->bands, pOld->length );
 }
 
 void ConvertCFParams(tpAniSirGlobal     pMac,
-                           tSirMacCfParamSet *pOld,
-                           tDot11fIECFParams    *pNew)
-{
+                     tSirMacCfParamSet *pOld,
+                     tDot11fIECFParams    *pNew) {
     pOld->cfpCount        = pNew->cfp_count;
     pOld->cfpPeriod       = pNew->cfp_period;
     pOld->cfpMaxDuration  = pNew->cfp_maxduration;
@@ -255,8 +238,7 @@ void ConvertCFParams(tpAniSirGlobal     pMac,
 
 void ConvertFHParams (tpAniSirGlobal        pMac,
                       tSirMacFHParamSet    *pOld,
-                      tDot11fIEFHParamSet  *pNew)
-{
+                      tDot11fIEFHParamSet  *pNew) {
     pOld->dwellTime   = pNew->dwell_time;
     pOld->hopSet      = pNew->hop_set;
     pOld->hopPattern  = pNew->hop_pattern;
@@ -264,9 +246,8 @@ void ConvertFHParams (tpAniSirGlobal        pMac,
 }
 
 void ConvertTIM(tpAniSirGlobal pMac,
-                      tSirMacTim    *pOld,
-                      tDot11fIETIM     *pNew)
-{
+                tSirMacTim    *pOld,
+                tDot11fIETIM     *pNew) {
     pOld->dtimCount     = pNew->dtim_count;
     pOld->dtimPeriod    = pNew->dtim_period;
     pOld->bitmapControl = pNew->bmpctl;
@@ -276,17 +257,15 @@ void ConvertTIM(tpAniSirGlobal pMac,
 }
 
 void ConvertCountry(tpAniSirGlobal          pMac,
-                          tSirCountryInformation *pOld,
-                          tDot11fIECountry          *pNew)
-{
+                    tSirCountryInformation *pOld,
+                    tDot11fIECountry          *pNew) {
     int i;
 
     vos_mem_copy( pOld->countryString, pNew->country, COUNTRY_STRING_LENGTH );
 
     pOld->numIntervals = pNew->num_triplets;
 
-    for (i = 0; i < pNew->num_triplets; ++i)
-    {
+    for (i = 0; i < pNew->num_triplets; ++i) {
         pOld->channelTransmitPower[i].channelNumber    = pNew->triplets[i][0];
         pOld->channelTransmitPower[i].numChannel       = pNew->triplets[i][1];
         pOld->channelTransmitPower[i].maxTransmitPower = pNew->triplets[i][2];
@@ -294,9 +273,8 @@ void ConvertCountry(tpAniSirGlobal          pMac,
 }
 
 void ConvertWMMParams(tpAniSirGlobal         pMac,
-                            tSirMacEdcaParamSetIE *pOld,
-                            tDot11fIEWMMParams       *pNew)
-{
+                      tSirMacEdcaParamSetIE *pOld,
+                      tDot11fIEWMMParams       *pNew) {
     pOld->type = 221;
     pOld->length = 24;
 
@@ -332,18 +310,16 @@ void ConvertWMMParams(tpAniSirGlobal         pMac,
 }
 
 void ConvertERPInfo(tpAniSirGlobal    pMac,
-                          tSirMacErpInfo   *pOld,
-                          tDot11fIEERPInfo    *pNew)
-{
+                    tSirMacErpInfo   *pOld,
+                    tDot11fIEERPInfo    *pNew) {
     pOld->nonErpPresent = pNew->non_erp_present;
     pOld->useProtection = pNew->use_prot;
     pOld->barkerPreambleMode = pNew->barker_preamble;
 }
 
 void ConvertEDCAParam(tpAniSirGlobal         pMac,
-                            tSirMacEdcaParamSetIE *pOld,
-                            tDot11fIEEDCAParamSet    *pNew)
-{
+                      tSirMacEdcaParamSetIE *pOld,
+                      tDot11fIEEDCAParamSet    *pNew) {
     pOld->type   = 12;
     pOld->length = 20;
 
@@ -380,9 +356,8 @@ void ConvertEDCAParam(tpAniSirGlobal         pMac,
 }
 
 void ConvertTSPEC(tpAniSirGlobal  pMac,
-                        tSirMacTspecIE *pOld,
-                        tDot11fIETSPEC *pNew)
-{
+                  tSirMacTspecIE *pOld,
+                  tDot11fIETSPEC *pNew) {
     pOld->tsinfo.traffic.trafficType  = (tANI_U16)pNew->traffic_type;
     pOld->tsinfo.traffic.tsid         = (tANI_U16)pNew->tsid;
     pOld->tsinfo.traffic.direction    = (tANI_U16)pNew->direction;
@@ -412,13 +387,11 @@ void ConvertTSPEC(tpAniSirGlobal  pMac,
 }
 
 tSirRetStatus ConvertTCLAS(tpAniSirGlobal  pMac,
-                                 tSirTclasInfo  *pOld,
-                                 tDot11fIETCLAS *pNew)
-{
+                           tSirTclasInfo  *pOld,
+                           tDot11fIETCLAS *pNew) {
     tANI_U32 length = 0;
 
-    if ( DOT11F_FAILED( dot11fGetPackedIETCLAS( pMac, pNew, &length ) ) )
-    {
+    if ( DOT11F_FAILED( dot11fGetPackedIETCLAS( pMac, pNew, &length ) ) ) {
         return eSIR_FAILURE;
     }
 
@@ -428,8 +401,7 @@ tSirRetStatus ConvertTCLAS(tpAniSirGlobal  pMac,
     pOld->tclas.classifierType = pNew->classifier_type;
     pOld->tclas.classifierMask = pNew->classifier_mask;
 
-    switch ( pNew->classifier_type )
-    {
+    switch ( pNew->classifier_type ) {
     case 0:
         vos_mem_copy( pOld->tclasParams.eth.srcAddr, pNew->info.EthParams.source, 6 );
         vos_mem_copy( pOld->tclasParams.eth.dstAddr, pNew->info.EthParams.dest, 6 );
@@ -437,8 +409,7 @@ tSirRetStatus ConvertTCLAS(tpAniSirGlobal  pMac,
         break;
     case 1:
         pOld->version = pNew->info.IpParams.version;
-        if ( 4 == pNew->info.IpParams.version )
-        {
+        if ( 4 == pNew->info.IpParams.version ) {
             pOld->tclasParams.ipv4.version = 4;
             vos_mem_copy( pOld->tclasParams.ipv4.srcIpAddr,
                           pNew->info.IpParams.params.IpV4Params.source, 4 );
@@ -449,9 +420,7 @@ tSirRetStatus ConvertTCLAS(tpAniSirGlobal  pMac,
             pOld->tclasParams.ipv4.dscp     = pNew->info.IpParams.params.IpV4Params.DSCP;
             pOld->tclasParams.ipv4.protocol = pNew->info.IpParams.params.IpV4Params.proto;
             pOld->tclasParams.ipv4.rsvd     = pNew->info.IpParams.params.IpV4Params.reserved;
-        }
-        else if ( 6 == pNew->info.IpParams.version )
-        {
+        } else if ( 6 == pNew->info.IpParams.version ) {
             pOld->tclasParams.ipv6.version = 6;
             vos_mem_copy( ( tANI_U8* )pOld->tclasParams.ipv6.srcIpAddr,
                           ( tANI_U8* )pNew->info.IpParams.params.IpV6Params.source, 16 );
@@ -461,9 +430,7 @@ tSirRetStatus ConvertTCLAS(tpAniSirGlobal  pMac,
             pOld->tclasParams.ipv6.dstPort  = pNew->info.IpParams.params.IpV6Params.dest_port;
             vos_mem_copy( ( tANI_U8* )pOld->tclasParams.ipv6.flowLabel,
                           ( tANI_U8* )pNew->info.IpParams.params.IpV6Params.flow_label, 3 );
-        }
-        else
-        {
+        } else {
             return eSIR_FAILURE;
         }
         break;
@@ -478,9 +445,8 @@ tSirRetStatus ConvertTCLAS(tpAniSirGlobal  pMac,
 }
 
 void ConvertWMMTSPEC(tpAniSirGlobal     pMac,
-                           tSirMacTspecIE    *pOld,
-                           tDot11fIEWMMTSPEC *pNew)
-{
+                     tSirMacTspecIE    *pOld,
+                     tDot11fIEWMMTSPEC *pNew) {
     pOld->tsinfo.traffic.trafficType  = (tANI_U16)pNew->traffic_type;
     pOld->tsinfo.traffic.tsid         = (tANI_U16)pNew->tsid;
     pOld->tsinfo.traffic.direction    = (tANI_U16)pNew->direction;
@@ -507,13 +473,11 @@ void ConvertWMMTSPEC(tpAniSirGlobal     pMac,
 }
 
 tSirRetStatus ConvertWMMTCLAS(tpAniSirGlobal    pMac,
-                                    tSirTclasInfo     *pOld,
-                                    tDot11fIEWMMTCLAS *pNew)
-{
+                              tSirTclasInfo     *pOld,
+                              tDot11fIEWMMTCLAS *pNew) {
     tANI_U32 length = 0;
 
-    if ( DOT11F_FAILED( dot11fGetPackedIEWMMTCLAS( pMac, pNew, &length ) ) )
-    {
+    if ( DOT11F_FAILED( dot11fGetPackedIEWMMTCLAS( pMac, pNew, &length ) ) ) {
         return eSIR_FAILURE;
     }
 
@@ -523,8 +487,7 @@ tSirRetStatus ConvertWMMTCLAS(tpAniSirGlobal    pMac,
     pOld->tclas.classifierType = pNew->classifier_type;
     pOld->tclas.classifierMask = pNew->classifier_mask;
 
-    switch ( pNew->classifier_type )
-    {
+    switch ( pNew->classifier_type ) {
     case 0:
         vos_mem_copy(  pOld->tclasParams.eth.srcAddr, pNew->info.EthParams.source, 6 );
         vos_mem_copy( pOld->tclasParams.eth.dstAddr, pNew->info.EthParams.dest, 6 );
@@ -532,8 +495,7 @@ tSirRetStatus ConvertWMMTCLAS(tpAniSirGlobal    pMac,
         break;
     case 1:
         pOld->version = pNew->info.IpParams.version;
-        if ( 4 == pNew->info.IpParams.version )
-        {
+        if ( 4 == pNew->info.IpParams.version ) {
             pOld->tclasParams.ipv4.version = 4;
             vos_mem_copy( pOld->tclasParams.ipv4.srcIpAddr,
                           pNew->info.IpParams.params.IpV4Params.source, 4 );
@@ -544,9 +506,7 @@ tSirRetStatus ConvertWMMTCLAS(tpAniSirGlobal    pMac,
             pOld->tclasParams.ipv4.dscp     = pNew->info.IpParams.params.IpV4Params.DSCP;
             pOld->tclasParams.ipv4.protocol = pNew->info.IpParams.params.IpV4Params.proto;
             pOld->tclasParams.ipv4.rsvd     = pNew->info.IpParams.params.IpV4Params.reserved;
-        }
-        else if ( 6 == pNew->info.IpParams.version )
-        {
+        } else if ( 6 == pNew->info.IpParams.version ) {
             pOld->tclasParams.ipv6.version = 6;
             vos_mem_copy( ( tANI_U8* )pOld->tclasParams.ipv6.srcIpAddr,
                           ( tANI_U8* )pNew->info.IpParams.params.IpV6Params.source, 16 );
@@ -556,9 +516,7 @@ tSirRetStatus ConvertWMMTCLAS(tpAniSirGlobal    pMac,
             pOld->tclasParams.ipv6.dstPort  = pNew->info.IpParams.params.IpV6Params.dest_port;
             vos_mem_copy( ( tANI_U8* )pOld->tclasParams.ipv6.flowLabel,
                           ( tANI_U8* )pNew->info.IpParams.params.IpV6Params.flow_label, 3 );
-        }
-        else
-        {
+        } else {
             return eSIR_FAILURE;
         }
         break;
@@ -573,18 +531,16 @@ tSirRetStatus ConvertWMMTCLAS(tpAniSirGlobal    pMac,
 }
 
 void ConvertTSDelay(tpAniSirGlobal    pMac,
-                          tSirMacTsDelayIE *pOld,
-                          tDot11fIETSDelay *pNew)
-{
+                    tSirMacTsDelayIE *pOld,
+                    tDot11fIETSDelay *pNew) {
     pOld->type   = DOT11F_EID_TSDELAY;
     pOld->length = 4U;
     pOld->delay  = pNew->delay;
 }
 
 void ConvertSchedule(tpAniSirGlobal     pMac,
-                           tSirMacScheduleIE *pOld,
-                           tDot11fIESchedule *pNew)
-{
+                     tSirMacScheduleIE *pOld,
+                     tDot11fIESchedule *pNew) {
     pOld->type             = DOT11F_EID_SCHEDULE;
     pOld->length           = DOT11F_IE_SCHEDULE_MIN_LEN;
 
@@ -598,9 +554,8 @@ void ConvertSchedule(tpAniSirGlobal     pMac,
 }
 
 void ConvertWMMSchedule(tpAniSirGlobal        pMac,
-                              tSirMacScheduleIE    *pOld,
-                              tDot11fIEWMMSchedule *pNew)
-{
+                        tSirMacScheduleIE    *pOld,
+                        tDot11fIEWMMSchedule *pNew) {
     pOld->type             = DOT11F_EID_WMMSCHEDULE;
     pOld->length           = DOT11F_IE_WMMSCHEDULE_MIN_LEN;
 
@@ -614,20 +569,18 @@ void ConvertWMMSchedule(tpAniSirGlobal        pMac,
 }
 
 /**
-    @brief   :    This functions converts the given buffer till given size to Big endian format assuming the 
+    @brief   :    This functions converts the given buffer till given size to Big endian format assuming the
                      bus is 32 bit. The size should be four byte aligned.
     @param :    ptr to be converted, size
     @return  :    void
 */
 
-void ConverttoBigEndian(void *ptr, tANI_U16    size)
-{
+void ConverttoBigEndian(void *ptr, tANI_U16    size) {
     tANI_U8        *temp_ptr;
     tANI_U32    *dest_ptr;
 
     dest_ptr  = (tANI_U32 *)ptr;
-    while(size)
-    {
+    while(size) {
         temp_ptr = (tANI_U8 *) dest_ptr;
         *dest_ptr = (temp_ptr[0] << 24) | (temp_ptr[1] << 16) | (temp_ptr[2] << 8) | temp_ptr[3];
         dest_ptr++;
@@ -637,8 +590,7 @@ void ConverttoBigEndian(void *ptr, tANI_U16    size)
 
 
 void CreateScanDataNullFrame(tpAniSirGlobal pMac, tSirMacMgmtHdr *macMgmtHdr,
-                  tANI_U8 pwrMgmt, tSirMacAddr bssid, tSirMacAddr selfMacAddr)
-{
+                             tANI_U8 pwrMgmt, tSirMacAddr bssid, tSirMacAddr selfMacAddr) {
 
     macMgmtHdr->fc.type = SIR_MAC_DATA_FRAME;
     macMgmtHdr->fc.subType = SIR_MAC_DATA_NULL;
@@ -657,24 +609,23 @@ void CreateScanDataNullFrame(tpAniSirGlobal pMac, tSirMacMgmtHdr *macMgmtHdr,
     macMgmtHdr->seqControl.seqNumLo = 0;
     macMgmtHdr->seqControl.seqNumHi = 2;
     vos_mem_copy( (void *)&macMgmtHdr->da,
-                              (void *)bssid, sizeof(tSirMacAddr));
+                  (void *)bssid, sizeof(tSirMacAddr));
     vos_mem_copy( (void *)&macMgmtHdr->sa,
-                              (void *)selfMacAddr, sizeof(tSirMacAddr));
+                  (void *)selfMacAddr, sizeof(tSirMacAddr));
     vos_mem_copy( (void *)&macMgmtHdr->bssId,
-                              (void *)bssid, sizeof(tSirMacAddr));
-    
+                  (void *)bssid, sizeof(tSirMacAddr));
+
     return;
 }
 
 
-void CreateScanCtsFrame(tpAniSirGlobal pMac, tSirMacMgmtHdr *macMgmtHdr, tSirMacAddr selfMac)
-{
+void CreateScanCtsFrame(tpAniSirGlobal pMac, tSirMacMgmtHdr *macMgmtHdr, tSirMacAddr selfMac) {
     macMgmtHdr->fc.type = SIR_MAC_CTRL_FRAME;
     macMgmtHdr->fc.subType = SIR_MAC_CTRL_CTS;
     macMgmtHdr->fc.order = 0;
     macMgmtHdr->fc.wep = 0;
     macMgmtHdr->fc.moreData =0;
-    macMgmtHdr->fc.powerMgmt = 0;  
+    macMgmtHdr->fc.powerMgmt = 0;
     macMgmtHdr->fc.retry = 0;
     macMgmtHdr->fc.moreFrag = 0;
     macMgmtHdr->fc.fromDS = 0;
@@ -682,23 +633,20 @@ void CreateScanCtsFrame(tpAniSirGlobal pMac, tSirMacMgmtHdr *macMgmtHdr, tSirMac
     macMgmtHdr->durationLo = (tANI_U8) (SIR_MAC_MAX_DURATION_MICRO_SECONDS & 0xff);
     macMgmtHdr->durationHi = (tANI_U8) ((SIR_MAC_MAX_DURATION_MICRO_SECONDS & 0xff00) >> 8);
     vos_mem_copy( (void *)macMgmtHdr->da, (void *)selfMac, sizeof(tSirMacAddr));
-            
+
     return;
 }
 
-void ConvertQosMapsetFrame(tpAniSirGlobal pMac, tSirQosMapSet* Qos, tDot11fIEQosMapSet* dot11fIE)
-{
+void ConvertQosMapsetFrame(tpAniSirGlobal pMac, tSirQosMapSet* Qos, tDot11fIEQosMapSet* dot11fIE) {
     tANI_U8 i,j=0;
     Qos->num_dscp_exceptions = (dot11fIE->num_dscp_exceptions - 16)/2;
-    for (i=0;i<Qos->num_dscp_exceptions;i++)
-    {
+    for (i=0; i<Qos->num_dscp_exceptions; i++) {
         Qos->dscp_exceptions[i][0] = dot11fIE->dscp_exceptions[j];
         j++;
         Qos->dscp_exceptions[i][1] = dot11fIE->dscp_exceptions[j];
         j++;
     }
-    for (i=0;i<8;i++)
-    {
+    for (i=0; i<8; i++) {
         Qos->dscp_range[i][0] = dot11fIE->dscp_exceptions[j];
         j++;
         Qos->dscp_range[i][1] = dot11fIE->dscp_exceptions[j];
@@ -707,18 +655,16 @@ void ConvertQosMapsetFrame(tpAniSirGlobal pMac, tSirQosMapSet* Qos, tDot11fIEQos
 }
 
 /**
-    @brief    :    This functions creates a DATA_NULL/CTS2SELF frame in Big endian format 
+    @brief    :    This functions creates a DATA_NULL/CTS2SELF frame in Big endian format
     @param    :    Global MAC structure, pointer to return the created packet, role which is Station/AP
     @return    :    void
 */
 
-void CreateInitScanRawFrame(tpAniSirGlobal pMac, tSirMacMgmtHdr *macMgmtHdr, tBssSystemRole role)
-{
+void CreateInitScanRawFrame(tpAniSirGlobal pMac, tSirMacMgmtHdr *macMgmtHdr, tBssSystemRole role) {
 #if 0
     tpStaStruct pSta = (tpStaStruct) pMac->hal.halMac.staTable;
-    
-    if (role == eSYSTEM_STA_ROLE)
-    {
+
+    if (role == eSYSTEM_STA_ROLE) {
         macMgmtHdr->fc.type = SIR_MAC_DATA_FRAME;
         macMgmtHdr->fc.subType = SIR_MAC_DATA_NULL;
         macMgmtHdr->fc.protVer = SIR_MAC_PROTOCOL_VERSION;
@@ -738,9 +684,7 @@ void CreateInitScanRawFrame(tpAniSirGlobal pMac, tSirMacMgmtHdr *macMgmtHdr, tBs
         vos_mem_copy( (void *)&macMgmtHdr->da, (void *)pSta[0].bssId, 6);
         vos_mem_copy( &macMgmtHdr->sa, pSta[0].staAddr, 6);
         vos_mem_copy( (void *)&macMgmtHdr->bssId, (void *)pSta[0].bssId, 6);
-    }
-    else if (role == eSYSTEM_AP_ROLE || role == eSYSTEM_STA_IN_IBSS_ROLE)
-    {
+    } else if (role == eSYSTEM_AP_ROLE || role == eSYSTEM_STA_IN_IBSS_ROLE) {
         macMgmtHdr->fc.type = SIR_MAC_CTRL_FRAME;
         macMgmtHdr->fc.subType = SIR_MAC_CTRL_CTS;
         macMgmtHdr->fc.order = 0;
@@ -760,19 +704,17 @@ void CreateInitScanRawFrame(tpAniSirGlobal pMac, tSirMacMgmtHdr *macMgmtHdr, tBs
 }
 
 /**
-    @brief    :    This functions creates a DATA_NULL frame in Big endian format 
+    @brief    :    This functions creates a DATA_NULL frame in Big endian format
     @param    :    Global MAC structure, pointer to return the created packet, role which is Station/AP
     @return    :    void
 */
 
 
-void CreateFinishScanRawFrame(tpAniSirGlobal pMac, tSirMacMgmtHdr *macMgmtHdr, tBssSystemRole role)
-{
+void CreateFinishScanRawFrame(tpAniSirGlobal pMac, tSirMacMgmtHdr *macMgmtHdr, tBssSystemRole role) {
 #if 0
     tpStaStruct pSta = (tpStaStruct) pMac->hal.halMac.staTable;
 
-    if (role == eSYSTEM_STA_ROLE)
-    {
+    if (role == eSYSTEM_STA_ROLE) {
         macMgmtHdr->fc.type = SIR_MAC_DATA_FRAME;
         macMgmtHdr->fc.subType = SIR_MAC_DATA_NULL;
         macMgmtHdr->fc.protVer = SIR_MAC_PROTOCOL_VERSION;
@@ -794,7 +736,7 @@ void CreateFinishScanRawFrame(tpAniSirGlobal pMac, tSirMacMgmtHdr *macMgmtHdr, t
         vos_mem_copy( (void *)macMgmtHdr->bssId, (void *)pSta[0].bssId, 6);
 
     }
-    
+
     return;
 #endif
 }

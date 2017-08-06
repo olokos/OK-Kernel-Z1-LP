@@ -54,7 +54,7 @@ tSirRetStatus limTspecAdd(
     tSirMacTspecIE   *pTspec,
     tANI_U32               interval,
     tpLimTspecInfo   *ppInfo);
-    
+
 
 // admit control interface
 extern tSirRetStatus
@@ -68,14 +68,15 @@ limAdmitControlAddTS(
     tSirMacScheduleIE      *pSch,
     tANI_U8                   *pTspecIdx ,//index to the lim tspec table.
     tpPESession psessionEntry
-    );
+);
 
 static inline tSirRetStatus
 limAdmitControlAddSta(
     tpAniSirGlobal  pMac,
     tANI_U8             *staAddr,
-    tANI_U8            alloc)
-{ return eSIR_SUCCESS;}
+    tANI_U8            alloc) {
+    return eSIR_SUCCESS;
+}
 
 extern tSirRetStatus
 limAdmitControlDeleteSta(

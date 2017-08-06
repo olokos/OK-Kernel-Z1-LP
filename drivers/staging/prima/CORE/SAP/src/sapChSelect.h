@@ -32,18 +32,18 @@
 /*===========================================================================
 
                       s a p C h S e l e c t . h
-                                               
+
   OVERVIEW:
-  
+
   This software unit holds the implementation of the WLAN SAP modules
   functions for channel selection.
 
-  DEPENDENCIES:   
-  
+  DEPENDENCIES:
 
-  Are listed for each API below. 
-  
-  
+
+  Are listed for each API below.
+
+
 ===========================================================================*/
 
 /*===========================================================================
@@ -98,8 +98,7 @@
 #define SAP_24GHZ_THIRD_OVERLAP_CHAN_RSSI_EFFECT_PRIMARY      (-30) // In 2.4GHZ, Effect of Primary  Channel RSSI on Third Overlapping Channel
 #define SAP_24GHZ_FOURTH_OVERLAP_CHAN_RSSI_EFFECT_PRIMARY     (-40) // In 2.4GHZ, Effect of Primary  Channel RSSI on Fourth Overlapping Channel
 
-typedef enum
-{
+typedef enum {
     CHANNEL_1 = 1,
     CHANNEL_2,
     CHANNEL_3,
@@ -114,11 +113,11 @@ typedef enum
 } tSapChannel;
 
 /**
-* Structure holding information of each channel in the spectrum, 
+* Structure holding information of each channel in the spectrum,
 * it contains the channel number, the computed weight
 */
 
-typedef struct sSapChannelListInfo{
+typedef struct sSapChannelListInfo {
     v_U8_t numChannel;
     v_U8_t *channelList;
 } tSapChannelListInfo;
@@ -134,7 +133,7 @@ typedef struct {
 } tSapSpectChInfo;//tDfsSpectChInfo;
 
 /**
-* Structure holding all the information required to make a 
+* Structure holding all the information required to make a
 * decision for the best operating channel based on dfs formula
 */
 

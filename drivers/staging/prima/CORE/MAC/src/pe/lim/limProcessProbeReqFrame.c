@@ -49,8 +49,8 @@
 #include "limSession.h"
 
 #ifdef WLAN_FEATURE_P2P_INTERNAL
-void limSendP2PProbeResponse(tpAniSirGlobal pMac, tANI_U8 *pBd, 
-                      tpPESession psessionEntry);
+void limSendP2PProbeResponse(tpAniSirGlobal pMac, tANI_U8 *pBd,
+                             tpPESession psessionEntry);
 #endif
 void
 
@@ -59,7 +59,7 @@ limSendSmeProbeReqInd(tpAniSirGlobal pMac,
                       tANI_U8 *pProbeReqIE,
                       tANI_U32 ProbeReqIELen,
                       tpPESession psessionEntry);
-                      
+
 /**
  * limGetWPSPBCSessions
  *
@@ -67,7 +67,7 @@ limSendSmeProbeReqInd(tpAniSirGlobal pMac,
  * This function is called to query the WPS PBC overlap
  *
  *LOGIC:
- * This function check WPS PBC probe request link list for PBC overlap 
+ * This function check WPS PBC probe request link list for PBC overlap
  *
  *ASSUMPTIONS:
  *
@@ -76,16 +76,15 @@ limSendSmeProbeReqInd(tpAniSirGlobal pMac,
  *
  * @param  pMac   Pointer to Global MAC structure
  * @param  addr   A pointer to probe request source MAC addresss
- * @param  uuid_e A pointer to UUIDE element of WPS IE in WPS PBC probe request  
+ * @param  uuid_e A pointer to UUIDE element of WPS IE in WPS PBC probe request
  * @param  psessionEntry   A pointer to station PE session
  *
  * @return None
  */
 
-void limGetWPSPBCSessions(tpAniSirGlobal pMac, tANI_U8 *addr, 
-                          tANI_U8 *uuid_e, eWPSPBCOverlap *overlap, 
-                          tpPESession psessionEntry)
-{
+void limGetWPSPBCSessions(tpAniSirGlobal pMac, tANI_U8 *addr,
+                          tANI_U8 *uuid_e, eWPSPBCOverlap *overlap,
+                          tpPESession psessionEntry) {
     int count = 0;
     tSirWPSPBCSession *pbc;
     tANI_TIMESTAMP curTime;
@@ -103,21 +102,17 @@ void limGetWPSPBCSessions(tpAniSirGlobal pMac, tANI_U8 *addr,
         count++;
         if(count > 1)
             break;
-            
+
         vos_mem_copy((tANI_U8 *)addr, (tANI_U8 *)pbc->addr, sizeof(tSirMacAddr));
         vos_mem_copy((tANI_U8 *)uuid_e, (tANI_U8 *)pbc->uuid_e, SIR_WPS_UUID_LEN);
-        }
-
-    if (count > 1)
-    {
-        *overlap = eSAP_WPSPBC_OVERLAP_IN120S;    // Overlap  
     }
-    else if(count == 0)
-    {
-        *overlap = eSAP_WPSPBC_NO_WPSPBC_PROBE_REQ_IN120S;    // no WPS probe request in 120 second    
-    } else
-    {
-         *overlap = eSAP_WPSPBC_ONE_WPSPBC_PROBE_REQ_IN120S;   // One WPS probe request in 120 second
+
+    if (count > 1) {
+        *overlap = eSAP_WPSPBC_OVERLAP_IN120S;    // Overlap
+    } else if(count == 0) {
+        *overlap = eSAP_WPSPBC_NO_WPSPBC_PROBE_REQ_IN120S;    // no WPS probe request in 120 second
+    } else {
+        *overlap = eSAP_WPSPBC_ONE_WPSPBC_PROBE_REQ_IN120S;   // One WPS probe request in 120 second
     }
 
     PELOGE(limLog(pMac, LOGE, FL("overlap = %d"), *overlap);)
@@ -135,7 +130,7 @@ void limGetWPSPBCSessions(tpAniSirGlobal pMac, tANI_U8 *addr,
  *
  *LOGIC:
  *
- * 
+ *
  *ASSUMPTIONS:
  *
  *
@@ -146,33 +141,31 @@ void limGetWPSPBCSessions(tpAniSirGlobal pMac, tANI_U8 *addr,
  *
  * @return None
  */
-static void limRemoveTimeoutPBCsessions(tpAniSirGlobal pMac, tSirWPSPBCSession *pbc)
-{
-     tSirWPSPBCSession *prev;
+static void limRemoveTimeoutPBCsessions(tpAniSirGlobal pMac, tSirWPSPBCSession *pbc) {
+    tSirWPSPBCSession *prev;
 
-        while (pbc) {
-                prev = pbc;
-                pbc = pbc->next;
+    while (pbc) {
+        prev = pbc;
+        pbc = pbc->next;
 
         PELOG4(limLog(pMac, LOG4, FL("WPS PBC sessions remove"));)
         PELOG4(sirDumpBuf(pMac, SIR_LIM_MODULE_ID, LOG4, prev->addr, sizeof(tSirMacAddr));)
         PELOG4(sirDumpBuf(pMac, SIR_LIM_MODULE_ID, LOG4, prev->uuid_e, SIR_WPS_UUID_LEN);)
-        
+
         vos_mem_free(prev);
-       }
+    }
 }
 
-void limRemovePBCSessions(tpAniSirGlobal pMac, tSirMacAddr pRemoveMac,tpPESession psessionEntry)
-{
+void limRemovePBCSessions(tpAniSirGlobal pMac, tSirMacAddr pRemoveMac,tpPESession psessionEntry) {
     tSirWPSPBCSession *pbc, *prev = NULL;
     prev = pbc = psessionEntry->pAPWPSPBCSession;
 
     while (pbc) {
         if (vos_mem_compare((tANI_U8 *)pbc->addr,
                             (tANI_U8 *)pRemoveMac, sizeof(tSirMacAddr))) {
-          prev->next = pbc->next;
-          if (pbc == psessionEntry->pAPWPSPBCSession)
-            psessionEntry->pAPWPSPBCSession = pbc->next;
+            prev->next = pbc->next;
+            if (pbc == psessionEntry->pAPWPSPBCSession)
+                psessionEntry->pAPWPSPBCSession = pbc->next;
             vos_mem_free(pbc);
             return;
         }
@@ -189,10 +182,10 @@ void limRemovePBCSessions(tpAniSirGlobal pMac, tSirMacAddr pRemoveMac,tpPESessio
  * This function is called when probe request with WPS PBC IE is received
  *
  *LOGIC:
- * This function add the WPS PBC probe request in the WPS PBC probe request link list 
+ * This function add the WPS PBC probe request in the WPS PBC probe request link list
  * The link list is in decreased time order of probe request that is received.
  * The entry that is more than 120 second is removed.
- * 
+ *
  *ASSUMPTIONS:
  *
  *
@@ -200,22 +193,21 @@ void limRemovePBCSessions(tpAniSirGlobal pMac, tSirMacAddr pRemoveMac,tpPESessio
  *
  * @param  pMac   Pointer to Global MAC structure
  * @param  addr   A pointer to probe request source MAC addresss
- * @param  uuid_e A pointer to UUIDE element of WPS IE 
+ * @param  uuid_e A pointer to UUIDE element of WPS IE
  * @param  psessionEntry   A pointer to station PE session
  *
  * @return None
  */
 
 static void limUpdatePBCSessionEntry(tpAniSirGlobal pMac,
-                                     tANI_U8 *addr, tANI_U8 *uuid_e, 
-                                     tpPESession psessionEntry)
-{
+                                     tANI_U8 *addr, tANI_U8 *uuid_e,
+                                     tpPESession psessionEntry) {
     tSirWPSPBCSession *pbc, *prev = NULL;
 
     tANI_TIMESTAMP curTime;
 
     curTime = (tANI_TIMESTAMP)(palGetTickCount(pMac->hHdd) / PAL_TICKS_PER_SECOND);
-            
+
     PELOG4(limLog(pMac, LOG4, FL("Receive WPS probe reques curTime=%d"), curTime);)
     PELOG4(sirDumpBuf(pMac, SIR_LIM_MODULE_ID, LOG4, addr, sizeof(tSirMacAddr));)
     PELOG4(sirDumpBuf(pMac, SIR_LIM_MODULE_ID, LOG4, uuid_e, SIR_WPS_UUID_LEN);)
@@ -224,7 +216,7 @@ static void limUpdatePBCSessionEntry(tpAniSirGlobal pMac,
 
     while (pbc) {
         if (vos_mem_compare((tANI_U8 *)pbc->addr, (tANI_U8 *)addr, sizeof(tSirMacAddr)) &&
-            vos_mem_compare((tANI_U8 *)pbc->uuid_e, (tANI_U8 *)uuid_e, SIR_WPS_UUID_LEN)) {
+                vos_mem_compare((tANI_U8 *)pbc->uuid_e, (tANI_U8 *)uuid_e, SIR_WPS_UUID_LEN)) {
             if (prev)
                 prev->next = pbc->next;
             else
@@ -237,21 +229,20 @@ static void limUpdatePBCSessionEntry(tpAniSirGlobal pMac,
 
     if (!pbc) {
         pbc = vos_mem_malloc(sizeof(tSirWPSPBCSession));
-        if ( NULL == pbc )
-        {
+        if ( NULL == pbc ) {
             PELOGE(limLog(pMac, LOGE, FL("memory allocate failed!"));)
             return;
         }
         vos_mem_copy((tANI_U8 *)pbc->addr, (tANI_U8 *)addr, sizeof(tSirMacAddr));
-    
+
         if (uuid_e)
             vos_mem_copy((tANI_U8 *)pbc->uuid_e, (tANI_U8 *)uuid_e, SIR_WPS_UUID_LEN);
     }
-    
+
     pbc->next = psessionEntry->pAPWPSPBCSession;
     psessionEntry->pAPWPSPBCSession = pbc;
     pbc->timestamp = curTime;
-    
+
     /* remove entries that have timed out */
     prev = pbc;
     pbc = pbc->next;
@@ -260,7 +251,7 @@ static void limUpdatePBCSessionEntry(tpAniSirGlobal pMac,
         if (curTime > pbc->timestamp + SIR_WPS_PBC_WALK_TIME) {
             prev->next = NULL;
             limRemoveTimeoutPBCsessions(pMac, pbc);
-           break;
+            break;
         }
         prev = pbc;
         pbc = pbc->next;
@@ -287,21 +278,20 @@ static void limUpdatePBCSessionEntry(tpAniSirGlobal pMac,
  * @return None
  */
 
-void limWPSPBCTimeout(tpAniSirGlobal pMac, tpPESession psessionEntry)
-{
+void limWPSPBCTimeout(tpAniSirGlobal pMac, tpPESession psessionEntry) {
     tANI_TIMESTAMP curTime;
     tSirWPSPBCSession *pbc, *prev = NULL;
 
     curTime = (tANI_TIMESTAMP)(palGetTickCount(pMac->hHdd) / PAL_TICKS_PER_SECOND);
-    
+
     PELOG3(limLog(pMac, LOG3, FL("WPS PBC cleanup timeout curTime=%d"), curTime);)
 
-    prev = psessionEntry->pAPWPSPBCSession; 
+    prev = psessionEntry->pAPWPSPBCSession;
     if(prev)
         pbc = prev->next;
     else
         return;
-            
+
     while (pbc) {
         if (curTime > pbc->timestamp + SIR_WPS_PBC_WALK_TIME) {
             prev->next = NULL;
@@ -312,12 +302,11 @@ void limWPSPBCTimeout(tpAniSirGlobal pMac, tpPESession psessionEntry)
         pbc = pbc->next;
     }
 
-    if(prev)
-    {
-         if (curTime > prev->timestamp + SIR_WPS_PBC_WALK_TIME) {
-            psessionEntry->pAPWPSPBCSession = NULL;  
+    if(prev) {
+        if (curTime > prev->timestamp + SIR_WPS_PBC_WALK_TIME) {
+            psessionEntry->pAPWPSPBCSession = NULL;
             limRemoveTimeoutPBCsessions(pMac, prev);
-         }
+        }
     }
 
 }
@@ -342,8 +331,7 @@ void limWPSPBCTimeout(tpAniSirGlobal pMac, tpPESession psessionEntry)
  * @return None
  */
 
-void limWPSPBCClose(tpAniSirGlobal pMac, tpPESession psessionEntry)
-{
+void limWPSPBCClose(tpAniSirGlobal pMac, tpPESession psessionEntry) {
 
     limRemoveTimeoutPBCsessions(pMac, psessionEntry->pAPWPSPBCSession);
 
@@ -358,27 +346,25 @@ void limWPSPBCClose(tpAniSirGlobal pMac, tpPESession psessionEntry)
  *
  *LOGIC:
  * This function check 11b rates in supportedRates and extendedRates rates
- * 
+ *
  *NOTE:
  *
- * @param  rate   
+ * @param  rate
  *
  * @return BOOLEAN
  */
 
-tANI_BOOLEAN limCheck11bRates(tANI_U8 rate)
-{
+tANI_BOOLEAN limCheck11bRates(tANI_U8 rate) {
     if ( ( 0x02 == (rate))
-      || ( 0x04 == (rate))
-      || ( 0x0b == (rate))
-      || ( 0x16 == (rate))
-       )
-       {
-           return TRUE;
-       } 
+            || ( 0x04 == (rate))
+            || ( 0x0b == (rate))
+            || ( 0x16 == (rate))
+       ) {
+        return TRUE;
+    }
     return FALSE;
 }
-  
+
 /**
  * limProcessProbeReqFrame
  *
@@ -407,8 +393,7 @@ tANI_BOOLEAN limCheck11bRates(tANI_U8 rate)
  */
 
 void
-limProcessProbeReqFrame(tpAniSirGlobal pMac, tANI_U8 *pRxPacketInfo,tpPESession psessionEntry)
-{
+limProcessProbeReqFrame(tpAniSirGlobal pMac, tANI_U8 *pRxPacketInfo,tpPESession psessionEntry) {
     tANI_U8             *pBody;
     tpSirMacMgmtHdr     pHdr;
     tANI_U32            frameLen;
@@ -418,127 +403,103 @@ limProcessProbeReqFrame(tpAniSirGlobal pMac, tANI_U8 *pRxPacketInfo,tpPESession 
     tSirSmeProbeReq     *pSirSmeProbeReq;
     tANI_U32            wpsApEnable=0, tmp;
 
-    do{
+    do {
         // Don't send probe responses if disabled
         if (pMac->lim.gLimProbeRespDisableFlag)
             break;
 
-        // Don't send probe response if P2P go is scanning till scan come to idle state. 
+        // Don't send probe response if P2P go is scanning till scan come to idle state.
         if((psessionEntry->pePersona == VOS_P2P_GO_MODE) && ((pMac->lim.gpLimRemainOnChanReq )
-                                  || (pMac->lim.gLimHalScanState != eLIM_HAL_IDLE_SCAN_STATE)))
-        {
-           limLog(pMac, LOG3,
-              FL("While GO is scanning, don't send probe response"
-                 " on diff channel"));
-           break;
+                || (pMac->lim.gLimHalScanState != eLIM_HAL_IDLE_SCAN_STATE))) {
+            limLog(pMac, LOG3,
+                   FL("While GO is scanning, don't send probe response"
+                      " on diff channel"));
+            break;
         }
 
-       pHdr = WDA_GET_RX_MAC_HEADER(pRxPacketInfo);
+        pHdr = WDA_GET_RX_MAC_HEADER(pRxPacketInfo);
 
         if ( (psessionEntry->limSystemRole == eLIM_AP_ROLE) ||
-             (psessionEntry->limSystemRole == eLIM_BT_AMP_AP_ROLE)||
-             (psessionEntry->limSystemRole == eLIM_BT_AMP_STA_ROLE)|| 
-             ( (psessionEntry->limSystemRole == eLIM_STA_IN_IBSS_ROLE) &&
-             (WDA_GET_RX_BEACON_SENT(pRxPacketInfo)) ) )
-        {
-           frameLen = WDA_GET_RX_PAYLOAD_LEN(pRxPacketInfo);
+                (psessionEntry->limSystemRole == eLIM_BT_AMP_AP_ROLE)||
+                (psessionEntry->limSystemRole == eLIM_BT_AMP_STA_ROLE)||
+                ( (psessionEntry->limSystemRole == eLIM_STA_IN_IBSS_ROLE) &&
+                  (WDA_GET_RX_BEACON_SENT(pRxPacketInfo)) ) ) {
+            frameLen = WDA_GET_RX_PAYLOAD_LEN(pRxPacketInfo);
 
             PELOG3(limLog(pMac, LOG3, FL("Received Probe Request %d bytes from "), frameLen);
-            limPrintMacAddr(pMac, pHdr->sa, LOG3);)
+                   limPrintMacAddr(pMac, pHdr->sa, LOG3);)
 
             // Get pointer to Probe Request frame body
-           pBody = WDA_GET_RX_MPDU_DATA(pRxPacketInfo);
+            pBody = WDA_GET_RX_MPDU_DATA(pRxPacketInfo);
 
             // Parse Probe Request frame
-            if (sirConvertProbeReqFrame2Struct(pMac, pBody, frameLen, &probeReq)==eSIR_FAILURE)
-            {
+            if (sirConvertProbeReqFrame2Struct(pMac, pBody, frameLen, &probeReq)==eSIR_FAILURE) {
                 PELOGW(limLog(pMac, LOGE, FL("Parse error ProbeRequest,"
-                " length=%d, SA is:" MAC_ADDRESS_STR),
-                 frameLen,MAC_ADDR_ARRAY(pHdr->sa));)
+                                             " length=%d, SA is:" MAC_ADDRESS_STR),
+                              frameLen,MAC_ADDR_ARRAY(pHdr->sa));)
                 pMac->sys.probeError++;
                 break;
-            }
-            else
-            {
-                if (psessionEntry->pePersona == VOS_P2P_GO_MODE)
-                {
+            } else {
+                if (psessionEntry->pePersona == VOS_P2P_GO_MODE) {
                     tANI_U8 i = 0, rate_11b = 0, other_rates = 0;
                     // Check 11b rates in supported rates
                     for ( i = 0 ; i < probeReq.supportedRates.numRates;
-                                                                  i++ )
-                    {
-                        if (limCheck11bRates(probeReq.supportedRates.rate[i] & 0x7f))
-                        {
-                            rate_11b++; 
-                        }
-                        else
-                        {
+                            i++ ) {
+                        if (limCheck11bRates(probeReq.supportedRates.rate[i] & 0x7f)) {
+                            rate_11b++;
+                        } else {
                             other_rates++;
                         }
                     }
 
                     // Check 11b rates in extended rates
-                    for ( i = 0 ; i < probeReq.extendedRates.numRates; i++ )
-                    {
-                        if (limCheck11bRates(probeReq.extendedRates.rate[i] & 0x7f))
-                        {
-                            rate_11b++; 
-                        }
-                        else
-                        {
+                    for ( i = 0 ; i < probeReq.extendedRates.numRates; i++ ) {
+                        if (limCheck11bRates(probeReq.extendedRates.rate[i] & 0x7f)) {
+                            rate_11b++;
+                        } else {
                             other_rates++;
                         }
                     }
 
-                    if ( (rate_11b > 0) && (other_rates == 0) )
-                    {
-                        PELOG3(limLog(pMac, LOG3, 
-                               FL("Received a probe request frame with only 11b rates, SA is: "));
+                    if ( (rate_11b > 0) && (other_rates == 0) ) {
+                        PELOG3(limLog(pMac, LOG3,
+                                      FL("Received a probe request frame with only 11b rates, SA is: "));
                                limPrintMacAddr(pMac, pHdr->sa, LOG3);)
                         return;
                     }
                 }
-                if ((psessionEntry->limSystemRole == eLIM_AP_ROLE))
-                {
-                  
+                if ((psessionEntry->limSystemRole == eLIM_AP_ROLE)) {
+
                     if ( (psessionEntry->APWPSIEs.SirWPSProbeRspIE.FieldPresent &
-                                               SIR_WPS_PROBRSP_VER_PRESENT) &&
-                         (probeReq.wscIePresent ==  1) &&
-                         (probeReq.probeReqWscIeInfo.DevicePasswordID.id == 
-                                                  WSC_PASSWD_ID_PUSH_BUTTON) &&
-                         (probeReq.probeReqWscIeInfo.UUID_E.present == 1))
-                    {
-                        if(psessionEntry->fwdWPSPBCProbeReq)
-                        {
+                            SIR_WPS_PROBRSP_VER_PRESENT) &&
+                            (probeReq.wscIePresent ==  1) &&
+                            (probeReq.probeReqWscIeInfo.DevicePasswordID.id ==
+                             WSC_PASSWD_ID_PUSH_BUTTON) &&
+                            (probeReq.probeReqWscIeInfo.UUID_E.present == 1)) {
+                        if(psessionEntry->fwdWPSPBCProbeReq) {
                             PELOG4(sirDumpBuf(pMac, SIR_LIM_MODULE_ID, LOG4,
                                               pHdr->sa, sizeof(tSirMacAddr));)
                             PELOG4(sirDumpBuf(pMac, SIR_LIM_MODULE_ID, LOG4, pBody, frameLen);)
                             limSendSmeProbeReqInd(pMac, pHdr->sa, pBody, frameLen, psessionEntry);
-                        } 
-                        else
-                        {
+                        } else {
                             limUpdatePBCSessionEntry(pMac,
-                                pHdr->sa, probeReq.probeReqWscIeInfo.UUID_E.uuid, psessionEntry);
+                                                     pHdr->sa, probeReq.probeReqWscIeInfo.UUID_E.uuid, psessionEntry);
                         }
                     }
-                }
-                else
-                {
+                } else {
                     if (wlan_cfgGetInt(pMac, (tANI_U16) WNI_CFG_WPS_ENABLE, &tmp) != eSIR_SUCCESS)
                         limLog(pMac, LOGP,"Failed to cfg get id %d", WNI_CFG_WPS_ENABLE );
 
                     wpsApEnable = tmp & WNI_CFG_WPS_ENABLE_AP;
                     if ((wpsApEnable) &&
-                        (probeReq.wscIePresent ==  1) &&
-                        (probeReq.probeReqWscIeInfo.DevicePasswordID.id == WSC_PASSWD_ID_PUSH_BUTTON))
-                    {
-                        // send the probe req to WSM when it is from a PBC station 
+                            (probeReq.wscIePresent ==  1) &&
+                            (probeReq.probeReqWscIeInfo.DevicePasswordID.id == WSC_PASSWD_ID_PUSH_BUTTON)) {
+                        // send the probe req to WSM when it is from a PBC station
                         pSirSmeProbeReq = vos_mem_malloc(sizeof(tSirSmeProbeReq));
-                        if ( NULL == pSirSmeProbeReq )
-                        {
+                        if ( NULL == pSirSmeProbeReq ) {
                             // Log error
                             limLog(pMac, LOGP,
-                               FL("call to AllocateMemory failed for eWNI_SME_PROBE_REQ"));
+                                   FL("call to AllocateMemory failed for eWNI_SME_PROBE_REQ"));
                             return;
                         }
                         msgQ.type = eWNI_SME_PROBE_REQ;
@@ -551,8 +512,8 @@ limProcessProbeReqFrame(tpAniSirGlobal pMac, tANI_U8 *pRxPacketInfo,tpPESession 
                         vos_mem_copy(pSirSmeProbeReq->peerMacAddr, pHdr->sa, sizeof(tSirMacAddr));
                         pSirSmeProbeReq->devicePasswdId = probeReq.probeReqWscIeInfo.DevicePasswordID.id;
                         MTRACE(macTrace(pMac, TRACE_CODE_TX_SME_MSG,
-                            psessionEntry->peSessionId, msgQ.type));
-                       if (limSysProcessMmhMsgApi(pMac, &msgQ,  ePROT) != eSIR_SUCCESS){
+                                        psessionEntry->peSessionId, msgQ.type));
+                        if (limSysProcessMmhMsgApi(pMac, &msgQ,  ePROT) != eSIR_SUCCESS) {
                             PELOG3(limLog(pMac, LOG3, FL("couldnt send the probe req to wsm "));)
                         }
                     }
@@ -560,85 +521,73 @@ limProcessProbeReqFrame(tpAniSirGlobal pMac, tANI_U8 *pRxPacketInfo,tpPESession 
             }
 
             ssId.length = psessionEntry->ssId.length;
-             /* Copy the SSID from sessio entry to local variable */
+            /* Copy the SSID from sessio entry to local variable */
             vos_mem_copy(ssId.ssId,
                          psessionEntry->ssId.ssId,
                          psessionEntry->ssId.length);
 
             // Compare received SSID with current SSID. If they
             // match, reply with Probe Response.
-            if (probeReq.ssId.length)
-            {
+            if (probeReq.ssId.length) {
                 if (!ssId.length)
                     goto multipleSSIDcheck;
 
                 if (vos_mem_compare((tANI_U8 *) &ssId,
-                              (tANI_U8 *) &(probeReq.ssId), (tANI_U8) (ssId.length + 1)) )
-                {
+                                    (tANI_U8 *) &(probeReq.ssId), (tANI_U8) (ssId.length + 1)) ) {
                     limSendProbeRspMgmtFrame(pMac, pHdr->sa, &ssId, DPH_USE_MGMT_STAID,
                                              DPH_NON_KEEPALIVE_FRAME, psessionEntry,
                                              probeReq.p2pIePresent);
                     break;
-                }
-                else if (psessionEntry->pePersona == VOS_P2P_GO_MODE)
-                {
+                } else if (psessionEntry->pePersona == VOS_P2P_GO_MODE) {
                     tANI_U8   direct_ssid[7] = "DIRECT-";
                     tANI_U8   direct_ssid_len = 7;
                     if (vos_mem_compare((tANI_U8 *) &direct_ssid,
-                              (tANI_U8 *) &(probeReq.ssId.ssId), (tANI_U8) (direct_ssid_len)) )
-                    {
+                                        (tANI_U8 *) &(probeReq.ssId.ssId), (tANI_U8) (direct_ssid_len)) ) {
                         limSendProbeRspMgmtFrame(pMac, pHdr->sa, &ssId, DPH_USE_MGMT_STAID,
-                                             DPH_NON_KEEPALIVE_FRAME, psessionEntry,
-                                             probeReq.p2pIePresent);
+                                                 DPH_NON_KEEPALIVE_FRAME, psessionEntry,
+                                                 probeReq.p2pIePresent);
                         break;
                     }
-                }
-                else
-                {
-                   PELOG3(limLog(pMac, LOG3,
-                       FL("Ignoring ProbeReq frame with unmatched SSID received from "));
-                    limPrintMacAddr(pMac, pHdr->sa, LOG3);)
+                } else {
+                    PELOG3(limLog(pMac, LOG3,
+                                  FL("Ignoring ProbeReq frame with unmatched SSID received from "));
+                           limPrintMacAddr(pMac, pHdr->sa, LOG3);)
                     pMac->sys.probeBadSsid++;
                 }
-            }
-            else
-            {
+            } else {
                 {
                     if ((VOS_P2P_GO_MODE == psessionEntry->pePersona) &&
-                                                        pMac->miracastVendorConfig)
+                            pMac->miracastVendorConfig)
                         return;
 
                     // Broadcast SSID in the Probe Request.
                     // Reply with SSID we're configured with.
                     //Turn off the SSID length to 0 if hidden SSID feature is present
                     if(psessionEntry->ssidHidden)
-                      /*We are returning from here as probe request contains the broadcast SSID.
-                        So no need to send the probe resp*/
+                        /*We are returning from here as probe request contains the broadcast SSID.
+                          So no need to send the probe resp*/
                         //ssId.length = 0;
-                           return;
+                        return;
                     limSendProbeRspMgmtFrame(pMac, pHdr->sa, &ssId, DPH_USE_MGMT_STAID,
                                              DPH_NON_KEEPALIVE_FRAME, psessionEntry,
                                              probeReq.p2pIePresent);
                 }
                 break;
             }
-multipleSSIDcheck:
-            {
-               PELOG3(limLog(pMac, LOG3,
-                   FL("Ignoring ProbeReq frame with unmatched SSID received from "));
-                limPrintMacAddr(pMac, pHdr->sa, LOG3);)
+multipleSSIDcheck: {
+                PELOG3(limLog(pMac, LOG3,
+                              FL("Ignoring ProbeReq frame with unmatched SSID received from "));
+                       limPrintMacAddr(pMac, pHdr->sa, LOG3);)
                 pMac->sys.probeBadSsid++;
             }
-        }
-        else
-        {
+        } else {
             // Ignore received Probe Request frame
             PELOG3(limLog(pMac, LOG3, FL("Ignoring Probe Request frame received from "));
-            limPrintMacAddr(pMac, pHdr->sa, LOG3);)
+                   limPrintMacAddr(pMac, pHdr->sa, LOG3);)
             pMac->sys.probeIgnore++;
             break;
         }
-    }while(0);
+    } while(0);
 
     return;
 } /*** end limProcessProbeReqFrame() ***/
@@ -651,7 +600,7 @@ multipleSSIDcheck:
  * Probe Request frame reception.
  *
  *LOGIC:
- * This function processes received Probe Request frame and Pass 
+ * This function processes received Probe Request frame and Pass
  * Probe Request Frame to HDD.
  *
  * @param  pMac              Pointer to Global MAC structure
@@ -663,8 +612,7 @@ multipleSSIDcheck:
 
 static void
 limIndicateProbeReqToHDD(tpAniSirGlobal pMac, tANI_U8 *pBd,
-                         tpPESession psessionEntry)
-{
+                         tpPESession psessionEntry) {
     limLog( pMac, LOG1, FL("Received a probe request frame"));
 
     //send the probe req to SME.
@@ -683,8 +631,8 @@ limIndicateProbeReqToHDD(tpAniSirGlobal pMac, tANI_U8 *pBd,
  * Probe Request frame reception.
  *
  *LOGIC:
- * This function call limIndicateProbeReqToHDD function to indicate 
- * Probe Request frame to HDD. It also call limProcessProbeReqFrame 
+ * This function call limIndicateProbeReqToHDD function to indicate
+ * Probe Request frame to HDD. It also call limProcessProbeReqFrame
  * function which process received Probe Request frame and responds
  * with Probe Response.
  *
@@ -696,43 +644,36 @@ limIndicateProbeReqToHDD(tpAniSirGlobal pMac, tANI_U8 *pBd,
  */
 
 void
-limProcessProbeReqFrame_multiple_BSS(tpAniSirGlobal pMac, tANI_U8 *pBd,  tpPESession psessionEntry)
-{
+limProcessProbeReqFrame_multiple_BSS(tpAniSirGlobal pMac, tANI_U8 *pBd,  tpPESession psessionEntry) {
     tANI_U8 i;
 
-    if (psessionEntry != NULL)
-    {
+    if (psessionEntry != NULL) {
         if ((eLIM_AP_ROLE == psessionEntry->limSystemRole)
 #ifdef WLAN_FEATURE_P2P_INTERNAL
-         || (psessionEntry->limSystemRole == eLIM_P2P_DEVICE_ROLE)
+                || (psessionEntry->limSystemRole == eLIM_P2P_DEVICE_ROLE)
 #endif
-          )
-        {
+           ) {
             limIndicateProbeReqToHDD(pMac, pBd, psessionEntry);
         }
         limProcessProbeReqFrame(pMac,pBd,psessionEntry);
         return;
     }
 
-    for(i =0; i < pMac->lim.maxBssId;i++)
-    {
+    for(i =0; i < pMac->lim.maxBssId; i++) {
         psessionEntry = peFindSessionBySessionId(pMac,i);
-        if ( (psessionEntry != NULL) )
-        {
+        if ( (psessionEntry != NULL) ) {
             if ((eLIM_AP_ROLE == psessionEntry->limSystemRole)
 #ifdef WLAN_FEATURE_P2P_INTERNAL
-             || (psessionEntry->limSystemRole == eLIM_P2P_DEVICE_ROLE)
+                    || (psessionEntry->limSystemRole == eLIM_P2P_DEVICE_ROLE)
 #endif
-              )
-            {
+               ) {
                 limIndicateProbeReqToHDD(pMac, pBd, psessionEntry);
             }
             if ( (eLIM_AP_ROLE == psessionEntry->limSystemRole) ||
-                (eLIM_STA_IN_IBSS_ROLE == psessionEntry->limSystemRole) ||
-                (eLIM_BT_AMP_AP_ROLE == psessionEntry->limSystemRole) ||
-                (eLIM_BT_AMP_STA_ROLE == psessionEntry->limSystemRole)
-               )
-            {
+                    (eLIM_STA_IN_IBSS_ROLE == psessionEntry->limSystemRole) ||
+                    (eLIM_BT_AMP_AP_ROLE == psessionEntry->limSystemRole) ||
+                    (eLIM_BT_AMP_STA_ROLE == psessionEntry->limSystemRole)
+               ) {
                 limProcessProbeReqFrame(pMac,pBd,psessionEntry);
             }
         }
@@ -770,25 +711,23 @@ void
 limSendSmeProbeReqInd(tpAniSirGlobal pMac,
                       tSirMacAddr peerMacAddr,
                       tANI_U8 *pProbeReqIE,
-                      tANI_U32 ProbeReqIELen, 
-                      tpPESession psessionEntry)
-{
+                      tANI_U32 ProbeReqIELen,
+                      tpPESession psessionEntry) {
     tSirSmeProbeReqInd     *pSirSmeProbeReqInd;
-    tSirMsgQ                msgQ;   
+    tSirMsgQ                msgQ;
 
     pSirSmeProbeReqInd = vos_mem_malloc(sizeof(tSirSmeProbeReqInd));
-    if ( NULL == pSirSmeProbeReqInd )
-    {
+    if ( NULL == pSirSmeProbeReqInd ) {
         // Log error
         limLog(pMac, LOGP,
-            FL("call to AllocateMemory failed for eWNI_SME_PROBE_REQ"));
-            return;
+               FL("call to AllocateMemory failed for eWNI_SME_PROBE_REQ"));
+        return;
     }
-    
+
     msgQ.type =  eWNI_SME_WPS_PBC_PROBE_REQ_IND;
     msgQ.bodyval = 0;
     msgQ.bodyptr = pSirSmeProbeReqInd;
-    
+
     pSirSmeProbeReqInd->messageType =  eWNI_SME_WPS_PBC_PROBE_REQ_IND;
     pSirSmeProbeReqInd->length = sizeof(tSirSmeProbeReq);
     pSirSmeProbeReqInd->sessionId = psessionEntry->smeSessionId;
@@ -797,19 +736,18 @@ limSendSmeProbeReqInd(tpAniSirGlobal pMac,
     vos_mem_copy(pSirSmeProbeReqInd->WPSPBCProbeReq.peerMacAddr, peerMacAddr, sizeof(tSirMacAddr));
 
     MTRACE(macTrace(pMac, TRACE_CODE_TX_SME_MSG, psessionEntry->peSessionId,
-                                                               msgQ.type));
+                    msgQ.type));
     pSirSmeProbeReqInd->WPSPBCProbeReq.probeReqIELen = (tANI_U16)ProbeReqIELen;
     vos_mem_copy(pSirSmeProbeReqInd->WPSPBCProbeReq.probeReqIE, pProbeReqIE, ProbeReqIELen);
-    
-    if (limSysProcessMmhMsgApi(pMac, &msgQ,  ePROT) != eSIR_SUCCESS){
-                            PELOGE(limLog(pMac, LOGE, FL("couldnt send the probe req to hdd"));)
-    } 
-        
+
+    if (limSysProcessMmhMsgApi(pMac, &msgQ,  ePROT) != eSIR_SUCCESS) {
+        PELOGE(limLog(pMac, LOGE, FL("couldnt send the probe req to hdd"));)
+    }
+
 } /*** end limSendSmeProbeReqInd() ***/
 #ifdef WLAN_FEATURE_P2P_INTERNAL
-void limSendP2PProbeResponse(tpAniSirGlobal pMac, tANI_U8 *pBd, 
-                      tpPESession psessionEntry)
-{
+void limSendP2PProbeResponse(tpAniSirGlobal pMac, tANI_U8 *pBd,
+                             tpPESession psessionEntry) {
     tAniSSID            ssId = { P2P_WILDCARD_SSID_LEN, P2P_WILDCARD_SSID };
     tANI_U8             *pBody;
     tpSirMacMgmtHdr     pHdr;
@@ -818,31 +756,26 @@ void limSendP2PProbeResponse(tpAniSirGlobal pMac, tANI_U8 *pBd,
 
     pHdr =  WDA_GET_RX_MAC_HEADER(pBd);
     // Get pointer to Probe Request frame body
-    pBody =  WDA_GET_RX_MPDU_DATA(pBd);   
+    pBody =  WDA_GET_RX_MPDU_DATA(pBd);
 
     if( (pBody[0] == 0) && (pBody[1] == ssId.length) &&
-      (vos_mem_compare(ssId.ssId, pBody + 2,
-                       ssId.length)))
-    {
+            (vos_mem_compare(ssId.ssId, pBody + 2,
+                             ssId.length))) {
         // Parse Probe Request frame
         frameLen = WDA_GET_RX_PAYLOAD_LEN(pBd);
-        if (eSIR_FAILURE == sirConvertProbeReqFrame2Struct(pMac, pBody, frameLen, &probeReq))
-        {
+        if (eSIR_FAILURE == sirConvertProbeReqFrame2Struct(pMac, pBody, frameLen, &probeReq)) {
             PELOGW(limLog(pMac, LOGW, FL("Parse error ProbeRequest, length=%d, SA is:"), frameLen);)
             limPrintMacAddr(pMac, pHdr->sa, LOGW);
             pMac->sys.probeError++;
             return;
         }
 
-        if (psessionEntry->pePersona == VOS_P2P_GO_MODE) 
-        {
+        if (psessionEntry->pePersona == VOS_P2P_GO_MODE) {
             ssId.length = psessionEntry->ssId.length;
             vos_mem_copy(ssId.ssId, psessionEntry->ssId.ssId,psessionEntry->ssId.length);
-            limSendProbeRspMgmtFrame(pMac, pHdr->sa, &ssId, DPH_USE_MGMT_STAID, DPH_NON_KEEPALIVE_FRAME, 
+            limSendProbeRspMgmtFrame(pMac, pHdr->sa, &ssId, DPH_USE_MGMT_STAID, DPH_NON_KEEPALIVE_FRAME,
                                      psessionEntry, probeReq.p2pIePresent );
-        } 
-        else 
-        {
+        } else {
             limSendProbeRspMgmtFrame(pMac, pHdr->sa, &ssId, DPH_USE_MGMT_STAID, DPH_NON_KEEPALIVE_FRAME,
                                      psessionEntry, probeReq.p2pIePresent );
         }

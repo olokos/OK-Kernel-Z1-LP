@@ -71,20 +71,19 @@
 // macro to map vos trace levels into the bitmask
 #define VOS_TRACE_LEVEL_TO_MODULE_BITMASK( _level ) ( ( 1 << (_level) ) )
 
-typedef struct
-{
-   // Trace level for a module, as a bitmask.  The bits in this mask
-   // are ordered by VOS_TRACE_LEVEL.  For example, each bit represents
-   // one of the bits in VOS_TRACE_LEVEL that may be turned on to have
-   // traces at that level logged, i.e. if VOS_TRACE_LEVEL_ERROR is
-   // == 2, then if bit 2 (low order) is turned ON, then ERROR traces
-   // will be printed to the trace log.
-   //
-   // Note that all bits turned OFF means no traces.
-   v_U16_t moduleTraceLevel;
+typedef struct {
+    // Trace level for a module, as a bitmask.  The bits in this mask
+    // are ordered by VOS_TRACE_LEVEL.  For example, each bit represents
+    // one of the bits in VOS_TRACE_LEVEL that may be turned on to have
+    // traces at that level logged, i.e. if VOS_TRACE_LEVEL_ERROR is
+    // == 2, then if bit 2 (low order) is turned ON, then ERROR traces
+    // will be printed to the trace log.
+    //
+    // Note that all bits turned OFF means no traces.
+    v_U16_t moduleTraceLevel;
 
-   // 3 character string name for the module
-   unsigned char moduleNameStr[ 4 ];   // 3 chars plus the NULL
+    // 3 character string name for the module
+    unsigned char moduleNameStr[ 4 ];   // 3 chars plus the NULL
 
 } moduleTraceInfo;
 
@@ -94,24 +93,23 @@ typedef struct
 // Array of static data that contains all of the per module trace
 // information.  This includes the trace level for the module and
 // the 3 character 'name' of the module for marking the trace logs.
-moduleTraceInfo gVosTraceInfo[ VOS_MODULE_ID_MAX ] =
-{
-   [VOS_MODULE_ID_BAP]        = { VOS_DEFAULT_TRACE_LEVEL, "BAP" },
-   [VOS_MODULE_ID_TL]         = { VOS_DEFAULT_TRACE_LEVEL, "TL " },
-   [VOS_MODULE_ID_WDI]        = { VOS_DEFAULT_TRACE_LEVEL, "WDI" },
-   [VOS_MODULE_ID_SVC]        = { VOS_DEFAULT_TRACE_LEVEL, "SVC" },
-   [VOS_MODULE_ID_RSV4]       = { VOS_DEFAULT_TRACE_LEVEL, "RS4" },
-   [VOS_MODULE_ID_HDD]        = { VOS_DEFAULT_TRACE_LEVEL, "HDD" },
-   [VOS_MODULE_ID_SME]        = { VOS_DEFAULT_TRACE_LEVEL, "SME" },
-   [VOS_MODULE_ID_PE]         = { VOS_DEFAULT_TRACE_LEVEL, "PE " },
-   [VOS_MODULE_ID_WDA]        = { VOS_DEFAULT_TRACE_LEVEL, "WDA" },
-   [VOS_MODULE_ID_SYS]        = { VOS_DEFAULT_TRACE_LEVEL, "SYS" },
-   [VOS_MODULE_ID_VOSS]       = { VOS_DEFAULT_TRACE_LEVEL, "VOS" },
-   [VOS_MODULE_ID_SAP]        = { VOS_DEFAULT_TRACE_LEVEL, "SAP" },
-   [VOS_MODULE_ID_HDD_SOFTAP] = { VOS_DEFAULT_TRACE_LEVEL, "HSP" },
-   [VOS_MODULE_ID_PMC]        = { VOS_DEFAULT_TRACE_LEVEL, "PMC" },
-   [VOS_MODULE_ID_HDD_DATA]   = { VOS_DEFAULT_TRACE_LEVEL, "HDP" },
-   [VOS_MODULE_ID_HDD_SAP_DATA] = { VOS_DEFAULT_TRACE_LEVEL, "SDP" },
+moduleTraceInfo gVosTraceInfo[ VOS_MODULE_ID_MAX ] = {
+    [VOS_MODULE_ID_BAP]        = { VOS_DEFAULT_TRACE_LEVEL, "BAP" },
+    [VOS_MODULE_ID_TL]         = { VOS_DEFAULT_TRACE_LEVEL, "TL " },
+    [VOS_MODULE_ID_WDI]        = { VOS_DEFAULT_TRACE_LEVEL, "WDI" },
+    [VOS_MODULE_ID_SVC]        = { VOS_DEFAULT_TRACE_LEVEL, "SVC" },
+    [VOS_MODULE_ID_RSV4]       = { VOS_DEFAULT_TRACE_LEVEL, "RS4" },
+    [VOS_MODULE_ID_HDD]        = { VOS_DEFAULT_TRACE_LEVEL, "HDD" },
+    [VOS_MODULE_ID_SME]        = { VOS_DEFAULT_TRACE_LEVEL, "SME" },
+    [VOS_MODULE_ID_PE]         = { VOS_DEFAULT_TRACE_LEVEL, "PE " },
+    [VOS_MODULE_ID_WDA]        = { VOS_DEFAULT_TRACE_LEVEL, "WDA" },
+    [VOS_MODULE_ID_SYS]        = { VOS_DEFAULT_TRACE_LEVEL, "SYS" },
+    [VOS_MODULE_ID_VOSS]       = { VOS_DEFAULT_TRACE_LEVEL, "VOS" },
+    [VOS_MODULE_ID_SAP]        = { VOS_DEFAULT_TRACE_LEVEL, "SAP" },
+    [VOS_MODULE_ID_HDD_SOFTAP] = { VOS_DEFAULT_TRACE_LEVEL, "HSP" },
+    [VOS_MODULE_ID_PMC]        = { VOS_DEFAULT_TRACE_LEVEL, "PMC" },
+    [VOS_MODULE_ID_HDD_DATA]   = { VOS_DEFAULT_TRACE_LEVEL, "HDP" },
+    [VOS_MODULE_ID_HDD_SAP_DATA] = { VOS_DEFAULT_TRACE_LEVEL, "SDP" },
 };
 /*-------------------------------------------------------------------------
   Static and Global variables
@@ -133,90 +131,74 @@ static tpvosTraceCb vostraceRestoreCBTable[VOS_MODULE_ID_MAX];
 /*-------------------------------------------------------------------------
   Functions
   ------------------------------------------------------------------------*/
-void vos_trace_setLevel( VOS_MODULE_ID module, VOS_TRACE_LEVEL level )
-{
-   // Make sure the caller is passing in a valid LEVEL.
-   if ( level >= VOS_TRACE_LEVEL_MAX )
-   {
-      pr_err("%s: Invalid trace level %d passed in!\n", __func__, level);
-      return;
-   }
+void vos_trace_setLevel( VOS_MODULE_ID module, VOS_TRACE_LEVEL level ) {
+    // Make sure the caller is passing in a valid LEVEL.
+    if ( level >= VOS_TRACE_LEVEL_MAX ) {
+        pr_err("%s: Invalid trace level %d passed in!\n", __func__, level);
+        return;
+    }
 
-   // Treat 'none' differently.  NONE means we have to run off all
-   // the bits in the bit mask so none of the traces appear.  Anything other
-   // than 'none' means we need to turn ON a bit in the bitmask.
-   if ( VOS_TRACE_LEVEL_NONE == level )
-   {
-      gVosTraceInfo[ module ].moduleTraceLevel = VOS_TRACE_LEVEL_NONE;
-   }
-   else
-   {
-      // Set the desired bit in the bit mask for the module trace level.
-      gVosTraceInfo[ module ].moduleTraceLevel |= VOS_TRACE_LEVEL_TO_MODULE_BITMASK( level );
-   }
+    // Treat 'none' differently.  NONE means we have to run off all
+    // the bits in the bit mask so none of the traces appear.  Anything other
+    // than 'none' means we need to turn ON a bit in the bitmask.
+    if ( VOS_TRACE_LEVEL_NONE == level ) {
+        gVosTraceInfo[ module ].moduleTraceLevel = VOS_TRACE_LEVEL_NONE;
+    } else {
+        // Set the desired bit in the bit mask for the module trace level.
+        gVosTraceInfo[ module ].moduleTraceLevel |= VOS_TRACE_LEVEL_TO_MODULE_BITMASK( level );
+    }
 }
 
-void vos_trace_setValue( VOS_MODULE_ID module, VOS_TRACE_LEVEL level, v_U8_t on)
-{
-   // Make sure the caller is passing in a valid LEVEL.
-   if ( level < 0  || level >= VOS_TRACE_LEVEL_MAX )
-   {
-      pr_err("%s: Invalid trace level %d passed in!\n", __func__, level);
-      return;
-   }
+void vos_trace_setValue( VOS_MODULE_ID module, VOS_TRACE_LEVEL level, v_U8_t on) {
+    // Make sure the caller is passing in a valid LEVEL.
+    if ( level < 0  || level >= VOS_TRACE_LEVEL_MAX ) {
+        pr_err("%s: Invalid trace level %d passed in!\n", __func__, level);
+        return;
+    }
 
-   // Make sure the caller is passing in a valid module.
-   if ( module < 0 || module >= VOS_MODULE_ID_MAX )
-   {
-      pr_err("%s: Invalid module id %d passed in!\n", __func__, module);
-      return;
-   }
+    // Make sure the caller is passing in a valid module.
+    if ( module < 0 || module >= VOS_MODULE_ID_MAX ) {
+        pr_err("%s: Invalid module id %d passed in!\n", __func__, module);
+        return;
+    }
 
-   // Treat 'none' differently.  NONE means we have to turn off all
-   // the bits in the bit mask so none of the traces appear.
-   if ( VOS_TRACE_LEVEL_NONE == level )
-   {
-      gVosTraceInfo[ module ].moduleTraceLevel = VOS_TRACE_LEVEL_NONE;
-   }
-   // Treat 'All' differently.  All means we have to turn on all
-   // the bits in the bit mask so all of the traces appear.
-   else if ( VOS_TRACE_LEVEL_ALL == level )
-   {
-      gVosTraceInfo[ module ].moduleTraceLevel = 0xFFFF;
-   }
+    // Treat 'none' differently.  NONE means we have to turn off all
+    // the bits in the bit mask so none of the traces appear.
+    if ( VOS_TRACE_LEVEL_NONE == level ) {
+        gVosTraceInfo[ module ].moduleTraceLevel = VOS_TRACE_LEVEL_NONE;
+    }
+    // Treat 'All' differently.  All means we have to turn on all
+    // the bits in the bit mask so all of the traces appear.
+    else if ( VOS_TRACE_LEVEL_ALL == level ) {
+        gVosTraceInfo[ module ].moduleTraceLevel = 0xFFFF;
+    }
 
-   else
-   {
-      if (on)
-         // Set the desired bit in the bit mask for the module trace level.
-         gVosTraceInfo[ module ].moduleTraceLevel |= VOS_TRACE_LEVEL_TO_MODULE_BITMASK( level );
-      else
-         // Clear the desired bit in the bit mask for the module trace level.
-         gVosTraceInfo[ module ].moduleTraceLevel &= ~(VOS_TRACE_LEVEL_TO_MODULE_BITMASK( level ));
-   }
+    else {
+        if (on)
+            // Set the desired bit in the bit mask for the module trace level.
+            gVosTraceInfo[ module ].moduleTraceLevel |= VOS_TRACE_LEVEL_TO_MODULE_BITMASK( level );
+        else
+            // Clear the desired bit in the bit mask for the module trace level.
+            gVosTraceInfo[ module ].moduleTraceLevel &= ~(VOS_TRACE_LEVEL_TO_MODULE_BITMASK( level ));
+    }
 }
 
 
-v_BOOL_t vos_trace_getLevel( VOS_MODULE_ID module, VOS_TRACE_LEVEL level )
-{
-   v_BOOL_t traceOn = VOS_FALSE;
+v_BOOL_t vos_trace_getLevel( VOS_MODULE_ID module, VOS_TRACE_LEVEL level ) {
+    v_BOOL_t traceOn = VOS_FALSE;
 
-   if ( ( VOS_TRACE_LEVEL_NONE == level ) ||
-        ( VOS_TRACE_LEVEL_ALL  == level ) ||
-        ( level >= VOS_TRACE_LEVEL_MAX  )    )
-   {
-      traceOn = VOS_FALSE;
-   }
-   else
-   {
-      traceOn = ( level & gVosTraceInfo[ module ].moduleTraceLevel ) ? VOS_TRUE : VOS_FALSE;
-   }
+    if ( ( VOS_TRACE_LEVEL_NONE == level ) ||
+            ( VOS_TRACE_LEVEL_ALL  == level ) ||
+            ( level >= VOS_TRACE_LEVEL_MAX  )    ) {
+        traceOn = VOS_FALSE;
+    } else {
+        traceOn = ( level & gVosTraceInfo[ module ].moduleTraceLevel ) ? VOS_TRUE : VOS_FALSE;
+    }
 
-   return( traceOn );
+    return( traceOn );
 }
 
-void vos_snprintf(char *strBuffer, unsigned  int size, char *strFormat, ...)
-{
+void vos_snprintf(char *strBuffer, unsigned  int size, char *strFormat, ...) {
     va_list val;
 
     va_start( val, strFormat );
@@ -249,64 +231,59 @@ void vos_snprintf(char *strBuffer, unsigned  int size, char *strFormat, ...)
   \sa
 
   --------------------------------------------------------------------------*/
-void vos_trace_msg( VOS_MODULE_ID module, VOS_TRACE_LEVEL level, char *strFormat, ... )
-{
-   char strBuffer[VOS_TRACE_BUFFER_SIZE];
-   int n;
+void vos_trace_msg( VOS_MODULE_ID module, VOS_TRACE_LEVEL level, char *strFormat, ... ) {
+    char strBuffer[VOS_TRACE_BUFFER_SIZE];
+    int n;
 
-   // Print the trace message when the desired level bit is set in the module
-   // tracel level mask.
-   if ( gVosTraceInfo[ module ].moduleTraceLevel & VOS_TRACE_LEVEL_TO_MODULE_BITMASK( level ) )
-   {
-      // the trace level strings in an array.  these are ordered in the same order
-      // as the trace levels are defined in the enum (see VOS_TRACE_LEVEL) so we
-      // can index into this array with the level and get the right string.  The
-      // vos trace levels are...
-      // none, Fatal, Error, Warning, Info, InfoHigh, InfoMed, InfoLow, Debug
-      static const char * TRACE_LEVEL_STR[] = { "  ", "F ", "E ", "W ", "I ", "IH", "IM", "IL", "D" };
-      va_list val;
-      va_start(val, strFormat);
+    // Print the trace message when the desired level bit is set in the module
+    // tracel level mask.
+    if ( gVosTraceInfo[ module ].moduleTraceLevel & VOS_TRACE_LEVEL_TO_MODULE_BITMASK( level ) ) {
+        // the trace level strings in an array.  these are ordered in the same order
+        // as the trace levels are defined in the enum (see VOS_TRACE_LEVEL) so we
+        // can index into this array with the level and get the right string.  The
+        // vos trace levels are...
+        // none, Fatal, Error, Warning, Info, InfoHigh, InfoMed, InfoLow, Debug
+        static const char * TRACE_LEVEL_STR[] = { "  ", "F ", "E ", "W ", "I ", "IH", "IM", "IL", "D" };
+        va_list val;
+        va_start(val, strFormat);
 
-      // print the prefix string into the string buffer...
-      n = snprintf(strBuffer, VOS_TRACE_BUFFER_SIZE, "wlan: [%2s:%3s] ",
-                   (char *) TRACE_LEVEL_STR[ level ],
-                   (char *) gVosTraceInfo[ module ].moduleNameStr );
+        // print the prefix string into the string buffer...
+        n = snprintf(strBuffer, VOS_TRACE_BUFFER_SIZE, "wlan: [%2s:%3s] ",
+                     (char *) TRACE_LEVEL_STR[ level ],
+                     (char *) gVosTraceInfo[ module ].moduleNameStr );
 
-      // print the formatted log message after the prefix string.
-      if ((n >= 0) && (n < VOS_TRACE_BUFFER_SIZE))
-      {
-         vsnprintf(strBuffer + n, VOS_TRACE_BUFFER_SIZE - n, strFormat, val );
+        // print the formatted log message after the prefix string.
+        if ((n >= 0) && (n < VOS_TRACE_BUFFER_SIZE)) {
+            vsnprintf(strBuffer + n, VOS_TRACE_BUFFER_SIZE - n, strFormat, val );
 
 #ifdef WLAN_LOGGING_SOCK_SVC_ENABLE
-         wlan_log_to_user(level, (char *)strBuffer, strlen(strBuffer));
+            wlan_log_to_user(level, (char *)strBuffer, strlen(strBuffer));
 #else
-         pr_err("%s\n", strBuffer);
+            pr_err("%s\n", strBuffer);
 #endif
-      }
-      va_end(val);
-   }
+        }
+        va_end(val);
+    }
 }
 
-void vos_trace_display(void)
-{
-   VOS_MODULE_ID moduleId;
+void vos_trace_display(void) {
+    VOS_MODULE_ID moduleId;
 
-   pr_err("     1)FATAL  2)ERROR  3)WARN  4)INFO  5)INFO_H  6)INFO_M  7)INFO_L 8)DEBUG\n");
-   for (moduleId = 0; moduleId < VOS_MODULE_ID_MAX; ++moduleId)
-   {
-      pr_err("%2d)%s    %s        %s       %s       %s        %s         %s         %s        %s\n",
-             (int)moduleId,
-             gVosTraceInfo[moduleId].moduleNameStr,
-             (gVosTraceInfo[moduleId].moduleTraceLevel & (1 << VOS_TRACE_LEVEL_FATAL)) ? "X":" ",
-             (gVosTraceInfo[moduleId].moduleTraceLevel & (1 << VOS_TRACE_LEVEL_ERROR)) ? "X":" ",
-             (gVosTraceInfo[moduleId].moduleTraceLevel & (1 << VOS_TRACE_LEVEL_WARN)) ? "X":" ",
-             (gVosTraceInfo[moduleId].moduleTraceLevel & (1 << VOS_TRACE_LEVEL_INFO)) ? "X":" ",
-             (gVosTraceInfo[moduleId].moduleTraceLevel & (1 << VOS_TRACE_LEVEL_INFO_HIGH)) ? "X":" ",
-             (gVosTraceInfo[moduleId].moduleTraceLevel & (1 << VOS_TRACE_LEVEL_INFO_MED)) ? "X":" ",
-             (gVosTraceInfo[moduleId].moduleTraceLevel & (1 << VOS_TRACE_LEVEL_INFO_LOW)) ? "X":" ",
-             (gVosTraceInfo[moduleId].moduleTraceLevel & (1 << VOS_TRACE_LEVEL_DEBUG)) ? "X":" "
-         );
-   }
+    pr_err("     1)FATAL  2)ERROR  3)WARN  4)INFO  5)INFO_H  6)INFO_M  7)INFO_L 8)DEBUG\n");
+    for (moduleId = 0; moduleId < VOS_MODULE_ID_MAX; ++moduleId) {
+        pr_err("%2d)%s    %s        %s       %s       %s        %s         %s         %s        %s\n",
+               (int)moduleId,
+               gVosTraceInfo[moduleId].moduleNameStr,
+               (gVosTraceInfo[moduleId].moduleTraceLevel & (1 << VOS_TRACE_LEVEL_FATAL)) ? "X":" ",
+               (gVosTraceInfo[moduleId].moduleTraceLevel & (1 << VOS_TRACE_LEVEL_ERROR)) ? "X":" ",
+               (gVosTraceInfo[moduleId].moduleTraceLevel & (1 << VOS_TRACE_LEVEL_WARN)) ? "X":" ",
+               (gVosTraceInfo[moduleId].moduleTraceLevel & (1 << VOS_TRACE_LEVEL_INFO)) ? "X":" ",
+               (gVosTraceInfo[moduleId].moduleTraceLevel & (1 << VOS_TRACE_LEVEL_INFO_HIGH)) ? "X":" ",
+               (gVosTraceInfo[moduleId].moduleTraceLevel & (1 << VOS_TRACE_LEVEL_INFO_MED)) ? "X":" ",
+               (gVosTraceInfo[moduleId].moduleTraceLevel & (1 << VOS_TRACE_LEVEL_INFO_LOW)) ? "X":" ",
+               (gVosTraceInfo[moduleId].moduleTraceLevel & (1 << VOS_TRACE_LEVEL_DEBUG)) ? "X":" "
+              );
+    }
 }
 
 /*----------------------------------------------------------------------------
@@ -332,27 +309,24 @@ void vos_trace_display(void)
   \sa
   --------------------------------------------------------------------------*/
 void vos_trace_hex_dump( VOS_MODULE_ID module, VOS_TRACE_LEVEL level,
-                                void *data, int buf_len )
-{
+                         void *data, int buf_len ) {
     char *buf = (char *)data;
     int i;
-    for (i=0; (i+7)<buf_len; i+=8)
-    {
+    for (i=0; (i+7)<buf_len; i+=8) {
         vos_trace_msg( module, level,
-                 "%02x %02x %02x %02x %02x %02x %02x %02x \n",
-                 buf[i],
-                 buf[i+1],
-                 buf[i+2],
-                 buf[i+3],
-                 buf[i+4],
-                 buf[i+5],
-                 buf[i+6],
-                 buf[i+7]);
+                       "%02x %02x %02x %02x %02x %02x %02x %02x \n",
+                       buf[i],
+                       buf[i+1],
+                       buf[i+2],
+                       buf[i+3],
+                       buf[i+4],
+                       buf[i+5],
+                       buf[i+6],
+                       buf[i+7]);
     }
 
     // Dump the bytes in the last line
-    for (; i < buf_len; i++)
-    {
+    for (; i < buf_len; i++) {
         vos_trace_msg( module, level, "%02x ", buf[i]);
         if ((i+1) == buf_len)
             vos_trace_msg( module, level, "\n");
@@ -380,51 +354,36 @@ void vos_trace_hex_dump( VOS_MODULE_ID module, VOS_TRACE_LEVEL level,
   \param - enable - can be true or false.
            True implies enabling MTRACE, false implies disabling MTRACE.
   ---------------------------------------------------------------------------*/
-void vosTraceEnable(v_U32_t bitmask_of_moduleId, v_U8_t enable)
-{
+void vosTraceEnable(v_U32_t bitmask_of_moduleId, v_U8_t enable) {
     int i;
-    if (bitmask_of_moduleId)
-    {
-       for (i=0; i<VOS_MODULE_ID_MAX; i++)
-       {
-           if (((bitmask_of_moduleId >> i) & 1 ))
-           {
-             if(enable)
-             {
-                if (NULL != vostraceRestoreCBTable[i])
-                {
-                   vostraceCBTable[i] = vostraceRestoreCBTable[i];
+    if (bitmask_of_moduleId) {
+        for (i=0; i<VOS_MODULE_ID_MAX; i++) {
+            if (((bitmask_of_moduleId >> i) & 1 )) {
+                if(enable) {
+                    if (NULL != vostraceRestoreCBTable[i]) {
+                        vostraceCBTable[i] = vostraceRestoreCBTable[i];
+                    }
+                } else {
+                    vostraceRestoreCBTable[i] = vostraceCBTable[i];
+                    vostraceCBTable[i] = NULL;
                 }
-             }
-             else
-             {
-                vostraceRestoreCBTable[i] = vostraceCBTable[i];
-                vostraceCBTable[i] = NULL;
-             }
-           }
-       }
+            }
+        }
     }
 
-    else
-    {
-      if(enable)
-      {
-         for (i=0; i<VOS_MODULE_ID_MAX; i++)
-         {
-             if (NULL != vostraceRestoreCBTable[i])
-             {
-                vostraceCBTable[i] = vostraceRestoreCBTable[i];
-             }
-         }
-      }
-      else
-      {
-         for (i=0; i<VOS_MODULE_ID_MAX; i++)
-         {
-            vostraceRestoreCBTable[i] = vostraceCBTable[i];
-            vostraceCBTable[i] = NULL;
-         }
-      }
+    else {
+        if(enable) {
+            for (i=0; i<VOS_MODULE_ID_MAX; i++) {
+                if (NULL != vostraceRestoreCBTable[i]) {
+                    vostraceCBTable[i] = vostraceRestoreCBTable[i];
+                }
+            }
+        } else {
+            for (i=0; i<VOS_MODULE_ID_MAX; i++) {
+                vostraceRestoreCBTable[i] = vostraceCBTable[i];
+                vostraceCBTable[i] = NULL;
+            }
+        }
     }
 }
 
@@ -434,8 +393,7 @@ void vosTraceEnable(v_U32_t bitmask_of_moduleId, v_U8_t enable)
   Called immediately after vos_preopen, so that we can start recording HDD
   events ASAP.
   ----------------------------------------------------------------------------*/
-void vosTraceInit()
-{
+void vosTraceInit() {
     v_U8_t i;
     gvosTraceData.head = INVALID_VOS_TRACE_ADDR;
     gvosTraceData.tail = INVALID_VOS_TRACE_ADDR;
@@ -444,8 +402,7 @@ void vosTraceInit()
     gvosTraceData.dumpCount = DEFAULT_VOS_TRACE_DUMP_COUNT;
     gvosTraceData.numSinceLastDump = 0;
 
-    for (i=0; i<VOS_MODULE_ID_MAX; i++)
-    {
+    for (i=0; i<VOS_MODULE_ID_MAX; i++) {
         vostraceCBTable[i] = NULL;
         vostraceRestoreCBTable[i] = NULL;
     }
@@ -463,19 +420,16 @@ void vosTraceInit()
   \param session -
   \param data - actual message contents.
   ----------------------------------------------------------------------------*/
-void vos_trace(v_U8_t module, v_U8_t code, v_U8_t session, v_U32_t data)
-{
+void vos_trace(v_U8_t module, v_U8_t code, v_U8_t session, v_U32_t data) {
     tpvosTraceRecord rec = NULL;
     unsigned long flags;
 
 
-    if (!gvosTraceData.enable)
-    {
+    if (!gvosTraceData.enable) {
         return;
     }
     //If module is not registered, don't record for that module.
-    if (NULL == vostraceCBTable[module])
-    {
+    if (NULL == vostraceCBTable[module]) {
         return;
     }
 
@@ -484,32 +438,25 @@ void vos_trace(v_U8_t module, v_U8_t code, v_U8_t session, v_U32_t data)
 
     gvosTraceData.num++;
 
-    if (gvosTraceData.num > MAX_VOS_TRACE_RECORDS)
-    {
+    if (gvosTraceData.num > MAX_VOS_TRACE_RECORDS) {
         gvosTraceData.num = MAX_VOS_TRACE_RECORDS;
     }
 
-    if (INVALID_VOS_TRACE_ADDR == gvosTraceData.head)
-    {
+    if (INVALID_VOS_TRACE_ADDR == gvosTraceData.head) {
         /* first record */
         gvosTraceData.head = 0;
         gvosTraceData.tail = 0;
-    }
-    else
-    {
+    } else {
         /* queue is not empty */
         v_U32_t tail = gvosTraceData.tail + 1;
 
-        if (MAX_VOS_TRACE_RECORDS == tail)
-        {
+        if (MAX_VOS_TRACE_RECORDS == tail) {
             tail = 0;
         }
 
-        if (gvosTraceData.head == tail)
-        {
+        if (gvosTraceData.head == tail) {
             /* full */
-            if (MAX_VOS_TRACE_RECORDS == ++gvosTraceData.head)
-            {
+            if (MAX_VOS_TRACE_RECORDS == ++gvosTraceData.head) {
                 gvosTraceData.head = 0;
             }
         }
@@ -534,8 +481,7 @@ void vos_trace(v_U8_t module, v_U8_t code, v_U8_t session, v_U32_t data)
   This function will be called from vos_preOpen, we will have lock available
   to use ASAP.
   ----------------------------------------------------------------------------*/
-VOS_STATUS vos_trace_spin_lock_init()
-{
+VOS_STATUS vos_trace_spin_lock_init() {
     spin_lock_init(&ltraceLock);
 
     return VOS_STATUS_SUCCESS;
@@ -552,8 +498,7 @@ VOS_STATUS vos_trace_spin_lock_init()
   \param vostraceCb - call back functions to display the messages in particular
   format.
   ----------------------------------------------------------------------------*/
-void vosTraceRegister(VOS_MODULE_ID moduleID, tpvosTraceCb vostraceCb)
-{
+void vosTraceRegister(VOS_MODULE_ID moduleID, tpvosTraceCb vostraceCb) {
     vostraceCBTable[moduleID] = vostraceCb;
 }
 
@@ -576,14 +521,12 @@ void vosTraceRegister(VOS_MODULE_ID moduleID, tpvosTraceCb vostraceCb)
   \param count - number of lines to dump starting from tail to head
   ----------------------------------------------------------------------------*/
 void vosTraceDumpAll(void *pMac, v_U8_t code, v_U8_t session,
-                     v_U32_t count, v_U32_t bitmask_of_module)
-{
+                     v_U32_t count, v_U32_t bitmask_of_module) {
     tvosTraceRecord pRecord;
     tANI_S32 i, tail;
 
 
-    if (!gvosTraceData.enable)
-    {
+    if (!gvosTraceData.enable) {
         VOS_TRACE( VOS_MODULE_ID_SYS,
                    VOS_TRACE_LEVEL_ERROR, "Tracing Disabled");
         return;
@@ -596,23 +539,17 @@ void vosTraceDumpAll(void *pMac, v_U8_t code, v_U8_t session,
     /* Aquire the lock so that only one thread at a time can read the ring buffer */
     spin_lock(&ltraceLock);
 
-    if (gvosTraceData.head != INVALID_VOS_TRACE_ADDR)
-    {
+    if (gvosTraceData.head != INVALID_VOS_TRACE_ADDR) {
         i = gvosTraceData.head;
         tail = gvosTraceData.tail;
 
-        if (count)
-        {
-            if (count > gvosTraceData.num)
-            {
+        if (count) {
+            if (count > gvosTraceData.num) {
                 count = gvosTraceData.num;
             }
-            if (tail >= (count - 1))
-            {
+            if (tail >= (count - 1)) {
                 i = tail - count + 1;
-            }
-            else if (count != MAX_VOS_TRACE_RECORDS)
-            {
+            } else if (count != MAX_VOS_TRACE_RECORDS) {
                 i = MAX_VOS_TRACE_RECORDS - ((count - 1) - tail);
             }
         }
@@ -623,45 +560,33 @@ void vosTraceDumpAll(void *pMac, v_U8_t code, v_U8_t session,
            messages got added while we were dumping from ring buffer */
         gvosTraceData.numSinceLastDump = 0;
         spin_unlock(&ltraceLock);
-        for (;;)
-        {
+        for (;;) {
             if ((code == 0 || (code == pRecord.code)) &&
-                    (vostraceCBTable[pRecord.module] != NULL))
-            {
-                if (0 == bitmask_of_module)
-                {
-                   vostraceCBTable[pRecord.module](pMac, &pRecord, (v_U16_t)i);
-                }
-                else
-                {
-                   if (bitmask_of_module & (1 << pRecord.module))
-                   {
-                      vostraceCBTable[pRecord.module](pMac, &pRecord, (v_U16_t)i);
-                   }
+                    (vostraceCBTable[pRecord.module] != NULL)) {
+                if (0 == bitmask_of_module) {
+                    vostraceCBTable[pRecord.module](pMac, &pRecord, (v_U16_t)i);
+                } else {
+                    if (bitmask_of_module & (1 << pRecord.module)) {
+                        vostraceCBTable[pRecord.module](pMac, &pRecord, (v_U16_t)i);
+                    }
                 }
             }
 
-            if (i == tail)
-            {
+            if (i == tail) {
                 break;
             }
             i += 1;
 
             spin_lock(&ltraceLock);
-            if (MAX_VOS_TRACE_RECORDS == i)
-            {
+            if (MAX_VOS_TRACE_RECORDS == i) {
                 i = 0;
                 pRecord= gvosTraceTbl[0];
-            }
-            else
-            {
+            } else {
                 pRecord = gvosTraceTbl[i];
             }
             spin_unlock(&ltraceLock);
         }
-    }
-    else
-    {
+    } else {
         spin_unlock(&ltraceLock);
     }
 }

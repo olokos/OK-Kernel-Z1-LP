@@ -77,45 +77,41 @@
  * -------------------------------------------------------------------------*/
 /*! @brief AC/Queue Index values for Linux Qdisc to operate on different traffic.
 */
-typedef enum
-{
-   HDD_LINUX_AC_VO = 0,
-   HDD_LINUX_AC_VI = 1,
-   HDD_LINUX_AC_BE = 2,
-   HDD_LINUX_AC_BK = 3
+typedef enum {
+    HDD_LINUX_AC_VO = 0,
+    HDD_LINUX_AC_VI = 1,
+    HDD_LINUX_AC_BE = 2,
+    HDD_LINUX_AC_BK = 3
 
 } hdd_wmm_linuxac_t;
- 
+
 /*! @brief types of classification supported
 */
-typedef enum
-{
-   HDD_WMM_CLASSIFICATION_DSCP = 0,
-   HDD_WMM_CLASSIFICATION_802_1Q = 1
+typedef enum {
+    HDD_WMM_CLASSIFICATION_DSCP = 0,
+    HDD_WMM_CLASSIFICATION_802_1Q = 1
 
 } hdd_wmm_classification_t;
 
 /*! @brief UAPSD state
 */
-typedef enum
-{
-   HDD_WMM_NON_UAPSD = 0,
-   HDD_WMM_UAPSD = 1
+typedef enum {
+    HDD_WMM_NON_UAPSD = 0,
+    HDD_WMM_UAPSD = 1
 
 } hdd_wmm_uapsd_state_t;
 
 
-typedef enum
-{
-   //STA can associate with any AP, & HDD looks at the SME notification after
-   // association to find out if associated with QAP and acts accordingly
-   HDD_WMM_USER_MODE_AUTO = 0,
-   //SME will add the extra logic to make sure STA associates with a QAP only
-   HDD_WMM_USER_MODE_QBSS_ONLY = 1,
-   //SME will not join a QoS AP, unless the phy mode setting says "Auto". In
-   // that case, STA is free to join 11n AP. Although from HDD point of view,
-   // it will not be doing any packet classifications
-   HDD_WMM_USER_MODE_NO_QOS = 2,
+typedef enum {
+    //STA can associate with any AP, & HDD looks at the SME notification after
+    // association to find out if associated with QAP and acts accordingly
+    HDD_WMM_USER_MODE_AUTO = 0,
+    //SME will add the extra logic to make sure STA associates with a QAP only
+    HDD_WMM_USER_MODE_QBSS_ONLY = 1,
+    //SME will not join a QoS AP, unless the phy mode setting says "Auto". In
+    // that case, STA is free to join 11n AP. Although from HDD point of view,
+    // it will not be doing any packet classifications
+    HDD_WMM_USER_MODE_NO_QOS = 2,
 
 } hdd_wmm_user_mode_t;
 
@@ -128,78 +124,75 @@ typedef enum
 
 /*! @brief WMM Qos instance control block
 */
-typedef struct
-{
-   struct list_head             node;
-   v_U32_t                      handle;
-   v_U32_t                      qosFlowId;
-   hdd_adapter_t*               pAdapter;
-   WLANTL_ACEnumType            acType;
-   hdd_wlan_wmm_status_e        lastStatus;
-   struct work_struct           wmmAcSetupImplicitQos;
-   v_U32_t                      magic;
+typedef struct {
+    struct list_head             node;
+    v_U32_t                      handle;
+    v_U32_t                      qosFlowId;
+    hdd_adapter_t*               pAdapter;
+    WLANTL_ACEnumType            acType;
+    hdd_wlan_wmm_status_e        lastStatus;
+    struct work_struct           wmmAcSetupImplicitQos;
+    v_U32_t                      magic;
 } hdd_wmm_qos_context_t;
 
 /*! @brief WMM related per-AC state & status info
 */
-typedef struct
-{
-   // does the AP require access to this AC?
-   v_BOOL_t                     wmmAcAccessRequired;
+typedef struct {
+    // does the AP require access to this AC?
+    v_BOOL_t                     wmmAcAccessRequired;
 
-   // does the worker thread need to acquire access to this AC?
-   v_BOOL_t                     wmmAcAccessNeeded;
+    // does the worker thread need to acquire access to this AC?
+    v_BOOL_t                     wmmAcAccessNeeded;
 
-   // is implicit QoS negotiation currently taking place?
-   v_BOOL_t                     wmmAcAccessPending;
+    // is implicit QoS negotiation currently taking place?
+    v_BOOL_t                     wmmAcAccessPending;
 
-   // has implicit QoS negotiation already failed?
-   v_BOOL_t                     wmmAcAccessFailed;
+    // has implicit QoS negotiation already failed?
+    v_BOOL_t                     wmmAcAccessFailed;
 
-   // has implicit QoS negotiation already succeeded?
-   v_BOOL_t                     wmmAcAccessGranted;
+    // has implicit QoS negotiation already succeeded?
+    v_BOOL_t                     wmmAcAccessGranted;
 
-   // is access to this AC allowed, either because we are not doing
-   // WMM, we are not doing implicit QoS, implict QoS has completed,
-   // or explicit QoS has completed?
-   v_BOOL_t                     wmmAcAccessAllowed;
+    // is access to this AC allowed, either because we are not doing
+    // WMM, we are not doing implicit QoS, implict QoS has completed,
+    // or explicit QoS has completed?
+    v_BOOL_t                     wmmAcAccessAllowed;
 
-   // is the wmmAcTspecInfo valid?
-   v_BOOL_t                     wmmAcTspecValid;
+    // is the wmmAcTspecInfo valid?
+    v_BOOL_t                     wmmAcTspecValid;
 
-   // are the wmmAcUapsd* fields valid?
-   v_BOOL_t                     wmmAcUapsdInfoValid;
+    // are the wmmAcUapsd* fields valid?
+    v_BOOL_t                     wmmAcUapsdInfoValid;
 
-   // current (possibly aggregate) Tspec for this AC
-   sme_QosWmmTspecInfo          wmmAcTspecInfo;
+    // current (possibly aggregate) Tspec for this AC
+    sme_QosWmmTspecInfo          wmmAcTspecInfo;
 
-   // current U-APSD parameters
-   v_BOOL_t                     wmmAcIsUapsdEnabled;
-   v_U32_t                      wmmAcUapsdServiceInterval;
-   v_U32_t                      wmmAcUapsdSuspensionInterval;
-   sme_QosWmmDirType            wmmAcUapsdDirection;
+    // current U-APSD parameters
+    v_BOOL_t                     wmmAcIsUapsdEnabled;
+    v_U32_t                      wmmAcUapsdServiceInterval;
+    v_U32_t                      wmmAcUapsdSuspensionInterval;
+    sme_QosWmmDirType            wmmAcUapsdDirection;
 
 #ifdef FEATURE_WLAN_ESE
-   // Inactivity time parameters for TSPEC
-   v_U32_t                      wmmInactivityTime;
-   v_U32_t                      wmmPrevTrafficCnt;
-   vos_timer_t                  wmmInactivityTimer;
+    // Inactivity time parameters for TSPEC
+    v_U32_t                      wmmInactivityTime;
+    v_U32_t                      wmmPrevTrafficCnt;
+    vos_timer_t                  wmmInactivityTimer;
 #endif
 
 } hdd_wmm_ac_status_t;
 
 /*! @brief WMM state & status info
 */
-typedef struct
-{
-   struct list_head             wmmContextList;
-   hdd_wmm_ac_status_t          wmmAcStatus[WLANTL_MAX_AC];
-   v_BOOL_t                     wmmQap;
-   v_BOOL_t                     wmmQosConnection;
+typedef struct {
+    struct list_head             wmmContextList;
+    hdd_wmm_ac_status_t          wmmAcStatus[WLANTL_MAX_AC];
+    v_BOOL_t                     wmmQap;
+    v_BOOL_t                     wmmQosConnection;
 } hdd_wmm_status_t;
 
 extern const v_U8_t hdd_QdiscAcToTlAC[];
-extern const v_U8_t hddWmmUpToAcMap[]; 
+extern const v_U8_t hddWmmUpToAcMap[];
 extern const v_U8_t hddLinuxUpToAcMap[];
 
 #define WLAN_HDD_MAX_DSCP 0x3f
@@ -271,7 +264,7 @@ v_U16_t hdd_hostapd_select_queue(struct net_device * dev, struct sk_buff *skb
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,14,0))
                                  , select_queue_fallback_t fallbac
 #endif
-);
+                                );
 
 
 /**============================================================================
@@ -368,7 +361,7 @@ v_BOOL_t hdd_wmm_is_active( hdd_adapter_t* pAdapter );
   @param handle    : [in]  handle to uniquely identify a TS
   @param pTspec    : [in]  pointer to the traffic spec
 
-  @return          : HDD_WLAN_WMM_STATUS_* 
+  @return          : HDD_WLAN_WMM_STATUS_*
   ===========================================================================*/
 hdd_wlan_wmm_status_e hdd_wmm_addts( hdd_adapter_t* pAdapter,
                                      v_U32_t handle,
@@ -381,7 +374,7 @@ hdd_wlan_wmm_status_e hdd_wmm_addts( hdd_adapter_t* pAdapter,
   @param pAdapter  : [in]  pointer to adapter context
   @param handle    : [in]  handle to uniquely identify a TS
 
-  @return          : HDD_WLAN_WMM_STATUS_* 
+  @return          : HDD_WLAN_WMM_STATUS_*
   ===========================================================================*/
 hdd_wlan_wmm_status_e hdd_wmm_delts( hdd_adapter_t* pAdapter,
                                      v_U32_t handle );
@@ -393,7 +386,7 @@ hdd_wlan_wmm_status_e hdd_wmm_delts( hdd_adapter_t* pAdapter,
   @param pAdapter  : [in]  pointer to adapter context
   @param handle    : [in]  handle to uniquely identify a TS
 
-  @return          : HDD_WLAN_WMM_STATUS_* 
+  @return          : HDD_WLAN_WMM_STATUS_*
   ===========================================================================*/
 hdd_wlan_wmm_status_e hdd_wmm_checkts( hdd_adapter_t* pAdapter,
                                        v_U32_t handle );

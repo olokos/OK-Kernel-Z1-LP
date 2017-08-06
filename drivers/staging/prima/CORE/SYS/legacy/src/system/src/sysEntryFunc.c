@@ -78,8 +78,7 @@ postPTTMsgApi(tpAniSirGlobal pMac, tSirMsgQ *pMsg);
  */
 
 tSirRetStatus
-sysInitGlobals(tpAniSirGlobal pMac)
-{
+sysInitGlobals(tpAniSirGlobal pMac) {
 
     vos_mem_set((tANI_U8 *) &pMac->sys, sizeof(pMac->sys), 0);
 
@@ -111,70 +110,60 @@ sysInitGlobals(tpAniSirGlobal pMac)
  */
 tSirRetStatus
 sysBbtProcessMessageCore(tpAniSirGlobal pMac, tpSirMsgQ pMsg, tANI_U32 type,
-                         tANI_U32 subType)
-{
+                         tANI_U32 subType) {
     tSirRetStatus ret;
     void*         pBd;
     tMgmtFrmDropReason dropReason;
     vos_pkt_t  *pVosPkt = (vos_pkt_t *)pMsg->bodyptr;
     VOS_STATUS  vosStatus =
-              WDA_DS_PeekRxPacketInfo( pVosPkt, (v_PVOID_t *)&pBd, VOS_FALSE );
+        WDA_DS_PeekRxPacketInfo( pVosPkt, (v_PVOID_t *)&pBd, VOS_FALSE );
     pMac->sys.gSysBbtReceived++;
 
-    if ( !VOS_IS_STATUS_SUCCESS(vosStatus) )
-    {
+    if ( !VOS_IS_STATUS_SUCCESS(vosStatus) ) {
         goto fail;
     }
 
     PELOG3(sysLog(pMac, LOG3, FL("Rx Mgmt Frame Subtype: %d\n"), subType);
-    sirDumpBuf(pMac, SIR_SYS_MODULE_ID, LOG3, (tANI_U8 *)WDA_GET_RX_MAC_HEADER(pBd), WDA_GET_RX_MPDU_LEN(pBd));
-    sirDumpBuf(pMac, SIR_SYS_MODULE_ID, LOG3, WDA_GET_RX_MPDU_DATA(pBd), WDA_GET_RX_PAYLOAD_LEN(pBd));)
+           sirDumpBuf(pMac, SIR_SYS_MODULE_ID, LOG3, (tANI_U8 *)WDA_GET_RX_MAC_HEADER(pBd), WDA_GET_RX_MPDU_LEN(pBd));
+           sirDumpBuf(pMac, SIR_SYS_MODULE_ID, LOG3, WDA_GET_RX_MPDU_DATA(pBd), WDA_GET_RX_PAYLOAD_LEN(pBd));)
 
     pMac->sys.gSysFrameCount[type][subType]++;
 
-    if(type == SIR_MAC_MGMT_FRAME)
-    {
-            if ((subType == SIR_MAC_MGMT_DEAUTH ||
-                 subType == SIR_MAC_MGMT_DISASSOC)&&
+    if(type == SIR_MAC_MGMT_FRAME) {
+        if ((subType == SIR_MAC_MGMT_DEAUTH ||
+                subType == SIR_MAC_MGMT_DISASSOC)&&
                 limIsDeauthDiassocForDrop(pMac, pBd))
-                goto fail;
+            goto fail;
 
-            if( (dropReason = limIsPktCandidateForDrop(pMac, pBd, subType)) != eMGMT_DROP_NO_DROP)
-            {
-                PELOG1(sysLog(pMac, LOG1, FL("Mgmt Frame %d being dropped, reason: %d\n"), subType, dropReason);)
-                MTRACE(macTrace(pMac,   TRACE_CODE_RX_MGMT_DROP, NO_SESSION, dropReason);)
-                goto fail;
-            }
-            //Post the message to PE Queue
-            ret = (tSirRetStatus) limPostMsgApi(pMac, pMsg);
-            if (ret != eSIR_SUCCESS)
-            {
-                PELOGE(sysLog(pMac, LOGE, FL("posting to LIM2 failed, ret %d\n"), ret);)
-                goto fail;
-            }
-            pMac->sys.gSysBbtPostedToLim++;
-    }
-    else if (type == SIR_MAC_DATA_FRAME)
-    {
+        if( (dropReason = limIsPktCandidateForDrop(pMac, pBd, subType)) != eMGMT_DROP_NO_DROP) {
+            PELOG1(sysLog(pMac, LOG1, FL("Mgmt Frame %d being dropped, reason: %d\n"), subType, dropReason);)
+            MTRACE(macTrace(pMac,   TRACE_CODE_RX_MGMT_DROP, NO_SESSION, dropReason);)
+            goto fail;
+        }
+        //Post the message to PE Queue
+        ret = (tSirRetStatus) limPostMsgApi(pMac, pMsg);
+        if (ret != eSIR_SUCCESS) {
+            PELOGE(sysLog(pMac, LOGE, FL("posting to LIM2 failed, ret %d\n"), ret);)
+            goto fail;
+        }
+        pMac->sys.gSysBbtPostedToLim++;
+    } else if (type == SIR_MAC_DATA_FRAME) {
 #ifdef FEATURE_WLAN_ESE
         PELOGW(sysLog(pMac, LOGW, FL("IAPP Frame...\n")););
         //Post the message to PE Queue
         ret = (tSirRetStatus) limPostMsgApi(pMac, pMsg);
-        if (ret != eSIR_SUCCESS)
-        {
+        if (ret != eSIR_SUCCESS) {
             PELOGE(sysLog(pMac, LOGE, FL("posting to LIM2 failed, ret %d\n"), ret);)
             goto fail;
         }
         pMac->sys.gSysBbtPostedToLim++;
 #endif
-    }
-    else
-    {
+    } else {
         PELOG3(sysLog(pMac, LOG3, "BBT received Invalid type %d subType %d "
-                   "LIM state %X. BD dump is:\n",
-                   type, subType, limGetSmeState(pMac));
-        sirDumpBuf(pMac, SIR_SYS_MODULE_ID, LOG3,
-                       (tANI_U8 *) pBd, WLANHAL_RX_BD_HEADER_SIZE);)
+                      "LIM state %X. BD dump is:\n",
+                      type, subType, limGetSmeState(pMac));
+               sirDumpBuf(pMac, SIR_SYS_MODULE_ID, LOG3,
+                          (tANI_U8 *) pBd, WLANHAL_RX_BD_HEADER_SIZE);)
 
         goto fail;
     }
@@ -188,13 +177,11 @@ fail:
 }
 
 
-void sysLog(tpAniSirGlobal pMac, tANI_U32 loglevel, const char *pString,...)
-{
+void sysLog(tpAniSirGlobal pMac, tANI_U32 loglevel, const char *pString,...) {
     // Verify against current log level
     if ( loglevel > pMac->utils.gLogDbgLevel[LOG_INDEX_FOR_MODULE( SIR_SYS_MODULE_ID )] )
         return;
-    else
-    {
+    else {
         va_list marker;
 
         va_start( marker, pString );     /* Initialize variable arguments. */

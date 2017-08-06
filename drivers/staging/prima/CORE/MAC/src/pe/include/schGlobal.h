@@ -143,16 +143,14 @@ struct schMisc {
 
 //****************** MISC defs *********************************
 
-typedef struct schStaWaitList
-{
+typedef struct schStaWaitList {
     tANI_U16 staId;
     tANI_U16 count;
 } tStaWaitList, *tpStaWaitList;
 
 
 /// Global SCH structure
-typedef struct sAniSirSch
-{
+typedef struct sAniSirSch {
     /// The scheduler object
     struct  schMisc schObject;
 

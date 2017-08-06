@@ -42,22 +42,21 @@
 #include "schDebug.h"
 #define LOG_SIZE 256
 
-void schLog(tpAniSirGlobal pMac, tANI_U32 loglevel, const char *pString, ...)
-{
+void schLog(tpAniSirGlobal pMac, tANI_U32 loglevel, const char *pString, ...) {
 
-       VOS_TRACE_LEVEL  vosDebugLevel;
-       char    logBuffer[LOG_SIZE];
-       va_list marker;
+    VOS_TRACE_LEVEL  vosDebugLevel;
+    char    logBuffer[LOG_SIZE];
+    va_list marker;
 
-      /* getting proper Debug level*/
-       vosDebugLevel = getVosDebugLevel(loglevel);
+    /* getting proper Debug level*/
+    vosDebugLevel = getVosDebugLevel(loglevel);
 
-      /* extracting arguments from pstring */
-       va_start( marker, pString );
-       vsnprintf(logBuffer, LOG_SIZE, pString, marker);
-       VOS_TRACE(VOS_MODULE_ID_PE, vosDebugLevel, "%s", logBuffer);
-       va_end( marker );
- }
+    /* extracting arguments from pstring */
+    va_start( marker, pString );
+    vsnprintf(logBuffer, LOG_SIZE, pString, marker);
+    VOS_TRACE(VOS_MODULE_ID_PE, vosDebugLevel, "%s", logBuffer);
+    va_end( marker );
+}
 
 
 

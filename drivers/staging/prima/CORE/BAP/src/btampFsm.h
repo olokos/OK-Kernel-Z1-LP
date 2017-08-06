@@ -35,8 +35,7 @@
 #include "bapRsn8021xFsm.h"
 
 /* State definitions */
-typedef enum
-{
+typedef enum {
     AUTHENTICATING,
     DISCONNECTED,
     CONNECTING,
@@ -52,8 +51,7 @@ typedef enum
 
 #if 0
 /* Instance data definition of state machine */
-typedef struct
-{
+typedef struct {
     BTAMPFSM_ENTRY_FLAG_T disconnectedEntry;
     BTAMPFSM_STATEVAR_T stateVar;
     BTAMPFSM_INST_ID_T inst_id;

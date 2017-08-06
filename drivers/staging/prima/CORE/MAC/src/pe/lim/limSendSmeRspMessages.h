@@ -51,7 +51,7 @@ void limSendSmeScanRsp(tpAniSirGlobal, tANI_U16, tSirResultCodes,tANI_U8, tANI_U
 #ifdef WLAN_FEATURE_ROAM_SCAN_OFFLOAD
 void limSendSmeLfrScanRsp(tpAniSirGlobal, tANI_U16, tSirResultCodes,tANI_U8, tANI_U16);
 #endif
-void limPostSmeScanRspMessage(tpAniSirGlobal, tANI_U16, tSirResultCodes,tANI_U8,tANI_U16); 
+void limPostSmeScanRspMessage(tpAniSirGlobal, tANI_U16, tSirResultCodes,tANI_U8,tANI_U16);
 void limSendSmeAuthRsp(tpAniSirGlobal, tSirResultCodes,
                        tSirMacAddr, tAniAuthType, tANI_U16,tpPESession,tANI_U8,tANI_U16);
 
@@ -74,7 +74,7 @@ void limHandleDeleteBssRsp(tpAniSirGlobal pMac,tpSirMsgQ MsgQ);
 
 #ifdef WLAN_FEATURE_VOWIFI_11R
 void
-limSendSmeAggrQosRsp(tpAniSirGlobal pMac, tpSirAggrQosRsp aggrQosRsp, 
+limSendSmeAggrQosRsp(tpAniSirGlobal pMac, tpSirAggrQosRsp aggrQosRsp,
                      tANI_U8 smesessionId);
 #endif /*WLAN_FEATURE_VOWIFI_11R*/
 
@@ -98,7 +98,7 @@ void limSendSmeRemoveKeyRsp(tpAniSirGlobal pMac, tSirMacAddr peerMacAddr, tSirRe
 void limSendSmeGetTxPowerRsp(tpAniSirGlobal pMac, tANI_U32 power, tANI_U32 status);
 void limSendSmeGetNoiseRsp(tpAniSirGlobal pMac, tSirMacNoise noise);
 void limSendSmeIBSSPeerInd(tpAniSirGlobal pMac,tSirMacAddr peerMacAddr,tANI_U16 staIndex,tANI_U8 ucastIdx,tANI_U8 bcastIdx,
-               tANI_U8 *beacon,tANI_U16 beaconLen, tANI_U16 msgType, tANI_U8 sessionId);
+                           tANI_U8 *beacon,tANI_U16 beaconLen, tANI_U16 msgType, tANI_U8 sessionId);
 void limSendExitBmpsInd(tpAniSirGlobal pMac, tExitBmpsReason reasonCode);
 
 #ifdef FEATURE_OEM_DATA_SUPPORT

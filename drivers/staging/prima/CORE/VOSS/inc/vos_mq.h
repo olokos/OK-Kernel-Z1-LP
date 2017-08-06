@@ -45,23 +45,22 @@
 #include <vos_types.h>
 #include <vos_status.h>
 
-/*-------------------------------------------------------------------------- 
+/*--------------------------------------------------------------------------
   Preprocessor definitions and constants
   ------------------------------------------------------------------------*/
 
-/*-------------------------------------------------------------------------- 
+/*--------------------------------------------------------------------------
   Type declarations
   ------------------------------------------------------------------------*/
-  
-/// vos Message Type.  
+
+/// vos Message Type.
 /// This represnets a message that can be posted to another module through
-/// the voss Message Queues.  
+/// the voss Message Queues.
 ///
 /// \note This is mapped directly to the tSirMsgQ for backward
-///       compatibility with the legacy MAC code.  
+///       compatibility with the legacy MAC code.
 
-typedef struct vos_msg_s
-{
+typedef struct vos_msg_s {
     v_U16_t type;
     /*
      * This field can be used as sequence number/dialog token for matching
@@ -73,7 +72,7 @@ typedef struct vos_msg_s
      * memory or bodyval as a 32 bit data is used.
      * bodyptr: is always a freeable pointer, one should always
      * make sure that bodyptr is always freeable.
-     * 
+     *
      * Messages should use either bodyptr or bodyval; not both !!!.
      */
     void *bodyptr;
@@ -94,65 +93,64 @@ typedef struct vos_msg_s
   ------------------------------------------------------------------------*/
 
 /// Message Queue IDs
-typedef enum
-{
-  /// Message Queue ID for messages bound for SME
-  VOS_MQ_ID_SME = VOS_MODULE_ID_SME,
+typedef enum {
+    /// Message Queue ID for messages bound for SME
+    VOS_MQ_ID_SME = VOS_MODULE_ID_SME,
 
-  /// Message Queue ID for messages bound for PE
-  VOS_MQ_ID_PE = VOS_MODULE_ID_PE,
+    /// Message Queue ID for messages bound for PE
+    VOS_MQ_ID_PE = VOS_MODULE_ID_PE,
 
-  /// Message Queue ID for messages bound for WDA
-  VOS_MQ_ID_WDA = VOS_MODULE_ID_WDA,
+    /// Message Queue ID for messages bound for WDA
+    VOS_MQ_ID_WDA = VOS_MODULE_ID_WDA,
 
-  /// Message Queue ID for messages bound for TL
-  VOS_MQ_ID_TL = VOS_MODULE_ID_TL,
+    /// Message Queue ID for messages bound for TL
+    VOS_MQ_ID_TL = VOS_MODULE_ID_TL,
 
-  /// Message Queue ID for messages bound for the SYS module
-  VOS_MQ_ID_SYS = VOS_MODULE_ID_SYS,
+    /// Message Queue ID for messages bound for the SYS module
+    VOS_MQ_ID_SYS = VOS_MODULE_ID_SYS,
 
-  /// Message Queue ID for messages bound for WDI
-  VOS_MQ_ID_WDI = VOS_MODULE_ID_WDI,
+    /// Message Queue ID for messages bound for WDI
+    VOS_MQ_ID_WDI = VOS_MODULE_ID_WDI,
 
 } VOS_MQ_ID;
 
 
 /**---------------------------------------------------------------------------
-  
+
   \brief vos_mq_post_message() - post a message to a message queue
 
   This API allows messages to be posted to a specific message queue.  Messages
   can be posted to the following message queues:
-  
+
   <ul>
     <li> SME
     <li> PE
     <li> HAL
     <li> TL
-  </ul> 
-  
+  </ul>
+
   \param msgQueueId - identifies the message queue upon which the message
          will be posted.
-         
-  \param message - a pointer to a message buffer.  Memory for this message 
+
+  \param message - a pointer to a message buffer.  Memory for this message
          buffer is allocated by the caller and free'd by the vOSS after the
-         message is posted to the message queue.  If the consumer of the 
+         message is posted to the message queue.  If the consumer of the
          message needs anything in this message, it needs to copy the contents
          before returning from the message queue handler.
-  
+
   \return VOS_STATUS_SUCCESS - the message has been successfully posted
           to the message queue.
-          
-          VOS_STATUS_E_INVAL - The value specified by msgQueueId does not 
+
+          VOS_STATUS_E_INVAL - The value specified by msgQueueId does not
           refer to a valid Message Queue Id.
-          
-          VOS_STATUS_E_FAULT  - message is an invalid pointer.     
-          
+
+          VOS_STATUS_E_FAULT  - message is an invalid pointer.
+
           VOS_STATUS_E_FAILURE - the message queue handler has reported
           an unknown failure.
 
   \sa
-  
+
   --------------------------------------------------------------------------*/
 VOS_STATUS vos_mq_post_message( VOS_MQ_ID msgQueueId, vos_msg_t *message );
 
@@ -195,40 +193,40 @@ VOS_STATUS vos_mq_post_message_high_pri(VOS_MQ_ID msgQueueId, vos_msg_t *message
 
 
 /**---------------------------------------------------------------------------
-  
+
   \brief vos_tx_mq_serialize() - serialize a message to the Tx execution flow
 
-  This API allows messages to be posted to a specific message queue in the 
-  Tx excution flow.  Messages for the Tx execution flow can be posted only 
+  This API allows messages to be posted to a specific message queue in the
+  Tx excution flow.  Messages for the Tx execution flow can be posted only
   to the following queue.
-  
+
   <ul>
     <li> TL
     <li> WDI/SSC
   </ul>
-  
+
   \param msgQueueId - identifies the message queue upon which the message
          will be posted.
-         
-  \param message - a pointer to a message buffer.  Body memory for this message 
+
+  \param message - a pointer to a message buffer.  Body memory for this message
          buffer is allocated by the caller and free'd by the vOSS after the
-         message is dispacthed to the appropriate component.  If the consumer 
-         of the message needs to keep anything in the body, it needs to copy 
+         message is dispacthed to the appropriate component.  If the consumer
+         of the message needs to keep anything in the body, it needs to copy
          the contents before returning from the message handler.
-  
+
   \return VOS_STATUS_SUCCESS - the message has been successfully posted
           to the message queue.
-          
-          VOS_STATUS_E_INVAL - The value specified by msgQueueId does not 
+
+          VOS_STATUS_E_INVAL - The value specified by msgQueueId does not
           refer to a valid Message Queue Id.
-          
-          VOS_STATUS_E_FAULT  - message is an invalid pointer.     
-          
+
+          VOS_STATUS_E_FAULT  - message is an invalid pointer.
+
           VOS_STATUS_E_FAILURE - the message queue handler has reported
           an unknown failure.
 
   \sa
-  
+
   --------------------------------------------------------------------------*/
 VOS_STATUS vos_tx_mq_serialize( VOS_MQ_ID msgQueueId, vos_msg_t *message );
 

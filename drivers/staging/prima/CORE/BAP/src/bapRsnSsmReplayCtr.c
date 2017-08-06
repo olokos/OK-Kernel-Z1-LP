@@ -26,7 +26,7 @@
  */
 
 /*
- * File: $Header: //depot/software/projects/feature_branches/gen5_phase1/os/linux/classic/ap/apps/ssm/lib/aniSsmReplayCtr.c#2 $ 
+ * File: $Header: //depot/software/projects/feature_branches/gen5_phase1/os/linux/classic/ap/apps/ssm/lib/aniSsmReplayCtr.c#2 $
  *
  * Contains definitions of various utilities for EAPoL frame
  * parsing and creation.
@@ -91,21 +91,18 @@ updateCtrBuf(tAniSsmReplayCtr *ctr);
  * @return ANI_OK if the operation succeeds
  */
 int
-aniSsmReplayCtrCreate(v_U32_t cryptHandle, tAniSsmReplayCtr **ctrPtr, 
+aniSsmReplayCtrCreate(v_U32_t cryptHandle, tAniSsmReplayCtr **ctrPtr,
                       v_U8_t size,
-                      int initValue)
-{
+                      int initValue) {
     tAniSsmReplayCtr *ctr;
 
     ctr = vos_mem_malloc( sizeof(tAniSsmReplayCtr) );
-    if( NULL == ctr )
-    {
+    if( NULL == ctr ) {
         return ANI_E_MALLOC_FAILED;
     }
 
     ctr->buf = vos_mem_malloc( size );
-    if (ctr->buf == NULL) 
-    {
+    if (ctr->buf == NULL) {
         VOS_ASSERT( 0 );
         vos_mem_free(ctr);
         return ANI_E_MALLOC_FAILED;
@@ -120,14 +117,11 @@ aniSsmReplayCtrCreate(v_U32_t cryptHandle, tAniSsmReplayCtr **ctrPtr,
 
     // If initValue is negative, initialize the ctr randomly, else
     // initialize it to what the user specified.
-    if (initValue < 0) 
-    {
-        if( !VOS_IS_STATUS_SUCCESS( vos_rand_get_bytes(cryptHandle, ctr->buf, ctr->size) ) )
-        {
+    if (initValue < 0) {
+        if( !VOS_IS_STATUS_SUCCESS( vos_rand_get_bytes(cryptHandle, ctr->buf, ctr->size) ) ) {
             return ANI_ERROR;
         }
-    } 
-    else {
+    } else {
         ctr->currentValue = initValue - 1;
     }
 
@@ -137,8 +131,7 @@ aniSsmReplayCtrCreate(v_U32_t cryptHandle, tAniSsmReplayCtr **ctrPtr,
 }
 
 static int
-updateCtrBuf(tAniSsmReplayCtr *ctr)
-{
+updateCtrBuf(tAniSsmReplayCtr *ctr) {
 
     v_U32_t numBytes;
     v_U32_t offset;
@@ -148,8 +141,8 @@ updateCtrBuf(tAniSsmReplayCtr *ctr)
 
     numBytes = (4 <= ctr->size) ? 4 : ctr->size;
     offset = 4 - numBytes;
-    vos_mem_copy(ctr->buf + ctr->size - numBytes, 
-           ((v_U8_t *) &tmp) + offset, numBytes);
+    vos_mem_copy(ctr->buf + ctr->size - numBytes,
+                 ((v_U8_t *) &tmp) + offset, numBytes);
 
     return ANI_OK;
 }
@@ -158,7 +151,7 @@ updateCtrBuf(tAniSsmReplayCtr *ctr)
  * aniSsmReplayCtrCmp
  *
  * Used to check if the passed in value is greater
- * than, less than, or the same as the previous value. 
+ * than, less than, or the same as the previous value.
  *
  * Can be used on the TX side to determine if the response to a
  * request contains the same counter as the one in the request.
@@ -176,8 +169,7 @@ updateCtrBuf(tAniSsmReplayCtr *ctr)
  * current counter is greater than that of the given value.
  */
 int
-aniSsmReplayCtrCmp(tAniSsmReplayCtr *ctr, v_U8_t *value)
-{
+aniSsmReplayCtrCmp(tAniSsmReplayCtr *ctr, v_U8_t *value) {
     return vos_mem_compare2(ctr->buf, value, ctr->size);
 }
 
@@ -196,8 +188,7 @@ aniSsmReplayCtrCmp(tAniSsmReplayCtr *ctr, v_U8_t *value)
  */
 int
 aniSsmReplayCtrUpdate(tAniSsmReplayCtr *ctr,
-                      v_U8_t *value)
-{
+                      v_U8_t *value) {
     vos_mem_copy(ctr->buf, value, ctr->size);
 
     return ANI_OK;
@@ -218,8 +209,7 @@ aniSsmReplayCtrUpdate(tAniSsmReplayCtr *ctr,
  */
 int
 aniSsmReplayCtrNext(tAniSsmReplayCtr *ctr,
-                    v_U8_t *value)
-{
+                    v_U8_t *value) {
     ctr->currentValue++;
     updateCtrBuf(ctr);
     vos_mem_copy(value, ctr->buf, ctr->size);
@@ -237,8 +227,7 @@ aniSsmReplayCtrNext(tAniSsmReplayCtr *ctr,
  * @return ANI_OK if the operation succeeds
  */
 int
-aniSsmReplayCtrFree(tAniSsmReplayCtr *ctr)
-{
+aniSsmReplayCtrFree(tAniSsmReplayCtr *ctr) {
 
     if (ctr->buf != NULL)
         vos_mem_free(ctr->buf);

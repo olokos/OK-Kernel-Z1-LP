@@ -39,8 +39,7 @@
 #include "vos_types.h"
 #include "halTypes.h"
 
-typedef struct sNanRequestReq
-{
+typedef struct sNanRequestReq {
     tANI_U16 request_data_len;
     const tANI_U8* request_data;
 } tNanRequestReq, *tpNanRequestReq;
@@ -90,7 +89,7 @@ void sme_NanRegisterCallback(tHalHandle hHal, NanCallback callback);
  * VOS_STATUS
 ******************************************************************************/
 VOS_STATUS sme_NanRequest(tHalHandle hHalHandle, tpNanRequestReq input,
-        tANI_U32 sessionId);
+                          tANI_U32 sessionId);
 
 /******************************************************************************
   \fn sme_NanEvent

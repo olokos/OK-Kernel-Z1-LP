@@ -33,16 +33,16 @@
 
 /*===========================================================================
 
-         W L A N   D E V I C E   A B S T R A C T I O N   L A Y E R 
+         W L A N   D E V I C E   A B S T R A C T I O N   L A Y E R
               I N T E R N A L     A P I       F O R    T H E
-                                 D A T A   P A T H 
-                
-                   
+                                 D A T A   P A T H
+
+
 DESCRIPTION
-  This file contains the internal API exposed by the DAL Control Path Core 
-  module to be used by the DAL Data Path Core. 
-  
-      
+  This file contains the internal API exposed by the DAL Control Path Core
+  module to be used by the DAL Data Path Core.
+
+
 ===========================================================================*/
 
 
@@ -68,12 +68,12 @@ when        who    what, where, why
 #include "wlan_qct_wdi_i.h"
 #include "wlan_qct_wdi_bd.h"
 
-/*========================================================================= 
-   BD Macro Defines  
-=========================================================================*/ 
+/*=========================================================================
+   BD Macro Defines
+=========================================================================*/
 
 /*--------------------------------------------------------------------------
-  BD Definitions used by the DAL data path 
+  BD Definitions used by the DAL data path
 --------------------------------------------------------------------------*/
 #define WDI_TXBD_BDRATE_DEFAULT 0
 #define WDI_TXBD_BDRATE_FIRST   1
@@ -94,14 +94,14 @@ when        who    what, where, why
 #define WDI_BDRATE_BCDATA_FRAME           1
 #define WDI_BDRATE_BCMGMT_FRAME           2
 #define WDI_BDRATE_CTRL_FRAME             3
-    
+
 /* Default values for FillTx BD */
 #define WDI_DEFAULT_UNICAST_ENABLED       1
 #define WDI_RMF_DISABLED                  0
 #define WDI_RMF_ENABLED                   1
 #define WDI_NO_ENCRYPTION_DISABLED        0
 #define WDI_NO_ENCRYPTION_ENABLED         1
-    
+
 #define WDI_RX_BD_ADDR3_SELF_IDX          0
 
 #define WDI_TXCOMP_REQUESTED_MASK           0x1  //bit 0 for TxComp intr requested. 
@@ -215,7 +215,7 @@ when        who    what, where, why
  * tid(4):    TID
  * ucast(1):  Unicast or Broadcast data frame
  */
-#define WDI_TXBD_SIG_SERIAL_OFFSET        0   
+#define WDI_TXBD_SIG_SERIAL_OFFSET        0
 #define WDI_TXBD_SIG_TID_OFFSET           8
 #define WDI_TXBD_SIG_UCAST_DATA_OFFSET    9
 #define WDI_TXBD_SIG_MACADDR_HASH_OFFSET  16
@@ -225,7 +225,7 @@ when        who    what, where, why
 
 /*--------------------------------------------------------------------------
    BD header macros - used by the data path to get or set various values
-   inside the packet BD 
+   inside the packet BD
 --------------------------------------------------------------------------*/
 #define WDI_RX_BD_GET_MPDU_H_OFFSET( _pvBDHeader )   (((WDI_RxBdType*)_pvBDHeader)->mpduHeaderOffset)
 
@@ -331,7 +331,7 @@ when        who    what, where, why
 /*-----------------------------------------------------------------*/
 
 #define WDI_TX_BD_SET_MPDU_DATA_OFFSET( _bd, _off )      (((WDI_TxBdType*)_bd)->mpduDataOffset = _off)
- 
+
 #define WDI_TX_BD_SET_MPDU_HEADER_OFFSET( _bd, _off )    (((WDI_TxBdType*)_bd)->mpduHeaderOffset = _off)
 
 #define WDI_TX_BD_SET_MPDU_HEADER_LEN( _bd, _len )       (((WDI_TxBdType*)_bd)->mpduHeaderLength = _len)
@@ -366,38 +366,38 @@ when        who    what, where, why
 
 #define WDI_RX_BD_AEF_SET               1
 
- 
+
 #define WDI_RX_BD_LLC_PRESENT           0 /*The value of the field when LLC is present*/
 
 #define WDI_RX_BD_FT_DONE                1 /* The value of the field when frame xtl was done*/
 
-/*========================================================================= 
-   API Definition  
-=========================================================================*/ 
+/*=========================================================================
+   API Definition
+=========================================================================*/
 
 
 /**
- @brief WDI_RxBD_GetFrameTypeSubType - Called by the data path 
+ @brief WDI_RxBD_GetFrameTypeSubType - Called by the data path
         to retrieve the type/subtype of the received frame.
-  
+
  @param       pvBDHeader:    Void pointer to the RxBD buffer.
-    usFrmCtrl:     the frame ctrl of the 802.11 header 
-  
- @return   A byte which contains both type and subtype info. LSB four bytes 
- (b0 to b3)is subtype and b5-b6 is type info. 
+    usFrmCtrl:     the frame ctrl of the 802.11 header
+
+ @return   A byte which contains both type and subtype info. LSB four bytes
+ (b0 to b3)is subtype and b5-b6 is type info.
 */
 
-wpt_uint8 
+wpt_uint8
 WDI_RxBD_GetFrameTypeSubType
 (
-  void*       _pvBDHeader, 
-  wpt_uint16  usFrmCtrl
+    void*       _pvBDHeader,
+    wpt_uint16  usFrmCtrl
 );
 
 
 /**
- @brief WDI_FillTxBd - Called by the data path to fill the TX BD 
-  
+ @brief WDI_FillTxBd - Called by the data path to fill the TX BD
+
  @param       pWDICtx:       Context to the WDI
      ucTypeSubtype: of the frame
      pDestMacAddr:  destination MAC address
@@ -409,21 +409,21 @@ WDI_RxBD_GetFrameTypeSubType
      ucProtMgmtFrame: for management frames, whether the frame is
                       protected (protect bit is set in FC)
      uTimestamp:     pkt timestamp
-  
-  
+
+
  @return success or not
 */
 
 WDI_Status
 WDI_FillTxBd
 (
-    WDI_ControlBlockType*  pWDICtx, 
-    wpt_uint8              ucTypeSubtype, 
+    WDI_ControlBlockType*  pWDICtx,
+    wpt_uint8              ucTypeSubtype,
     void*                  pDestMacAddr,
     void*                  pAddr2,
-    wpt_uint8*             pTid, 
-    wpt_uint8              ucDisableFrmXtl, 
-    void*                  pTxBd, 
+    wpt_uint8*             pTid,
+    wpt_uint8              ucDisableFrmXtl,
+    void*                  pTxBd,
     wpt_uint32             ucTxFlag,
     wpt_uint8              ucProtMgmtFrame,
     wpt_uint32             uTimeStamp,
@@ -435,96 +435,96 @@ WDI_FillTxBd
 /**
  @brief WDI_SwapRxBd swaps the RX BD.
 
-  
+
  @param pBd - pointer to the BD (in/out)
-  
+
  @return None
 */
-void 
+void
 WDI_SwapRxBd
 (
-  wpt_uint8 *pBd
+    wpt_uint8 *pBd
 );
 
 /**
  @brief WDI_SwapTxBd - Swaps the TX BD
-  
+
  @param  pBd - pointer to the BD (in/out)
-  
+
  @return   none
 */
-void 
+void
 WDI_SwapTxBd
 (
-  wpt_uint8 *pBd
+    wpt_uint8 *pBd
 );
 
 /**
- @brief WDI_RxAmsduBdFix - fix for HW issue for AMSDU 
+ @brief WDI_RxAmsduBdFix - fix for HW issue for AMSDU
 
-  
+
  @param   pWDICtx:       Context to the WDI
           pBDHeader - pointer to the BD header
-  
+
  @return None
 */
-void 
+void
 WDI_RxAmsduBdFix
 (
-  WDI_ControlBlockType*  pWDICtx, 
-  void*                  pBDHeader
+    WDI_ControlBlockType*  pWDICtx,
+    void*                  pBDHeader
 );
 
 #ifdef WLAN_PERF
 /**
- @brief WDI_TxBdFastFwd - evaluates if a frame can be fast 
-        forwarded 
-  
- @param   pWDICtx: Context to the WDI 
+ @brief WDI_TxBdFastFwd - evaluates if a frame can be fast
+        forwarded
+
+ @param   pWDICtx: Context to the WDI
           pDestMac: Destination MAC
           ucTid: packet TID pBDHeader
           ucUnicastDst: is packet unicast
           pTxBd:       pointer to the BD header
-          usMpduLength: len 
-  
- @return 1 - if the frame can be fast fwd-ed ; 0 if not 
+          usMpduLength: len
+
+ @return 1 - if the frame can be fast fwd-ed ; 0 if not
 */
-wpt_uint32 
+wpt_uint32
 WDI_TxBdFastFwd
 (
-  WDI_ControlBlockType*  pWDICtx,  
-  wpt_uint8*             pDestMac, 
-  wpt_uint8              ucTid, 
-  wpt_uint8              ucUnicastDst,  
-  void*                  pTxBd, 
-  wpt_uint16             usMpduLength);
+    WDI_ControlBlockType*  pWDICtx,
+    wpt_uint8*             pDestMac,
+    wpt_uint8              ucTid,
+    wpt_uint8              ucUnicastDst,
+    void*                  pTxBd,
+    wpt_uint16             usMpduLength);
 #endif /*WLAN_PERF*/
 
 /**
- @brief WDI_DP_UtilsInit - Intializes the parameters required to 
+ @brief WDI_DP_UtilsInit - Intializes the parameters required to
         interact with the data path
-  
+
  @param       pWDICtx:    pointer to the main WDI Ctrl Block
-  
+
  @return   success always
 */
-WDI_Status 
+WDI_Status
 WDI_DP_UtilsInit
 (
-  WDI_ControlBlockType*  pWDICtx
+    WDI_ControlBlockType*  pWDICtx
 );
 
 /**
  @brief WDI_DP_UtilsExit - Clears the parameters required to
         interact with the data path
-  
+
  @param       pWDICtx:    pointer to the main WDI Ctrl Block
-  
+
  @return   success always
 */
 WDI_Status
 WDI_DP_UtilsExit
-( 
+(
     WDI_ControlBlockType*  pWDICtx
 );
 

@@ -2707,21 +2707,16 @@ typedef struct sDot11fIETCLAS {
     tANI_U8      user_priority;
     tANI_U8      classifier_type;
     tANI_U8      classifier_mask;
-    union
-    {
-        struct
-        {
+    union {
+        struct {
             tANI_U8 source[6];
             tANI_U8 dest[6];
             tANI_U16 type;
         } EthParams; /* classifier_type = 0 */
-        struct
-        {
+        struct {
             tANI_U8 version;
-            union
-            {
-                struct
-                {
+            union {
+                struct {
                     tANI_U8 source[4];
                     tANI_U8 dest[4];
                     tANI_U16 src_port;
@@ -2730,8 +2725,7 @@ typedef struct sDot11fIETCLAS {
                     tANI_U8 proto;
                     tANI_U8 reserved;
                 } IpV4Params; /* version = 4 */
-                struct
-                {
+                struct {
                     tANI_U8 source[16];
                     tANI_U8 dest[16];
                     tANI_U16 src_port;
@@ -2740,8 +2734,7 @@ typedef struct sDot11fIETCLAS {
                 } IpV6Params; /* version = 6 */
             } params;
         } IpParams; /* classifier_type = 1 */
-        struct
-        {
+        struct {
             tANI_U16 tag_type;
         } Params8021dq; /* classifier_type = 2 */
     } info;
@@ -2906,21 +2899,16 @@ typedef struct sDot11fIEWMMTCLAS {
     tANI_U8      user_priority;
     tANI_U8      classifier_type;
     tANI_U8      classifier_mask;
-    union
-    {
-        struct
-        {
+    union {
+        struct {
             tANI_U8 source[6];
             tANI_U8 dest[6];
             tANI_U16 type;
         } EthParams; /* classifier_type = 0 */
-        struct
-        {
+        struct {
             tANI_U8 version;
-            union
-            {
-                struct
-                {
+            union {
+                struct {
                     tANI_U8 source[4];
                     tANI_U8 dest[4];
                     tANI_U16 src_port;
@@ -2929,8 +2917,7 @@ typedef struct sDot11fIEWMMTCLAS {
                     tANI_U8 proto;
                     tANI_U8 reserved;
                 } IpV4Params; /* version = 4 */
-                struct
-                {
+                struct {
                     tANI_U8 source[16];
                     tANI_U8 dest[16];
                     tANI_U16 src_port;
@@ -2939,8 +2926,7 @@ typedef struct sDot11fIEWMMTCLAS {
                 } IpV6Params; /* version = 6 */
             } params;
         } IpParams; /* classifier_type = 1 */
-        struct
-        {
+        struct {
             tANI_U16 tag_type;
         } Params8021dq; /* classifier_type = 2 */
     } info;
@@ -3986,10 +3972,8 @@ typedef struct sDot11fIEMeasurementReport {
     tANI_U8          refused: 1;
     tANI_U8           unused: 5;
     tANI_U8      type;
-    union
-    {
-        struct
-        {
+    union {
+        struct {
             tANI_U8 channel;
             tDOT11F_U64 meas_start_time;
             tANI_U16 meas_duration;
@@ -4000,15 +3984,13 @@ typedef struct sDot11fIEMeasurementReport {
             tANI_U8     unmeasured: 1;
             tANI_U8         unused: 3;
         } Basic; /* type = 0 */
-        struct
-        {
+        struct {
             tANI_U8 channel;
             tDOT11F_U64 meas_start_time;
             tANI_U16 meas_duration;
             tANI_U8 cca_busy_fraction;
         } CCA; /* type = 1 */
-        struct
-        {
+        struct {
             tANI_U8 channel;
             tDOT11F_U64 meas_start_time;
             tANI_U16 meas_duration;
@@ -4021,8 +4003,7 @@ typedef struct sDot11fIEMeasurementReport {
             tANI_U8 rpi6_density;
             tANI_U8 rpi7_density;
         } RPIHistogram; /* type = 2 */
-        struct
-        {
+        struct {
             tANI_U8 regClass;
             tANI_U8 channel;
             tDOT11F_U64 meas_start_time;
@@ -4034,7 +4015,7 @@ typedef struct sDot11fIEMeasurementReport {
             tANI_U8 BSSID[6];
             tANI_U8 antenna_id;
             tANI_U32 parent_TSF;
-    tDot11fIEBeaconReportFrmBody BeaconReportFrmBody;
+            tDot11fIEBeaconReportFrmBody BeaconReportFrmBody;
         } Beacon; /* type = 5 */
     } report;
 } tDot11fIEMeasurementReport;
@@ -4069,40 +4050,35 @@ typedef struct sDot11fIEMeasurementRequest {
     tANI_U8 durationMandatory: 1;
     tANI_U8           unused: 3;
     tANI_U8      measurement_type;
-    union
-    {
-        struct
-        {
+    union {
+        struct {
             tANI_U8 channel_no;
             tANI_U8 meas_start_time[8];
             tANI_U16 meas_duration;
         } Basic; /* measurement_type = 0 */
-        struct
-        {
+        struct {
             tANI_U8 channel_no;
             tANI_U8 meas_start_time[8];
             tANI_U16 meas_duration;
         } CCA; /* measurement_type = 1 */
-        struct
-        {
+        struct {
             tANI_U8 channel_no;
             tANI_U8 meas_start_time[8];
             tANI_U16 meas_duration;
         } RPIHistogram; /* measurement_type = 2 */
-        struct
-        {
+        struct {
             tANI_U8 regClass;
             tANI_U8 channel;
             tANI_U16 randomization;
             tANI_U16 meas_duration;
             tANI_U8 meas_mode;
             tANI_U8 BSSID[6];
-    tDot11fIESSID SSID;
-    tDot11fIEBeaconReporting BeaconReporting;
-    tDot11fIEBcnReportingDetail BcnReportingDetail;
-    tDot11fIERequestedInfo RequestedInfo;
-    tANI_U16 num_APChannelReport;
-    tDot11fIEAPChannelReport APChannelReport[2];
+            tDot11fIESSID SSID;
+            tDot11fIEBeaconReporting BeaconReporting;
+            tDot11fIEBcnReportingDetail BcnReportingDetail;
+            tDot11fIERequestedInfo RequestedInfo;
+            tANI_U16 num_APChannelReport;
+            tDot11fIEAPChannelReport APChannelReport[2];
         } Beacon; /* measurement_type = 5 */
     } measurement_request;
 } tDot11fIEMeasurementRequest;
@@ -5309,7 +5285,7 @@ typedef struct sDot11fIESuppRates {
                       ((_x) == 48) || \
                       ((_x) == 72) || \
                       ((_x) == 96) || \
-                      ((_x) == 108))  
+                      ((_x) == 108))
 
 #ifdef __cplusplus
 extern "C" {
@@ -5796,7 +5772,7 @@ tANI_U32 dot11fGetPackedIEWMMParams(tpAniSirGlobal, tDot11fIEWMMParams*, tANI_U3
 typedef struct sDot11fIEWPA {
     tANI_U8      present;
     tANI_U16     version /* Must be 1! */;
-    tANI_U8      multicast_cipher_present;   //field added to fix the bug in dot11fPackIEWPA 
+    tANI_U8      multicast_cipher_present;   //field added to fix the bug in dot11fPackIEWPA
     tANI_U8      multicast_cipher[4];
     tANI_U16     unicast_cipher_count;
     tANI_U8      unicast_ciphers[4][4];
@@ -6188,7 +6164,7 @@ tANI_U32 dot11fGetPackedIEWscReassocRes(tpAniSirGlobal, tDot11fIEWscReassocRes*,
  * Frames
  **********************************************************************/
 
-typedef struct sDot11fAddBAReq{
+typedef struct sDot11fAddBAReq {
     tDot11fFfCategory                  Category;
     tDot11fFfAction                    Action;
     tDot11fFfDialogToken               DialogToken;
@@ -6211,7 +6187,7 @@ tANI_U32 dot11fGetPackedAddBAReqSize(tpAniSirGlobal pCtx, tDot11fAddBAReq *pFrm,
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fAddBARsp{
+typedef struct sDot11fAddBARsp {
     tDot11fFfCategory          Category;
     tDot11fFfAction            Action;
     tDot11fFfDialogToken       DialogToken;
@@ -6234,7 +6210,7 @@ tANI_U32 dot11fGetPackedAddBARspSize(tpAniSirGlobal pCtx, tDot11fAddBARsp *pFrm,
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fAddTSRequest{
+typedef struct sDot11fAddTSRequest {
     tDot11fFfCategory           Category;
     tDot11fFfAction             Action;
     tDot11fFfDialogToken        DialogToken;
@@ -6263,7 +6239,7 @@ tANI_U32 dot11fGetPackedAddTSRequestSize(tpAniSirGlobal pCtx, tDot11fAddTSReques
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fAddTSResponse{
+typedef struct sDot11fAddTSResponse {
     tDot11fFfCategory       Category;
     tDot11fFfAction         Action;
     tDot11fFfDialogToken    DialogToken;
@@ -6297,7 +6273,7 @@ tANI_U32 dot11fGetPackedAddTSResponseSize(tpAniSirGlobal pCtx, tDot11fAddTSRespo
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fAssocRequest{
+typedef struct sDot11fAssocRequest {
     tDot11fFfCapabilities   Capabilities;
     tDot11fFfListenInterval ListenInterval;
     tDot11fIESSID           SSID;
@@ -6340,7 +6316,7 @@ tANI_U32 dot11fGetPackedAssocRequestSize(tpAniSirGlobal pCtx, tDot11fAssocReques
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fAssocResponse{
+typedef struct sDot11fAssocResponse {
     tDot11fFfCapabilities       Capabilities;
     tDot11fFfStatus             Status;
     tDot11fFfAID                AID;
@@ -6389,7 +6365,7 @@ tANI_U32 dot11fGetPackedAssocResponseSize(tpAniSirGlobal pCtx, tDot11fAssocRespo
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fAuthentication{
+typedef struct sDot11fAuthentication {
     tDot11fFfAuthAlgo        AuthAlgo;
     tDot11fFfAuthSeqNo       AuthSeqNo;
     tDot11fFfStatus          Status;
@@ -6416,7 +6392,7 @@ tANI_U32 dot11fGetPackedAuthenticationSize(tpAniSirGlobal pCtx, tDot11fAuthentic
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fBeacon{
+typedef struct sDot11fBeacon {
     tDot11fFfTimeStamp            TimeStamp;
     tDot11fFfBeaconInterval       BeaconInterval;
     tDot11fFfCapabilities         Capabilities;
@@ -6480,7 +6456,7 @@ tANI_U32 dot11fGetPackedBeaconSize(tpAniSirGlobal pCtx, tDot11fBeacon *pFrm, tAN
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fBeacon1{
+typedef struct sDot11fBeacon1 {
     tDot11fFfTimeStamp      TimeStamp;
     tDot11fFfBeaconInterval BeaconInterval;
     tDot11fFfCapabilities   Capabilities;
@@ -6504,7 +6480,7 @@ tANI_U32 dot11fGetPackedBeacon1Size(tpAniSirGlobal pCtx, tDot11fBeacon1 *pFrm, t
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fBeacon2{
+typedef struct sDot11fBeacon2 {
     tDot11fIECountry              Country;
     tDot11fIEPowerConstraints     PowerConstraints;
     tDot11fIEChanSwitchAnn        ChanSwitchAnn;
@@ -6554,7 +6530,7 @@ tANI_U32 dot11fGetPackedBeacon2Size(tpAniSirGlobal pCtx, tDot11fBeacon2 *pFrm, t
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fBeaconIEs{
+typedef struct sDot11fBeaconIEs {
     tDot11fIESSID                 SSID;
     tDot11fIESuppRates            SuppRates;
     tDot11fIEFHParamSet           FHParamSet;
@@ -6616,7 +6592,7 @@ tANI_U32 dot11fGetPackedBeaconIEsSize(tpAniSirGlobal pCtx, tDot11fBeaconIEs *pFr
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fChannelSwitch{
+typedef struct sDot11fChannelSwitch {
     tDot11fFfCategory             Category;
     tDot11fFfAction               Action;
     tDot11fIEChanSwitchAnn        ChanSwitchAnn;
@@ -6638,7 +6614,7 @@ tANI_U32 dot11fGetPackedChannelSwitchSize(tpAniSirGlobal pCtx, tDot11fChannelSwi
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fDeAuth{
+typedef struct sDot11fDeAuth {
     tDot11fFfReason    Reason;
     tDot11fIEP2PDeAuth P2PDeAuth;
 } tDot11fDeAuth;
@@ -6657,7 +6633,7 @@ tANI_U32 dot11fGetPackedDeAuthSize(tpAniSirGlobal pCtx, tDot11fDeAuth *pFrm, tAN
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fDelBAInd{
+typedef struct sDot11fDelBAInd {
     tDot11fFfCategory          Category;
     tDot11fFfAction            Action;
     tDot11fFfDelBAParameterSet DelBAParameterSet;
@@ -6678,7 +6654,7 @@ tANI_U32 dot11fGetPackedDelBAIndSize(tpAniSirGlobal pCtx, tDot11fDelBAInd *pFrm,
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fDelTS{
+typedef struct sDot11fDelTS {
     tDot11fFfCategory Category;
     tDot11fFfAction   Action;
     tDot11fFfTSInfo   TSInfo;
@@ -6699,7 +6675,7 @@ tANI_U32 dot11fGetPackedDelTSSize(tpAniSirGlobal pCtx, tDot11fDelTS *pFrm, tANI_
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fDeviceDiscoverabilityReq{
+typedef struct sDot11fDeviceDiscoverabilityReq {
     tDot11fFfCategory                    Category;
     tDot11fFfAction                      Action;
     tDot11fFfP2POUI                      P2POUI;
@@ -6722,7 +6698,7 @@ tANI_U32 dot11fGetPackedDeviceDiscoverabilityReqSize(tpAniSirGlobal pCtx, tDot11
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fDeviceDiscoverabilityRes{
+typedef struct sDot11fDeviceDiscoverabilityRes {
     tDot11fFfCategory                    Category;
     tDot11fFfAction                      Action;
     tDot11fFfP2POUI                      P2POUI;
@@ -6745,7 +6721,7 @@ tANI_U32 dot11fGetPackedDeviceDiscoverabilityResSize(tpAniSirGlobal pCtx, tDot11
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fDisassociation{
+typedef struct sDot11fDisassociation {
     tDot11fFfReason      Reason;
     tDot11fIEP2PDisAssoc P2PDisAssoc;
 } tDot11fDisassociation;
@@ -6764,7 +6740,7 @@ tANI_U32 dot11fGetPackedDisassociationSize(tpAniSirGlobal pCtx, tDot11fDisassoci
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fGODiscoverabilityReq{
+typedef struct sDot11fGODiscoverabilityReq {
     tDot11fFfCategory      Category;
     tDot11fFfP2POUI        P2POUI;
     tDot11fFfP2POUISubType P2POUISubType;
@@ -6785,7 +6761,7 @@ tANI_U32 dot11fGetPackedGODiscoverabilityReqSize(tpAniSirGlobal pCtx, tDot11fGOD
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fGONegCnf{
+typedef struct sDot11fGONegCnf {
     tDot11fFfCategory      Category;
     tDot11fFfAction        Action;
     tDot11fFfP2POUI        P2POUI;
@@ -6808,7 +6784,7 @@ tANI_U32 dot11fGetPackedGONegCnfSize(tpAniSirGlobal pCtx, tDot11fGONegCnf *pFrm,
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fGONegReq{
+typedef struct sDot11fGONegReq {
     tDot11fFfCategory      Category;
     tDot11fFfAction        Action;
     tDot11fFfP2POUI        P2POUI;
@@ -6832,7 +6808,7 @@ tANI_U32 dot11fGetPackedGONegReqSize(tpAniSirGlobal pCtx, tDot11fGONegReq *pFrm,
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fGONegRes{
+typedef struct sDot11fGONegRes {
     tDot11fFfCategory      Category;
     tDot11fFfAction        Action;
     tDot11fFfP2POUI        P2POUI;
@@ -6856,7 +6832,7 @@ tANI_U32 dot11fGetPackedGONegResSize(tpAniSirGlobal pCtx, tDot11fGONegRes *pFrm,
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fHT2040BSSCoexistenceManagementActionFrame{
+typedef struct sDot11fHT2040BSSCoexistenceManagementActionFrame {
     tDot11fFfCategory                  Category;
     tDot11fFfAction                    Action;
     tDot11fIEHT2040BSSCoexistence      HT2040BSSCoexistence;
@@ -6877,7 +6853,7 @@ tANI_U32 dot11fGetPackedHT2040BSSCoexistenceManagementActionFrameSize(tpAniSirGl
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fInvitationReq{
+typedef struct sDot11fInvitationReq {
     tDot11fFfCategory         Category;
     tDot11fFfAction           Action;
     tDot11fFfP2POUI           P2POUI;
@@ -6900,7 +6876,7 @@ tANI_U32 dot11fGetPackedInvitationReqSize(tpAniSirGlobal pCtx, tDot11fInvitation
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fInvitationRes{
+typedef struct sDot11fInvitationRes {
     tDot11fFfCategory         Category;
     tDot11fFfAction           Action;
     tDot11fFfP2POUI           P2POUI;
@@ -6923,7 +6899,7 @@ tANI_U32 dot11fGetPackedInvitationResSize(tpAniSirGlobal pCtx, tDot11fInvitation
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fLinkMeasurementReport{
+typedef struct sDot11fLinkMeasurementReport {
     tDot11fFfCategory    Category;
     tDot11fFfAction      Action;
     tDot11fFfDialogToken DialogToken;
@@ -6951,7 +6927,7 @@ tANI_U32 dot11fGetPackedLinkMeasurementReportSize(tpAniSirGlobal pCtx, tDot11fLi
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fLinkMeasurementRequest{
+typedef struct sDot11fLinkMeasurementRequest {
     tDot11fFfCategory    Category;
     tDot11fFfAction      Action;
     tDot11fFfDialogToken DialogToken;
@@ -6973,7 +6949,7 @@ tANI_U32 dot11fGetPackedLinkMeasurementRequestSize(tpAniSirGlobal pCtx, tDot11fL
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fMeasurementReport{
+typedef struct sDot11fMeasurementReport {
     tDot11fFfCategory          Category;
     tDot11fFfAction            Action;
     tDot11fFfDialogToken       DialogToken;
@@ -6994,7 +6970,7 @@ tANI_U32 dot11fGetPackedMeasurementReportSize(tpAniSirGlobal pCtx, tDot11fMeasur
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fMeasurementRequest{
+typedef struct sDot11fMeasurementRequest {
     tDot11fFfCategory           Category;
     tDot11fFfAction             Action;
     tDot11fFfDialogToken        DialogToken;
@@ -7016,7 +6992,7 @@ tANI_U32 dot11fGetPackedMeasurementRequestSize(tpAniSirGlobal pCtx, tDot11fMeasu
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fNeighborReportRequest{
+typedef struct sDot11fNeighborReportRequest {
     tDot11fFfCategory    Category;
     tDot11fFfAction      Action;
     tDot11fFfDialogToken DialogToken;
@@ -7037,7 +7013,7 @@ tANI_U32 dot11fGetPackedNeighborReportRequestSize(tpAniSirGlobal pCtx, tDot11fNe
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fNeighborReportResponse{
+typedef struct sDot11fNeighborReportResponse {
     tDot11fFfCategory       Category;
     tDot11fFfAction         Action;
     tDot11fFfDialogToken    DialogToken;
@@ -7059,7 +7035,7 @@ tANI_U32 dot11fGetPackedNeighborReportResponseSize(tpAniSirGlobal pCtx, tDot11fN
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fNoticeOfAbs{
+typedef struct sDot11fNoticeOfAbs {
     tDot11fFfCategory           Category;
     tDot11fFfP2POUI             P2POUI;
     tDot11fFfP2POUISubType      P2POUISubType;
@@ -7081,7 +7057,7 @@ tANI_U32 dot11fGetPackedNoticeOfAbsSize(tpAniSirGlobal pCtx, tDot11fNoticeOfAbs 
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fOperatingMode{
+typedef struct sDot11fOperatingMode {
     tDot11fFfCategory      Category;
     tDot11fFfAction        Action;
     tDot11fFfOperatingMode OperatingMode;
@@ -7101,7 +7077,7 @@ tANI_U32 dot11fGetPackedOperatingModeSize(tpAniSirGlobal pCtx, tDot11fOperatingM
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fPresenceReq{
+typedef struct sDot11fPresenceReq {
     tDot11fFfCategory           Category;
     tDot11fFfP2POUI             P2POUI;
     tDot11fFfP2POUISubType      P2POUISubType;
@@ -7123,7 +7099,7 @@ tANI_U32 dot11fGetPackedPresenceReqSize(tpAniSirGlobal pCtx, tDot11fPresenceReq 
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fPresenceRes{
+typedef struct sDot11fPresenceRes {
     tDot11fFfCategory            Category;
     tDot11fFfP2POUI              P2POUI;
     tDot11fFfP2POUISubType       P2POUISubType;
@@ -7145,7 +7121,7 @@ tANI_U32 dot11fGetPackedPresenceResSize(tpAniSirGlobal pCtx, tDot11fPresenceRes 
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fProbeRequest{
+typedef struct sDot11fProbeRequest {
     tDot11fIESSID          SSID;
     tDot11fIESuppRates     SuppRates;
     tDot11fIERequestedInfo RequestedInfo;
@@ -7172,7 +7148,7 @@ tANI_U32 dot11fGetPackedProbeRequestSize(tpAniSirGlobal pCtx, tDot11fProbeReques
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fProbeResponse{
+typedef struct sDot11fProbeResponse {
     tDot11fFfTimeStamp          TimeStamp;
     tDot11fFfBeaconInterval     BeaconInterval;
     tDot11fFfCapabilities       Capabilities;
@@ -7232,7 +7208,7 @@ tANI_U32 dot11fGetPackedProbeResponseSize(tpAniSirGlobal pCtx, tDot11fProbeRespo
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fProvisionDiscoveryReq{
+typedef struct sDot11fProvisionDiscoveryReq {
     tDot11fFfCategory                 Category;
     tDot11fFfAction                   Action;
     tDot11fFfP2POUI                   P2POUI;
@@ -7255,7 +7231,7 @@ tANI_U32 dot11fGetPackedProvisionDiscoveryReqSize(tpAniSirGlobal pCtx, tDot11fPr
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fProvisionDiscoveryRes{
+typedef struct sDot11fProvisionDiscoveryRes {
     tDot11fFfCategory                    Category;
     tDot11fFfAction                      Action;
     tDot11fFfP2POUI                      P2POUI;
@@ -7278,7 +7254,7 @@ tANI_U32 dot11fGetPackedProvisionDiscoveryResSize(tpAniSirGlobal pCtx, tDot11fPr
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fQosMapConfigure{
+typedef struct sDot11fQosMapConfigure {
     tDot11fFfCategory  Category;
     tDot11fFfAction    Action;
     tDot11fIEQosMapSet QosMapSet;
@@ -7298,7 +7274,7 @@ tANI_U32 dot11fGetPackedQosMapConfigureSize(tpAniSirGlobal pCtx, tDot11fQosMapCo
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fRadioMeasurementReport{
+typedef struct sDot11fRadioMeasurementReport {
     tDot11fFfCategory          Category;
     tDot11fFfAction            Action;
     tDot11fFfDialogToken       DialogToken;
@@ -7320,7 +7296,7 @@ tANI_U32 dot11fGetPackedRadioMeasurementReportSize(tpAniSirGlobal pCtx, tDot11fR
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fRadioMeasurementRequest{
+typedef struct sDot11fRadioMeasurementRequest {
     tDot11fFfCategory           Category;
     tDot11fFfAction             Action;
     tDot11fFfDialogToken        DialogToken;
@@ -7343,7 +7319,7 @@ tANI_U32 dot11fGetPackedRadioMeasurementRequestSize(tpAniSirGlobal pCtx, tDot11f
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fReAssocRequest{
+typedef struct sDot11fReAssocRequest {
     tDot11fFfCapabilities       Capabilities;
     tDot11fFfListenInterval     ListenInterval;
     tDot11fFfCurrentAPAddress   CurrentAPAddress;
@@ -7394,7 +7370,7 @@ tANI_U32 dot11fGetPackedReAssocRequestSize(tpAniSirGlobal pCtx, tDot11fReAssocRe
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fReAssocResponse{
+typedef struct sDot11fReAssocResponse {
     tDot11fFfCapabilities       Capabilities;
     tDot11fFfStatus             Status;
     tDot11fFfAID                AID;
@@ -7444,7 +7420,7 @@ tANI_U32 dot11fGetPackedReAssocResponseSize(tpAniSirGlobal pCtx, tDot11fReAssocR
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fSMPowerSave{
+typedef struct sDot11fSMPowerSave {
     tDot11fFfCategory       Category;
     tDot11fFfAction         Action;
     tDot11fFfSMPowerModeSet SMPowerModeSet;
@@ -7464,7 +7440,7 @@ tANI_U32 dot11fGetPackedSMPowerSaveSize(tpAniSirGlobal pCtx, tDot11fSMPowerSave 
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fSaQueryReq{
+typedef struct sDot11fSaQueryReq {
     tDot11fFfCategory      Category;
     tDot11fFfAction        Action;
     tDot11fFfTransactionId TransactionId;
@@ -7484,7 +7460,7 @@ tANI_U32 dot11fGetPackedSaQueryReqSize(tpAniSirGlobal pCtx, tDot11fSaQueryReq *p
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fSaQueryRsp{
+typedef struct sDot11fSaQueryRsp {
     tDot11fFfCategory      Category;
     tDot11fFfAction        Action;
     tDot11fFfTransactionId TransactionId;
@@ -7504,7 +7480,7 @@ tANI_U32 dot11fGetPackedSaQueryRspSize(tpAniSirGlobal pCtx, tDot11fSaQueryRsp *p
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fTDLSDisReq{
+typedef struct sDot11fTDLSDisReq {
     tDot11fFfCategory       Category;
     tDot11fFfAction         Action;
     tDot11fFfDialogToken    DialogToken;
@@ -7525,7 +7501,7 @@ tANI_U32 dot11fGetPackedTDLSDisReqSize(tpAniSirGlobal pCtx, tDot11fTDLSDisReq *p
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fTDLSDisRsp{
+typedef struct sDot11fTDLSDisRsp {
     tDot11fFfCategory             Category;
     tDot11fFfAction               Action;
     tDot11fFfDialogToken          DialogToken;
@@ -7559,7 +7535,7 @@ tANI_U32 dot11fGetPackedTDLSDisRspSize(tpAniSirGlobal pCtx, tDot11fTDLSDisRsp *p
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fTDLSPeerTrafficInd{
+typedef struct sDot11fTDLSPeerTrafficInd {
     tDot11fFfCategory       Category;
     tDot11fFfAction         Action;
     tDot11fFfDialogToken    DialogToken;
@@ -7582,7 +7558,7 @@ tANI_U32 dot11fGetPackedTDLSPeerTrafficIndSize(tpAniSirGlobal pCtx, tDot11fTDLSP
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fTDLSPeerTrafficRsp{
+typedef struct sDot11fTDLSPeerTrafficRsp {
     tDot11fFfCategory       Category;
     tDot11fFfAction         Action;
     tDot11fFfDialogToken    DialogToken;
@@ -7603,7 +7579,7 @@ tANI_U32 dot11fGetPackedTDLSPeerTrafficRspSize(tpAniSirGlobal pCtx, tDot11fTDLSP
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fTDLSSetupCnf{
+typedef struct sDot11fTDLSSetupCnf {
     tDot11fFfCategory             Category;
     tDot11fFfAction               Action;
     tDot11fFfStatus               Status;
@@ -7634,7 +7610,7 @@ tANI_U32 dot11fGetPackedTDLSSetupCnfSize(tpAniSirGlobal pCtx, tDot11fTDLSSetupCn
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fTDLSSetupReq{
+typedef struct sDot11fTDLSSetupReq {
     tDot11fFfCategory             Category;
     tDot11fFfAction               Action;
     tDot11fFfDialogToken          DialogToken;
@@ -7672,7 +7648,7 @@ tANI_U32 dot11fGetPackedTDLSSetupReqSize(tpAniSirGlobal pCtx, tDot11fTDLSSetupRe
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fTDLSSetupRsp{
+typedef struct sDot11fTDLSSetupRsp {
     tDot11fFfCategory             Category;
     tDot11fFfAction               Action;
     tDot11fFfStatus               Status;
@@ -7712,7 +7688,7 @@ tANI_U32 dot11fGetPackedTDLSSetupRspSize(tpAniSirGlobal pCtx, tDot11fTDLSSetupRs
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fTDLSTeardown{
+typedef struct sDot11fTDLSTeardown {
     tDot11fFfCategory       Category;
     tDot11fFfAction         Action;
     tDot11fFfReason         Reason;
@@ -7734,7 +7710,7 @@ tANI_U32 dot11fGetPackedTDLSTeardownSize(tpAniSirGlobal pCtx, tDot11fTDLSTeardow
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fTPCReport{
+typedef struct sDot11fTPCReport {
     tDot11fFfCategory    Category;
     tDot11fFfAction      Action;
     tDot11fFfDialogToken DialogToken;
@@ -7755,7 +7731,7 @@ tANI_U32 dot11fGetPackedTPCReportSize(tpAniSirGlobal pCtx, tDot11fTPCReport *pFr
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fTPCRequest{
+typedef struct sDot11fTPCRequest {
     tDot11fFfCategory    Category;
     tDot11fFfAction      Action;
     tDot11fFfDialogToken DialogToken;
@@ -7776,7 +7752,7 @@ tANI_U32 dot11fGetPackedTPCRequestSize(tpAniSirGlobal pCtx, tDot11fTPCRequest *p
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fVHTGidManagementActionFrame{
+typedef struct sDot11fVHTGidManagementActionFrame {
     tDot11fFfCategory                 Category;
     tDot11fFfAction                   Action;
     tDot11fFfVhtMembershipStatusArray VhtMembershipStatusArray;
@@ -7797,7 +7773,7 @@ tANI_U32 dot11fGetPackedVHTGidManagementActionFrameSize(tpAniSirGlobal pCtx, tDo
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fWMMAddTSRequest{
+typedef struct sDot11fWMMAddTSRequest {
     tDot11fFfCategory           Category;
     tDot11fFfAction             Action;
     tDot11fFfDialogToken        DialogToken;
@@ -7820,7 +7796,7 @@ tANI_U32 dot11fGetPackedWMMAddTSRequestSize(tpAniSirGlobal pCtx, tDot11fWMMAddTS
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fWMMAddTSResponse{
+typedef struct sDot11fWMMAddTSResponse {
     tDot11fFfCategory       Category;
     tDot11fFfAction         Action;
     tDot11fFfDialogToken    DialogToken;
@@ -7843,7 +7819,7 @@ tANI_U32 dot11fGetPackedWMMAddTSResponseSize(tpAniSirGlobal pCtx, tDot11fWMMAddT
 } /* End extern "C". */
 #endif /* C++ */
 
-typedef struct sDot11fWMMDelTS{
+typedef struct sDot11fWMMDelTS {
     tDot11fFfCategory    Category;
     tDot11fFfAction      Action;
     tDot11fFfDialogToken DialogToken;

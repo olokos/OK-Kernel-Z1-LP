@@ -29,14 +29,14 @@
 #define __WLAN_QCT_PAL_TIMER_H
 
 /**=========================================================================
-  
+
   \file  wlan_qct_pal_timer.h
-  
+
   \brief define synchronization objects PAL exports. wpt = (Wlan Pal Type) wpal = (Wlan PAL)
-               
+
    Definitions for platform independent.
-  
-  
+
+
   ========================================================================*/
 
 #include "wlan_qct_pal_type.h"
@@ -48,11 +48,10 @@ typedef VOS_TIMER_STATE WPAL_TIMER_STATE;
 
 typedef void (*wpal_timer_callback)(void *pUserData);
 
-typedef struct
-{
-   wpt_os_timer timer;
-   wpal_timer_callback callback;
-   void *pUserData;
+typedef struct {
+    wpt_os_timer timer;
+    wpal_timer_callback callback;
+    void *pUserData;
 } wpt_timer;
 
 

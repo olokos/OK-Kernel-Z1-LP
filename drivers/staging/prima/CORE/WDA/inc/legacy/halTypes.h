@@ -72,8 +72,7 @@ typedef void *tHalHandle;
     HAL interface functions.
 
     -------------------------------------------------------------------------- */
-typedef enum
-{
+typedef enum {
     eHAL_STATUS_SUCCESS,
 
     // general failure.  This status applies to all failure that are not covered
@@ -224,34 +223,31 @@ typedef enum
 
 } eHalStatus;
 
-typedef enum
-{
+typedef enum {
     HAL_STOP_TYPE_SYS_RESET,
     HAL_STOP_TYPE_SYS_DEEP_SLEEP,
     HAL_STOP_TYPE_RF_KILL,
-}tHalStopType;
+} tHalStopType;
 
 // macro to check for SUCCESS value of the halStatus
 #define HAL_STATUS_SUCCESS( variable ) ( eHAL_STATUS_SUCCESS == ( variable ) )
 
 /// Bit value data structure
-typedef enum sHalBitVal  // For Bit operations
-{
+typedef enum sHalBitVal { // For Bit operations
     eHAL_CLEAR,
     eHAL_SET
-}tHalBitVal;
+} tHalBitVal;
 
 // -------------------------------------------------------------
 /// MMH APIs
 enum {
-   eHI_PRI,
-   ePROT,
-   eDBG
+    eHI_PRI,
+    ePROT,
+    eDBG
 };
 
 /// System role definition on a per BSS
-typedef enum eBssSystemRole
-{
+typedef enum eBssSystemRole {
     eSYSTEM_UNKNOWN_ROLE,
     eSYSTEM_AP_ROLE,
     eSYSTEM_STA_IN_IBSS_ROLE,
@@ -267,13 +263,12 @@ typedef enum eBssSystemRole
 // ---------------------------------------
 // Channel Bonding Sideband configuration
 // ---------------------------------------
-typedef enum sHalCBsidebandType
-{
+typedef enum sHalCBsidebandType {
     eHAL_SIDEBAND_CENTER=0,
     eHAL_SIDEBAND_LOWER,
     eHAL_SIDEBAND_UPPER,
     eHAL_SIDEBAND_COPY
-}tHalCBsidebandType;
+} tHalCBsidebandType;
 
 
 /// HAL states
@@ -290,8 +285,7 @@ typedef enum {
 
 
 // Type to define softmac mode (also system mode)
-typedef enum
-{
+typedef enum {
     //3- Promisc, 2 - Scan, 1 - Learn  0 - Normal
     eHAL_SYS_MODE_NORMAL = 0,
     eHAL_SYS_MODE_LEARN,
@@ -321,8 +315,7 @@ typedef enum {
 } eFrameType;
 
 
-typedef enum
-{
+typedef enum {
     ANI_TXDIR_IBSS = 0,
     ANI_TXDIR_TODS,
     ANI_TXDIR_FROMDS,
@@ -330,8 +323,7 @@ typedef enum
 
 } eFrameTxDir;
 
-typedef enum
-{
+typedef enum {
     eRF_BAND_UNKNOWN = 0,
     eRF_BAND_2_4_GHZ = 1,
     eRF_BAND_5_GHZ = 2
@@ -349,9 +341,9 @@ typedef enum
 #define HAL_MAX_TXPOWER_INVALID       127
 
 #define MIN_STA_PWR_CAP_DBM         13
-#define MAX_STA_PWR_CAP_DBM         19 
+#define MAX_STA_PWR_CAP_DBM         19
 
-/* Moving the miscellaneous defination required by UMAC are moved here from 
+/* Moving the miscellaneous defination required by UMAC are moved here from
  * volansdefs.h */
 /* --------------------------------------------------------------------
  * Support definitions for taurus
@@ -399,7 +391,7 @@ typedef enum
 #define IS_VSTA_IDX(__x) \
                    (((__x) >= QWLAN_VSTA_MIN_IDX) && ((__x) < HAL_NUM_STA))
 
-                 
+
 // is the STA a General Purpose STA?
 #define IS_GPSTA_IDX(__x) \
     (((__x) >= (HAL_NUM_HW_STA-HAL_NUM_GPSTA)) && \

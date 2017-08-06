@@ -55,7 +55,7 @@ typedef enum {
     TRACE_CODE_TL_FORWARD_CACHED_FRAMES,
     TRACE_CODE_TL_FLUSH_CACHED_FRAMES,
     TRACE_CODE_TL_CACHE_FRAME,
-}WLANTL_TraceCode;
+} WLANTL_TraceCode;
 
 void tlTraceDump(void *pMac, tpvosTraceRecord pRecord, tANI_U16 recIndex);
 void tlTraceInit(void);

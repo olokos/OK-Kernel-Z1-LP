@@ -28,16 +28,16 @@
 
 #if !defined( __VOS_UTILS_H )
 #define __VOS_UTILS_H
- 
+
 /**=========================================================================
-  
+
   \file  vos_utils.h
-  
+
   \brief virtual Operating System Services (vOSS) utility APIs
-               
+
    Various utility functions
-  
-  
+
+
   ========================================================================*/
 
 /* $Header$ */
@@ -50,7 +50,7 @@
 #include <vos_event.h>
 //#include <Wincrypt.h>
 
-/*-------------------------------------------------------------------------- 
+/*--------------------------------------------------------------------------
   Preprocessor definitions and constants
   ------------------------------------------------------------------------*/
 #define VOS_DIGEST_SHA1_SIZE    20
@@ -59,12 +59,12 @@
 #define VOS_BAND_5GHZ          2
 
 #define VOS_24_GHZ_CHANNEL_14  14
-/*-------------------------------------------------------------------------- 
+/*--------------------------------------------------------------------------
   Type declarations
   ------------------------------------------------------------------------*/
 
 
-/*------------------------------------------------------------------------- 
+/*-------------------------------------------------------------------------
   Function declarations and documenation
   ------------------------------------------------------------------------*/
 
@@ -84,7 +84,7 @@ VOS_STATUS vos_crypto_deinit( v_U32_t hCryptProv );
  * @param pbBuf - the caller allocated location where the bytes should be copied
  * @param numBytes the number of bytes that should be generated and
  * copied
- * 
+ *
  * @return VOS_STATUS_SUCCSS if the operation succeeds
 */
 VOS_STATUS vos_rand_get_bytes( v_U32_t handle, v_U8_t *pbBuf, v_U32_t numBytes );
@@ -113,11 +113,11 @@ VOS_STATUS vos_rand_get_bytes( v_U32_t handle, v_U8_t *pbBuf, v_U32_t numBytes )
  *
  */
 VOS_STATUS vos_sha1_hmac_str(v_U32_t cryptHandle, /* Handle */
-           v_U8_t *text, /* pointer to data stream */
-           v_U32_t textLen, /* length of data stream */
-           v_U8_t *key, /* pointer to authentication key */
-           v_U32_t keyLen, /* length of authentication key */
-           v_U8_t digest[VOS_DIGEST_SHA1_SIZE]);/* caller digest to be filled in */
+                             v_U8_t *text, /* pointer to data stream */
+                             v_U32_t textLen, /* length of data stream */
+                             v_U8_t *key, /* pointer to authentication key */
+                             v_U32_t keyLen, /* length of authentication key */
+                             v_U8_t digest[VOS_DIGEST_SHA1_SIZE]);/* caller digest to be filled in */
 
 /**
  * vos_md5_hmac_str
@@ -142,11 +142,11 @@ VOS_STATUS vos_sha1_hmac_str(v_U32_t cryptHandle, /* Handle */
  *
  */
 VOS_STATUS vos_md5_hmac_str(v_U32_t cryptHandle, /* Handle */
-           v_U8_t *text, /* pointer to data stream */
-           v_U32_t textLen, /* length of data stream */
-           v_U8_t *key, /* pointer to authentication key */
-           v_U32_t keyLen, /* length of authentication key */
-           v_U8_t digest[VOS_DIGEST_MD5_SIZE]);/* caller digest to be filled in */
+                            v_U8_t *text, /* pointer to data stream */
+                            v_U32_t textLen, /* length of data stream */
+                            v_U8_t *key, /* pointer to authentication key */
+                            v_U32_t keyLen, /* length of authentication key */
+                            v_U8_t digest[VOS_DIGEST_MD5_SIZE]);/* caller digest to be filled in */
 
 
 
@@ -163,12 +163,11 @@ VOS_STATUS vos_decrypt_AES(v_U32_t cryptHandle, /* Handle */
 
 v_U8_t vos_chan_to_band(v_U32_t chan);
 void vos_get_wlan_unsafe_channel(v_U16_t *unsafeChannelList,
-                    v_U16_t buffer_size, v_U16_t *unsafeChannelCount);
+                                 v_U16_t buffer_size, v_U16_t *unsafeChannelCount);
 
 #define ROAM_DELAY_TABLE_SIZE   10
 
-enum e_roaming_event
-{
+enum e_roaming_event {
     e_HDD_DISABLE_TX_QUEUE = 0,
     e_SME_PREAUTH_REASSOC_START,
     e_SME_PREAUTH_CALLBACK_HIT,
@@ -199,8 +198,7 @@ enum e_roaming_event
     e_ROAM_EVENT_MAX
 };
 
-typedef enum
-{
+typedef enum {
     eVOS_AUTH_TYPE_NONE,    //never used
     // MAC layer authentication types
     eVOS_AUTH_TYPE_OPEN_SYSTEM,
@@ -233,11 +231,10 @@ typedef enum
     eVOS_AUTH_TYPE_FAILED = 0xff,
     eVOS_AUTH_TYPE_UNKNOWN = eVOS_AUTH_TYPE_FAILED,
 
-}eVosAuthType;
+} eVosAuthType;
 
 
-typedef struct sRoamDelayMetaInfo
-{
+typedef struct sRoamDelayMetaInfo {
     v_BOOL_t           log_tl;
     v_U8_t             hdd_monitor_tx;//monitor the tx @ hdd basically (Eapol , First Tx Data Frame )
     v_U8_t             hdd_monitor_rx;//monitor the rx @ hdd basically (Eapol )

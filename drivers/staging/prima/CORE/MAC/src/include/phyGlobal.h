@@ -27,7 +27,7 @@
 
 /**
  *
- * 
+ *
  * phyGlobal.h: Holds all globals for the phy, rf, and asic layers in hal
  * Author:  Mark Nelson
  * Date:    4/9/05
@@ -74,8 +74,7 @@ typedef struct sPhySetChanCntx {
 } tPhySetChanCntx, *tpPhySetChanCntx;
 
 
-typedef struct
-{
+typedef struct {
     sHalNv nvCache;
     void *nvTables[NUM_NV_TABLE_IDS];
 
@@ -100,6 +99,6 @@ typedef struct
     ePhyRxDisabledPktTypes modTypes;  //current disabled packet types
     volatile tANI_BOOLEAN setPhyMsgEvent;
     tANI_U32 hdetResidualDCO;
-}tAniSirPhy;
+} tAniSirPhy;
 
 #endif /* PHYGLOBAL_H */

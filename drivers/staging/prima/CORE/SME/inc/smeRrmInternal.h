@@ -31,12 +31,12 @@
 
 
 /**=========================================================================
-  
+
   \file  smeRrmInternal.h
-  
+
   \brief prototype for SME RRM APIs
-  
-  
+
+
   ========================================================================*/
 
 /* $Header$ */
@@ -51,66 +51,60 @@
 #include "palTimer.h"
 #include "rrmGlobal.h"
 
-/*-------------------------------------------------------------------------- 
+/*--------------------------------------------------------------------------
   Type declarations
   ------------------------------------------------------------------------*/
-typedef struct sRrmConfigParam
-{
-   tANI_U8 rrmEnabled;
-   tANI_U8 maxRandnInterval;
-}tRrmConfigParam, *tpRrmConfigParam;
+typedef struct sRrmConfigParam {
+    tANI_U8 rrmEnabled;
+    tANI_U8 maxRandnInterval;
+} tRrmConfigParam, *tpRrmConfigParam;
 
-typedef struct sRrmNeighborReportDesc
-{
-   tListElem    List;
-   tSirNeighborBssDescription   *pNeighborBssDescription;
-   tANI_U32                     roamScore;
+typedef struct sRrmNeighborReportDesc {
+    tListElem    List;
+    tSirNeighborBssDescription   *pNeighborBssDescription;
+    tANI_U32                     roamScore;
 } tRrmNeighborReportDesc, *tpRrmNeighborReportDesc;
 
 
 typedef void (*NeighborReportRspCallback) (void *context, VOS_STATUS vosStatus);
 
-typedef struct sRrmNeighborRspCallbackInfo
-{
+typedef struct sRrmNeighborRspCallbackInfo {
     tANI_U32                  timeout;  //in ms.. min value is 10 (10ms)
     NeighborReportRspCallback neighborRspCallback;
     void                      *neighborRspCallbackContext;
 } tRrmNeighborRspCallbackInfo, *tpRrmNeighborRspCallbackInfo;
 
-typedef struct sRrmNeighborRequestControlInfo
-{
+typedef struct sRrmNeighborRequestControlInfo {
     tANI_BOOLEAN    isNeighborRspPending;   //To check whether a neighbor req is already sent and response pending
     vos_timer_t     neighborRspWaitTimer;
     tRrmNeighborRspCallbackInfo neighborRspCallbackInfo;
 } tRrmNeighborRequestControlInfo, *tpRrmNeighborRequestControlInfo;
 
-typedef struct sRrmSMEContext
-{
-   tANI_U16 token;
-   tCsrBssid sessionBssId;
-   tANI_U8 regClass;
-   tCsrChannelInfo channelList; //list of all channels to be measured.
-   tANI_U8 currentIndex;
-   tAniSSID ssId;  //SSID used in the measuring beacon report.
-   tSirMacAddr bssId; //bssid used for beacon report measurement.
-   tANI_U16 randnIntvl; //Randomization interval to be used in subsequent measurements.
-   tANI_U16 duration[SIR_ESE_MAX_MEAS_IE_REQS];
-   tANI_U8 measMode[SIR_ESE_MAX_MEAS_IE_REQS];
-   tRrmConfigParam rrmConfig;
-   vos_timer_t IterMeasTimer;
-   tDblLinkList neighborReportCache;
-   tRrmNeighborRequestControlInfo neighborReqControlInfo;
+typedef struct sRrmSMEContext {
+    tANI_U16 token;
+    tCsrBssid sessionBssId;
+    tANI_U8 regClass;
+    tCsrChannelInfo channelList; //list of all channels to be measured.
+    tANI_U8 currentIndex;
+    tAniSSID ssId;  //SSID used in the measuring beacon report.
+    tSirMacAddr bssId; //bssid used for beacon report measurement.
+    tANI_U16 randnIntvl; //Randomization interval to be used in subsequent measurements.
+    tANI_U16 duration[SIR_ESE_MAX_MEAS_IE_REQS];
+    tANI_U8 measMode[SIR_ESE_MAX_MEAS_IE_REQS];
+    tRrmConfigParam rrmConfig;
+    vos_timer_t IterMeasTimer;
+    tDblLinkList neighborReportCache;
+    tRrmNeighborRequestControlInfo neighborReqControlInfo;
 
 #if defined(FEATURE_WLAN_ESE) && defined(FEATURE_WLAN_ESE_UPLOAD)
-   tCsrEseBeaconReq  eseBcnReqInfo;
+    tCsrEseBeaconReq  eseBcnReqInfo;
 #endif /* FEATURE_WLAN_ESE && FEATURE_WLAN_ESE_UPLOAD */
-   tRrmMsgReqSource msgSource;
-}tRrmSMEContext, *tpRrmSMEContext; 
+    tRrmMsgReqSource msgSource;
+} tRrmSMEContext, *tpRrmSMEContext;
 
-typedef struct sRrmNeighborReq
-{
-   tANI_U8 no_ssid;
-   tSirMacSSid ssid;
-}tRrmNeighborReq, *tpRrmNeighborReq;
+typedef struct sRrmNeighborReq {
+    tANI_U8 no_ssid;
+    tSirMacSSid ssid;
+} tRrmNeighborReq, *tpRrmNeighborReq;
 
 #endif //#if !defined( __SMERRMINTERNAL_H )

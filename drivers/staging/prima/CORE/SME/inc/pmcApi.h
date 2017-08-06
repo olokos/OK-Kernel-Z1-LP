@@ -48,7 +48,7 @@
 #define __PMC_API_H__
 
 //This timer value determines the default periodicity at which BMPS retries will happen
-//This default value is overwritten typicaly by OS specific registry/INI values. 
+//This default value is overwritten typicaly by OS specific registry/INI values.
 #define BMPS_TRAFFIC_TIMER_DEFAULT 5000  //unit = ms
 #define DHCP_REMAIN_POWER_ACTIVE_THRESHOLD 12 // (12 * 5) sec = 60 seconds = 1 min
 
@@ -141,7 +141,7 @@ typedef enum ePmcPowerState
 
 } tPmcPowerState;
 
- 
+
 
 /* PMC states. */
 
@@ -216,11 +216,10 @@ typedef enum ePmcSmpsMode
 
 } tPmcSmpsMode;
 
-typedef enum
-{
+typedef enum {
     eWOWL_EXIT_USER,
     eWOWL_EXIT_WAKEIND
-}tWowlExitSource;
+} tWowlExitSource;
 
 /* Configuration parameters for Idle Mode Power Save (IMPS). */
 
@@ -271,13 +270,13 @@ typedef struct sPmcBmpsConfigParams
 
                                          frame has been processed */
 
-    tANI_BOOLEAN enableBeaconEarlyTermination; /* if TRUE, BET feature in RIVA 
+    tANI_BOOLEAN enableBeaconEarlyTermination; /* if TRUE, BET feature in RIVA
                                       will be enabled, FALSE otherwise, TRUE means:
-                                      RXP will read the beacon header for the 
-                                      TIM bit & discard the rest if set to 0, 
+                                      RXP will read the beacon header for the
+                                      TIM bit & discard the rest if set to 0,
                                       while in BMPS              */
-    tANI_U8      bcnEarlyTermWakeInterval; /* This specifies how often in terms 
-                                      of LI we will disable BET in order to sync 
+    tANI_U8      bcnEarlyTermWakeInterval; /* This specifies how often in terms
+                                      of LI we will disable BET in order to sync
                                       up TSF*/
 
 } tPmcBmpsConfigParams, *tpPmcBmpsConfigParams;
@@ -341,7 +340,7 @@ extern eHalStatus pmcRequestImps (tHalHandle hHal, tANI_U32 impsPeriod,
 
 extern eHalStatus pmcRegisterPowerSaveCheck (tHalHandle hHal, tANI_BOOLEAN (*checkRoutine) (void *checkContext),
 
-                                             void *checkContext);
+        void *checkContext);
 
 extern eHalStatus pmcDeregisterPowerSaveCheck (tHalHandle hHal, tANI_BOOLEAN (*checkRoutine) (void *checkContext));
 
@@ -351,20 +350,20 @@ extern v_BOOL_t IsPmcImpsReqFailed (tHalHandle hHal);
 
 extern eHalStatus pmcRequestBmps (
 
-   tHalHandle hHal,
+    tHalHandle hHal,
 
-   void (*callbackRoutine) (void *callbackContext, eHalStatus status),
+    void (*callbackRoutine) (void *callbackContext, eHalStatus status),
 
-   void *callbackContext);
+    void *callbackContext);
 
 
 extern eHalStatus pmcStartUapsd (
 
-   tHalHandle hHal,
+    tHalHandle hHal,
 
-   void (*callbackRoutine) (void *callbackContext, eHalStatus status),
+    void (*callbackRoutine) (void *callbackContext, eHalStatus status),
 
-   void *callbackContext);
+    void *callbackContext);
 
 
 extern eHalStatus pmcStopUapsd (tHalHandle hHal);
@@ -372,23 +371,23 @@ extern eHalStatus pmcStopUapsd (tHalHandle hHal);
 
 extern eHalStatus pmcRequestStandby (
 
-   tHalHandle hHal,
+    tHalHandle hHal,
 
-   void (*callbackRoutine) (void *callbackContext, eHalStatus status),
+    void (*callbackRoutine) (void *callbackContext, eHalStatus status),
 
-   void *callbackContext);
-
-
-extern eHalStatus pmcRegisterDeviceStateUpdateInd (tHalHandle hHal, 
-
-   void (*callbackRoutine) (void *callbackContext, tPmcState pmcState),
-
-   void *callbackContext);
+    void *callbackContext);
 
 
-extern eHalStatus pmcDeregisterDeviceStateUpdateInd (tHalHandle hHal, 
+extern eHalStatus pmcRegisterDeviceStateUpdateInd (tHalHandle hHal,
 
-   void (*callbackRoutine) (void *callbackContext, tPmcState pmcState));
+        void (*callbackRoutine) (void *callbackContext, tPmcState pmcState),
+
+        void *callbackContext);
+
+
+extern eHalStatus pmcDeregisterDeviceStateUpdateInd (tHalHandle hHal,
+
+        void (*callbackRoutine) (void *callbackContext, tPmcState pmcState));
 
 
 extern eHalStatus pmcReady(tHalHandle hHal);
@@ -398,20 +397,20 @@ void pmcDumpInit(tHalHandle hHal);
 
 
 extern eHalStatus pmcWowlAddBcastPattern (
-   tHalHandle hHal, 
-   tpSirWowlAddBcastPtrn pattern, 
-   tANI_U8  sessionId);
+    tHalHandle hHal,
+    tpSirWowlAddBcastPtrn pattern,
+    tANI_U8  sessionId);
 
 
 extern eHalStatus pmcWowlDelBcastPattern (
-   tHalHandle hHal, 
-   tpSirWowlDelBcastPtrn pattern,
-   tANI_U8 sessionId);
+    tHalHandle hHal,
+    tpSirWowlDelBcastPtrn pattern,
+    tANI_U8 sessionId);
 
 
-extern eHalStatus pmcEnterWowl ( 
+extern eHalStatus pmcEnterWowl (
 
-    tHalHandle hHal, 
+    tHalHandle hHal,
 
     void (*enterWowlCallbackRoutine) (void *callbackContext, eHalStatus status),
 
@@ -427,7 +426,7 @@ extern eHalStatus pmcExitWowl (tHalHandle hHal, tWowlExitSource wowlExitSrc);
 
 
 extern eHalStatus pmcSetHostOffload (tHalHandle hHal, tpSirHostOffloadReq pRequest,
-                                          tANI_U8 sessionId);
+                                     tANI_U8 sessionId);
 
 /* ---------------------------------------------------------------------------
     \fn pmcSetKeepAlive
@@ -436,7 +435,7 @@ extern eHalStatus pmcSetHostOffload (tHalHandle hHal, tpSirHostOffloadReq pReque
     \param  pRequest - Pointer to the Keep Alive.
     \return eHalStatus
             eHAL_STATUS_FAILURE  Cannot set the keepalive.
-            eHAL_STATUS_SUCCESS  Request accepted. 
+            eHAL_STATUS_SUCCESS  Request accepted.
   ---------------------------------------------------------------------------*/
 extern eHalStatus pmcSetKeepAlive (tHalHandle hHal, tpSirKeepAliveReq pRequest, tANI_U8 sessionId);
 
@@ -457,8 +456,8 @@ extern eHalStatus pmcSetRssiFilter(tHalHandle hHal, v_U8_t rssiThreshold);
 // Packet Coalescing Filter Match Count Callback declaration
 typedef void(*FilterMatchCountCallback)(void *callbackContext,
                                         tpSirRcvFltPktMatchRsp pRcvFltPktMatchRsp);
-extern eHalStatus pmcGetFilterMatchCount(tHalHandle hHal, FilterMatchCountCallback callbackRoutine, 
-                                                void *callbackContext, tANI_U8 sessionId);
+extern eHalStatus pmcGetFilterMatchCount(tHalHandle hHal, FilterMatchCountCallback callbackRoutine,
+        void *callbackContext, tANI_U8 sessionId);
 #endif // WLAN_FEATURE_PACKET_FILTERING
 
 #ifdef WLAN_FEATURE_GTK_OFFLOAD
@@ -472,7 +471,7 @@ typedef void(*GTKOffloadGetInfoCallback)(void *callbackContext, tpSirGtkOffloadG
     \param  pGtkOffload - Pointer to the GTK offload request.
     \return eHalStatus
             eHAL_STATUS_FAILURE  Cannot set the offload.
-            eHAL_STATUS_SUCCESS  Request accepted. 
+            eHAL_STATUS_SUCCESS  Request accepted.
   ---------------------------------------------------------------------------*/
 extern eHalStatus pmcSetGTKOffload (tHalHandle hHal, tpSirGtkOffloadParams pGtkOffload, tANI_U8 sessionId);
 
@@ -483,7 +482,7 @@ extern eHalStatus pmcSetGTKOffload (tHalHandle hHal, tpSirGtkOffloadParams pGtkO
     \param  callbackRoutine - Pointer to the GTK Offload Get Info response callback routine.
     \return eHalStatus
             eHAL_STATUS_FAILURE  Cannot set the offload.
-            eHAL_STATUS_SUCCESS  Request accepted. 
+            eHAL_STATUS_SUCCESS  Request accepted.
   ---------------------------------------------------------------------------*/
 extern eHalStatus pmcGetGTKOffload(tHalHandle hHal,
                                    GTKOffloadGetInfoCallback callbackRoutine,
@@ -493,11 +492,11 @@ extern eHalStatus pmcGetGTKOffload(tHalHandle hHal,
 #ifdef FEATURE_WLAN_BATCH_SCAN
 /*Set batch scan request Cb declaration*/
 typedef void(*hddSetBatchScanReqCallback)(void *callbackContext,
-     tSirSetBatchScanRsp *pRsp);
+        tSirSetBatchScanRsp *pRsp);
 
 /*Trigger batch scan result indication Cb declaration*/
 typedef void(*hddTriggerBatchScanResultIndCallback)(void *callbackContext,
-     void *pRsp);
+        void *pRsp);
 
 /* -----------------------------------------------------------------------------
     \fn pmcSetBatchScanReq
@@ -511,8 +510,8 @@ typedef void(*hddTriggerBatchScanResultIndCallback)(void *callbackContext,
              eHAL_STATUS_SUCCESS  Request accepted.
  -----------------------------------------------------------------------------*/
 extern eHalStatus pmcSetBatchScanReq(tHalHandle hHal, tSirSetBatchScanReq
-       *pRequest, tANI_U8 sessionId, hddSetBatchScanReqCallback callbackRoutine,
-       void *callbackContext);
+                                     *pRequest, tANI_U8 sessionId, hddSetBatchScanReqCallback callbackRoutine,
+                                     void *callbackContext);
 
 /* -----------------------------------------------------------------------------
     \fn pmcTriggerBatchScanResultInd

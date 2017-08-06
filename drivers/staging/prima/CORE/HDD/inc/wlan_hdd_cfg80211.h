@@ -103,14 +103,14 @@
 #define MAX_CHANNEL MAX_2_4GHZ_CHANNEL + NUM_5GHZ_CHANNELS
 
 typedef struct {
-   u8 element_id;
-   u8 len;
-   u8 oui_1;
-   u8 oui_2;
-   u8 oui_3;
-   u32 type;
-   u32 age;
-}__attribute__((packed)) qcom_ie_age ;
+    u8 element_id;
+    u8 len;
+    u8 oui_1;
+    u8 oui_2;
+    u8 oui_3;
+    u32 type;
+    u32 age;
+} __attribute__((packed)) qcom_ie_age ;
 #endif
 
 enum qca_nl80211_vendor_subcmds {
@@ -196,8 +196,7 @@ enum qca_nl80211_vendor_subcmds_index {
     QCA_NL80211_VENDOR_SUBCMD_NAN_INDEX,
 };
 
-enum qca_wlan_vendor_attr
-{
+enum qca_wlan_vendor_attr {
     QCA_WLAN_VENDOR_ATTR_INVALID = 0,
     /* used by QCA_NL80211_VENDOR_SUBCMD_DFS_CAPABILITY */
     QCA_WLAN_VENDOR_ATTR_DFS     = 1,
@@ -219,8 +218,7 @@ enum qca_wlan_vendor_attr
 };
 
 /*EXT TDLS*/
-enum qca_wlan_vendor_attr_tdls_enable
-{
+enum qca_wlan_vendor_attr_tdls_enable {
     QCA_WLAN_VENDOR_ATTR_TDLS_ENABLE_INVALID = 0,
     /* An array of 6 x Unsigned 8-bit value */
     QCA_WLAN_VENDOR_ATTR_TDLS_ENABLE_MAC_ADDR,
@@ -232,22 +230,20 @@ enum qca_wlan_vendor_attr_tdls_enable
     /* keep last */
     QCA_WLAN_VENDOR_ATTR_TDLS_ENABLE_AFTER_LAST,
     QCA_WLAN_VENDOR_ATTR_TDLS_ENABLE_MAX =
-         QCA_WLAN_VENDOR_ATTR_TDLS_ENABLE_AFTER_LAST - 1,
+        QCA_WLAN_VENDOR_ATTR_TDLS_ENABLE_AFTER_LAST - 1,
 };
 
-enum qca_wlan_vendor_attr_tdls_disable
-{
+enum qca_wlan_vendor_attr_tdls_disable {
     QCA_WLAN_VENDOR_ATTR_TDLS_DISABLE_INVALID = 0,
     /* An array of 6 x Unsigned 8-bit value */
     QCA_WLAN_VENDOR_ATTR_TDLS_DISABLE_MAC_ADDR,
     /* keep last */
     QCA_WLAN_VENDOR_ATTR_TDLS_DISABLE_AFTER_LAST,
     QCA_WLAN_VENDOR_ATTR_TDLS_DISABLE_MAX =
-       QCA_WLAN_VENDOR_ATTR_TDLS_DISABLE_AFTER_LAST - 1,
+        QCA_WLAN_VENDOR_ATTR_TDLS_DISABLE_AFTER_LAST - 1,
 };
 
-enum qca_wlan_vendor_attr_tdls_get_status
-{
+enum qca_wlan_vendor_attr_tdls_get_status {
     QCA_WLAN_VENDOR_ATTR_TDLS_GET_STATUS_INVALID = 0,
     /* An array of 6 x Unsigned 8-bit value */
     QCA_WLAN_VENDOR_ATTR_TDLS_GET_STATUS_MAC_ADDR,
@@ -259,11 +255,10 @@ enum qca_wlan_vendor_attr_tdls_get_status
     /* keep last */
     QCA_WLAN_VENDOR_ATTR_TDLS_GET_STATUS_AFTER_LAST,
     QCA_WLAN_VENDOR_ATTR_TDLS_GET_STATUS_MAX =
-      QCA_WLAN_VENDOR_ATTR_TDLS_GET_STATUS_AFTER_LAST - 1,
+        QCA_WLAN_VENDOR_ATTR_TDLS_GET_STATUS_AFTER_LAST - 1,
 };
 
-enum qca_wlan_vendor_attr_tdls_state
-{
+enum qca_wlan_vendor_attr_tdls_state {
     QCA_WLAN_VENDOR_ATTR_TDLS_STATE_INVALID = 0,
     /* An array of 6 x Unsigned 8-bit value */
     QCA_WLAN_VENDOR_ATTR_TDLS_STATE_MAC_ADDR,
@@ -281,19 +276,17 @@ enum qca_wlan_vendor_attr_tdls_state
 
 #ifdef WLAN_FEATURE_LINK_LAYER_STATS
 
-enum qca_wlan_vendor_attr_ll_stats_set
-{
+enum qca_wlan_vendor_attr_ll_stats_set {
     QCA_WLAN_VENDOR_ATTR_LL_STATS_SET_INVALID = 0,
     QCA_WLAN_VENDOR_ATTR_LL_STATS_SET_CONFIG_MPDU_SIZE_THRESHOLD = 1,
     QCA_WLAN_VENDOR_ATTR_LL_STATS_SET_CONFIG_AGGRESSIVE_STATS_GATHERING,
     /* keep last */
     QCA_WLAN_VENDOR_ATTR_LL_STATS_SET_AFTER_LAST,
     QCA_WLAN_VENDOR_ATTR_LL_STATS_SET_MAX =
-                    QCA_WLAN_VENDOR_ATTR_LL_STATS_SET_AFTER_LAST - 1,
+        QCA_WLAN_VENDOR_ATTR_LL_STATS_SET_AFTER_LAST - 1,
 };
 
-enum qca_wlan_vendor_attr_ll_stats_get
-{
+enum qca_wlan_vendor_attr_ll_stats_get {
     QCA_WLAN_VENDOR_ATTR_LL_STATS_GET_INVALID = 0,
     /* Unsigned 32bit value provided by the caller issuing the GET stats
      * command. When reporting the stats results, the driver uses the same
@@ -307,11 +300,10 @@ enum qca_wlan_vendor_attr_ll_stats_get
     /* keep last */
     QCA_WLAN_VENDOR_ATTR_LL_STATS_GET_AFTER_LAST,
     QCA_WLAN_VENDOR_ATTR_LL_STATS_GET_MAX =
-                  QCA_WLAN_VENDOR_ATTR_LL_STATS_GET_AFTER_LAST - 1,
+        QCA_WLAN_VENDOR_ATTR_LL_STATS_GET_AFTER_LAST - 1,
 };
 
-enum qca_wlan_vendor_attr_ll_stats_clr
-{
+enum qca_wlan_vendor_attr_ll_stats_clr {
     QCA_WLAN_VENDOR_ATTR_LL_STATS_CLR_INVALID = 0,
     QCA_WLAN_VENDOR_ATTR_LL_STATS_CLR_CONFIG_REQ_MASK,
     QCA_WLAN_VENDOR_ATTR_LL_STATS_CLR_CONFIG_STOP_REQ,
@@ -320,7 +312,7 @@ enum qca_wlan_vendor_attr_ll_stats_clr
 
     QCA_WLAN_VENDOR_ATTR_LL_STATS_CLR_AFTER_LAST,
     QCA_WLAN_VENDOR_ATTR_LL_STATS_CLR_MAX       =
-                        QCA_WLAN_VENDOR_ATTR_LL_STATS_CLR_AFTER_LAST - 1,
+        QCA_WLAN_VENDOR_ATTR_LL_STATS_CLR_AFTER_LAST - 1,
 };
 
 /**
@@ -342,11 +334,10 @@ enum qca_wlan_vendor_attr_ll_stats_results_type {
 
     QCA_WLAN_VENDOR_ATTR_LL_STATS_TYPE_AFTER_LAST,
     QCA_WLAN_VENDOR_ATTR_LL_STATS_TYPE_MAX =
-    QCA_WLAN_VENDOR_ATTR_LL_STATS_TYPE_AFTER_LAST - 1
+        QCA_WLAN_VENDOR_ATTR_LL_STATS_TYPE_AFTER_LAST - 1
 };
 
-enum qca_wlan_vendor_attr_ll_stats_results
-{
+enum qca_wlan_vendor_attr_ll_stats_results {
     QCA_WLAN_VENDOR_ATTR_LL_STATS_INVALID = 0,
     /* Unsigned 32bit value */
     QCA_WLAN_VENDOR_ATTR_LL_STATS_RESULTS_REQ_ID = 1,
@@ -589,7 +580,7 @@ enum qca_wlan_vendor_attr_ll_stats_results
     /* keep last */
     QCA_WLAN_VENDOR_ATTR_LL_STATS_AFTER_LAST,
     QCA_WLAN_VENDOR_ATTR_LL_STATS_MAX   =
-                        QCA_WLAN_VENDOR_ATTR_LL_STATS_AFTER_LAST -1,
+        QCA_WLAN_VENDOR_ATTR_LL_STATS_AFTER_LAST -1,
 };
 
 
@@ -597,8 +588,7 @@ enum qca_wlan_vendor_attr_ll_stats_results
 
 #ifdef WLAN_FEATURE_EXTSCAN
 
-enum qca_wlan_vendor_attr_extscan_config_params
-{
+enum qca_wlan_vendor_attr_extscan_config_params {
     QCA_WLAN_VENDOR_ATTR_EXTSCAN_SUBCMD_CONFIG_PARAM_INVALID = 0,
 
     /* Unsigned 32-bit value; Middleware provides it to the driver. Middle ware
@@ -711,8 +701,7 @@ enum qca_wlan_vendor_attr_extscan_config_params
 
 };
 
-enum qca_wlan_vendor_attr_extscan_results
-{
+enum qca_wlan_vendor_attr_extscan_results {
     QCA_WLAN_VENDOR_ATTR_EXTSCAN_RESULTS_INVALID = 0,
 
     /* Unsigned 32-bit value; must match the request Id supplied by Wi-Fi HAL
@@ -840,7 +829,7 @@ enum qca_wlan_vendor_attr_extscan_results
 };
 
 #endif /* WLAN_FEATURE_EXTSCAN */
-enum qca_wlan_vendor_attr_set_scanning_mac_oui{
+enum qca_wlan_vendor_attr_set_scanning_mac_oui {
     QCA_WLAN_VENDOR_ATTR_SET_SCANNING_MAC_OUI_INVALID = 0,
     QCA_WLAN_VENDOR_ATTR_SET_SCANNING_MAC_OUI = 1,
     /* keep last */
@@ -902,8 +891,7 @@ enum qca_wlan_vendor_attr_get_concurrency_matrix {
 #define WIFI_FEATURE_LINK_LAYER_STATS   0x10000  /* Link layer stats */
 
 /* Add more features here */
-enum qca_wlan_vendor_attr_set_no_dfs_flag
-{
+enum qca_wlan_vendor_attr_set_no_dfs_flag {
     QCA_WLAN_VENDOR_ATTR_SET_NO_DFS_FLAG_INVALID = 0,
     /* Unsigned 32-bit value */
     QCA_WLAN_VENDOR_ATTR_SET_NO_DFS_FLAG = 1,
@@ -923,43 +911,41 @@ enum qca_wlan_vendor_attr_set_no_dfs_flag
 
 #ifdef FEATURE_WLAN_CH_AVOID
 #define HDD_MAX_AVOID_FREQ_RANGES   15
-typedef struct sHddAvoidFreqRange
-{
-   u32 startFreq;
-   u32 endFreq;
+typedef struct sHddAvoidFreqRange {
+    u32 startFreq;
+    u32 endFreq;
 } tHddAvoidFreqRange;
 
-typedef struct sHddAvoidFreqList
-{
-   u32 avoidFreqRangeCount;
-   tHddAvoidFreqRange avoidFreqRange[HDD_MAX_AVOID_FREQ_RANGES];
+typedef struct sHddAvoidFreqList {
+    u32 avoidFreqRangeCount;
+    tHddAvoidFreqRange avoidFreqRange[HDD_MAX_AVOID_FREQ_RANGES];
 } tHddAvoidFreqList;
 #endif /* FEATURE_WLAN_CH_AVOID */
 
 struct cfg80211_bss* wlan_hdd_cfg80211_update_bss_db( hdd_adapter_t *pAdapter,
-                                      tCsrRoamInfo *pRoamInfo
-                                      );
+        tCsrRoamInfo *pRoamInfo
+                                                    );
 
 #ifdef FEATURE_WLAN_LFR
 int wlan_hdd_cfg80211_pmksa_candidate_notify(
-                    hdd_adapter_t *pAdapter, tCsrRoamInfo *pRoamInfo,
-                    int index, bool preauth );
+    hdd_adapter_t *pAdapter, tCsrRoamInfo *pRoamInfo,
+    int index, bool preauth );
 #endif
 
 #ifdef FEATURE_WLAN_LFR_METRICS
 VOS_STATUS wlan_hdd_cfg80211_roam_metrics_preauth(hdd_adapter_t *pAdapter,
-                                                  tCsrRoamInfo *pRoamInfo);
+        tCsrRoamInfo *pRoamInfo);
 
 VOS_STATUS wlan_hdd_cfg80211_roam_metrics_preauth_status(
     hdd_adapter_t *pAdapter, tCsrRoamInfo *pRoamInfo, bool preauth_status);
 
 VOS_STATUS wlan_hdd_cfg80211_roam_metrics_handover(hdd_adapter_t *pAdapter,
-                                                   tCsrRoamInfo *pRoamInfo);
+        tCsrRoamInfo *pRoamInfo);
 #endif
 
 #ifdef FEATURE_WLAN_WAPI
 void wlan_hdd_cfg80211_set_key_wapi(hdd_adapter_t* pAdapter,
-              u8 key_index, const u8 *mac_addr, const u8 *key , int key_Len);
+                                    u8 key_index, const u8 *mac_addr, const u8 *key , int key_Len);
 #endif
 struct wiphy *wlan_hdd_cfg80211_wiphy_alloc(int priv_size);
 
@@ -972,9 +958,9 @@ int wlan_hdd_cfg80211_scan( struct wiphy *wiphy,
 int wlan_hdd_cfg80211_update_band(struct wiphy *wiphy, eCsrBand eBand);
 
 int wlan_hdd_cfg80211_init(struct device *dev,
-                               struct wiphy *wiphy,
-                               hdd_config_t *pCfg
-                                         );
+                           struct wiphy *wiphy,
+                           hdd_config_t *pCfg
+                          );
 
 int wlan_hdd_cfg80211_register( struct wiphy *wiphy);
 void wlan_hdd_cfg80211_register_frames(hdd_adapter_t* pAdapter);
@@ -995,26 +981,26 @@ int wlan_hdd_crda_reg_notifier(struct wiphy *wiphy, struct regulatory_request *r
 #endif
 
 extern v_VOID_t hdd_connSetConnectionState( hdd_station_ctx_t *pHddStaCtx,
-                                        eConnectionState connState );
+        eConnectionState connState );
 VOS_STATUS wlan_hdd_validate_operation_channel(hdd_adapter_t *pAdapter,int channel);
 #ifdef FEATURE_WLAN_TDLS
 int wlan_hdd_cfg80211_send_tdls_discover_req(struct wiphy *wiphy,
-                            struct net_device *dev, u8 *peer);
+        struct net_device *dev, u8 *peer);
 #endif
 #ifdef WLAN_FEATURE_GTK_OFFLOAD
 extern void wlan_hdd_cfg80211_update_replayCounterCallback(void *callbackContext,
-                            tpSirGtkOffloadGetInfoRspParams pGtkOffloadGetInfoRsp);
+        tpSirGtkOffloadGetInfoRspParams pGtkOffloadGetInfoRsp);
 #endif
 void* wlan_hdd_change_country_code_cb(void *pAdapter);
 void hdd_select_cbmode( hdd_adapter_t *pAdapter,v_U8_t operationChannel);
 
 v_U8_t* wlan_hdd_cfg80211_get_ie_ptr(
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,0))
-                                     const v_U8_t *pIes,
+    const v_U8_t *pIes,
 #else
-                                     v_U8_t *pIes,
+    v_U8_t *pIes,
 #endif
-                                     int length, v_U8_t eid);
+    int length, v_U8_t eid);
 
 #ifdef FEATURE_WLAN_CH_AVOID
 int wlan_hdd_send_avoid_freq_event(hdd_context_t *pHddCtx,
@@ -1023,7 +1009,7 @@ int wlan_hdd_send_avoid_freq_event(hdd_context_t *pHddCtx,
 
 #ifdef WLAN_FEATURE_EXTSCAN
 void wlan_hdd_cfg80211_extscan_callback(void *ctx, const tANI_U16 evType,
-                                      void *pMsg);
+                                        void *pMsg);
 #endif /* WLAN_FEATURE_EXTSCAN */
 
 void wlan_hdd_cfg80211_nan_init(hdd_context_t *pHddCtx);
@@ -1032,11 +1018,10 @@ void wlan_hdd_cfg80211_nan_init(hdd_context_t *pHddCtx);
 static inline struct sk_buff *
 backported_cfg80211_vendor_event_alloc(struct wiphy *wiphy,
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,0))
-    struct wireless_dev *wdev,
+                                       struct wireless_dev *wdev,
 #endif
-    int approxlen,
-    int event_idx, gfp_t gfp)
-{
+                                       int approxlen,
+                                       int event_idx, gfp_t gfp) {
     return cfg80211_vendor_event_alloc(wiphy, approxlen, event_idx, gfp);
 }
 #define cfg80211_vendor_event_alloc backported_cfg80211_vendor_event_alloc

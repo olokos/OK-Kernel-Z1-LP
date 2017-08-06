@@ -33,12 +33,12 @@
 
 
 /**=========================================================================
-  
+
   \file  smeInternal.h
-  
+
   \brief prototype for SME internal structures and APIs used for SME and MAC
-  
-  
+
+
   ========================================================================*/
 
 /* $Header$ */
@@ -54,20 +54,19 @@
 #include "csrLinkList.h"
 #include "vos_diag_core_event.h"
 
-/*-------------------------------------------------------------------------- 
+/*--------------------------------------------------------------------------
   Type declarations
   ------------------------------------------------------------------------*/
 
 // Mask can be only have one bit set
-typedef enum eSmeCommandType 
-{
-    eSmeNoCommand = 0, 
+typedef enum eSmeCommandType {
+    eSmeNoCommand = 0,
     eSmeDropCommand,
     //CSR
     eSmeCsrCommandMask = 0x10000,   //this is not a command, it is to identify this is a CSR command
     eSmeCommandScan,
-    eSmeCommandRoam, 
-    eSmeCommandWmStatusChange, 
+    eSmeCommandRoam,
+    eSmeCommandWmStatusChange,
     eSmeCommandSetKey,
     eSmeCommandRemoveKey,
     eSmeCommandAddStaSession,
@@ -80,10 +79,10 @@ typedef enum eSmeCommandType
     eSmeCommandUpdateChannelList,
 #ifdef FEATURE_WLAN_TDLS
     //eSmeTdlsCommandMask = 0x80000,  //To identify TDLS commands <TODO>
-    //These can be considered as csr commands. 
-    eSmeCommandTdlsSendMgmt, 
-    eSmeCommandTdlsAddPeer, 
-    eSmeCommandTdlsDelPeer, 
+    //These can be considered as csr commands.
+    eSmeCommandTdlsSendMgmt,
+    eSmeCommandTdlsAddPeer,
+    eSmeCommandTdlsDelPeer,
     eSmeCommandTdlsLinkEstablish,
     eSmeCommandTdlsChannelSwitch, // tdlsoffchan
 #endif
@@ -111,8 +110,7 @@ typedef enum eSmeCommandType
 } eSmeCommandType;
 
 
-typedef enum eSmeState
-{
+typedef enum eSmeState {
     SME_STATE_STOP,
     SME_STATE_START,
     SME_STATE_READY,
@@ -124,14 +122,12 @@ typedef enum eSmeState
 /* HDD Callback function */
 typedef void(*pEncryptMsgRSPCb)(void *pUserData, void *infoParam);
 
-typedef struct tagSmeEncMsgHddCbkInfo
-{
-   void *pUserData;
-   pEncryptMsgRSPCb pEncMsgCbk;
-}tSmeEncMsgHddCbkInfo;
+typedef struct tagSmeEncMsgHddCbkInfo {
+    void *pUserData;
+    pEncryptMsgRSPCb pEncMsgCbk;
+} tSmeEncMsgHddCbkInfo;
 
-typedef struct tagSmeStruct
-{
+typedef struct tagSmeStruct {
     eSmeState state;
     vos_lock_t lkSmeGlobalLock;
     tANI_U32 totalSmeCmd;
@@ -139,7 +135,7 @@ typedef struct tagSmeStruct
     tDblLinkList smeCmdActiveList;
     tDblLinkList smeCmdPendingList;
     tDblLinkList smeCmdFreeList;   //preallocated roam cmd list
-    void (*pTxPerHitCallback) (void *pCallbackContext); /* callback for Tx PER hit to HDD */ 
+    void (*pTxPerHitCallback) (void *pCallbackContext); /* callback for Tx PER hit to HDD */
     void *pTxPerHitCbContext;
     tVOS_CON_MODE currDeviceMode;
 #ifdef FEATURE_WLAN_LPHB
@@ -154,20 +150,20 @@ typedef struct tagSmeStruct
 #endif /* FEATURE_WLAN_CH_AVOID */
 
 #ifdef WLAN_FEATURE_LINK_LAYER_STATS
-   /* HDD callback to be called after receiving Link Layer Stats Results IND from FW */
-   void(*pLinkLayerStatsIndCallback)(void *callbackContext,
-                                     int indType, void *pRsp, tANI_U8 *macAddr );
-   void *pLinkLayerStatsCallbackContext;
+    /* HDD callback to be called after receiving Link Layer Stats Results IND from FW */
+    void(*pLinkLayerStatsIndCallback)(void *callbackContext,
+                                      int indType, void *pRsp, tANI_U8 *macAddr );
+    void *pLinkLayerStatsCallbackContext;
 #endif
 #ifdef WLAN_FEATURE_EXTSCAN
-   void (*pEXTScanIndCb) (void *, const tANI_U16, void *);
-   /* Use this request ID while sending Full Scan Results */
-   int  extScanStartReqId;
-   void *pEXTScanCallbackContext;
+    void (*pEXTScanIndCb) (void *, const tANI_U16, void *);
+    /* Use this request ID while sending Full Scan Results */
+    int  extScanStartReqId;
+    void *pEXTScanCallbackContext;
 #endif /* WLAN_FEATURE_EXTSCAN */
-   tSmeEncMsgHddCbkInfo pEncMsgInfoParams;
-   void (*pBtCoexTDLSNotification) (void *pAdapter, int);
-   void (*nanCallback) (void*, tSirNanEvent*);
+    tSmeEncMsgHddCbkInfo pEncMsgInfoParams;
+    void (*pBtCoexTDLSNotification) (void *pAdapter, int);
+    void (*nanCallback) (void*, tSirNanEvent*);
 
 } tSmeStruct, *tpSmeStruct;
 

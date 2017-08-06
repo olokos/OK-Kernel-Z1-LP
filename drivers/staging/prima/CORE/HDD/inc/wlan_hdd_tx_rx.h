@@ -58,8 +58,8 @@
 #define HDD_80211_HEADER_LEN      24
 #define HDD_80211_HEADER_QOS_CTL  2
 #define HDD_LLC_HDR_LEN           6
-#define HDD_FRAME_TYPE_MASK       0x0c 
-#define HDD_FRAME_SUBTYPE_MASK    0xf0 
+#define HDD_FRAME_TYPE_MASK       0x0c
+#define HDD_FRAME_SUBTYPE_MASK    0xf0
 #define HDD_FRAME_TYPE_DATA       0x08
 #define HDD_FRAME_TYPE_MGMT       0x00
 #define HDD_FRAME_SUBTYPE_QOSDATA 0x80
@@ -114,10 +114,10 @@
 #define TID3 0x60
 
 
-/*--------------------------------------------------------------------------- 
+/*---------------------------------------------------------------------------
   Type declarations
-  -------------------------------------------------------------------------*/ 
- 
+  -------------------------------------------------------------------------*/
+
 /*---------------------------------------------------------------------------
   Function declarations and documenation
   -------------------------------------------------------------------------*/
@@ -139,7 +139,7 @@ extern int hdd_ibss_hard_start_xmit(struct sk_buff *skb, struct net_device *dev)
 
   @param skb      : [in]  pointer to OS packet (sk_buff)
   @param dev      : [in] pointer to Libra network device
-  
+
   @return         : NET_XMIT_DROP if packets are dropped
                   : NET_XMIT_SUCCESS if packet is enqueued succesfully
   ===========================================================================*/
@@ -157,11 +157,11 @@ extern int hdd_mon_hard_start_xmit(struct sk_buff *skb, struct net_device *dev);
 extern void hdd_tx_timeout(struct net_device *dev);
 
 /**============================================================================
-  @brief hdd_stats() - Function registered with the Linux OS for 
+  @brief hdd_stats() - Function registered with the Linux OS for
   device TX/RX statistics
 
   @param dev      : [in] pointer to Libra network device
-  
+
   @return         : pointer to net_device_stats structure
   ===========================================================================*/
 extern struct net_device_stats* hdd_stats(struct net_device *dev);
@@ -190,8 +190,8 @@ extern VOS_STATUS hdd_ibss_deinit_tx_rx( hdd_adapter_t *pAdapter );
   @brief hdd_init_tx_rx() - Init function to initialize Tx/RX
   modules in HDD
 
-  @param pAdapter : [in] pointer to adapter context  
-  @return         : VOS_STATUS_E_FAILURE if any errors encountered 
+  @param pAdapter : [in] pointer to adapter context
+  @return         : VOS_STATUS_E_FAILURE if any errors encountered
                   : VOS_STATUS_SUCCESS otherwise
   ===========================================================================*/
 extern VOS_STATUS hdd_init_tx_rx( hdd_adapter_t *pAdapter );
@@ -200,8 +200,8 @@ extern VOS_STATUS hdd_init_tx_rx( hdd_adapter_t *pAdapter );
   @brief hdd_deinit_tx_rx() - Deinit function to clean up Tx/RX
   modules in HDD
 
-  @param pAdapter : [in] pointer to adapter context  
-  @return         : VOS_STATUS_E_FAILURE if any errors encountered 
+  @param pAdapter : [in] pointer to adapter context
+  @return         : VOS_STATUS_E_FAILURE if any errors encountered
                   : VOS_STATUS_SUCCESS otherwise
   ===========================================================================*/
 extern VOS_STATUS hdd_deinit_tx_rx( hdd_adapter_t *pAdapter );
@@ -210,8 +210,8 @@ extern VOS_STATUS hdd_deinit_tx_rx( hdd_adapter_t *pAdapter );
   @brief hdd_disconnect_tx_rx() - Disconnect function to clean up Tx/RX
   modules in HDD
 
-  @param pAdapter : [in] pointer to adapter context  
-  @return         : VOS_STATUS_E_FAILURE if any errors encountered 
+  @param pAdapter : [in] pointer to adapter context
+  @return         : VOS_STATUS_E_FAILURE if any errors encountered
                   : VOS_STATUS_SUCCESS otherwise
   ===========================================================================*/
 extern VOS_STATUS hdd_disconnect_tx_rx( hdd_adapter_t *pAdapter );
@@ -221,15 +221,15 @@ extern VOS_STATUS hdd_disconnect_tx_rx( hdd_adapter_t *pAdapter );
   to indicate that a packet has been transmitted across the SDIO bus
   succesfully. OS packet resources can be released after this cbk.
 
-  @param vosContext   : [in] pointer to VOS context   
-  @param pVosPacket   : [in] pointer to VOS packet (containing skb) 
-  @param vosStatusIn  : [in] status of the transmission 
+  @param vosContext   : [in] pointer to VOS context
+  @param pVosPacket   : [in] pointer to VOS packet (containing skb)
+  @param vosStatusIn  : [in] status of the transmission
 
-  @return             : VOS_STATUS_E_FAILURE if any errors encountered 
+  @return             : VOS_STATUS_E_FAILURE if any errors encountered
                       : VOS_STATUS_SUCCESS otherwise
   ===========================================================================*/
-extern VOS_STATUS hdd_tx_complete_cbk( v_VOID_t *vosContext, 
-                                       vos_pkt_t *pVosPacket, 
+extern VOS_STATUS hdd_tx_complete_cbk( v_VOID_t *vosContext,
+                                       vos_pkt_t *pVosPacket,
                                        VOS_STATUS vosStatusIn );
 
 /**============================================================================
@@ -247,63 +247,63 @@ extern VOS_STATUS hdd_tx_complete_cbk( v_VOID_t *vosContext,
                       : VOS_STATUS_SUCCESS otherwise
   ===========================================================================*/
 extern VOS_STATUS hdd_ibss_tx_fetch_packet_cbk( v_VOID_t *vosContext,
-                                           v_U8_t *pStaId,
-                                           WLANTL_ACEnumType    ucAC,
-                                           vos_pkt_t **ppVosPacket,
-                                           WLANTL_MetaInfoType *pPktMetaInfo );
+        v_U8_t *pStaId,
+        WLANTL_ACEnumType    ucAC,
+        vos_pkt_t **ppVosPacket,
+        WLANTL_MetaInfoType *pPktMetaInfo );
 
 /**============================================================================
-  @brief hdd_tx_fetch_packet_cbk() - Callback function invoked by TL to 
+  @brief hdd_tx_fetch_packet_cbk() - Callback function invoked by TL to
   fetch a packet for transmission.
 
-  @param vosContext   : [in] pointer to VOS context  
+  @param vosContext   : [in] pointer to VOS context
   @param staId        : [in] Station for which TL is requesting a pkt
   @param ucAC         : [in] pointer to access category requested by TL
   @param pVosPacket   : [out] pointer to VOS packet packet pointer
-  @param pPktMetaInfo : [out] pointer to meta info for the pkt 
-  
+  @param pPktMetaInfo : [out] pointer to meta info for the pkt
+
   @return             : VOS_STATUS_E_EMPTY if no packets to transmit
-                      : VOS_STATUS_E_FAILURE if any errors encountered 
+                      : VOS_STATUS_E_FAILURE if any errors encountered
                       : VOS_STATUS_SUCCESS otherwise
   ===========================================================================*/
 extern VOS_STATUS hdd_tx_fetch_packet_cbk( v_VOID_t *vosContext,
-                                           v_U8_t *pStaId,
-                                           WLANTL_ACEnumType    ucAC,
-                                           vos_pkt_t **ppVosPacket,
-                                           WLANTL_MetaInfoType *pPktMetaInfo );
+        v_U8_t *pStaId,
+        WLANTL_ACEnumType    ucAC,
+        vos_pkt_t **ppVosPacket,
+        WLANTL_MetaInfoType *pPktMetaInfo );
 
 /**============================================================================
-  @brief hdd_tx_low_resource_cbk() - Callback function invoked in the 
-  case where VOS packets are not available at the time of the call to get 
-  packets. This callback function is invoked by VOS when packets are 
+  @brief hdd_tx_low_resource_cbk() - Callback function invoked in the
+  case where VOS packets are not available at the time of the call to get
+  packets. This callback function is invoked by VOS when packets are
   available.
 
-  @param pVosPacket : [in]  pointer to VOS packet 
-  @param userData   : [in]  opaque user data that was passed initially 
-  
-  @return           : VOS_STATUS_E_FAILURE if any errors encountered, 
+  @param pVosPacket : [in]  pointer to VOS packet
+  @param userData   : [in]  opaque user data that was passed initially
+
+  @return           : VOS_STATUS_E_FAILURE if any errors encountered,
                     : VOS_STATUS_SUCCESS otherwise
   =============================================================================*/
-extern VOS_STATUS hdd_tx_low_resource_cbk( vos_pkt_t *pVosPacket, 
-                                           v_VOID_t *userData );
+extern VOS_STATUS hdd_tx_low_resource_cbk( vos_pkt_t *pVosPacket,
+        v_VOID_t *userData );
 
 extern VOS_STATUS hdd_rx_packet_monitor_cbk(v_VOID_t *vosContext,vos_pkt_t *pVosPacket, int conversion);
 
 /**============================================================================
   @brief hdd_rx_packet_cbk() - Receive callback registered with TL.
-  TL will call this to notify the HDD when a packet was received 
+  TL will call this to notify the HDD when a packet was received
   for a registered STA.
 
-  @param vosContext   : [in] pointer to VOS context  
-  @param pVosPacket   : [in] pointer to VOS packet (conatining sk_buff) 
+  @param vosContext   : [in] pointer to VOS context
+  @param pVosPacket   : [in] pointer to VOS packet (conatining sk_buff)
   @param staId        : [in] Station Id
-  @param pRxMetaInfo  : [in] pointer to meta info for the received pkt(s) 
+  @param pRxMetaInfo  : [in] pointer to meta info for the received pkt(s)
 
-  @return             : VOS_STATUS_E_FAILURE if any errors encountered, 
+  @return             : VOS_STATUS_E_FAILURE if any errors encountered,
                       : VOS_STATUS_SUCCESS otherwise
   ===========================================================================*/
-extern VOS_STATUS hdd_rx_packet_cbk( v_VOID_t *vosContext, 
-                                     vos_pkt_t *pVosPacket, 
+extern VOS_STATUS hdd_rx_packet_cbk( v_VOID_t *vosContext,
+                                     vos_pkt_t *pVosPacket,
                                      v_U8_t staId,
                                      WLANTL_RxMetaInfoType* pRxMetaInfo );
 
@@ -311,14 +311,14 @@ extern VOS_STATUS hdd_rx_packet_cbk( v_VOID_t *vosContext,
 /**============================================================================
   @brief hdd_IsEAPOLPacket() - Checks the packet is EAPOL or not.
 
-  @param pVosPacket : [in] pointer to vos packet  
-  @return         : VOS_TRUE if the packet is EAPOL 
+  @param pVosPacket : [in] pointer to vos packet
+  @return         : VOS_TRUE if the packet is EAPOL
                   : VOS_FALSE otherwise
   ===========================================================================*/
 extern v_BOOL_t hdd_IsEAPOLPacket( vos_pkt_t *pVosPacket );
 
 /**============================================================================
-  @brief hdd_mon_tx_mgmt_pkt() - Transmit MGMT packet received on monitor 
+  @brief hdd_mon_tx_mgmt_pkt() - Transmit MGMT packet received on monitor
                                  interface.
 
   @param pAdapter: [in] SAP/P2P GO adapter.
@@ -340,7 +340,7 @@ void hdd_mon_tx_work_queue(struct work_struct *work);
   @return    : VOS_STATUS_SUCCESS/VOS_STATUS_E_FAILURE
   ===========================================================================*/
 VOS_STATUS hdd_Ibss_GetStaId(hdd_station_ctx_t *pHddStaCtx,
-                                  v_MACADDR_t *pMacAddress, v_U8_t *staId);
+                             v_MACADDR_t *pMacAddress, v_U8_t *staId);
 
 /**============================================================================
   @brief hdd_tx_rx_pkt_cnt_stat_timer_handler() -
@@ -390,11 +390,10 @@ void hdd_dump_dhcp_pkt(struct sk_buff *skb, int path);
  *
  */
 void wlan_hdd_log_eapol(struct sk_buff *skb,
-                         uint8_t event_type);
+                        uint8_t event_type);
 #else
 static inline void wlan_hdd_log_eapol(struct sk_buff *skb,
-                                      uint8_t event_type)
-{
+                                      uint8_t event_type) {
 }
 #endif /* FEATURE_WLAN_DIAG_SUPPORT */
 

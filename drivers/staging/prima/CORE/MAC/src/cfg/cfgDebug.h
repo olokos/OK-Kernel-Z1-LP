@@ -28,7 +28,7 @@
 /*
  *
  *
- * Author:      Kevin Nguyen    
+ * Author:      Kevin Nguyen
  * Date:        04/09/02
  * History:-
  * 04/09/02        Created.

@@ -99,8 +99,7 @@
 /// Start of Sirius/Host message types
 #define WNI_HOST_MSG_START             0x1500
 
-enum eWniMsgTypes
-{
+enum eWniMsgTypes {
     /// CFG message types
     eWNI_CFG_MSG_TYPES_BEGIN=WNI_HOST_MSG_START,
     eWNI_CFG_MSG_TYPES_END=eWNI_CFG_MSG_TYPES_BEGIN+0xFF,
@@ -324,11 +323,11 @@ enum eWniMsgTypes
     eWNI_SME_EXCLUDE_UNENCRYPTED,
     eWNI_SME_RSSI_IND, //RSSI indication from TL to be serialized on MC thread
 #ifdef FEATURE_WLAN_TDLS
-    eWNI_SME_TDLS_SEND_MGMT_REQ,    
-    eWNI_SME_TDLS_SEND_MGMT_RSP,    
-    eWNI_SME_TDLS_ADD_STA_REQ,    
-    eWNI_SME_TDLS_ADD_STA_RSP,    
-    eWNI_SME_TDLS_DEL_STA_REQ,    
+    eWNI_SME_TDLS_SEND_MGMT_REQ,
+    eWNI_SME_TDLS_SEND_MGMT_RSP,
+    eWNI_SME_TDLS_ADD_STA_REQ,
+    eWNI_SME_TDLS_ADD_STA_RSP,
+    eWNI_SME_TDLS_DEL_STA_REQ,
     eWNI_SME_TDLS_DEL_STA_RSP,
     eWNI_SME_TDLS_DEL_STA_IND,
     eWNI_SME_TDLS_DEL_ALL_PEER_IND,
@@ -339,7 +338,7 @@ enum eWniMsgTypes
     eWNI_SME_TDLS_CHANNEL_SWITCH_REQ,
     eWNI_SME_TDLS_CHANNEL_SWITCH_RSP,
 #endif
-    //NOTE: If you are planning to add more mesages, please make sure that 
+    //NOTE: If you are planning to add more mesages, please make sure that
     //SIR_LIM_ITC_MSG_TYPES_BEGIN is moved appropriately. It is set as
     //SIR_LIM_MSG_TYPES_BEGIN+0xB0 = 12B0 (which means max of 176 messages and
     //eWNI_SME_TDLS_DEL_STA_RSP = 175.
@@ -364,7 +363,7 @@ enum eWniMsgTypes
     eWNI_SME_TSM_IE_IND,
 
 #ifdef FEATURE_WLAN_CH_AVOID
-   eWNI_SME_CH_AVOID_IND,
+    eWNI_SME_CH_AVOID_IND,
 #endif /* FEATURE_WLAN_CH_AVOID */
     eWNI_SME_HT40_OBSS_SCAN_IND, /* START and UPDATE OBSS SCAN Indication*/
     eWNI_SME_HT40_STOP_OBSS_SCAN_IND, /* STOP OBSS SCAN indication */
@@ -601,36 +600,35 @@ enum eWniMsgTypes
 #define WNI_CFG_GET_PER_STA_STAT_RSP_FIRST_PARAM                2
 
 // Per STA statistic structure
-typedef struct sAniCfgPerStaStatStruct
-{
-       unsigned long     sentAesBlksUcastHi;
-       unsigned long     sentAesBlksUcastLo;
+typedef struct sAniCfgPerStaStatStruct {
+    unsigned long     sentAesBlksUcastHi;
+    unsigned long     sentAesBlksUcastLo;
 
-       unsigned long     recvAesBlksUcastHi;
-       unsigned long     recvAesBlksUcastLo;
+    unsigned long     recvAesBlksUcastHi;
+    unsigned long     recvAesBlksUcastLo;
 
-       unsigned long     aesFormatErrorUcastCnts;
+    unsigned long     aesFormatErrorUcastCnts;
 
-       unsigned long     aesReplaysUcast;
+    unsigned long     aesReplaysUcast;
 
-       unsigned long     aesDecryptErrUcast;
+    unsigned long     aesDecryptErrUcast;
 
-       unsigned long     singleRetryPkts;
+    unsigned long     singleRetryPkts;
 
-       unsigned long     failedTxPkts;
+    unsigned long     failedTxPkts;
 
-       unsigned long     ackTimeouts;
+    unsigned long     ackTimeouts;
 
-       unsigned long     multiRetryPkts;
+    unsigned long     multiRetryPkts;
 
-       unsigned long     fragTxCntsHi;
-       unsigned long     fragTxCntsLo;
+    unsigned long     fragTxCntsHi;
+    unsigned long     fragTxCntsLo;
 
-       unsigned long     transmittedPktsHi;
-       unsigned long     transmittedPktsLo;
+    unsigned long     transmittedPktsHi;
+    unsigned long     transmittedPktsLo;
 
-       unsigned long     phyStatHi;
-       unsigned long     phyStatLo;
+    unsigned long     phyStatHi;
+    unsigned long     phyStatLo;
 } tCfgPerStaStatStruct, *tpAniCfgPerStaStatStruct;
 
 #define WNI_CFG_GET_PER_STA_STAT_RSP_NUM                       23
@@ -649,11 +647,10 @@ typedef struct sAniCfgPerStaStatStruct
                                    (WNI_CFG_GET_AGG_STA_STAT_RSP_NUM << 2))
 #define WNI_CFG_GET_AGG_STA_STAT_RSP_RES 0
 
-  // Get TX rate based stats
+// Get TX rate based stats
 #define WNI_CFG_GET_TX_RATE_CTR_RSP_RES                        0
 
-typedef struct sAniCfgTxRateCtrs
-{
+typedef struct sAniCfgTxRateCtrs {
 // add the rate counters here
     unsigned long TxFrames_1Mbps;
     unsigned long TxFrames_2Mbps;
@@ -686,7 +683,7 @@ typedef struct sAniCfgTxRateCtrs
 #define WNI_CFG_GET_STAT_REQ_LEN       (WNI_CFG_MB_HDR_LEN + \
                                        (WNI_CFG_GET_STAT_REQ_NUM << 2))
 
-  // Get per station statistic request
+// Get per station statistic request
 #define WNI_CFG_GET_PER_STA_STAT_REQ_STAID 0
 
 #define WNI_CFG_GET_PER_STA_STAT_REQ_NUM   1

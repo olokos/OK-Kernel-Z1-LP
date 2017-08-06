@@ -45,8 +45,7 @@
 #include "limScanResultUtils.h"
 #include "limTimerUtils.h"
 #include "limTrace.h"
-typedef enum
-{
+typedef enum {
     ONE_BYTE   = 1,
     TWO_BYTE   = 2
 } eSizeOfLenField;
@@ -76,24 +75,20 @@ typedef enum
     *pCurVal = (tLimBAState)(((pSta->baState >> tid*2) & 0x3));\
 }
 
-typedef struct sAddBaInfo
-{
+typedef struct sAddBaInfo {
     tANI_U16 fBaEnable : 1;
     tANI_U16 startingSeqNum: 12;
     tANI_U16 reserved : 3;
-}tAddBaInfo, *tpAddBaInfo;
+} tAddBaInfo, *tpAddBaInfo;
 
-typedef struct sAddBaCandidate
-{
+typedef struct sAddBaCandidate {
     tSirMacAddr staAddr;
     tAddBaInfo baInfo[STACFG_MAX_TC];
-}tAddBaCandidate, *tpAddBaCandidate;
+} tAddBaCandidate, *tpAddBaCandidate;
 
 #ifdef WLAN_FEATURE_11W
-typedef union uPmfSaQueryTimerId
-{
-    struct
-    {
+typedef union uPmfSaQueryTimerId {
+    struct {
         tANI_U8 sessionId;
         tANI_U16 peerIdx;
     } fields;
@@ -114,7 +109,7 @@ typedef struct op_class_map {
     tANI_U8 ch_spacing;
     offset_t    offset;
     tANI_U8 channels[25];
-}op_class_map_t;
+} op_class_map_t;
 // LIM utility functions
 tANI_BOOLEAN limCheck11BRateBitmap(tANI_U16 RateBitmap);
 void limGetBssidFromPkt(tpAniSirGlobal, tANI_U8 *, tANI_U8 *, tANI_U32 *);
@@ -131,9 +126,9 @@ void limPrintMsgInfo(tpAniSirGlobal pMac, tANI_U16 logLevel, tSirMsgQ *msg);
 char* limBssTypeStr(tSirBssType bssType);
 
 #if defined FEATURE_WLAN_ESE || defined WLAN_FEATURE_VOWIFI
-extern tSirRetStatus limSendSetMaxTxPowerReq ( tpAniSirGlobal pMac, 
-                                  tPowerdBm txPower, 
-                                  tpPESession pSessionEntry );
+extern tSirRetStatus limSendSetMaxTxPowerReq ( tpAniSirGlobal pMac,
+        tPowerdBm txPower,
+        tpPESession pSessionEntry );
 extern tANI_U8 limGetMaxTxPower(tPowerdBm regMax, tPowerdBm apTxPower, tANI_U8 iniTxPower);
 #endif
 
@@ -162,7 +157,7 @@ void    limReleasePeerIdx(tpAniSirGlobal, tANI_U16, tpPESession);
 
 void limDecideApProtection(tpAniSirGlobal pMac, tSirMacAddr peerMacAddr,  tpUpdateBeaconParams pBeaconParams,tpPESession);
 void
-limDecideApProtectionOnDelete(tpAniSirGlobal pMac, 
+limDecideApProtectionOnDelete(tpAniSirGlobal pMac,
                               tpDphHashNode pStaDs, tpUpdateBeaconParams pBeaconParams, tpPESession psessionEntry);
 
 extern tSirRetStatus limEnable11aProtection(tpAniSirGlobal pMac, tANI_U8 enable, tANI_U8 overlap, tpUpdateBeaconParams pBeaconParams,tpPESession);
@@ -206,7 +201,7 @@ void limUpdateChannelSwitch(tpAniSirGlobal, tpSirProbeRespBeacon, tpPESession ps
 void limProcessQuietTimeout(tpAniSirGlobal);
 void limProcessQuietBssTimeout(tpAniSirGlobal);
 void limInitOBSSScanParams(tpAniSirGlobal pMac,
-                                   tpPESession psessionEntry);
+                           tpPESession psessionEntry);
 #if 0
 void limProcessWPSOverlapTimeout(tpAniSirGlobal pMac);
 #endif
@@ -226,17 +221,16 @@ tSirRetStatus limRestorePreChannelSwitchState(tpAniSirGlobal pMac, tpPESession p
 tSirRetStatus limRestorePreQuietState(tpAniSirGlobal pMac, tpPESession psessionEntry);
 
 void limPrepareFor11hChannelSwitch(tpAniSirGlobal pMac, tpPESession psessionEntry);
-void limSwitchChannelCback(tpAniSirGlobal pMac, eHalStatus status, 
+void limSwitchChannelCback(tpAniSirGlobal pMac, eHalStatus status,
                            tANI_U32 *data, tpPESession psessionEntry);
 
-static inline tSirRFBand limGetRFBand(tANI_U8 channel)
-{
+static inline tSirRFBand limGetRFBand(tANI_U8 channel) {
     if ((channel >= SIR_11A_CHANNEL_BEGIN) &&
-        (channel <= SIR_11A_CHANNEL_END))
+            (channel <= SIR_11A_CHANNEL_END))
         return SIR_BAND_5_GHZ;
 
     if ((channel >= SIR_11B_CHANNEL_BEGIN) &&
-        (channel <= SIR_11B_CHANNEL_END))
+            (channel <= SIR_11B_CHANNEL_END))
         return SIR_BAND_2_4_GHZ;
 
     return SIR_BAND_UNKNOWN;
@@ -244,8 +238,7 @@ static inline tSirRFBand limGetRFBand(tANI_U8 channel)
 
 
 static inline tSirRetStatus
-limGetMgmtStaid(tpAniSirGlobal pMac, tANI_U16 *staid, tpPESession psessionEntry)
-{
+limGetMgmtStaid(tpAniSirGlobal pMac, tANI_U16 *staid, tpPESession psessionEntry) {
     if (psessionEntry->limSystemRole == eLIM_AP_ROLE)
         *staid = 1;
     else if (psessionEntry->limSystemRole == eLIM_STA_ROLE)
@@ -257,18 +250,16 @@ limGetMgmtStaid(tpAniSirGlobal pMac, tANI_U16 *staid, tpPESession psessionEntry)
 }
 
 static inline tANI_U8
-limIsSystemInSetMimopsState(tpAniSirGlobal pMac)
-{
+limIsSystemInSetMimopsState(tpAniSirGlobal pMac) {
     if (pMac->lim.gLimMlmState == eLIM_MLM_WT_SET_MIMOPS_STATE)
         return true;
     return false;
 }
-        
+
 static inline tANI_U8
- isEnteringMimoPS(tSirMacHTMIMOPowerSaveState curState, tSirMacHTMIMOPowerSaveState newState)
- {
+isEnteringMimoPS(tSirMacHTMIMOPowerSaveState curState, tSirMacHTMIMOPowerSaveState newState) {
     if (curState == eSIR_HT_MIMO_PS_NO_LIMIT &&
-        (newState == eSIR_HT_MIMO_PS_DYNAMIC ||newState == eSIR_HT_MIMO_PS_STATIC))
+            (newState == eSIR_HT_MIMO_PS_DYNAMIC ||newState == eSIR_HT_MIMO_PS_STATIC))
         return TRUE;
     return FALSE;
 }
@@ -315,55 +306,54 @@ void limGetBDfromRxPacket(tpAniSirGlobal pMac, void *body, tANI_U32 **pBD);
  * \return Result of X^Y
  *
  */
-static inline tANI_U32 utilsPowerXY( tANI_U16 base, tANI_U16 power )
-{
-tANI_U32 result = 1, i;
+static inline tANI_U32 utilsPowerXY( tANI_U16 base, tANI_U16 power ) {
+    tANI_U32 result = 1, i;
 
-  for( i = 0; i < power; i++ )
-    result *= base;
+    for( i = 0; i < power; i++ )
+        result *= base;
 
-  return result;
+    return result;
 }
 
 
 
 tSirRetStatus limPostMlmAddBAReq( tpAniSirGlobal pMac,
-    tpDphHashNode pStaDs,
-    tANI_U8 tid, tANI_U16 startingSeqNum,tpPESession psessionEntry);
+                                  tpDphHashNode pStaDs,
+                                  tANI_U8 tid, tANI_U16 startingSeqNum,tpPESession psessionEntry);
 tSirRetStatus limPostMlmAddBARsp( tpAniSirGlobal pMac,
-    tSirMacAddr peerMacAddr,
-    tSirMacStatusCodes baStatusCode,
-    tANI_U8 baDialogToken,
-    tANI_U8 baTID,
-    tANI_U8 baPolicy,
-    tANI_U16 baBufferSize,
-    tANI_U16 baTimeout,
-    tpPESession psessionEntry);
+                                  tSirMacAddr peerMacAddr,
+                                  tSirMacStatusCodes baStatusCode,
+                                  tANI_U8 baDialogToken,
+                                  tANI_U8 baTID,
+                                  tANI_U8 baPolicy,
+                                  tANI_U16 baBufferSize,
+                                  tANI_U16 baTimeout,
+                                  tpPESession psessionEntry);
 tSirRetStatus limPostMlmDelBAReq( tpAniSirGlobal pMac,
-    tpDphHashNode pSta,
-    tANI_U8 baDirection,
-    tANI_U8 baTID,
-    tSirMacReasonCodes baReasonCode ,
-    tpPESession psessionEntry);
+                                  tpDphHashNode pSta,
+                                  tANI_U8 baDirection,
+                                  tANI_U8 baTID,
+                                  tSirMacReasonCodes baReasonCode ,
+                                  tpPESession psessionEntry);
 tSirRetStatus limPostMsgAddBAReq( tpAniSirGlobal pMac,
-    tpDphHashNode pSta,
-    tANI_U8 baDialogToken,
-    tANI_U8 baTID,
-    tANI_U8 baPolicy,
-    tANI_U16 baBufferSize,
-    tANI_U16 baTimeout,
-    tANI_U16 baSSN,
-    tANI_U8 baDirection,
-    tpPESession psessionEntry);
+                                  tpDphHashNode pSta,
+                                  tANI_U8 baDialogToken,
+                                  tANI_U8 baTID,
+                                  tANI_U8 baPolicy,
+                                  tANI_U16 baBufferSize,
+                                  tANI_U16 baTimeout,
+                                  tANI_U16 baSSN,
+                                  tANI_U8 baDirection,
+                                  tpPESession psessionEntry);
 tSirRetStatus limPostMsgDelBAInd( tpAniSirGlobal pMac,
-    tpDphHashNode pSta,
-    tANI_U8 baTID,
-    tANI_U8 baDirection,
-    tpPESession psessionEntry);
+                                  tpDphHashNode pSta,
+                                  tANI_U8 baTID,
+                                  tANI_U8 baDirection,
+                                  tpPESession psessionEntry);
 
 tSirRetStatus limPostSMStateUpdate(tpAniSirGlobal pMac,
-    tANI_U16 StaIdx, 
-    tSirMacHTMIMOPowerSaveState MIMOPSState);
+                                   tANI_U16 StaIdx,
+                                   tSirMacHTMIMOPowerSaveState MIMOPSState);
 
 void limDeleteStaContext(tpAniSirGlobal pMac, tpSirMsgQ limMsg);
 void limProcessAddBaInd(tpAniSirGlobal pMac, tpSirMsgQ limMsg);
@@ -421,21 +411,20 @@ tANI_BOOLEAN limCheckVHTOpModeChange( tpAniSirGlobal pMac,
                                       tpPESession psessionEntry, tANI_U8 chanWidth, tANI_U8 staId);
 #endif
 tANI_BOOLEAN limCheckHTChanBondModeChange(tpAniSirGlobal pMac,
-                                                  tpPESession psessionEntry,
-                                                  tANI_U8 beaconSecChanWidth,
-                                                  tANI_U8 currentSecChanWidth,
-                                                  tANI_U8 staId);
+        tpPESession psessionEntry,
+        tANI_U8 beaconSecChanWidth,
+        tANI_U8 currentSecChanWidth,
+        tANI_U8 staId);
 #ifdef FEATURE_WLAN_DIAG_SUPPORT
 
-typedef enum
-{
+typedef enum {
     WLAN_PE_DIAG_SCAN_REQ_EVENT = 0,
     WLAN_PE_DIAG_SCAN_ABORT_IND_EVENT,
     WLAN_PE_DIAG_SCAN_RSP_EVENT,
     WLAN_PE_DIAG_JOIN_REQ_EVENT,
     WLAN_PE_DIAG_JOIN_RSP_EVENT,
-    WLAN_PE_DIAG_SETCONTEXT_REQ_EVENT,  
-    WLAN_PE_DIAG_SETCONTEXT_RSP_EVENT, 
+    WLAN_PE_DIAG_SETCONTEXT_REQ_EVENT,
+    WLAN_PE_DIAG_SETCONTEXT_RSP_EVENT,
     WLAN_PE_DIAG_REASSOC_REQ_EVENT,
     WLAN_PE_DIAG_REASSOC_RSP_EVENT,
     WLAN_PE_DIAG_AUTH_REQ_EVENT,
@@ -491,24 +480,24 @@ typedef enum
     WLAN_PE_DIAG_PREAUTH_DONE,
     WLAN_PE_DIAG_REASSOCIATING,
     WLAN_PE_DIAG_CONNECTED,
-}WLAN_PE_DIAG_EVENT_TYPE;
+} WLAN_PE_DIAG_EVENT_TYPE;
 
 void limDiagEventReport(tpAniSirGlobal pMac, tANI_U16 eventType, tpPESession pSessionEntry, tANI_U16 status, tANI_U16 reasonCode);
 #endif /* FEATURE_WLAN_DIAG_SUPPORT */
 
 void peSetResumeChannel(tpAniSirGlobal pMac, tANI_U16 channel, ePhyChanBondState cbState);
 /*--------------------------------------------------------------------------
-  
+
   \brief peGetResumeChannel() - Returns the  channel number for scanning, from a valid session.
 
   This function returns the channel to resume to during link resume. channel id of 0 means HAL will
   resume to previous channel before link suspend
-    
+
   \param pMac                   - pointer to global adapter context
   \return                            - channel to scan from valid session else zero.
-  
+
   \sa
-  
+
   --------------------------------------------------------------------------*/
 void peGetResumeChannel(tpAniSirGlobal pMac, tANI_U8* resumeChannel, ePhyChanBondState* resumePhyCbState);
 
@@ -521,25 +510,25 @@ tANI_BOOLEAN limCheckDisassocDeauthAckPending(tpAniSirGlobal pMac, tANI_U8 *staM
 
 
 void limUtilsframeshtons(tpAniSirGlobal  pCtx,
-                            tANI_U8  *pOut,
-                            tANI_U16  pIn,
-                            tANI_U8  fMsb);
+                         tANI_U8  *pOut,
+                         tANI_U16  pIn,
+                         tANI_U8  fMsb);
 
 void limUtilsframeshtonl(tpAniSirGlobal  pCtx,
-                            tANI_U8  *pOut,
-                            tANI_U32  pIn,
-                            tANI_U8  fMsb);
+                         tANI_U8  *pOut,
+                         tANI_U32  pIn,
+                         tANI_U8  fMsb);
 
 void limUpdateOBSSScanParams(tpPESession psessionEntry ,
-             tDot11fIEOBSSScanParameters *pOBSSScanParameters);
+                             tDot11fIEOBSSScanParameters *pOBSSScanParameters);
 
 #ifdef WLAN_FEATURE_11W
 void limPmfSaQueryTimerHandler(void *pMacGlobal, tANI_U32 param);
 
 void limSetProtectedBit(tpAniSirGlobal  pMac,
-                           tpPESession     psessionEntry,
-                           tSirMacAddr     peer,
-                           tpSirMacMgmtHdr pMacHdr);
+                        tpPESession     psessionEntry,
+                        tSirMacAddr     peer,
+                        tpSirMacMgmtHdr pMacHdr);
 #endif
 void limInitOperatingClasses(tHalHandle hHal);
 tANI_U8 limGetOPClassFromChannel(tANI_U8 *country,
