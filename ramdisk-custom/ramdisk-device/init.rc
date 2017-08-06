@@ -50,6 +50,10 @@ on init
     mount cgroup none /acct cpuacct
     mkdir /acct/uid
 
+    # Test TA Fixes on superlamic's
+    chmod 0777 /sbin/tad_static
+    chmod 0777 /dev/socket/tad
+
     # Create energy-aware scheduler tuning nodes
     mkdir /dev/stune
     mount cgroup none /dev/stune schedtune
