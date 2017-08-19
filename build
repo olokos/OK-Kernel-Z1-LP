@@ -5,11 +5,11 @@ echo
 
 # Tuneables Here
 toolchain_path="/home/olokos/toolchains/gcc-linaro-6.2.1-2016.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-"
-name_of_your_kernel="OK-Kernel-V8.3"
+name_of_your_kernel="OK-Kernel-V8.4"
 defconfig="rhine_lp_honami_moj_defconfig"
 cpu_jobs="12"
 kerneltype="zImage"
-cmdline="androidboot.hardware=qcom user_debug=31 maxcpus=4 msm_rtb.filter=0x3F ehci-hcd.park=3 msm_rtb.enable=0 lpj=192598 dwc3.maximum_speed=high dwc3_msm.prop_chg_detect=Y androidboot.selinux=permissive audit=0"
+cmdline="androidboot.hardware=qcom user_debug=31 maxcpus=4 msm_rtb.filter=0x3F ehci-hcd.park=3 msm_rtb.enable=0 lpj=192598 dwc3.maximum_speed=high dwc3_msm.prop_chg_detect=Y androidboot.selinux=permissive enforcing=0"
 ps=2048
 base=0x00000000
 ramdisk_offset=0x02000000
@@ -30,10 +30,9 @@ case "$cchoice" in
 		make clean -j$cpu_jobs
 		rm -rf arch/arm/boot/"$kerneltype"
 		echo "Also make clean packed ramdisk"
-		cd ramdisk-custom/ramdisk-complete/sbin
+		cd ramdisk-custom/
 		rm ramdisk.cpio
 		rm ramdisk-recovery.cpio
-		cd ../..
 		rm ramdisk.cpio.gz
 		cd ..
 		echo "Done"
@@ -81,25 +80,14 @@ case "$cchoice" in
 		mkdir out
 
 #ramdisk packing begins here
-		echo "Packing base device ramdisk..."
-		cd ramdisk-custom/ramdisk-device
-		find . | cpio -o -H newc > ../ramdisk-complete/sbin/ramdisk.cpio
-		echo "Packing recovery ramdisk..."
-		cd ..
-		cd ramdisk-recovery
-		find . | cpio -o -H newc > ../ramdisk-complete/sbin/ramdisk-recovery.cpio
-
-		echo "Both recovery and device ramdisk packed!"
-		echo " "
-
-		echo "Begin packing complete ramdisk"
-		cd   ../ramdisk-complete
+		echo "Packing device ramdisk..."
+		cd ramdisk-custom/
 		echo "Packing complete ramdisk..."		
 		find . | cpio -o -H newc | gzip > ../ramdisk.cpio.gz
 		echo "Move packed ramdisk to /out"
-		cp ../ramdisk.cpio.gz ../../out
+		cp ../ramdisk.cpio.gz ../out
 		echo "Back out into kernel source directory"
-		cd ../..
+		cd ..
 #ramdisk packing ends here
 		echo "Ramdisk packing finished!"
 		echo " "
@@ -137,7 +125,7 @@ fi
 		adb reboot bootloader
 		echo
 #sudo not needed for fastboot if udev rules are set like so:
-#https://wiki.cyanogenmod.org/w/UDEV dead link lol
+#https://wiki.cyanogenmod.org/w/UDEV
 #but with mode 0666 		
 		fastboot flash boot boot.img
 		echo "Kernel successfuly flashed!"
