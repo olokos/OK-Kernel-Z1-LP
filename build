@@ -33,8 +33,8 @@ case "$cchoice" in
 		cd ramdisk-custom/
 		rm ramdisk.cpio
 		rm ramdisk-recovery.cpio
-		rm ramdisk.cpio.gz
 		cd ..
+        rm ramdisk.cpio.gz
 		echo "Done"
 		echo
 		break
