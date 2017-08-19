@@ -1,2 +1,3 @@
 *.cpio.gz
 /ramdisk-complete/sbin/*.cpio
+*
