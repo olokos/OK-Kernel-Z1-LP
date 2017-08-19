@@ -251,6 +251,7 @@ targets := $(fw-shipped-) $(patsubst $(obj)/%,%, \
 
 # Without this, built-in.o won't be created when it's empty, and the
 # final vmlinux link will fail.
+#olokos 2017 antipaste
 obj-n := dummy
 
 hostprogs-y := ihex2fw
