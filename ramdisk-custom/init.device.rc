@@ -1,8 +1,8 @@
 on boot
-    # PM8941 flash
-    chown system camera /sys/class/misc/pm8941-flash/device/current1
+# PM8941 flash
+chown system camera /sys/class/misc/pm8941-flash/device/current1
     chown system camera /sys/class/misc/pm8941-flash/device/current2
-    chown system camera /sys/class/misc/pm8941-flash/device/fault_status
-    chown system camera /sys/class/misc/pm8941-flash/device/flash_timer
-    chown system camera /sys/class/misc/pm8941-flash/device/mode
-    chown system camera /sys/class/misc/pm8941-flash/device/strobe
+        chown system camera /sys/class/misc/pm8941-flash/device/fault_status
+            chown system camera /sys/class/misc/pm8941-flash/device/flash_timer
+                chown system camera /sys/class/misc/pm8941-flash/device/mode
+                    chown system camera /sys/class/misc/pm8941-flash/device/strobe

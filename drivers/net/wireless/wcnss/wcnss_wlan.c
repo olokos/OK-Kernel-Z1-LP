@@ -2583,9 +2583,8 @@ fail_gpio_res:
  * function directly, so to invoke this function it
  * call wcnss_dump_stack function
  */
-void wcnss_dump_stack(struct task_struct *task)
-{
-	show_stack(task, NULL);
+void wcnss_dump_stack(struct task_struct *task) {
+    show_stack(task, NULL);
 }
 EXPORT_SYMBOL(wcnss_dump_stack);
 

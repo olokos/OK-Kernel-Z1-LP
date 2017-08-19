@@ -8323,190 +8323,190 @@ void csrRoamCheckForLinkStatusChange( tpAniSirGlobal pMac, tSirSmeRsp *pSirMsg )
     switch( pSirMsg->messageType ) 
     {
         case eWNI_SME_ASSOC_IND:
+    {
+        tCsrRoamSession  *pSession;
+        smsLog( pMac, LOG1, FL("Receive WNI_SME_ASSOC_IND from SME"));
+        pAssocInd = (tSirSmeAssocInd *)pSirMsg;
+        status = csrRoamGetSessionIdFromBSSID( pMac, (tCsrBssid *)pAssocInd->bssId, &sessionId );
+        if( HAL_STATUS_SUCCESS( status ) )
         {
-            tCsrRoamSession  *pSession;
-            smsLog( pMac, LOG1, FL("Receive WNI_SME_ASSOC_IND from SME"));
-            pAssocInd = (tSirSmeAssocInd *)pSirMsg;
-            status = csrRoamGetSessionIdFromBSSID( pMac, (tCsrBssid *)pAssocInd->bssId, &sessionId );
-            if( HAL_STATUS_SUCCESS( status ) )
+            pSession = CSR_GET_SESSION(pMac, sessionId);
+
+            if(!pSession)
             {
-                pSession = CSR_GET_SESSION(pMac, sessionId);
+                smsLog(pMac, LOGE, FL("  session %d not found "), sessionId);
+                return;
+            }
 
-                if(!pSession)
-                {
-                    smsLog(pMac, LOGE, FL("  session %d not found "), sessionId);
-                    return;
-                }
+        pRoamInfo = &roamInfo;
 
-            pRoamInfo = &roamInfo;
+        // Required for indicating the frames to upper layer
+        pRoamInfo->assocReqLength = pAssocInd->assocReqLength;
+        pRoamInfo->assocReqPtr = pAssocInd->assocReqPtr;
 
-            // Required for indicating the frames to upper layer
-            pRoamInfo->assocReqLength = pAssocInd->assocReqLength;
-            pRoamInfo->assocReqPtr = pAssocInd->assocReqPtr;
+        pRoamInfo->beaconPtr = pAssocInd->beaconPtr;
+        pRoamInfo->beaconLength = pAssocInd->beaconLength;                
+        pRoamInfo->statusCode = eSIR_SME_SUCCESS; //send the status code as Success 
+        pRoamInfo->u.pConnectedProfile = &pSession->connectedProfile;
 
-            pRoamInfo->beaconPtr = pAssocInd->beaconPtr;
-            pRoamInfo->beaconLength = pAssocInd->beaconLength;                
-            pRoamInfo->statusCode = eSIR_SME_SUCCESS; //send the status code as Success 
-            pRoamInfo->u.pConnectedProfile = &pSession->connectedProfile;
-
-                pRoamInfo->staId = (tANI_U8)pAssocInd->staId;
-                pRoamInfo->rsnIELen = (tANI_U8)pAssocInd->rsnIE.length;
-                pRoamInfo->prsnIE = pAssocInd->rsnIE.rsnIEdata;
-            
-            pRoamInfo->addIELen = (tANI_U8)pAssocInd->addIE.length;
-            pRoamInfo->paddIE =  pAssocInd->addIE.addIEdata;
-                vos_mem_copy(pRoamInfo->peerMac, pAssocInd->peerMacAddr,
-                             sizeof(tSirMacAddr));
-                vos_mem_copy(&pRoamInfo->bssid, pAssocInd->bssId,
-                             sizeof(tCsrBssid));
-                pRoamInfo->wmmEnabledSta = pAssocInd->wmmEnabledSta;
+            pRoamInfo->staId = (tANI_U8)pAssocInd->staId;
+            pRoamInfo->rsnIELen = (tANI_U8)pAssocInd->rsnIE.length;
+            pRoamInfo->prsnIE = pAssocInd->rsnIE.rsnIEdata;
+        
+        pRoamInfo->addIELen = (tANI_U8)pAssocInd->addIE.length;
+        pRoamInfo->paddIE =  pAssocInd->addIE.addIEdata;
+            vos_mem_copy(pRoamInfo->peerMac, pAssocInd->peerMacAddr,
+                         sizeof(tSirMacAddr));
+            vos_mem_copy(&pRoamInfo->bssid, pAssocInd->bssId,
+                         sizeof(tCsrBssid));
+            pRoamInfo->wmmEnabledSta = pAssocInd->wmmEnabledSta;
 #ifdef WLAN_FEATURE_AP_HT40_24G
-                pRoamInfo->HT40MHzIntoEnabledSta =
-                           pAssocInd->HT40MHzIntoEnabledSta;
-                smsLog(pMac, LOGW, FL("HT40MHzIntoEnabledSta: %d \n"),
-                                   pRoamInfo->HT40MHzIntoEnabledSta);
+            pRoamInfo->HT40MHzIntoEnabledSta =
+                       pAssocInd->HT40MHzIntoEnabledSta;
+            smsLog(pMac, LOGW, FL("HT40MHzIntoEnabledSta: %d \n"),
+                               pRoamInfo->HT40MHzIntoEnabledSta);
 #endif
-                if(CSR_IS_WDS_AP( pRoamInfo->u.pConnectedProfile))
-                    status = csrRoamCallCallback(pMac, sessionId, pRoamInfo, 0, eCSR_ROAM_WDS_IND, eCSR_ROAM_RESULT_WDS_ASSOCIATION_IND);//Sta
-                if(CSR_IS_INFRA_AP(pRoamInfo->u.pConnectedProfile))
+            if(CSR_IS_WDS_AP( pRoamInfo->u.pConnectedProfile))
+                status = csrRoamCallCallback(pMac, sessionId, pRoamInfo, 0, eCSR_ROAM_WDS_IND, eCSR_ROAM_RESULT_WDS_ASSOCIATION_IND);//Sta
+            if(CSR_IS_INFRA_AP(pRoamInfo->u.pConnectedProfile))
+            {
+                if( CSR_IS_ENC_TYPE_STATIC( pSession->pCurRoamProfile->negotiatedUCEncryptionType ))
                 {
-                    if( CSR_IS_ENC_TYPE_STATIC( pSession->pCurRoamProfile->negotiatedUCEncryptionType ))
-                    {
-                        csrRoamIssueSetContextReq( pMac, sessionId, pSession->pCurRoamProfile->negotiatedUCEncryptionType, 
-                                pSession->pConnectBssDesc,
-                                &(pRoamInfo->peerMac),
-                                FALSE, TRUE, eSIR_TX_RX, 0, 0, NULL, 0 ); // NO keys... these key parameters don't matter.
-                        pRoamInfo->fAuthRequired = FALSE;
-                    }
-                    else
-                    {
-                        pRoamInfo->fAuthRequired = TRUE;
-                    }
-                    status = csrRoamCallCallback(pMac, sessionId, pRoamInfo, 0, eCSR_ROAM_INFRA_IND, eCSR_ROAM_RESULT_INFRA_ASSOCIATION_IND);
-                    if (!HAL_STATUS_SUCCESS(status))
-                        pRoamInfo->statusCode = eSIR_SME_ASSOC_REFUSED;// Refused due to Mac filtering 
+                    csrRoamIssueSetContextReq( pMac, sessionId, pSession->pCurRoamProfile->negotiatedUCEncryptionType, 
+                            pSession->pConnectBssDesc,
+                            &(pRoamInfo->peerMac),
+                            FALSE, TRUE, eSIR_TX_RX, 0, 0, NULL, 0 ); // NO keys... these key parameters don't matter.
+                    pRoamInfo->fAuthRequired = FALSE;
                 }
-                /* Send Association completion message to PE */
-                status = csrSendAssocCnfMsg( pMac, pAssocInd, status );//Sta
-                
-                /* send a message to CSR itself just to avoid the EAPOL frames going
-                 * OTA before association response */
-                if(CSR_IS_WDS_AP( pRoamInfo->u.pConnectedProfile))
-            {
-                status = csrSendAssocIndToUpperLayerCnfMsg(pMac, pAssocInd, status, sessionId);
+                else
+                {
+                    pRoamInfo->fAuthRequired = TRUE;
+                }
+                status = csrRoamCallCallback(pMac, sessionId, pRoamInfo, 0, eCSR_ROAM_INFRA_IND, eCSR_ROAM_RESULT_INFRA_ASSOCIATION_IND);
+                if (!HAL_STATUS_SUCCESS(status))
+                    pRoamInfo->statusCode = eSIR_SME_ASSOC_REFUSED;// Refused due to Mac filtering 
             }
-            else if(CSR_IS_INFRA_AP(pRoamInfo->u.pConnectedProfile) && (pRoamInfo->statusCode != eSIR_SME_ASSOC_REFUSED))
-            {
-                pRoamInfo->fReassocReq = pAssocInd->reassocReq;
-                //status = csrRoamCallCallback(pMac, sessionId, pRoamInfo, 0, eCSR_ROAM_INFRA_IND, eCSR_ROAM_RESULT_INFRA_ASSOCIATION_CNF);
-                status = csrSendAssocIndToUpperLayerCnfMsg(pMac, pAssocInd, status, sessionId);
-            }
-            }
-        }
-        break;
-        case eWNI_SME_DISASSOC_IND:
+            /* Send Association completion message to PE */
+            status = csrSendAssocCnfMsg( pMac, pAssocInd, status );//Sta
+            
+            /* send a message to CSR itself just to avoid the EAPOL frames going
+             * OTA before association response */
+            if(CSR_IS_WDS_AP( pRoamInfo->u.pConnectedProfile))
         {
-            // Check if AP dis-associated us because of MIC failure. If so,
-            // then we need to take action immediately and not wait till the
-            // the WmStatusChange requests is pushed and processed
-            tSmeCmd *pCommand;
+            status = csrSendAssocIndToUpperLayerCnfMsg(pMac, pAssocInd, status, sessionId);
+        }
+        else if(CSR_IS_INFRA_AP(pRoamInfo->u.pConnectedProfile) && (pRoamInfo->statusCode != eSIR_SME_ASSOC_REFUSED))
+        {
+            pRoamInfo->fReassocReq = pAssocInd->reassocReq;
+            //status = csrRoamCallCallback(pMac, sessionId, pRoamInfo, 0, eCSR_ROAM_INFRA_IND, eCSR_ROAM_RESULT_INFRA_ASSOCIATION_CNF);
+            status = csrSendAssocIndToUpperLayerCnfMsg(pMac, pAssocInd, status, sessionId);
+        }
+        }
+    }
+    break;
+        case eWNI_SME_DISASSOC_IND:
+    {
+        // Check if AP dis-associated us because of MIC failure. If so,
+        // then we need to take action immediately and not wait till the
+        // the WmStatusChange requests is pushed and processed
+        tSmeCmd *pCommand;
 
-            pDisassocInd = (tSirSmeDisassocInd *)pSirMsg;
-            status = csrRoamGetSessionIdFromBSSID( pMac,
-                               (tCsrBssid *)pDisassocInd->bssId, &sessionId );
-            if( HAL_STATUS_SUCCESS( status ) )
-            {
-                smsLog( pMac, LOGE, FL("DISASSOCIATION Indication from MAC"
-                                   " for session %d "), sessionId);
-                smsLog( pMac, LOGE, FL("DISASSOCIATION from peer ="
-                                  MAC_ADDRESS_STR " "
-                                  " reason = %d status = %d "),
-                                 MAC_ADDR_ARRAY(pDisassocInd->peerMacAddr),
-                                 pDisassocInd->reasonCode,
-                                 pDisassocInd->statusCode);
-                // If we are in neighbor preauth done state then on receiving
-                // disassoc or deauth we dont roam instead we just disassoc
-                // from current ap and then go to disconnected state
-                // This happens for ESE and 11r FT connections ONLY.
+        pDisassocInd = (tSirSmeDisassocInd *)pSirMsg;
+        status = csrRoamGetSessionIdFromBSSID( pMac,
+                           (tCsrBssid *)pDisassocInd->bssId, &sessionId );
+        if( HAL_STATUS_SUCCESS( status ) )
+        {
+            smsLog( pMac, LOGE, FL("DISASSOCIATION Indication from MAC"
+                               " for session %d "), sessionId);
+            smsLog( pMac, LOGE, FL("DISASSOCIATION from peer ="
+                              MAC_ADDRESS_STR " "
+                              " reason = %d status = %d "),
+                             MAC_ADDR_ARRAY(pDisassocInd->peerMacAddr),
+                             pDisassocInd->reasonCode,
+                             pDisassocInd->statusCode);
+            // If we are in neighbor preauth done state then on receiving
+            // disassoc or deauth we dont roam instead we just disassoc
+            // from current ap and then go to disconnected state
+            // This happens for ESE and 11r FT connections ONLY.
 #ifdef WLAN_FEATURE_VOWIFI_11R
-                if (csrRoamIs11rAssoc(pMac) && (csrNeighborRoamStatePreauthDone(pMac)))
-                {
-                    csrNeighborRoamTranistionPreauthDoneToDisconnected(pMac);
-                }
+            if (csrRoamIs11rAssoc(pMac) && (csrNeighborRoamStatePreauthDone(pMac)))
+            {
+                csrNeighborRoamTranistionPreauthDoneToDisconnected(pMac);
+            }
 #endif
 #ifdef FEATURE_WLAN_ESE
-                if (csrRoamIsESEAssoc(pMac) && (csrNeighborRoamStatePreauthDone(pMac)))
-                {
-                    csrNeighborRoamTranistionPreauthDoneToDisconnected(pMac);
-                }
+            if (csrRoamIsESEAssoc(pMac) && (csrNeighborRoamStatePreauthDone(pMac)))
+            {
+                csrNeighborRoamTranistionPreauthDoneToDisconnected(pMac);
+            }
 #endif
 #ifdef FEATURE_WLAN_LFR
-                if (csrRoamIsFastRoamEnabled(pMac, sessionId) && (csrNeighborRoamStatePreauthDone(pMac)))
-                {
-                    csrNeighborRoamTranistionPreauthDoneToDisconnected(pMac);
-                }
+            if (csrRoamIsFastRoamEnabled(pMac, sessionId) && (csrNeighborRoamStatePreauthDone(pMac)))
+            {
+                csrNeighborRoamTranistionPreauthDoneToDisconnected(pMac);
+            }
 #endif
-                pSession = CSR_GET_SESSION( pMac, sessionId );
+            pSession = CSR_GET_SESSION( pMac, sessionId );
 
-                if (!pSession)
+            if (!pSession)
+            {
+                smsLog(pMac, LOGE, FL("  session %d not found "), sessionId);
+                return;
+            }
+
+            if ( csrIsConnStateInfra( pMac, sessionId ) )
+            {
+                pSession->connectState = eCSR_ASSOC_STATE_TYPE_NOT_CONNECTED;
+            }
+#ifndef WLAN_MDM_CODE_REDUCTION_OPT
+            sme_QosCsrEventInd(pMac, (v_U8_t)sessionId, SME_QOS_CSR_DISCONNECT_IND, NULL);
+#endif
+            csrRoamLinkDown(pMac, sessionId);
+            csrRoamIssueWmStatusChange( pMac, sessionId, eCsrDisassociated, pSirMsg );
+            if (CSR_IS_INFRA_AP(&pSession->connectedProfile))
+            {
+                pRoamInfo = &roamInfo;
+                pRoamInfo->statusCode = pDisassocInd->statusCode;
+                pRoamInfo->u.pConnectedProfile = &pSession->connectedProfile;
+                pRoamInfo->staId = (tANI_U8)pDisassocInd->staId;
+
+                vos_mem_copy(pRoamInfo->peerMac, pDisassocInd->peerMacAddr,
+                             sizeof(tSirMacAddr));
+                vos_mem_copy(&pRoamInfo->bssid, pDisassocInd->bssId,
+                             sizeof(tCsrBssid));
+
+                status = csrRoamCallCallback(pMac, sessionId, pRoamInfo, 0,
+                                eCSR_ROAM_INFRA_IND, eCSR_ROAM_RESULT_DISASSOC_IND);
+
+                /*
+                 *  STA/P2P client got  disassociated so remove any pending deauth
+                 *  commands in sme pending list
+                 */
+                pCommand = csrGetCommandBuffer(pMac);
+                if (NULL == pCommand)
                 {
-                    smsLog(pMac, LOGE, FL("  session %d not found "), sessionId);
+                    smsLog( pMac, LOGE, FL(" fail to get command buffer") );
+                    status = eHAL_STATUS_RESOURCES;
                     return;
                 }
+                pCommand->command = eSmeCommandRoam;
+                pCommand->sessionId = (tANI_U8)sessionId;
+                pCommand->u.roamCmd.roamReason = eCsrForcedDeauthSta;
+                vos_mem_copy(pCommand->u.roamCmd.peerMac,
+                             pDisassocInd->peerMacAddr,
+                             sizeof(tSirMacAddr));
+                csrRoamRemoveDuplicateCommand(pMac, sessionId, pCommand, eCsrForcedDeauthSta);
+                csrReleaseCommand( pMac, pCommand );
 
-                if ( csrIsConnStateInfra( pMac, sessionId ) )
-                {
-                    pSession->connectState = eCSR_ASSOC_STATE_TYPE_NOT_CONNECTED;
-                }
-#ifndef WLAN_MDM_CODE_REDUCTION_OPT
-                sme_QosCsrEventInd(pMac, (v_U8_t)sessionId, SME_QOS_CSR_DISCONNECT_IND, NULL);
-#endif
-                csrRoamLinkDown(pMac, sessionId);
-                csrRoamIssueWmStatusChange( pMac, sessionId, eCsrDisassociated, pSirMsg );
-                if (CSR_IS_INFRA_AP(&pSession->connectedProfile))
-                {
-                    pRoamInfo = &roamInfo;
-                    pRoamInfo->statusCode = pDisassocInd->statusCode;
-                    pRoamInfo->u.pConnectedProfile = &pSession->connectedProfile;
-                    pRoamInfo->staId = (tANI_U8)pDisassocInd->staId;
-
-                    vos_mem_copy(pRoamInfo->peerMac, pDisassocInd->peerMacAddr,
-                                 sizeof(tSirMacAddr));
-                    vos_mem_copy(&pRoamInfo->bssid, pDisassocInd->bssId,
-                                 sizeof(tCsrBssid));
-
-                    status = csrRoamCallCallback(pMac, sessionId, pRoamInfo, 0,
-                                    eCSR_ROAM_INFRA_IND, eCSR_ROAM_RESULT_DISASSOC_IND);
-
-                    /*
-                     *  STA/P2P client got  disassociated so remove any pending deauth
-                     *  commands in sme pending list
-                     */
-                    pCommand = csrGetCommandBuffer(pMac);
-                    if (NULL == pCommand)
-                    {
-                        smsLog( pMac, LOGE, FL(" fail to get command buffer") );
-                        status = eHAL_STATUS_RESOURCES;
-                        return;
-                    }
-                    pCommand->command = eSmeCommandRoam;
-                    pCommand->sessionId = (tANI_U8)sessionId;
-                    pCommand->u.roamCmd.roamReason = eCsrForcedDeauthSta;
-                    vos_mem_copy(pCommand->u.roamCmd.peerMac,
-                                 pDisassocInd->peerMacAddr,
-                                 sizeof(tSirMacAddr));
-                    csrRoamRemoveDuplicateCommand(pMac, sessionId, pCommand, eCsrForcedDeauthSta);
-                    csrReleaseCommand( pMac, pCommand );
-
-                }
-            }
-            else
-            {
-                smsLog(pMac, LOGE, FL(" Session Id not found for BSSID " MAC_ADDRESS_STR),
-                                        MAC_ADDR_ARRAY(pDisassocInd->bssId));
             }
         }
-        break;
+        else
+        {
+            smsLog(pMac, LOGE, FL(" Session Id not found for BSSID " MAC_ADDRESS_STR),
+                                    MAC_ADDR_ARRAY(pDisassocInd->bssId));
+        }
+    }
+    break;
         case eWNI_SME_DEAUTH_IND:
             smsLog( pMac, LOG1, FL("DEAUTHENTICATION Indication from MAC"));
             pDeauthInd = (tpSirSmeDeauthInd)pSirMsg;
@@ -8639,82 +8639,82 @@ void csrRoamCheckForLinkStatusChange( tpAniSirGlobal pMac, tSirSmeRsp *pSirMsg )
             }
             break;
         case eWNI_SME_LOST_LINK_PARAMS_IND:
-        {
-            tpSirSmeLostLinkParamsInd pLostLinkParamsInd = (tpSirSmeLostLinkParamsInd)pSirMsg;
-            tCsrRoamInfo roamInfo, *pRoamInfo = NULL;
-            eCsrRoamResult result = eCSR_ROAM_RESULT_NONE;
-            vos_mem_set(&roamInfo, sizeof(tCsrRoamInfo), 0);
-            roamInfo.u.pLostLinkParams = &pLostLinkParamsInd->info;
-            pRoamInfo = &roamInfo;
-            csrRoamCallCallback(pMac, pLostLinkParamsInd->sessionId,
-                               pRoamInfo, 0, eCSR_ROAM_LOST_LINK_PARAMS_IND, result);
-            break;
-        }
+    {
+        tpSirSmeLostLinkParamsInd pLostLinkParamsInd = (tpSirSmeLostLinkParamsInd)pSirMsg;
+        tCsrRoamInfo roamInfo, *pRoamInfo = NULL;
+        eCsrRoamResult result = eCSR_ROAM_RESULT_NONE;
+        vos_mem_set(&roamInfo, sizeof(tCsrRoamInfo), 0);
+        roamInfo.u.pLostLinkParams = &pLostLinkParamsInd->info;
+        pRoamInfo = &roamInfo;
+        csrRoamCallCallback(pMac, pLostLinkParamsInd->sessionId,
+                           pRoamInfo, 0, eCSR_ROAM_LOST_LINK_PARAMS_IND, result);
+        break;
+    }
         case eWNI_SME_MIC_FAILURE_IND:
-        {
-            tpSirSmeMicFailureInd pMicInd = (tpSirSmeMicFailureInd)pSirMsg;
-            tCsrRoamInfo roamInfo, *pRoamInfo = NULL;
-            eCsrRoamResult result = eCSR_ROAM_RESULT_MIC_ERROR_UNICAST;
+    {
+        tpSirSmeMicFailureInd pMicInd = (tpSirSmeMicFailureInd)pSirMsg;
+        tCsrRoamInfo roamInfo, *pRoamInfo = NULL;
+        eCsrRoamResult result = eCSR_ROAM_RESULT_MIC_ERROR_UNICAST;
 
-            status = csrRoamGetSessionIdFromBSSID( pMac, (tCsrBssid *)pMicInd->bssId, &sessionId );
-            if( HAL_STATUS_SUCCESS( status ) )
+        status = csrRoamGetSessionIdFromBSSID( pMac, (tCsrBssid *)pMicInd->bssId, &sessionId );
+        if( HAL_STATUS_SUCCESS( status ) )
+        {
+            vos_mem_set(&roamInfo, sizeof(tCsrRoamInfo), 0);
+            roamInfo.u.pMICFailureInfo = &pMicInd->info;
+            pRoamInfo = &roamInfo;
+            if(pMicInd->info.multicast)
             {
-                vos_mem_set(&roamInfo, sizeof(tCsrRoamInfo), 0);
-                roamInfo.u.pMICFailureInfo = &pMicInd->info;
-                pRoamInfo = &roamInfo;
-                if(pMicInd->info.multicast)
-                {
-                    result = eCSR_ROAM_RESULT_MIC_ERROR_GROUP;
-                }
-                else
-                {
-                    result = eCSR_ROAM_RESULT_MIC_ERROR_UNICAST;
-                }
-                csrRoamCallCallback(pMac, sessionId, pRoamInfo, 0, eCSR_ROAM_MIC_ERROR_IND, result);
+                result = eCSR_ROAM_RESULT_MIC_ERROR_GROUP;
             }
+            else
+            {
+                result = eCSR_ROAM_RESULT_MIC_ERROR_UNICAST;
+            }
+            csrRoamCallCallback(pMac, sessionId, pRoamInfo, 0, eCSR_ROAM_MIC_ERROR_IND, result);
+        }
 
 #ifdef FEATURE_WLAN_DIAG_SUPPORT_CSR
-            {
-                WLAN_VOS_DIAG_EVENT_DEF(secEvent, vos_event_wlan_security_payload_type);
-                tCsrRoamSession *pSession = CSR_GET_SESSION( pMac, sessionId );
-                if(!pSession)
-                {
-                    smsLog(pMac, LOGE, FL("  session %d not found "), sessionId);
-                    return;
-                }
-
-                vos_mem_set(&secEvent, sizeof(vos_event_wlan_security_payload_type), 0);
-                secEvent.eventId = WLAN_SECURITY_EVENT_MIC_ERROR;
-                secEvent.encryptionModeMulticast = 
-                    (v_U8_t)diagEncTypeFromCSRType(pSession->connectedProfile.mcEncryptionType);
-                secEvent.encryptionModeUnicast = 
-                    (v_U8_t)diagEncTypeFromCSRType(pSession->connectedProfile.EncryptionType);
-                secEvent.authMode = 
-                    (v_U8_t)diagAuthTypeFromCSRType(pSession->connectedProfile.AuthType);
-                vos_mem_copy(secEvent.bssid,
-                             pSession->connectedProfile.bssid, 6);
-                WLAN_VOS_DIAG_EVENT_REPORT(&secEvent, EVENT_WLAN_SECURITY);
-            }
-#endif//FEATURE_WLAN_DIAG_SUPPORT_CSR
-        }
-        break;
-        case eWNI_SME_WPS_PBC_PROBE_REQ_IND:
         {
-            tpSirSmeProbeReqInd pProbeReqInd = (tpSirSmeProbeReqInd)pSirMsg;
-            tCsrRoamInfo roamInfo;
-            smsLog( pMac, LOG1, FL("WPS PBC Probe request Indication from SME"));
-       
-            status = csrRoamGetSessionIdFromBSSID( pMac, (tCsrBssid *)pProbeReqInd->bssId, &sessionId );
-            if( HAL_STATUS_SUCCESS( status ) )
+            WLAN_VOS_DIAG_EVENT_DEF(secEvent, vos_event_wlan_security_payload_type);
+            tCsrRoamSession *pSession = CSR_GET_SESSION( pMac, sessionId );
+            if(!pSession)
             {
-                vos_mem_set(&roamInfo, sizeof(tCsrRoamInfo), 0);
-                roamInfo.u.pWPSPBCProbeReq = &pProbeReqInd->WPSPBCProbeReq;
-                csrRoamCallCallback(pMac, sessionId, &roamInfo, 0, eCSR_ROAM_WPS_PBC_PROBE_REQ_IND, 
-                    eCSR_ROAM_RESULT_WPS_PBC_PROBE_REQ_IND);
+                smsLog(pMac, LOGE, FL("  session %d not found "), sessionId);
+                return;
             }
+
+            vos_mem_set(&secEvent, sizeof(vos_event_wlan_security_payload_type), 0);
+            secEvent.eventId = WLAN_SECURITY_EVENT_MIC_ERROR;
+            secEvent.encryptionModeMulticast = 
+                (v_U8_t)diagEncTypeFromCSRType(pSession->connectedProfile.mcEncryptionType);
+            secEvent.encryptionModeUnicast = 
+                (v_U8_t)diagEncTypeFromCSRType(pSession->connectedProfile.EncryptionType);
+            secEvent.authMode = 
+                (v_U8_t)diagAuthTypeFromCSRType(pSession->connectedProfile.AuthType);
+            vos_mem_copy(secEvent.bssid,
+                         pSession->connectedProfile.bssid, 6);
+            WLAN_VOS_DIAG_EVENT_REPORT(&secEvent, EVENT_WLAN_SECURITY);
         }
-        break;        
-        
+#endif//FEATURE_WLAN_DIAG_SUPPORT_CSR
+    }
+    break;
+        case eWNI_SME_WPS_PBC_PROBE_REQ_IND:
+    {
+        tpSirSmeProbeReqInd pProbeReqInd = (tpSirSmeProbeReqInd)pSirMsg;
+        tCsrRoamInfo roamInfo;
+        smsLog( pMac, LOG1, FL("WPS PBC Probe request Indication from SME"));
+   
+        status = csrRoamGetSessionIdFromBSSID( pMac, (tCsrBssid *)pProbeReqInd->bssId, &sessionId );
+        if( HAL_STATUS_SUCCESS( status ) )
+        {
+            vos_mem_set(&roamInfo, sizeof(tCsrRoamInfo), 0);
+            roamInfo.u.pWPSPBCProbeReq = &pProbeReqInd->WPSPBCProbeReq;
+            csrRoamCallCallback(pMac, sessionId, &roamInfo, 0, eCSR_ROAM_WPS_PBC_PROBE_REQ_IND, 
+                eCSR_ROAM_RESULT_WPS_PBC_PROBE_REQ_IND);
+        }
+    }
+    break;        
+    
         case eWNI_SME_WM_STATUS_CHANGE_NTF:
             pStatusChangeMsg = (tSirSmeWmStatusChangeNtf *)pSirMsg;
             switch( pStatusChangeMsg->statusChangeCode ) 
@@ -9017,254 +9017,254 @@ void csrRoamCheckForLinkStatusChange( tpAniSirGlobal pMac, tSirSmeRsp *pSirMsg )
             }
             break;
         case eWNI_SME_SETCONTEXT_RSP:
+    {
+        tSirSmeSetContextRsp *pRsp = (tSirSmeSetContextRsp *)pSirMsg;
+        tListElem *pEntry;
+        tSmeCmd *pCommand;
+        
+        pEntry = csrLLPeekHead( &pMac->sme.smeCmdActiveList, LL_ACCESS_LOCK );
+        if ( pEntry )
         {
-            tSirSmeSetContextRsp *pRsp = (tSirSmeSetContextRsp *)pSirMsg;
-            tListElem *pEntry;
-            tSmeCmd *pCommand;
-            
-            pEntry = csrLLPeekHead( &pMac->sme.smeCmdActiveList, LL_ACCESS_LOCK );
-            if ( pEntry )
-            {
-                pCommand = GET_BASE_ADDR( pEntry, tSmeCmd, Link );
-                if ( eSmeCommandSetKey == pCommand->command )
-                {                
-                    sessionId = pCommand->sessionId;
-                    pSession = CSR_GET_SESSION( pMac, sessionId );
+            pCommand = GET_BASE_ADDR( pEntry, tSmeCmd, Link );
+            if ( eSmeCommandSetKey == pCommand->command )
+            {                
+                sessionId = pCommand->sessionId;
+                pSession = CSR_GET_SESSION( pMac, sessionId );
 
-                    if(!pSession)
-                    {
-                        smsLog(pMac, LOGE, FL("  session %d not found "), sessionId);
-                        return;
-                    }
+                if(!pSession)
+                {
+                    smsLog(pMac, LOGE, FL("  session %d not found "), sessionId);
+                    return;
+                }
    
 #ifdef FEATURE_WLAN_DIAG_SUPPORT_CSR
-                    if(eCSR_ENCRYPT_TYPE_NONE != pSession->connectedProfile.EncryptionType)
+                if(eCSR_ENCRYPT_TYPE_NONE != pSession->connectedProfile.EncryptionType)
+                {
+                    WLAN_VOS_DIAG_EVENT_DEF(setKeyEvent, vos_event_wlan_security_payload_type);
+                    vos_mem_set(&setKeyEvent,
+                                sizeof(vos_event_wlan_security_payload_type), 0);
+                    if( pRsp->peerMacAddr[0] & 0x01 )
                     {
-                        WLAN_VOS_DIAG_EVENT_DEF(setKeyEvent, vos_event_wlan_security_payload_type);
-                        vos_mem_set(&setKeyEvent,
-                                    sizeof(vos_event_wlan_security_payload_type), 0);
-                        if( pRsp->peerMacAddr[0] & 0x01 )
-                        {
-                            setKeyEvent.eventId = WLAN_SECURITY_EVENT_SET_GTK_RSP;
-                        }
-                        else
-                        {
-                            setKeyEvent.eventId = WLAN_SECURITY_EVENT_SET_PTK_RSP;
-                        }
-                        if( pRsp->peerMacAddr[0] & 0x01 )
-                        {
-                            pMac->pmc.remainInPowerActiveTillDHCP = FALSE;
-                            smsLog(pMac, LOG1, FL("Reset"
-                            "remainInPowerActiveTillDHCP to allow BMPS"));
-                        }
-                        setKeyEvent.encryptionModeMulticast = 
-                            (v_U8_t)diagEncTypeFromCSRType(pSession->connectedProfile.mcEncryptionType);
-                        setKeyEvent.encryptionModeUnicast = 
-                            (v_U8_t)diagEncTypeFromCSRType(pSession->connectedProfile.EncryptionType);
-                        vos_mem_copy(setKeyEvent.bssid,
-                                     pSession->connectedProfile.bssid, 6);
-                        setKeyEvent.authMode = 
-                            (v_U8_t)diagAuthTypeFromCSRType(pSession->connectedProfile.AuthType);
-                        if( eSIR_SME_SUCCESS != pRsp->statusCode )
-                        {
-                            setKeyEvent.status = WLAN_SECURITY_STATUS_FAILURE;
-                        }
-                        WLAN_VOS_DIAG_EVENT_REPORT(&setKeyEvent, EVENT_WLAN_SECURITY);
+                        setKeyEvent.eventId = WLAN_SECURITY_EVENT_SET_GTK_RSP;
                     }
+                    else
+                    {
+                        setKeyEvent.eventId = WLAN_SECURITY_EVENT_SET_PTK_RSP;
+                    }
+                    if( pRsp->peerMacAddr[0] & 0x01 )
+                    {
+                        pMac->pmc.remainInPowerActiveTillDHCP = FALSE;
+                        smsLog(pMac, LOG1, FL("Reset"
+                        "remainInPowerActiveTillDHCP to allow BMPS"));
+                    }
+                    setKeyEvent.encryptionModeMulticast = 
+                        (v_U8_t)diagEncTypeFromCSRType(pSession->connectedProfile.mcEncryptionType);
+                    setKeyEvent.encryptionModeUnicast = 
+                        (v_U8_t)diagEncTypeFromCSRType(pSession->connectedProfile.EncryptionType);
+                    vos_mem_copy(setKeyEvent.bssid,
+                                 pSession->connectedProfile.bssid, 6);
+                    setKeyEvent.authMode = 
+                        (v_U8_t)diagAuthTypeFromCSRType(pSession->connectedProfile.AuthType);
+                    if( eSIR_SME_SUCCESS != pRsp->statusCode )
+                    {
+                        setKeyEvent.status = WLAN_SECURITY_STATUS_FAILURE;
+                    }
+                    WLAN_VOS_DIAG_EVENT_REPORT(&setKeyEvent, EVENT_WLAN_SECURITY);
+                }
 #endif //FEATURE_WLAN_DIAG_SUPPORT_CSR
-                    if( CSR_IS_WAIT_FOR_KEY( pMac, sessionId) )
-                    {
-                        csrRoamStopWaitForKeyTimer( pMac );
+                if( CSR_IS_WAIT_FOR_KEY( pMac, sessionId) )
+                {
+                    csrRoamStopWaitForKeyTimer( pMac );
 
-                        //We are done with authentication, whethere succeed or not
-                        csrRoamSubstateChange( pMac, eCSR_ROAM_SUBSTATE_NONE, sessionId);
-                        //We do it here because this linkup function is not called after association 
-                        //when a key needs to be set. 
-                        if( csrIsConnStateConnectedInfra(pMac, sessionId) ) 
-                        {
-                            csrRoamLinkUp(pMac, pSession->connectedProfile.bssid);
-                        }
+                    //We are done with authentication, whethere succeed or not
+                    csrRoamSubstateChange( pMac, eCSR_ROAM_SUBSTATE_NONE, sessionId);
+                    //We do it here because this linkup function is not called after association 
+                    //when a key needs to be set. 
+                    if( csrIsConnStateConnectedInfra(pMac, sessionId) ) 
+                    {
+                        csrRoamLinkUp(pMac, pSession->connectedProfile.bssid);
                     }
-                    if( eSIR_SME_SUCCESS == pRsp->statusCode )
-                    {
-                        vos_mem_copy(&roamInfo.peerMac,
-                                     &pRsp->peerMacAddr, sizeof(tCsrBssid));
-                            //Make sure we install the GTK before indicating to HDD as authenticated
-                            //This is to prevent broadcast packets go out after PTK and before GTK.
-                            if ( vos_mem_compare( &Broadcastaddr, pRsp->peerMacAddr,
-                                                 sizeof(tSirMacAddr) ) )
-                            {
+                }
+                if( eSIR_SME_SUCCESS == pRsp->statusCode )
+                {
+                    vos_mem_copy(&roamInfo.peerMac,
+                                 &pRsp->peerMacAddr, sizeof(tCsrBssid));
+                        //Make sure we install the GTK before indicating to HDD as authenticated
+                        //This is to prevent broadcast packets go out after PTK and before GTK.
+                        if ( vos_mem_compare( &Broadcastaddr, pRsp->peerMacAddr,
+                                             sizeof(tSirMacAddr) ) )
+                        {
 #ifdef WLAN_ACTIVEMODE_OFFLOAD_FEATURE
-                                if(IS_ACTIVEMODE_OFFLOAD_FEATURE_ENABLE)
-                                {
-                                   tpSirSetActiveModeSetBncFilterReq pMsg;
-                                   pMsg = vos_mem_malloc(sizeof(tSirSetActiveModeSetBncFilterReq));
-                                   pMsg->messageType = pal_cpu_to_be16((tANI_U16)eWNI_SME_SET_BCN_FILTER_REQ);
-                                   pMsg->length = pal_cpu_to_be16(sizeof( tANI_U8));
-                                   pMsg->seesionId = sessionId;
-                                   status = palSendMBMessage(pMac->hHdd, pMsg ); 
-                                }
+                            if(IS_ACTIVEMODE_OFFLOAD_FEATURE_ENABLE)
+                            {
+                               tpSirSetActiveModeSetBncFilterReq pMsg;
+                               pMsg = vos_mem_malloc(sizeof(tSirSetActiveModeSetBncFilterReq));
+                               pMsg->messageType = pal_cpu_to_be16((tANI_U16)eWNI_SME_SET_BCN_FILTER_REQ);
+                               pMsg->length = pal_cpu_to_be16(sizeof( tANI_U8));
+                               pMsg->seesionId = sessionId;
+                               status = palSendMBMessage(pMac->hHdd, pMsg ); 
+                            }
 #endif
-                     /* OBSS SCAN Indication will be sent to Firmware to start OBSS Scan */
-                                if( CSR_IS_CHANNEL_24GHZ(pSession->connectedProfile.operationChannel)
-                                   && IS_HT40_OBSS_SCAN_FEATURE_ENABLE
-                                   && (pSession->connectState ==
-                                       eCSR_ASSOC_STATE_TYPE_INFRA_ASSOCIATED)
-                                   && pSession->pCurRoamProfile
-                                   && (VOS_P2P_GO_MODE !=
-                                           pSession->pCurRoamProfile->csrPersona
-                                       && VOS_STA_SAP_MODE !=
-                                            pSession->pCurRoamProfile->csrPersona))
-                                {
-                                     tpSirSmeHT40OBSSScanInd pMsg;
-                                     pMsg = vos_mem_malloc(sizeof(tSirSmeHT40OBSSScanInd));
-                                     pMsg->messageType =
-                                       pal_cpu_to_be16((tANI_U16)eWNI_SME_HT40_OBSS_SCAN_IND);
-                                     pMsg->length =
-                                      pal_cpu_to_be16(sizeof( tSirSmeHT40OBSSScanInd));
-                                     vos_mem_copy(pMsg->peerMacAddr,
-                                                   pSession->connectedProfile.bssid,
-                                                   sizeof(tSirMacAddr));
-                                     status = palSendMBMessage(pMac->hHdd,
-                                                                 pMsg );
-                                }
-                                else
-                                {
-                                     smsLog( pMac, LOG1,FL("OBSS SCAN"
-                                             "Indication not sent to FW"
-                                             "channel %d OBSS_SCAN: %d"),
-                                             pSession->connectedProfile.
-                                             operationChannel,
-                                             IS_HT40_OBSS_SCAN_FEATURE_ENABLE);
-                                     smsLog( pMac, LOG1,FL("connectState %d"
-                                             "pCurRoamProfile %p"),
-                                             pSession->connectState,
-                                             pSession->pCurRoamProfile);
-                                }
-
-                                result = eCSR_ROAM_RESULT_AUTHENTICATED;
+                 /* OBSS SCAN Indication will be sent to Firmware to start OBSS Scan */
+                            if( CSR_IS_CHANNEL_24GHZ(pSession->connectedProfile.operationChannel)
+                               && IS_HT40_OBSS_SCAN_FEATURE_ENABLE
+                               && (pSession->connectState ==
+                                   eCSR_ASSOC_STATE_TYPE_INFRA_ASSOCIATED)
+                               && pSession->pCurRoamProfile
+                               && (VOS_P2P_GO_MODE !=
+                                       pSession->pCurRoamProfile->csrPersona
+                                   && VOS_STA_SAP_MODE !=
+                                        pSession->pCurRoamProfile->csrPersona))
+                            {
+                                 tpSirSmeHT40OBSSScanInd pMsg;
+                                 pMsg = vos_mem_malloc(sizeof(tSirSmeHT40OBSSScanInd));
+                                 pMsg->messageType =
+                                   pal_cpu_to_be16((tANI_U16)eWNI_SME_HT40_OBSS_SCAN_IND);
+                                 pMsg->length =
+                                  pal_cpu_to_be16(sizeof( tSirSmeHT40OBSSScanInd));
+                                 vos_mem_copy(pMsg->peerMacAddr,
+                                               pSession->connectedProfile.bssid,
+                                               sizeof(tSirMacAddr));
+                                 status = palSendMBMessage(pMac->hHdd,
+                                                             pMsg );
                             }
                             else
                             {
-                                result = eCSR_ROAM_RESULT_NONE;
+                                 smsLog( pMac, LOG1,FL("OBSS SCAN"
+                                         "Indication not sent to FW"
+                                         "channel %d OBSS_SCAN: %d"),
+                                         pSession->connectedProfile.
+                                         operationChannel,
+                                         IS_HT40_OBSS_SCAN_FEATURE_ENABLE);
+                                 smsLog( pMac, LOG1,FL("connectState %d"
+                                         "pCurRoamProfile %p"),
+                                         pSession->connectState,
+                                         pSession->pCurRoamProfile);
                             }
-                            pRoamInfo = &roamInfo;
-                    }
-                    else
-                    {
-                        result = eCSR_ROAM_RESULT_FAILURE;
-                        smsLog(pMac, LOGE, "CSR: Roam Completion setkey "
-                               "command failed(%d) PeerMac "MAC_ADDRESS_STR,
-                               pRsp->statusCode, MAC_ADDR_ARRAY(pRsp->peerMacAddr));
-                    }
-                    roamInfo.is11rAssoc = csrRoamIs11rAssoc(pMac);
-                    csrRoamCallCallback(pMac, sessionId, &roamInfo, pCommand->u.setKeyCmd.roamId, 
-                                        eCSR_ROAM_SET_KEY_COMPLETE, result);
-                    // Indicate SME_QOS that the SET_KEY is completed, so that SME_QOS
-                    // can go ahead and initiate the TSPEC if any are pending
-                    sme_QosCsrEventInd(pMac, (v_U8_t)sessionId, SME_QOS_CSR_SET_KEY_SUCCESS_IND, NULL);
-#ifdef FEATURE_WLAN_ESE
-                    //Send Adjacent AP repot to new AP.
-                    if (result == eCSR_ROAM_RESULT_AUTHENTICATED &&
-                        pSession->isPrevApInfoValid && 
-                        pSession->connectedProfile.isESEAssoc)
-                    {
-#ifdef FEATURE_WLAN_ESE_UPLOAD
-                        csrSendEseAdjacentApRepInd(pMac, pSession);
-#else
-                        csrEseSendAdjacentApRepMsg(pMac, pSession);
-#endif
-                        pSession->isPrevApInfoValid = FALSE;
-                    }
-#endif
-                    if( csrLLRemoveEntry( &pMac->sme.smeCmdActiveList, pEntry, LL_ACCESS_LOCK ) )
-                    {
-                        csrReleaseCommandSetKey( pMac, pCommand );
-                    }
-                }
-                else
-                {
-                    smsLog( pMac, LOGE, "CSR: Roam Completion called but setkey command is not ACTIVE ..." );
-                }
-            }
-            else
-            {
-                smsLog( pMac, LOGE, "CSR: SetKey Completion called but NO commands are ACTIVE ..." );
-            }
-            smeProcessPendingQueue( pMac );
-        }
-        break;
-        case eWNI_SME_REMOVEKEY_RSP:
-        {
-            tSirSmeRemoveKeyRsp *pRsp = (tSirSmeRemoveKeyRsp *)pSirMsg;
-            tListElem *pEntry;
-            tSmeCmd *pCommand;
-            
-            pEntry = csrLLPeekHead( &pMac->sme.smeCmdActiveList, LL_ACCESS_LOCK );
-            if ( pEntry )
-            {
-                pCommand = GET_BASE_ADDR( pEntry, tSmeCmd, Link );
-                if ( eSmeCommandRemoveKey == pCommand->command )
-                {                
-                    sessionId = pCommand->sessionId;
-                    pSession = CSR_GET_SESSION( pMac, sessionId );
 
-                    if(!pSession)
-                    {
-                        smsLog(pMac, LOGE, FL("  session %d not found "), sessionId);
-                        return;
-                    }
-#ifdef FEATURE_WLAN_DIAG_SUPPORT_CSR
-                    {
-                        WLAN_VOS_DIAG_EVENT_DEF(removeKeyEvent, vos_event_wlan_security_payload_type);
-                        vos_mem_set(&removeKeyEvent,
-                                    sizeof(vos_event_wlan_security_payload_type), 0);
-                        removeKeyEvent.eventId = WLAN_SECURITY_EVENT_REMOVE_KEY_RSP;
-                        removeKeyEvent.encryptionModeMulticast = 
-                            (v_U8_t)diagEncTypeFromCSRType(pSession->connectedProfile.mcEncryptionType);
-                        removeKeyEvent.encryptionModeUnicast = 
-                            (v_U8_t)diagEncTypeFromCSRType(pSession->connectedProfile.EncryptionType);
-                        vos_mem_copy( removeKeyEvent.bssid,
-                                      pSession->connectedProfile.bssid, 6);
-                        removeKeyEvent.authMode = 
-                            (v_U8_t)diagAuthTypeFromCSRType(pSession->connectedProfile.AuthType);
-                        if( eSIR_SME_SUCCESS != pRsp->statusCode )
-                        {
-                            removeKeyEvent.status = WLAN_SECURITY_STATUS_FAILURE;
+                            result = eCSR_ROAM_RESULT_AUTHENTICATED;
                         }
-                        WLAN_VOS_DIAG_EVENT_REPORT(&removeKeyEvent, EVENT_WLAN_SECURITY);
-                    }
-#endif //FEATURE_WLAN_DIAG_SUPPORT_CSR
-                    if( eSIR_SME_SUCCESS == pRsp->statusCode )
-                    {
-                        vos_mem_copy(&roamInfo.peerMac, &pRsp->peerMacAddr,
-                                     sizeof(tCsrBssid));
-                        result = eCSR_ROAM_RESULT_NONE;
+                        else
+                        {
+                            result = eCSR_ROAM_RESULT_NONE;
+                        }
                         pRoamInfo = &roamInfo;
-                    }
-                    else
-                    {
-                        result = eCSR_ROAM_RESULT_FAILURE;
-                    }
-                    csrRoamCallCallback(pMac, sessionId, &roamInfo, pCommand->u.setKeyCmd.roamId, 
-                                        eCSR_ROAM_REMOVE_KEY_COMPLETE, result);
-                    if( csrLLRemoveEntry( &pMac->sme.smeCmdActiveList, pEntry, LL_ACCESS_LOCK ) )
-                    {
-                        csrReleaseCommandRemoveKey( pMac, pCommand );
-                    }
                 }
                 else
                 {
-                    smsLog( pMac, LOGW, "CSR: Roam Completion called but setkey command is not ACTIVE ..." );
+                    result = eCSR_ROAM_RESULT_FAILURE;
+                    smsLog(pMac, LOGE, "CSR: Roam Completion setkey "
+                           "command failed(%d) PeerMac "MAC_ADDRESS_STR,
+                           pRsp->statusCode, MAC_ADDR_ARRAY(pRsp->peerMacAddr));
+                }
+                roamInfo.is11rAssoc = csrRoamIs11rAssoc(pMac);
+                csrRoamCallCallback(pMac, sessionId, &roamInfo, pCommand->u.setKeyCmd.roamId, 
+                                    eCSR_ROAM_SET_KEY_COMPLETE, result);
+                // Indicate SME_QOS that the SET_KEY is completed, so that SME_QOS
+                // can go ahead and initiate the TSPEC if any are pending
+                sme_QosCsrEventInd(pMac, (v_U8_t)sessionId, SME_QOS_CSR_SET_KEY_SUCCESS_IND, NULL);
+#ifdef FEATURE_WLAN_ESE
+                //Send Adjacent AP repot to new AP.
+                if (result == eCSR_ROAM_RESULT_AUTHENTICATED &&
+                    pSession->isPrevApInfoValid && 
+                    pSession->connectedProfile.isESEAssoc)
+                {
+#ifdef FEATURE_WLAN_ESE_UPLOAD
+                    csrSendEseAdjacentApRepInd(pMac, pSession);
+#else
+                    csrEseSendAdjacentApRepMsg(pMac, pSession);
+#endif
+                    pSession->isPrevApInfoValid = FALSE;
+                }
+#endif
+                if( csrLLRemoveEntry( &pMac->sme.smeCmdActiveList, pEntry, LL_ACCESS_LOCK ) )
+                {
+                    csrReleaseCommandSetKey( pMac, pCommand );
                 }
             }
             else
             {
-                smsLog( pMac, LOGW, "CSR: SetKey Completion called but NO commands are ACTIVE ..." );
+                smsLog( pMac, LOGE, "CSR: Roam Completion called but setkey command is not ACTIVE ..." );
             }
-            smeProcessPendingQueue( pMac );
         }
-        break;
+        else
+        {
+            smsLog( pMac, LOGE, "CSR: SetKey Completion called but NO commands are ACTIVE ..." );
+        }
+        smeProcessPendingQueue( pMac );
+    }
+    break;
+        case eWNI_SME_REMOVEKEY_RSP:
+    {
+        tSirSmeRemoveKeyRsp *pRsp = (tSirSmeRemoveKeyRsp *)pSirMsg;
+        tListElem *pEntry;
+        tSmeCmd *pCommand;
+        
+        pEntry = csrLLPeekHead( &pMac->sme.smeCmdActiveList, LL_ACCESS_LOCK );
+        if ( pEntry )
+        {
+            pCommand = GET_BASE_ADDR( pEntry, tSmeCmd, Link );
+            if ( eSmeCommandRemoveKey == pCommand->command )
+            {                
+                sessionId = pCommand->sessionId;
+                pSession = CSR_GET_SESSION( pMac, sessionId );
+
+                if(!pSession)
+                {
+                    smsLog(pMac, LOGE, FL("  session %d not found "), sessionId);
+                    return;
+                }
+#ifdef FEATURE_WLAN_DIAG_SUPPORT_CSR
+                {
+                    WLAN_VOS_DIAG_EVENT_DEF(removeKeyEvent, vos_event_wlan_security_payload_type);
+                    vos_mem_set(&removeKeyEvent,
+                                sizeof(vos_event_wlan_security_payload_type), 0);
+                    removeKeyEvent.eventId = WLAN_SECURITY_EVENT_REMOVE_KEY_RSP;
+                    removeKeyEvent.encryptionModeMulticast = 
+                        (v_U8_t)diagEncTypeFromCSRType(pSession->connectedProfile.mcEncryptionType);
+                    removeKeyEvent.encryptionModeUnicast = 
+                        (v_U8_t)diagEncTypeFromCSRType(pSession->connectedProfile.EncryptionType);
+                    vos_mem_copy( removeKeyEvent.bssid,
+                                  pSession->connectedProfile.bssid, 6);
+                    removeKeyEvent.authMode = 
+                        (v_U8_t)diagAuthTypeFromCSRType(pSession->connectedProfile.AuthType);
+                    if( eSIR_SME_SUCCESS != pRsp->statusCode )
+                    {
+                        removeKeyEvent.status = WLAN_SECURITY_STATUS_FAILURE;
+                    }
+                    WLAN_VOS_DIAG_EVENT_REPORT(&removeKeyEvent, EVENT_WLAN_SECURITY);
+                }
+#endif //FEATURE_WLAN_DIAG_SUPPORT_CSR
+                if( eSIR_SME_SUCCESS == pRsp->statusCode )
+                {
+                    vos_mem_copy(&roamInfo.peerMac, &pRsp->peerMacAddr,
+                                 sizeof(tCsrBssid));
+                    result = eCSR_ROAM_RESULT_NONE;
+                    pRoamInfo = &roamInfo;
+                }
+                else
+                {
+                    result = eCSR_ROAM_RESULT_FAILURE;
+                }
+                csrRoamCallCallback(pMac, sessionId, &roamInfo, pCommand->u.setKeyCmd.roamId, 
+                                    eCSR_ROAM_REMOVE_KEY_COMPLETE, result);
+                if( csrLLRemoveEntry( &pMac->sme.smeCmdActiveList, pEntry, LL_ACCESS_LOCK ) )
+                {
+                    csrReleaseCommandRemoveKey( pMac, pCommand );
+                }
+            }
+            else
+            {
+                smsLog( pMac, LOGW, "CSR: Roam Completion called but setkey command is not ACTIVE ..." );
+            }
+        }
+        else
+        {
+            smsLog( pMac, LOGW, "CSR: SetKey Completion called but NO commands are ACTIVE ..." );
+        }
+        smeProcessPendingQueue( pMac );
+    }
+    break;
         case eWNI_SME_GET_STATISTICS_RSP:
             smsLog( pMac, LOG2, FL("Stats rsp from PE"));
             csrRoamStatsRspProcessor( pMac, pSirMsg );

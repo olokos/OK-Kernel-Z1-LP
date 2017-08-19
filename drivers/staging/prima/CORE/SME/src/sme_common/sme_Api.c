@@ -2353,7 +2353,7 @@ eHalStatus sme_ProcessMsg(tHalHandle hHal, vos_msg_t* pMsg) {
                     vos_mem_free(pMsg->bodyptr);
                 } else {
                     smsLog( pMac, LOGE, "Empty rsp message for TDLS, \
-                            nothing to process");
+                        nothing to process");
                 }
                 break;
             }

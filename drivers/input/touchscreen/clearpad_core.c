@@ -473,9 +473,9 @@ struct synaptics_clearpad {
     u32 reset_count;
     const char *reset_cause;
 #ifdef CONFIG_FB
-	struct notifier_block fb_notif;
-	struct work_struct notify_resume;
-	struct work_struct notify_suspend;
+    struct notifier_block fb_notif;
+    struct work_struct notify_resume;
+    struct work_struct notify_suspend;
 #endif
 };
 
@@ -3475,58 +3475,55 @@ static int synaptics_clearpad_pm_suspend_noirq(struct device *dev) {
 }
 
 #ifdef CONFIG_FB
-static void notify_resume(struct work_struct *work)
-{
-	struct synaptics_clearpad *this = container_of(work,
-			struct synaptics_clearpad, notify_resume);
+static void notify_resume(struct work_struct *work) {
+    struct synaptics_clearpad *this = container_of(work,
+                                      struct synaptics_clearpad, notify_resume);
 
-	LOCK(this);
+    LOCK(this);
 
-	if (!(this->active & SYN_ACTIVE_POWER))
-		synaptics_clearpad_resume(&this->pdev->dev);
+    if (!(this->active & SYN_ACTIVE_POWER))
+        synaptics_clearpad_resume(&this->pdev->dev);
 
-	UNLOCK(this);
+    UNLOCK(this);
 
-	synaptics_clearpad_set_power(this);
+    synaptics_clearpad_set_power(this);
 }
 
-static void notify_suspend(struct work_struct *work)
-{
-	struct synaptics_clearpad *this = container_of(work,
-			struct synaptics_clearpad, notify_suspend);
+static void notify_suspend(struct work_struct *work) {
+    struct synaptics_clearpad *this = container_of(work,
+                                      struct synaptics_clearpad, notify_suspend);
 
-	LOCK(this);
+    LOCK(this);
 
-	if (this->active & SYN_ACTIVE_POWER)
-		synaptics_clearpad_suspend(&this->pdev->dev);
+    if (this->active & SYN_ACTIVE_POWER)
+        synaptics_clearpad_suspend(&this->pdev->dev);
 
-	UNLOCK(this);
+    UNLOCK(this);
 
-	synaptics_clearpad_set_power(this);
+    synaptics_clearpad_set_power(this);
 }
 
 static int fb_notifier_callback(struct notifier_block *self,
-				unsigned long event, void *data)
-{
-	struct fb_event *evdata = data;
-	int *blank;
-	struct synaptics_clearpad *this =
-		container_of(self, struct synaptics_clearpad, fb_notif);
+                                unsigned long event, void *data) {
+    struct fb_event *evdata = data;
+    int *blank;
+    struct synaptics_clearpad *this =
+        container_of(self, struct synaptics_clearpad, fb_notif);
 
-	if (evdata && evdata->data && event == FB_EVENT_BLANK && this &&
-			this->pdev) {
-		blank = evdata->data;
-		if (*blank == FB_BLANK_UNBLANK) {
-			cancel_work_sync(&this->notify_suspend);
-			cancel_work_sync(&this->notify_resume);
-			schedule_work(&this->notify_resume);
-		} else if (*blank != FB_BLANK_UNBLANK) {
-			cancel_work_sync(&this->notify_resume);
-			cancel_work_sync(&this->notify_suspend);
-			schedule_work(&this->notify_suspend);
-		}
-	}
-	return 0;
+    if (evdata && evdata->data && event == FB_EVENT_BLANK && this &&
+            this->pdev) {
+        blank = evdata->data;
+        if (*blank == FB_BLANK_UNBLANK) {
+            cancel_work_sync(&this->notify_suspend);
+            cancel_work_sync(&this->notify_resume);
+            schedule_work(&this->notify_resume);
+        } else if (*blank != FB_BLANK_UNBLANK) {
+            cancel_work_sync(&this->notify_resume);
+            cancel_work_sync(&this->notify_suspend);
+            schedule_work(&this->notify_suspend);
+        }
+    }
+    return 0;
 }
 #endif
 
@@ -4200,14 +4197,14 @@ static int __devinit clearpad_probe(struct platform_device *pdev) {
     this->state = SYN_STATE_RUNNING;
 
 #ifdef CONFIG_FB
-	this->fb_notif.notifier_call = fb_notifier_callback;
-	rc = fb_register_client(&this->fb_notif);
-	if (rc) {
-		dev_err(&this->pdev->dev, "Unable to register fb_notifier\n");
-	} else {
-		INIT_WORK(&this->notify_resume, notify_resume);
-		INIT_WORK(&this->notify_suspend, notify_suspend);
-	}
+    this->fb_notif.notifier_call = fb_notifier_callback;
+    rc = fb_register_client(&this->fb_notif);
+    if (rc) {
+        dev_err(&this->pdev->dev, "Unable to register fb_notifier\n");
+    } else {
+        INIT_WORK(&this->notify_resume, notify_resume);
+        INIT_WORK(&this->notify_suspend, notify_suspend);
+    }
 #endif
 
     /* sysfs */
@@ -4263,7 +4260,7 @@ err_input_device_pen:
     input_unregister_device(this->input_pen);
 err_input_device:
 #ifdef CONFIG_FB
-	fb_unregister_client(&this->fb_notif);
+    fb_unregister_client(&this->fb_notif);
 #endif
     input_unregister_device(this->input);
 err_gpio_teardown:
@@ -4308,9 +4305,9 @@ static int __devexit clearpad_remove(struct platform_device *pdev) {
 #endif
     remove_sysfs_entries(this);
 #ifdef CONFIG_FB
-	fb_unregister_client(&this->fb_notif);
-	cancel_work_sync(&this->notify_resume);
-	cancel_work_sync(&this->notify_suspend);
+    fb_unregister_client(&this->fb_notif);
+    cancel_work_sync(&this->notify_resume);
+    cancel_work_sync(&this->notify_suspend);
 #endif
     input_unregister_device(this->input);
     input_unregister_device(this->input_pen);
